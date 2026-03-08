@@ -1,0 +1,6 @@
+ML-FORENSIC-INTEGRATION-V2 + IMPULSE TRAIN WIRING
+
+* Integrated `ImpulseTrainEvent` extraction and `ImpulsePatternModel` in `src/ml/modular_features.rs`
+* Expanded `FeatureFlags` to include impulse detection configurations
+* Modified `main.rs` dispatch loop to isolate impulse trains and route them to an independent pattern analysis worker over a new crossbeam channel
+* Updated `src/state.rs` to propagate `impulse_anomaly_score` and flag `harassment_detected` boolean state globally

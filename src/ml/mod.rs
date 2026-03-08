@@ -26,6 +26,7 @@ pub mod mamba_block;
 pub mod point_decoder;
 pub mod point_mamba;
 pub mod point_mamba_trainer;
+pub mod modular_features;
 
 pub use timegnn::TimeGnnModel;
 pub use wav2vec2_loader::{Wav2Vec2Model, load_wav2vec2, infer_wav2vec2_embedding};

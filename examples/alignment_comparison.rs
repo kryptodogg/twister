@@ -84,7 +84,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     renderer.render(count as u32)?;
 
                     // Measurement (run 3 times for stability)
-                    let mut times = Vec::new();
+                    let mut times: Vec<f64> = Vec::new();
                     for run in 1..=3 {
                         renderer.render(count as u32)?;
                         // Extract timing from the renderer's output (it prints it)
@@ -134,7 +134,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     renderer.render(count as u32)?;
 
                     // Measurement (run 3 times for stability)
-                    let mut times = Vec::new();
+                    let mut times: Vec<f64> = Vec::new();
                     for run in 1..=3 {
                         renderer.render(count as u32)?;
                         // Extract timing from the renderer's output (it prints it)
