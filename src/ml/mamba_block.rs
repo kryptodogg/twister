@@ -39,7 +39,7 @@ impl<B: Backend> MambaBlock<B> {
             // Gating: Δ_i = sigmoid(W_g · u_i) ∈ [0, 1]
             // input: [batch, n, 128], gate_w: [128] -> [128, 1]
             let gate_logits = input.clone().matmul(self.gate_w.clone().unsqueeze_dim(1));
-            let delta = gate_logits.clone().sigmoid();
+            let delta = burn::tensor::activation::sigmoid(gate_logits);
 
             // State evolution (highly simplified parallel formulation for MVP)
             // In a real Mamba, this would be a scan; here we approximate with a gated linear layer
