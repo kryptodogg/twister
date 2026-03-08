@@ -39,7 +39,7 @@ impl GpuShared {
         let (device, queue) = pollster::block_on(adapter.request_device(
             &wgpu::DeviceDescriptor {
                 label:             Some("twister-shared-device"),
-                required_features: wgpu::Features::empty(),
+                required_features: wgpu::Features::SHADER_F16,
                 required_limits:   wgpu::Limits::default(),
                 ..Default::default()
             },
