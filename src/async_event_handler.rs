@@ -158,9 +158,7 @@ impl GpuEventHandler {
 
                 while !shutdown.load(Ordering::Relaxed) {
                     // GPU processes rolling v-buffer autonomously
-                    if let Err(e) = kernel.dispatch_autonomous_batch() {
-                        eprintln!("[GPU-Dispatch] Dispatch failed: {}", e);
-                    }
+                    kernel.dispatch_autonomous_batch();
 
                     // Wait before next dispatch (2ms = 500 Hz)
                     sleep(Duration::from_millis(2)).await;
@@ -194,56 +192,45 @@ impl GpuEventHandler {
 
                     if !processed_frames.is_empty() {
                         // GPU has work for us - process it
-                        match kernel.read_results() {
-                            Ok(results) => {
-                                for (idx, _frame_idx) in processed_frames.iter().enumerate() {
-                                    if idx >= results.len() {
-                                        break;
-                                    }
-                                    let result = &results[idx];
-                                    frame_count += 1;
+                        let results = kernel.read_results();
+                        for (idx, _frame_idx) in processed_frames.iter().enumerate() {
+                            if idx >= results.len() {
+                                break;
+                            }
+                            let result = &results[idx];
+                            frame_count += 1;
 
-                                    {
-                                        let st = app_state.lock().await;
-                                        st.detected_freq.store(
-                                            result.detected_frequency_hz.max(0.0),
-                                            Ordering::Relaxed,
-                                        );
-                                        st.mamba_anomaly_score
-                                            .store(result.anomaly_score_db, Ordering::Relaxed);
-                                        st.beam_azimuth_deg.store(
-                                            result.beamform_azimuth_degrees,
-                                            Ordering::Relaxed,
-                                        );
-                                        st.beam_elevation_rad.store(
-                                            result.beamform_elevation_degrees.to_radians(),
-                                            Ordering::Relaxed,
-                                        );
-                                        st.beam_confidence.store(
-                                            result.confidence.clamp(0.0, 1.0),
-                                            Ordering::Relaxed,
-                                        );
+                            {
+                                let st = app_state.lock().await;
+                                st.detected_freq.store(
+                                    result.detected_frequency_hz.max(0.0),
+                                    Ordering::Relaxed,
+                                );
+                                st.mamba_anomaly_score
+                                    .store(result.anomaly_score_db, Ordering::Relaxed);
+                                st.beam_azimuth_deg
+                                    .store(result.beamform_azimuth_degrees, Ordering::Relaxed);
+                                st.beam_elevation_rad.store(
+                                    result.beamform_elevation_degrees.to_radians(),
+                                    Ordering::Relaxed,
+                                );
+                                st.beam_confidence
+                                    .store(result.confidence.clamp(0.0, 1.0), Ordering::Relaxed);
 
-                                        if frame_count % 100 == 0 {
-                                            eprintln!(
-                                                "[CPU-EventHandler] Frame {}: {} Hz, anomaly={:.3}, conf={:.2}",
-                                                frame_count,
-                                                result.detected_frequency_hz as u32,
-                                                result.anomaly_score_db,
-                                                result.confidence
-                                            );
-                                        }
-                                    }
-
-                                    if result.anomaly_score_db > 1.0 {
-                                        let st = app_state.lock().await;
-                                        st.replay_buf_len.fetch_add(1, Ordering::Relaxed);
-                                    }
+                                if frame_count % 100 == 0 {
+                                    eprintln!(
+                                        "[CPU-EventHandler] Frame {}: {} Hz, anomaly={:.3}, conf={:.2}",
+                                        frame_count,
+                                        result.detected_frequency_hz as u32,
+                                        result.anomaly_score_db,
+                                        result.confidence
+                                    );
                                 }
                             }
-                            Err(e) => {
-                                eprintln!("[CPU-EventHandler] Read results failed: {}", e);
-                                error_count += 1;
+
+                            if result.anomaly_score_db > 1.0 {
+                                let st = app_state.lock().await;
+                                st.replay_buf_len.fetch_add(1, Ordering::Relaxed);
                             }
                         }
                     } else {

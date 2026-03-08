@@ -38,7 +38,9 @@ impl<B: Backend> MambaBlock<B> {
         let output = {
             // Gating: Δ_i = sigmoid(W_g · u_i) ∈ [0, 1]
             // input: [batch, n, 128], gate_w: [128] -> [128, 1]
-            let gate_logits = input.clone().matmul(self.gate_w.clone().unsqueeze_dim(1));
+            let gate_logits = input
+                .clone()
+                .matmul(self.gate_w.clone().unsqueeze_dim::<2>(1));
             let delta = burn::tensor::activation::sigmoid(gate_logits);
 
             // State evolution (highly simplified parallel formulation for MVP)
@@ -47,25 +49,30 @@ impl<B: Backend> MambaBlock<B> {
             // h_updated: [batch, n, 128]
             let h_updated = input
                 .clone()
-                .matmul(self.state_a.clone().unsqueeze_dim(0)) // [batch, n, 128]
+                .matmul(self.state_a.clone().unsqueeze_dim::<3>(0)) // [batch, n, 128]
                 .mul(delta.clone());
 
             // Readout: y = C ⊙ h
-            h_updated.mul(self.output_c.clone().unsqueeze_dim(0).unsqueeze_dim(0))
+            h_updated.mul(
+                self.output_c
+                    .clone()
+                    .unsqueeze_dim::<2>(0)
+                    .unsqueeze_dim::<3>(0),
+            )
         }; // All intermediates freed here
 
         // Residual connection (skip connection for gradient flow)
-        original.add(&output)
+        original.add(output)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use burn::backend::ndarray::NdArrayBackend;
-    use burn::tensor::Data;
+    use burn::backend::ndarray::NdArray;
+    use burn::tensor::TensorData;
 
-    type Backend = NdArrayBackend<f32>;
+    type Backend = NdArray<f32>;
 
     #[test]
     fn test_mamba_block_forward() {

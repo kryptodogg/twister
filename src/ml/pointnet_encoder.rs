@@ -1,6 +1,5 @@
-use burn::prelude::Module;
-use burn::tensor::backend::Backend;
-use burn::tensor::{Data, Distribution, Tensor, TensorData};
+use burn::prelude::*;
+use burn::tensor::Tensor;
 /// PointNet Encoder: Point Cloud (N, 6) → (N, 256) Features
 /// GPU-optimized with Wave64 function packing (no dead padding)
 ///
@@ -79,10 +78,10 @@ impl<B: Backend> PointNetEncoder<B> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use burn::backend::ndarray::NdArrayBackend;
-    use burn::tensor::Data;
+    use burn::backend::ndarray::NdArray;
+    use burn::tensor::TensorData;
 
-    type Backend = NdArrayBackend<f32>;
+    type Backend = NdArray<f32>;
 
     // Helper function to create an encoder with random weights for tests
     fn create_test_encoder(

@@ -9,7 +9,7 @@
 //! each point to control its own state evolution based on input magnitude.
 
 use crate::ml::mamba_block::MambaBlock;
-use burn::tensor::{backend::Backend, Distribution, Tensor};
+use burn::prelude::*;
 
 /// Full Point Mamba: 8 cascaded Mamba blocks
 ///
@@ -99,7 +99,7 @@ impl<B: Backend> PointMamba<B> {
         // Pass through all 8 blocks sequentially
         // Each block's output becomes the next block's input
         for (block_idx, block) in self.mamba_blocks.iter().enumerate() {
-            output = block.forward(output);
+            output = block.forward(&output);
 
             // STUB: Optional debug logging for monitoring intermediate features
             // Would output shape and statistics at each layer

@@ -1,6 +1,4 @@
-use burn::prelude::Module;
-use burn::tensor::backend::Backend;
-use burn::tensor::{Distribution, Tensor, TensorData};
+use burn::prelude::*;
 use std::error::Error;
 
 /// Point Decoder: Mamba Features (N, 128) → 3D Offsets (N, 3)
@@ -88,10 +86,10 @@ impl<B: Backend> PointDecoder<B> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use burn::backend::ndarray::NdArrayBackend;
-    use burn::tensor::Data;
+    use burn::backend::ndarray::NdArray;
+    use burn::tensor::TensorData;
 
-    type Backend = NdArrayBackend<f32>;
+    type Backend = NdArray<f32>;
 
     // Helper function to create a decoder with random weights for tests
     fn create_test_decoder(
