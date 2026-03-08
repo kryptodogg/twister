@@ -32,7 +32,7 @@ impl ChamferDistance {
                 let dx = px - tx;
                 let dy = py - ty;
                 let dz = pz - tz;
-                let dist_sq = dx*dx + dy*dy + dz*dz;
+                let dist_sq = dx * dx + dy * dy + dz * dz;
                 min_dist_sq = min_dist_sq.min(dist_sq);
             }
             forward_loss += min_dist_sq;
@@ -47,7 +47,7 @@ impl ChamferDistance {
                 let dx = tx - px;
                 let dy = ty - py;
                 let dz = tz - pz;
-                let dist_sq = dx*dx + dy*dy + dz*dz;
+                let dist_sq = dx * dx + dy * dy + dz * dz;
                 min_dist_sq = min_dist_sq.min(dist_sq);
             }
             backward_loss += min_dist_sq;
@@ -91,7 +91,10 @@ mod tests {
     fn test_chamfer_identical_points() {
         let points = vec![(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (0.0, 1.0, 0.0)];
         let loss = ChamferDistance::compute_loss(&points, &points).unwrap();
-        assert!(loss < 0.001, "Identical point clouds should have near-zero loss");
+        assert!(
+            loss < 0.001,
+            "Identical point clouds should have near-zero loss"
+        );
     }
 
     #[test]
@@ -102,7 +105,10 @@ mod tests {
         let loss_ab = ChamferDistance::compute_loss(&points_a, &points_b).unwrap();
         let loss_ba = ChamferDistance::compute_loss(&points_b, &points_a).unwrap();
 
-        assert!((loss_ab - loss_ba).abs() < 0.001, "Chamfer distance should be symmetric");
+        assert!(
+            (loss_ab - loss_ba).abs() < 0.001,
+            "Chamfer distance should be symmetric"
+        );
     }
 
     #[test]
@@ -126,7 +132,10 @@ mod tests {
         let errors = vec![10.0];
         let loss = HuberLoss::compute(&errors, 1.0).unwrap();
         // δ * (|e| - 0.5*δ) = 1.0 * (10.0 - 0.5) = 9.5
-        assert!((loss - 9.5).abs() < 0.1, "Large errors should use linear Huber loss");
+        assert!(
+            (loss - 9.5).abs() < 0.1,
+            "Large errors should use linear Huber loss"
+        );
     }
 
     #[test]
@@ -135,7 +144,7 @@ mod tests {
         let pred = vec![(0.0, 0.0, 0.0)];
         let truth = vec![(1.0, 0.0, 0.0)];
         let loss = ChamferDistance::compute_loss(&pred, &truth).unwrap();
-        
+
         // Distance = 1.0, loss = 1.0²/2 + 1.0²/2 / 2 = 0.5
         assert!((loss - 0.5).abs() < 0.01);
     }

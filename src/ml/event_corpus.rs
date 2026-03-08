@@ -10,7 +10,7 @@
 ///
 /// Output HDF5 Structure:
 /// ```
-/// multimodal_features: float32[N, 1092]  ← TimeGNN input
+/// multimodal_features: float32[N, 1297]  ← TimeGNN input
 /// timestamps: int64[N]                    ← Event timing
 /// ground_truth_tags: string[N]            ← Forensic classification
 /// audio_samples: float32[N, 48000]        ← Raw audio context
@@ -29,7 +29,6 @@
 ///   }
 /// }
 /// ```
-
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::error::Error;
@@ -94,27 +93,16 @@ pub fn load_forensic_events(jsonl_path: &str) -> Result<Vec<ForensicEventData>, 
 
         // Extract required fields with fallbacks
         let event = ForensicEventData {
-            id: json["id"]
-                .as_str()
-                .unwrap_or("unknown")
-                .to_string(),
-            timestamp_unix: json["timestamp_unix"]
-                .as_f64()
-                .unwrap_or(0.0),
-            frequency_hz: json["frequency_hz"]
-                .as_f64()
-                .unwrap_or(145.5) as f32,
+            id: json["id"].as_str().unwrap_or("unknown").to_string(),
+            timestamp_unix: json["timestamp_unix"].as_f64().unwrap_or(0.0),
+            frequency_hz: json["frequency_hz"].as_f64().unwrap_or(145.5) as f32,
             tag: json["event_type"]
                 .as_str()
                 .or_else(|| json["tag"].as_str())
                 .unwrap_or("UNKNOWN")
                 .to_string(),
-            confidence: json["confidence"]
-                .as_f64()
-                .unwrap_or(0.5) as f32,
-            duration_seconds: json["duration_seconds"]
-                .as_f64()
-                .unwrap_or(0.250) as f32,
+            confidence: json["confidence"].as_f64().unwrap_or(0.5) as f32,
+            duration_seconds: json["duration_seconds"].as_f64().unwrap_or(0.250) as f32,
             metadata: json["metadata"]
                 .as_object()
                 .map(|m| {
@@ -131,7 +119,11 @@ pub fn load_forensic_events(jsonl_path: &str) -> Result<Vec<ForensicEventData>, 
     // Sort by timestamp
     events.sort_by(|a, b| a.timestamp_unix.partial_cmp(&b.timestamp_unix).unwrap());
 
-    eprintln!("[event_corpus] Loaded {} forensic events from {}", events.len(), jsonl_path);
+    eprintln!(
+        "[event_corpus] Loaded {} forensic events from {}",
+        events.len(),
+        jsonl_path
+    );
 
     Ok(events)
 }
@@ -239,7 +231,10 @@ pub fn prepare_event_corpus(
     for (idx, event) in events.iter().enumerate() {
         // Skip invalid timestamps
         if event.timestamp_unix <= 0.0 {
-            eprintln!("[event_corpus] Skipping event {} with invalid timestamp", event.id);
+            eprintln!(
+                "[event_corpus] Skipping event {} with invalid timestamp",
+                event.id
+            );
             continue;
         }
 
@@ -248,11 +243,11 @@ pub fn prepare_event_corpus(
         let ray_features = generate_ray_features_dummy(event.frequency_hz);
         let wav2vec2_features = generate_wav2vec2_features_dummy(event.confidence);
 
-        // Fuse into 1092-D
-        let mut fused = [0.0f32; 1092];
+        // Fuse into 1297-D
+        let mut fused = [0.0f32; 1297];
         fused[0..196].copy_from_slice(&audio_features);
         fused[196..324].copy_from_slice(&ray_features);
-        fused[324..1092].copy_from_slice(&wav2vec2_features);
+        fused[324..1297].copy_from_slice(&wav2vec2_features);
 
         multimodal_features.push(fused.to_vec());
         timestamps.push(event.timestamp_unix as i64);
@@ -319,9 +314,14 @@ pub fn prepare_event_corpus(
         tag_distribution,
     };
 
-    eprintln!("[event_corpus] Corpus complete: {} events, {:.2} day span",
-              total_events, time_range_days);
-    eprintln!("[event_corpus] Tag distribution: {:?}", stats.tag_distribution);
+    eprintln!(
+        "[event_corpus] Corpus complete: {} events, {:.2} day span",
+        total_events, time_range_days
+    );
+    eprintln!(
+        "[event_corpus] Tag distribution: {:?}",
+        stats.tag_distribution
+    );
 
     Ok(stats)
 }
@@ -405,7 +405,11 @@ mod tests {
 
         // Check normalization: norm should be close to 1
         let norm: f32 = features.iter().map(|x| x.powi(2)).sum::<f32>().sqrt();
-        assert!((norm - 1.0).abs() < 0.01, "Features not normalized: {}", norm);
+        assert!(
+            (norm - 1.0).abs() < 0.01,
+            "Features not normalized: {}",
+            norm
+        );
     }
 
     #[test]
@@ -415,7 +419,11 @@ mod tests {
 
         // Check normalization
         let norm: f32 = features.iter().map(|x| x.powi(2)).sum::<f32>().sqrt();
-        assert!((norm - 1.0).abs() < 0.01, "Features not normalized: {}", norm);
+        assert!(
+            (norm - 1.0).abs() < 0.01,
+            "Features not normalized: {}",
+            norm
+        );
     }
 
     #[test]
@@ -425,6 +433,10 @@ mod tests {
 
         // Check normalization
         let norm: f32 = features.iter().map(|x| x.powi(2)).sum::<f32>().sqrt();
-        assert!((norm - 1.0).abs() < 0.01, "Features not normalized: {}", norm);
+        assert!(
+            (norm - 1.0).abs() < 0.01,
+            "Features not normalized: {}",
+            norm
+        );
     }
 }

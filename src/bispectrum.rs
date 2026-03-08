@@ -10,7 +10,7 @@
 //     slice (the dispatch thread extracts it from the V-buffer), keeping the
 //     engine testable without a live V-buffer reference.
 
-use crate::detection::{DetectionEvent, HardwareLayer, MIN_COHERENCE_FRAMES, ProductType};
+use crate::detection::{DetectionEvent, HardwareLayer, ProductType, MIN_COHERENCE_FRAMES};
 use crate::gpu_shared::GpuShared;
 use bytemuck::{Pod, Zeroable};
 use std::sync::Arc;

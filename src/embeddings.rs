@@ -5,8 +5,8 @@
 // if Qdrant is unavailable the Option<EmbeddingStore> in main.rs is None
 // and all store calls are silently skipped — the app runs without a DB.
 
-use anyhow::Result;
 use crate::detection::DetectionEvent;
+use anyhow::Result;
 
 /// A detection retrieved from a vector similarity search.
 /// Fields match the access pattern in main.rs:
@@ -57,11 +57,7 @@ impl EmbeddingStore {
     }
 
     /// Persist Mamba latent vectors for downstream anomaly pattern mining.
-    pub async fn store_latents(
-        &self,
-        _latents: &[f32],
-        _events: &[DetectionEvent],
-    ) -> Result<()> {
+    pub async fn store_latents(&self, _latents: &[f32], _events: &[DetectionEvent]) -> Result<()> {
         // TODO: batch upsert latent embeddings with event metadata
         Ok(())
     }

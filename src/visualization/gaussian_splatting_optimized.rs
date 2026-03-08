@@ -6,18 +6,18 @@
 //! Each particle attribute (azimuth, elevation, frequency, etc.) is stored in
 //! a separate storage buffer to maximize memory coalescence on GPU.
 
-use wgpu::*;
 use bytemuck::{Pod, Zeroable};
 use std::mem::size_of;
+use wgpu::*;
 
 /// Single particle in the point cloud
 #[repr(C)]
 #[derive(Copy, Clone, Pod, Zeroable)]
 pub struct Particle {
-    pub azimuth_rad: f32,      // [0, 2π]
-    pub elevation_rad: f32,    // [-π/2, π/2]
-    pub frequency_hz: f32,     // Detection frequency
-    pub intensity: f32,        // Anomaly score [0, 1]
+    pub azimuth_rad: f32,   // [0, 2π]
+    pub elevation_rad: f32, // [-π/2, π/2]
+    pub frequency_hz: f32,  // Detection frequency
+    pub intensity: f32,     // Anomaly score [0, 1]
 }
 
 /// Configuration for gaussian splatting renderer
@@ -102,10 +102,16 @@ impl GaussianSplattingRenderer {
             .and_then(|s| s.parse::<u64>().ok())
             .unwrap_or(256);
 
-        let aligned_size = ((particle_count as u64 * size_of::<f32>() as u64) + (alignment_bytes - 1)) / alignment_bytes * alignment_bytes;
+        let aligned_size = ((particle_count as u64 * size_of::<f32>() as u64)
+            + (alignment_bytes - 1))
+            / alignment_bytes
+            * alignment_bytes;
         let aligned_size = aligned_size as usize;
 
-        eprintln!("[GaussianSplat] Creating {} particles, {}-byte alignment ({} bytes total)", particle_count, alignment_bytes, aligned_size);
+        eprintln!(
+            "[GaussianSplat] Creating {} particles, {}-byte alignment ({} bytes total)",
+            particle_count, alignment_bytes, aligned_size
+        );
 
         // Create SoA storage buffers (SEPARATE bindings for each attribute)
         let azimuth_buffer = device.create_buffer(&BufferDescriptor {
@@ -240,16 +246,19 @@ impl GaussianSplattingRenderer {
         let (shader_source, shader_label) = if is_wave32 {
             (
                 include_str!("shaders/gaussian_splatting_wave32.wgsl"),
-                "gaussian_splat_wave32"
+                "gaussian_splat_wave32",
             )
         } else {
             (
                 include_str!("shaders/gaussian_splatting.wgsl"),
-                "gaussian_splat_wave64"
+                "gaussian_splat_wave64",
             )
         };
 
-        eprintln!("[GaussianSplat] Using {} shader (Wave{} execution)", shader_label, wave_variant);
+        eprintln!(
+            "[GaussianSplat] Using {} shader (Wave{} execution)",
+            shader_label, wave_variant
+        );
 
         let shader_module = device.create_shader_module(ShaderModuleDescriptor {
             label: Some(shader_label),
@@ -318,8 +327,10 @@ impl GaussianSplattingRenderer {
             mapped_at_creation: false,
         });
 
-        eprintln!("[GaussianSplat] Renderer initialized: {}x{}, 256-byte alignment, timestamps enabled",
-                  config.width, config.height);
+        eprintln!(
+            "[GaussianSplat] Renderer initialized: {}x{}, 256-byte alignment, timestamps enabled",
+            config.width, config.height
+        );
 
         Ok(Self {
             device: device.clone(),
@@ -343,7 +354,10 @@ impl GaussianSplattingRenderer {
     }
 
     /// Upload particle data to GPU
-    pub fn upload_particles(&self, particles: &[Particle]) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn upload_particles(
+        &self,
+        particles: &[Particle],
+    ) -> Result<(), Box<dyn std::error::Error>> {
         if particles.is_empty() {
             return Ok(());
         }
@@ -353,7 +367,8 @@ impl GaussianSplattingRenderer {
                 "Too many particles: {} > {}",
                 particles.len(),
                 self.config.max_particles
-            ).into());
+            )
+            .into());
         }
 
         // Convert to SoA format and upload each buffer separately
@@ -361,9 +376,15 @@ impl GaussianSplattingRenderer {
         let elevations: Vec<f32> = particles.iter().map(|p| p.elevation_rad).collect();
         let frequencies: Vec<f32> = particles.iter().map(|p| p.frequency_hz).collect();
 
-        self.queue.write_buffer(&self.azimuth_buffer, 0, bytemuck::cast_slice(&azimuths));
-        self.queue.write_buffer(&self.elevation_buffer, 0, bytemuck::cast_slice(&elevations));
-        self.queue.write_buffer(&self.frequency_buffer, 0, bytemuck::cast_slice(&frequencies));
+        self.queue
+            .write_buffer(&self.azimuth_buffer, 0, bytemuck::cast_slice(&azimuths));
+        self.queue
+            .write_buffer(&self.elevation_buffer, 0, bytemuck::cast_slice(&elevations));
+        self.queue.write_buffer(
+            &self.frequency_buffer,
+            0,
+            bytemuck::cast_slice(&frequencies),
+        );
 
         eprintln!("[GaussianSplat] Uploaded {} particles", particles.len());
 
@@ -376,9 +397,11 @@ impl GaussianSplattingRenderer {
             return Ok(());
         }
 
-        let mut encoder = self.device.create_command_encoder(&CommandEncoderDescriptor {
-            label: Some("gaussian_splat_encoder"),
-        });
+        let mut encoder = self
+            .device
+            .create_command_encoder(&CommandEncoderDescriptor {
+                label: Some("gaussian_splat_encoder"),
+            });
 
         {
             let mut cpass = encoder.begin_compute_pass(&ComputePassDescriptor {
@@ -426,8 +449,12 @@ impl GaussianSplattingRenderer {
         if let Ok(Ok(())) = rx.recv() {
             let data = buffer_slice.get_mapped_range();
             let timestamps: [u64; 2] = [
-                u64::from_le_bytes([data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]]),
-                u64::from_le_bytes([data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]]),
+                u64::from_le_bytes([
+                    data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7],
+                ]),
+                u64::from_le_bytes([
+                    data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15],
+                ]),
             ];
             drop(data);
             self.query_readback_buffer.unmap();
@@ -436,10 +463,16 @@ impl GaussianSplattingRenderer {
             let timestamp_period = self.queue.get_timestamp_period();
             let gpu_time_ms = (delta_ns as f64) * (timestamp_period as f64) / 1_000_000.0;
 
-            println!("[GaussianSplat] {} particles: {:.3} ms GPU compute time", particle_count, gpu_time_ms);
+            println!(
+                "[GaussianSplat] {} particles: {:.3} ms GPU compute time",
+                particle_count, gpu_time_ms
+            );
         }
 
-        eprintln!("[GaussianSplat] Dispatched compute kernel for {} particles", particle_count);
+        eprintln!(
+            "[GaussianSplat] Dispatched compute kernel for {} particles",
+            particle_count
+        );
 
         Ok(())
     }

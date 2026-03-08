@@ -4,8 +4,10 @@
 // Includes JSON for machines, Markdown for investigators, CSV for spreadsheets.
 
 use chrono::{DateTime, Utc};
-use twister::{DetectionWithContext, AttackPatternReport};
-use twister::evidence_export::{export_json_evidence, export_markdown_summary, export_csv_timeline};
+use twister::evidence_export::{
+    export_csv_timeline, export_json_evidence, export_markdown_summary,
+};
+use twister::{AttackPatternReport, DetectionWithContext};
 
 #[test]
 fn test_json_export_structure() {
@@ -61,7 +63,10 @@ fn test_json_export_structure() {
     assert!(first["timestamp_utc"].is_string());
     assert!(first["rf_frequency_hz"].is_number());
     let freq_val = first["rf_frequency_hz"].as_f64().unwrap();
-    assert!((freq_val - 750.0).abs() < 0.1, "Frequency should be ~750 Hz");
+    assert!(
+        (freq_val - 750.0).abs() < 0.1,
+        "Frequency should be ~750 Hz"
+    );
     assert!(first["rf_confidence"].is_number());
     let conf_val = first["rf_confidence"].as_f64().unwrap();
     assert!((conf_val - 0.92).abs() < 0.01, "Confidence should be ~0.92");
@@ -169,13 +174,21 @@ fn test_markdown_includes_forensic_section() {
     let md = export_markdown_summary(&report);
 
     // Should have forensic sections
-    assert!(md.contains("DC Bias Correlation"), "Should have DC Bias section");
-    assert!(md.contains("Mamba Anomaly Detection"), "Should have Mamba section");
+    assert!(
+        md.contains("DC Bias Correlation"),
+        "Should have DC Bias section"
+    );
+    assert!(
+        md.contains("Mamba Anomaly Detection"),
+        "Should have Mamba section"
+    );
     assert!(md.contains("Conclusion"), "Should have Conclusion section");
 
     // Should explain what these mean forensically
-    assert!(md.contains("proof of coordination") || md.contains("DELIBERATE"),
-            "Should explain forensic significance");
+    assert!(
+        md.contains("proof of coordination") || md.contains("DELIBERATE"),
+        "Should explain forensic significance"
+    );
 }
 
 #[test]
@@ -212,46 +225,62 @@ fn test_csv_timeline() {
 
     // Header line
     assert!(!lines.is_empty(), "Should have at least header line");
-    assert!(lines[0].contains("timestamp"), "Header should have timestamp");
-    assert!(lines[0].contains("frequency"), "Header should have frequency");
-    assert!(lines[0].contains("rf_confidence"), "Header should have rf_confidence");
+    assert!(
+        lines[0].contains("timestamp"),
+        "Header should have timestamp"
+    );
+    assert!(
+        lines[0].contains("frequency"),
+        "Header should have frequency"
+    );
+    assert!(
+        lines[0].contains("rf_confidence"),
+        "Header should have rf_confidence"
+    );
     assert!(lines[0].contains("dc_v"), "Header should have dc_v");
     assert!(lines[0].contains("anomaly"), "Header should have anomaly");
 
     // Data rows
     assert_eq!(lines.len(), 3, "Should have header + 2 data rows");
     assert!(lines[1].contains("750"), "First event should have 750 Hz");
-    assert!(lines[2].contains("1500"), "Second event should have 1500 Hz");
+    assert!(
+        lines[2].contains("1500"),
+        "Second event should have 1500 Hz"
+    );
 
     // Should be valid CSV (can split on commas)
     let header_fields: Vec<&str> = lines[0].split(',').collect();
     let first_data_fields: Vec<&str> = lines[1].split(',').collect();
-    assert_eq!(header_fields.len(), first_data_fields.len(), "All rows should have same field count");
+    assert_eq!(
+        header_fields.len(),
+        first_data_fields.len(),
+        "All rows should have same field count"
+    );
 }
 
 #[test]
 fn test_csv_timeline_with_missing_audio_bias() {
     // Test CSV handles missing audio DC bias gracefully
-    let events = vec![
-        DetectionWithContext {
-            event_id: "missing_001".to_string(),
-            timestamp_utc: parse_time("2025-03-06T14:23:45.123Z"),
-            rf_freq_hz: 750.0,
-            rf_confidence: 0.92,
-            bispectrum_method: "test".to_string(),
-            sdr_dc_bias_v: 2.679,
-            audio_dc_bias_v: None,  // Missing audio DC bias
-            mamba_anomaly_db: 22.66,
-        },
-    ];
+    let events = vec![DetectionWithContext {
+        event_id: "missing_001".to_string(),
+        timestamp_utc: parse_time("2025-03-06T14:23:45.123Z"),
+        rf_freq_hz: 750.0,
+        rf_confidence: 0.92,
+        bispectrum_method: "test".to_string(),
+        sdr_dc_bias_v: 2.679,
+        audio_dc_bias_v: None, // Missing audio DC bias
+        mamba_anomaly_db: 22.66,
+    }];
 
     let csv = export_csv_timeline(&events);
     let lines: Vec<&str> = csv.lines().collect();
 
     assert_eq!(lines.len(), 2, "Should have header + 1 data row");
     // Should not crash when audio_dc_bias_v is None (should output 0.0)
-    assert!(lines[1].contains("0.0") || lines[1].contains("0.000"),
-            "Missing audio DC should output 0.0");
+    assert!(
+        lines[1].contains("0.0") || lines[1].contains("0.000"),
+        "Missing audio DC should output 0.0"
+    );
 }
 
 #[test]
@@ -271,7 +300,7 @@ fn test_json_export_multiple_events_unique_freqs() {
         DetectionWithContext {
             event_id: "freq_002".to_string(),
             timestamp_utc: parse_time("2025-03-06T14:23:05Z"),
-            rf_freq_hz: 750.0,  // Same frequency
+            rf_freq_hz: 750.0, // Same frequency
             rf_confidence: 0.91,
             bispectrum_method: "test".to_string(),
             sdr_dc_bias_v: 2.6,
@@ -281,7 +310,7 @@ fn test_json_export_multiple_events_unique_freqs() {
         DetectionWithContext {
             event_id: "freq_003".to_string(),
             timestamp_utc: parse_time("2025-03-06T14:23:10Z"),
-            rf_freq_hz: 1500.0,  // Different frequency
+            rf_freq_hz: 1500.0, // Different frequency
             rf_confidence: 0.88,
             bispectrum_method: "test".to_string(),
             sdr_dc_bias_v: 2.4,

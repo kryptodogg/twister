@@ -39,7 +39,7 @@
 //   let cancel = anc.lms_update(&mic_input, &synth_output);
 //   // `cancel` is the LMS correction signal; mix it into synth_output.
 
-use rustfft::{FftPlanner, num_complex::Complex};
+use rustfft::{num_complex::Complex, FftPlanner};
 use std::f32::consts::{PI, TAU};
 
 // ── Constants ─────────────────────────────────────────────────────────────────

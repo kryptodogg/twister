@@ -14,36 +14,38 @@
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MusicalKey {
-    CMajor,   // C-E-G (261.63, 329.63, 392.00 Hz)
-    AMinor,   // A-C-E (220.00, 261.63, 329.63 Hz)
-    GMajor,   // G-B-D (392.00, 493.88, 587.33 Hz)
+    CMajor, // C-E-G (261.63, 329.63, 392.00 Hz)
+    AMinor, // A-C-E (220.00, 261.63, 329.63 Hz)
+    GMajor, // G-B-D (392.00, 493.88, 587.33 Hz)
 }
 
 /// Detect musical key from attack fundamental frequency
 /// Maps frequency to nearest musical tonic (C, A, or G)
 pub fn detect_attack_key(fundamental_hz: f32) -> MusicalKey {
     // Standard pitch frequencies (just intonation)
-    let c_freq = 261.63;   // C4 (middle C)
-    let a_freq = 220.00;   // A3
-    let g_freq = 392.00;   // G4
+    let c_freq = 261.63; // C4 (middle C)
+    let a_freq = 220.00; // A3
+    let g_freq = 392.00; // G4
 
     // Normalize to octave equivalence (mod 2x frequency)
     let normalized = if fundamental_hz < 100.0 {
-        fundamental_hz * 4.0  // Bring very low pitches up
+        fundamental_hz * 4.0 // Bring very low pitches up
     } else if fundamental_hz > 1000.0 {
-        fundamental_hz / 4.0  // Bring very high pitches down
+        fundamental_hz / 4.0 // Bring very high pitches down
     } else {
         fundamental_hz
     };
 
     // Find nearest musical note (with octave equivalence)
     let mut min_distance = f32::MAX;
-    let mut detected_key = MusicalKey::GMajor;  // Default
+    let mut detected_key = MusicalKey::GMajor; // Default
 
     // Check C (and octaves)
     for octave in 0..6 {
         let freq = c_freq * 2_f32.powi(octave as i32 - 2);
-        let distance = (normalized - freq).abs().min((normalized - freq * 2.0).abs());
+        let distance = (normalized - freq)
+            .abs()
+            .min((normalized - freq * 2.0).abs());
         if distance < min_distance {
             min_distance = distance;
             detected_key = MusicalKey::CMajor;
@@ -53,7 +55,9 @@ pub fn detect_attack_key(fundamental_hz: f32) -> MusicalKey {
     // Check A (and octaves)
     for octave in 0..6 {
         let freq = a_freq * 2_f32.powi(octave as i32 - 2);
-        let distance = (normalized - freq).abs().min((normalized - freq * 2.0).abs());
+        let distance = (normalized - freq)
+            .abs()
+            .min((normalized - freq * 2.0).abs());
         if distance < min_distance {
             min_distance = distance;
             detected_key = MusicalKey::AMinor;
@@ -63,7 +67,9 @@ pub fn detect_attack_key(fundamental_hz: f32) -> MusicalKey {
     // Check G (and octaves)
     for octave in 0..6 {
         let freq = g_freq * 2_f32.powi(octave as i32 - 2);
-        let distance = (normalized - freq).abs().min((normalized - freq * 2.0).abs());
+        let distance = (normalized - freq)
+            .abs()
+            .min((normalized - freq * 2.0).abs());
         if distance < min_distance {
             min_distance = distance;
             detected_key = MusicalKey::GMajor;
@@ -77,9 +83,9 @@ pub fn detect_attack_key(fundamental_hz: f32) -> MusicalKey {
 /// Returns three frequencies for 3-note major/minor chord
 pub fn get_chord_frequencies(key: &MusicalKey) -> Vec<f32> {
     match key {
-        MusicalKey::CMajor => vec![261.63, 329.63, 392.00],  // C, E, G (just intonation)
-        MusicalKey::AMinor => vec![220.00, 261.63, 329.63],  // A, C, E
-        MusicalKey::GMajor => vec![392.00, 493.88, 587.33],  // G, B, D
+        MusicalKey::CMajor => vec![261.63, 329.63, 392.00], // C, E, G (just intonation)
+        MusicalKey::AMinor => vec![220.00, 261.63, 329.63], // A, C, E
+        MusicalKey::GMajor => vec![392.00, 493.88, 587.33], // G, B, D
     }
 }
 
@@ -97,7 +103,7 @@ pub fn synthesize_heterodyned_chord(chord_freqs: &[f32], carrier_hz: f32) -> Vec
 /// Uses mode (most common key) from recent attack history
 pub fn predict_next_attack_key(attack_history: &[MusicalKey]) -> MusicalKey {
     if attack_history.is_empty() {
-        return MusicalKey::GMajor;  // Default
+        return MusicalKey::GMajor; // Default
     }
 
     // Count occurrences of each key
