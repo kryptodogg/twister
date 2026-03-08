@@ -1,14 +1,14 @@
 [package]
 name = "twister"
 version = "0.5.0"
-edition = "2021"
+edition = "2024"
 
 [[bin]]
 name = "twister"
 path = "src/main.rs"
 
 [dependencies]
-half = { version = "*", features = ["bytemuck"] }
+half = "*"
 # ── Error handling ─────────────────────────────────────────────────────────────
 anyhow = "*"
 bytemuck = { version = "*", features = ["derive"] }
@@ -52,8 +52,8 @@ tokio = { version = "*", features = ["full"] }
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
 wgpu = { version = "*", features = ["vulkan"] }
 # ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
-hf-hub = "0.3"
-safetensors = "0.3"
+hf-hub = "*"
+safetensors = "*"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]

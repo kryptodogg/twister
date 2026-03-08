@@ -117,14 +117,22 @@ mod training_tests {
         // High SNR spectrum: 10% signal, 90% noise floor
         let _high_snr_spectrum = (0..512 * 64)
             .map(|i| {
-                if i % 10 == 0 { 1.0 } else { 0.01 } // 1.0 signal, 0.01 noise floor
+                if i % 10 == 0 {
+                    1.0
+                } else {
+                    0.01
+                } // 1.0 signal, 0.01 noise floor
             })
             .collect::<Vec<_>>();
 
         // Low SNR spectrum: equal signal and noise
         let _low_snr_spectrum = (0..512 * 64)
             .map(|i| {
-                if i % 2 == 0 { 0.5 } else { 0.4 } // 0.5 signal, 0.4 noise floor
+                if i % 2 == 0 {
+                    0.5
+                } else {
+                    0.4
+                } // 0.5 signal, 0.4 noise floor
             })
             .collect::<Vec<_>>();
 

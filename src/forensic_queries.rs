@@ -249,9 +249,7 @@ pub async fn correlation_evidence(
     // Calculate synchronization
     let rf_start_ms: i64 = 0;
     let dc_start_ms: Option<i64> = None;
-    let sync_ms = dc_start_ms
-        .map(|dc| (rf_start_ms - dc).abs())
-        .unwrap_or(0);
+    let sync_ms = dc_start_ms.map(|dc| (rf_start_ms - dc).abs()).unwrap_or(0);
 
     CorrelationEvidence {
         event_id: event_id.to_string(),
@@ -282,12 +280,10 @@ pub fn is_forensic_proof(evidence: &CorrelationEvidence) -> bool {
 pub fn interpret_dc_correlation(percent: f32) -> String {
     match percent {
         p if p >= 80.0 => {
-            "Strong evidence of coordinated attack (DC bias in >80% of events)"
-                .to_string()
+            "Strong evidence of coordinated attack (DC bias in >80% of events)".to_string()
         }
         p if p >= 50.0 => {
-            "Moderate evidence of coordination (DC bias in 50-80% of events)"
-                .to_string()
+            "Moderate evidence of coordination (DC bias in 50-80% of events)".to_string()
         }
         _ => "Insufficient evidence of DC coordination".to_string(),
     }
@@ -296,11 +292,9 @@ pub fn interpret_dc_correlation(percent: f32) -> String {
 /// Helper: Interpret attack time window for investigation conclusion
 pub fn interpret_time_pattern(attacks_throughout_day: bool) -> String {
     if attacks_throughout_day {
-        "Attacks throughout day (suggests environmental interference)"
-            .to_string()
+        "Attacks throughout day (suggests environmental interference)".to_string()
     } else {
-        "Attacks during business hours only (suggests targeted harassment)"
-            .to_string()
+        "Attacks during business hours only (suggests targeted harassment)".to_string()
     }
 }
 
@@ -324,7 +318,10 @@ mod tests {
             is_synchronized: true,
         };
 
-        assert!(is_forensic_proof(&evidence), "3ms delta should be forensic proof");
+        assert!(
+            is_forensic_proof(&evidence),
+            "3ms delta should be forensic proof"
+        );
     }
 
     #[test]

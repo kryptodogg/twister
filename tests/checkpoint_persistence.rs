@@ -13,8 +13,7 @@ fn test_checkpoint_metadata_save() {
     };
 
     // Should serialize to JSON without errors
-    let json = serde_json::to_string(&metadata)
-        .expect("Metadata should serialize to JSON");
+    let json = serde_json::to_string(&metadata).expect("Metadata should serialize to JSON");
 
     assert!(json.contains("\"epoch\":247"));
     assert!(json.contains("\"loss_avg\":0.1234"));
@@ -24,9 +23,9 @@ fn test_checkpoint_metadata_save() {
 #[test]
 fn test_checkpoint_metadata_load() {
     let json = r#"{"epoch":247,"loss_avg":0.1234,"loss_min":0.0456,"loss_max":0.9876,"timestamp_created":"2026-03-07T14:23:14Z"}"#;
-    
-    let metadata: twister::state::CheckpointMetadata = serde_json::from_str(json)
-        .expect("Should deserialize from JSON");
+
+    let metadata: twister::state::CheckpointMetadata =
+        serde_json::from_str(json).expect("Should deserialize from JSON");
 
     assert_eq!(metadata.epoch, 247);
     assert_eq!(metadata.loss_avg, 0.1234);
@@ -47,7 +46,7 @@ fn test_checkpoint_roundtrip() {
 
     // Simulate file write/read
     let json = serde_json::to_string(&original).expect("Should serialize");
-    let restored: twister::state::CheckpointMetadata = 
+    let restored: twister::state::CheckpointMetadata =
         serde_json::from_str(&json).expect("Should deserialize");
 
     assert_eq!(restored.epoch, original.epoch);
@@ -68,8 +67,11 @@ fn test_mamba_checkpoint_includes_metrics() {
     };
 
     // On load, epoch should NOT reset to 0
-    assert_ne!(checkpoint.epoch, 0, "Loaded checkpoint should preserve epoch number");
-    
+    assert_ne!(
+        checkpoint.epoch, 0,
+        "Loaded checkpoint should preserve epoch number"
+    );
+
     // Loss average should be recoverable
     assert!(checkpoint.loss_avg > 0.0, "Loss average should be positive");
 }

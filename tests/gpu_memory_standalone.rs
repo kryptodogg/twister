@@ -1,10 +1,10 @@
 // tests/gpu_memory_standalone.rs — Standalone GPU Memory Tests
 // This file is independent and doesn't require the full lib to compile
 
-use std::sync::atomic::{AtomicU32, Ordering};
-use std::collections::VecDeque;
-use parking_lot::Mutex;
 use bytemuck::Pod;
+use parking_lot::Mutex;
+use std::collections::VecDeque;
+use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
 use std::time::Instant;
 
@@ -92,7 +92,9 @@ impl<T: Pod + Send + Sync> UnifiedBuffer<T> {
     }
 
     pub fn reset(&mut self) {
-        self.cpu_map.iter_mut().for_each(|v| *v = unsafe { std::mem::zeroed() });
+        self.cpu_map
+            .iter_mut()
+            .for_each(|v| *v = unsafe { std::mem::zeroed() });
         self.gpu_write_flag.store(0, Ordering::Release);
     }
 }
@@ -173,26 +175,25 @@ fn create_test_device() -> (wgpu::Device, wgpu::Queue) {
         ..Default::default()
     });
 
-    let adapter = pollster::block_on(instance.request_adapter(
-        &wgpu::RequestAdapterOptions {
-            power_preference: wgpu::PowerPreference::HighPerformance,
-            compatible_surface: None,
-            force_fallback_adapter: false,
-        },
-    ))
+    let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
+        power_preference: wgpu::PowerPreference::HighPerformance,
+        compatible_surface: None,
+        force_fallback_adapter: false,
+    }))
     .expect("Failed to find GPU adapter");
 
     let info = adapter.get_info();
-    println!("[GPU Device] {} ({:?}) via {:?}", info.name, info.device_type, info.backend);
+    println!(
+        "[GPU Device] {} ({:?}) via {:?}",
+        info.name, info.device_type, info.backend
+    );
 
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor {
-            label: Some("test-device"),
-            required_features: wgpu::Features::empty(),
-            required_limits: wgpu::Limits::default(),
-            ..Default::default()
-        },
-    ))
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        label: Some("test-device"),
+        required_features: wgpu::Features::empty(),
+        required_limits: wgpu::Limits::default(),
+        ..Default::default()
+    }))
     .expect("Failed to create device");
 
     (device, queue)
@@ -211,7 +212,9 @@ fn test_unified_buffer_gpu_write_single_element() {
     let mut buffer = UnifiedBuffer::<f32>::new(&device, 100);
 
     let test_value = vec![42.5];
-    buffer.gpu_write(&queue, &test_value, 0).expect("Write failed");
+    buffer
+        .gpu_write(&queue, &test_value, 0)
+        .expect("Write failed");
 
     assert_eq!(buffer.write_flag_state(), 1);
 
@@ -228,7 +231,9 @@ fn test_unified_buffer_gpu_write_multiple_elements() {
     let mut buffer = UnifiedBuffer::<f32>::new(&device, 100);
 
     let test_data = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    buffer.gpu_write(&queue, &test_data, 0).expect("Write failed");
+    buffer
+        .gpu_write(&queue, &test_data, 0)
+        .expect("Write failed");
 
     let cpu_view = buffer.cpu_read();
     assert_eq!(&cpu_view[..5], &[1.0, 2.0, 3.0, 4.0, 5.0]);
@@ -269,13 +274,17 @@ fn test_unified_buffer_multiple_writes() {
     let mut buffer = UnifiedBuffer::<f32>::new(&device, 100);
 
     let data1 = vec![1.0, 2.0, 3.0];
-    buffer.gpu_write(&queue, &data1, 0).expect("First write failed");
+    buffer
+        .gpu_write(&queue, &data1, 0)
+        .expect("First write failed");
     let view1 = buffer.cpu_read();
     assert_eq!(&view1[..3], &[1.0, 2.0, 3.0]);
     buffer.cpu_ack_read();
 
     let data2 = vec![10.0, 20.0, 30.0];
-    buffer.gpu_write(&queue, &data2, 0).expect("Second write failed");
+    buffer
+        .gpu_write(&queue, &data2, 0)
+        .expect("Second write failed");
     let view2 = buffer.cpu_read();
     assert_eq!(&view2[..3], &[10.0, 20.0, 30.0]);
     buffer.cpu_ack_read();
@@ -381,7 +390,9 @@ fn test_unified_buffer_with_work_queue_integration() {
     let work_queue = GpuWorkQueue::<u32>::new();
 
     let data = vec![1.5, 2.5, 3.5, 4.5, 5.5];
-    buffer.gpu_write(&queue_wgpu, &data, 0).expect("Write failed");
+    buffer
+        .gpu_write(&queue_wgpu, &data, 0)
+        .expect("Write failed");
 
     work_queue.gpu_enqueue(0);
 
@@ -405,7 +416,10 @@ fn test_unified_buffer_write_throughput() {
     buffer.gpu_write(&queue, &data, 0).expect("Write failed");
     let write_time = start.elapsed();
 
-    println!("[Performance] GPU write 10000 f32 elements: {:?}", write_time);
+    println!(
+        "[Performance] GPU write 10000 f32 elements: {:?}",
+        write_time
+    );
 
     let read_start = Instant::now();
     let _ = buffer.cpu_read();
