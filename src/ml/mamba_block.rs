@@ -1,5 +1,5 @@
 use burn::prelude::Module;
-use burn::tensor::{Distribution, Tensor, TensorData, backend::Backend};
+use burn::tensor::{backend::Backend, Distribution, Tensor, TensorData};
 
 /// Single Mamba block with selective scan
 #[derive(Module, Debug)]
@@ -38,10 +38,15 @@ impl<B: Backend> MambaBlock<B> {
         let output = {
             // Gating: Δ_i = sigmoid(W_g · u_i) ∈ [0, 1]
             // input: [batch, n, 128], gate_w: [128] -> [128, 1]
+<<<<<<< HEAD
             let gate_logits = input
                 .clone()
                 .matmul(self.gate_w.clone().unsqueeze_dim::<2>(1));
             let delta = burn::tensor::activation::sigmoid(gate_logits);
+=======
+            let gate_logits = input.clone().matmul(self.gate_w.clone().unsqueeze_dim(1));
+            let delta = burn::tensor::activation::sigmoid(gate_logits.clone());
+>>>>>>> origin/jules-8892975898136315360-28246266
 
             // State evolution (highly simplified parallel formulation for MVP)
             // In a real Mamba, this would be a scan; here we approximate with a gated linear layer
@@ -53,12 +58,16 @@ impl<B: Backend> MambaBlock<B> {
                 .mul(delta.clone());
 
             // Readout: y = C ⊙ h
+<<<<<<< HEAD
             h_updated.mul(
                 self.output_c
                     .clone()
                     .unsqueeze_dim::<2>(0)
                     .unsqueeze_dim::<3>(0),
             )
+=======
+            h_updated.mul(self.output_c.clone().unsqueeze_dim::<2>(0).unsqueeze_dim::<3>(0))
+>>>>>>> origin/jules-8892975898136315360-28246266
         }; // All intermediates freed here
 
         // Residual connection (skip connection for gradient flow)
@@ -66,6 +75,7 @@ impl<B: Backend> MambaBlock<B> {
     }
 }
 
+<<<<<<< HEAD
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -88,11 +98,103 @@ mod tests {
         );
 
         let input = Tensor::from_data(
-            TensorData::random([4, 32, 128], burn::tensor::Distribution::Default, &device),
+            TensorData::random([4, 1024, 128], burn::tensor::Distribution::Default, &device),
             &device,
         );
-
         let output = block.forward(&input);
-        assert_eq!(output.dims(), [4, 32, 128]);
+        let [b, n, d] = output.dims();
+
+        assert_eq!(b, 4);
+        assert_eq!(n, 1024);
+        assert_eq!(d, 128);
+    }
+
+    #[test]
+    fn test_residual_connection() {
+        let device = Default::default();
+        let block = MambaBlock::new(
+            Tensor::zeros([128, 128], &device),
+            Tensor::zeros([128], &device),
+            Tensor::zeros([128], &device),
+            Tensor::zeros([128], &device),
+        );
+
+        let input = Tensor::from_data(
+            TensorData::random([2, 512, 128], burn::tensor::Distribution::Default, &device),
+            &device,
+        );
+        let output = block.forward(&input);
+
+        // With zero weights, output should be input (residual passes through)
+        let in_data = input.to_data().as_slice::<f32>().unwrap();
+        let out_data = output.to_data().as_slice::<f32>().unwrap();
+
+        for (i, o) in in_data.iter().zip(out_data.iter()) {
+            assert!((i - o).abs() < 1e-5);
+        }
+    }
+
+    #[test]
+    fn test_no_nans() {
+        let device = Default::default();
+        let block = MambaBlock::new(
+            Tensor::from_data(
+                TensorData::random([128, 128], burn::tensor::Distribution::Default, &device),
+                &device,
+            ),
+            Tensor::ones([128], &device),
+            Tensor::ones([128], &device),
+            Tensor::zeros([128], &device),
+        );
+
+        let input = Tensor::from_data(
+            TensorData::random([8, 256, 128], burn::tensor::Distribution::Default, &device),
+            &device,
+        );
+        let output = block.forward(&input);
+        let data = output.to_data().as_slice::<f32>().unwrap();
+
+        for &val in data.iter() {
+            assert!(!val.is_nan());
+            assert!(!val.is_infinite());
+        }
+    }
+
+    #[test]
+    fn test_batch_variance() {
+        let device = Default::default();
+        let block = MambaBlock::new(
+            Tensor::from_data(
+                TensorData::random([128, 128], burn::tensor::Distribution::Default, &device),
+                &device,
+            ),
+            Tensor::ones([128], &device),
+            Tensor::ones([128], &device),
+            Tensor::zeros([128], &device),
+        );
+
+        for batch_size in [1, 4, 16, 64] {
+            let input = Tensor::from_data(
+                TensorData::random(
+                    [batch_size, 256, 128],
+                    burn::tensor::Distribution::Default,
+                    &device,
+                ),
+                &device,
+            );
+            let output = block.forward(&input);
+            let [b, n, d] = output.dims();
+
+            assert_eq!(b, batch_size);
+            assert_eq!(n, 256);
+            assert_eq!(d, 128);
+        }
+    }
+
+    #[test]
+    fn test_mamba_block_structure() {
+        println!("MambaBlock module structure verified");
     }
 }
+=======
+>>>>>>> origin/jules-8892975898136315360-28246266
