@@ -1,88 +1,73 @@
-use crate::features::AudioFeatures;
-use crate::ml::fold_frequency_harmonics::{FoldFrequencyAnalyzer, FoldFrequencyFeatures};
-use crate::ml::impulse_modulation::{ImpulseModulationAnalyzer, ModulationFeatures};
-use crate::ml::wideband_harmonic_analysis::{WidebandHarmonicAnalyzer, WidebandHarmonicFeatures};
 
-pub struct ForensicFeatures {
-    pub base_audio_features: Option<AudioFeatures>, // Example 196-D
-    pub wideband_harmonics: Option<WidebandHarmonicFeatures>, // 110-D
-    pub fold_features: Option<FoldFrequencyFeatures>, // 28-D
-    pub modulation_features: Option<ModulationFeatures>, // 67-D
+/// Additional Impulse Train Feature Extraction Logic
+pub struct ImpulseTrainFeatures {
+    pub impulse_detection: [f32; 512],
+    pub impulse_spacing: f32,
+    pub impulse_spacing_jitter: f32,
+    pub amplitude_envelope: [f32; 64],
+    pub impulse_phase_lock: f32,
+    pub pulse_train_confidence: f32,
 }
 
-#[derive(Debug, Clone)]
-pub struct FeatureFlags {
-    pub use_harmonic_analysis: bool,
-    pub fold_correction: bool,
-    pub use_impulse_detection: bool,
+impl ImpulseTrainFeatures {
+    pub fn to_vec(&self) -> Vec<f32> {
+        let mut vec = Vec::with_capacity(512 + 1 + 1 + 64 + 1 + 1); // 580 total
+        vec.extend_from_slice(&self.impulse_detection);
+        vec.push(self.impulse_spacing);
+        vec.push(self.impulse_spacing_jitter);
+        vec.extend_from_slice(&self.amplitude_envelope);
+        vec.push(self.impulse_phase_lock);
+        vec.push(self.pulse_train_confidence);
+        vec
+    }
 }
 
-pub struct ModularFeatureExtractor {
-    pub audio_features: Vec<f32>, // Simulated 196-D
-    pub wideband_analyzer: WidebandHarmonicAnalyzer,
-    pub fold_analyzer: FoldFrequencyAnalyzer,
-    pub modulation_analyzer: ImpulseModulationAnalyzer,
-    pub audio_fft_mag: Vec<f32>,
-    pub sample_rate: u32,
+pub fn detect_impulses(stft_magnitude: &[f32]) -> [f32; 512] {
+    let mut impulses = [0.0f32; 512];
+    let len = stft_magnitude.len().min(512);
+    for i in 0..len {
+        let mag = stft_magnitude[i];
+        let prev = if i > 0 { stft_magnitude[i - 1] } else { 0.0 };
+        let next = if i < len - 1 { stft_magnitude[i + 1] } else { 0.0 };
+
+        // Peak detection: local maximum
+        if mag > prev && mag > next && mag > next.max(prev) * 1.5 {
+            impulses[i] = mag;  // Mark as impulse
+        }
+    }
+    impulses
 }
 
-impl ModularFeatureExtractor {
-    pub fn new(sample_rate: u32, audio_features: Vec<f32>, audio_fft_mag: Vec<f32>) -> Self {
-        Self {
-            audio_features,
-            wideband_analyzer: WidebandHarmonicAnalyzer::new(),
-            fold_analyzer: FoldFrequencyAnalyzer::new(sample_rate),
-            modulation_analyzer: ImpulseModulationAnalyzer::new(sample_rate),
-            audio_fft_mag,
-            sample_rate,
+pub fn measure_pulse_train_coherence(
+    time_domain: &[f32],
+    sample_rate: u32,
+) -> (f32, f32, f32) {
+    let mut impulse_times = Vec::new();
+    let threshold = time_domain.iter().fold(f32::MIN, |a, &b| a.max(b)) * 0.8;
+
+    for (i, &sample) in time_domain.iter().enumerate() {
+        if sample.abs() > threshold {
+            impulse_times.push(i);
         }
     }
 
-    pub fn extract(&self, time_domain_samples: &[f32], flags: &FeatureFlags) -> Vec<f32> {
-        let mut features = self.audio_features.clone();
-
-        if flags.use_harmonic_analysis {
-            let mag = self.audio_fft_mag.clone();
-
-            // Wideband harmonics
-            let harmonics = self.wideband_analyzer.extract(&mag, self.sample_rate);
-
-            // Add log-frequency representation
-            features.extend_from_slice(&harmonics.log_spectrogram); // +96-D
-            features.extend_from_slice(&harmonics.octave_pattern); // +12-D
-            features.push(harmonics.fundamental_confidence); // +1-D
-            features.push(harmonics.harmonic_coherence); // +1-D
-                                                         // Total: +110-D
-
-            if flags.fold_correction {
-                let aliased_energy = 0.5; // Placeholder for actual aliased energy computation
-                let fold_features = self
-                    .fold_analyzer
-                    .extract(&harmonics.baseband_harmonics, aliased_energy);
-
-                features.extend_from_slice(&fold_features.fold_frequency_map); // +10-D
-                features.push(fold_features.aliased_energy); // +1-D
-                features.push(fold_features.fold_coherence); // +1-D
-                features.extend_from_slice(&fold_features.pulse_train_signature);
-            // +16-D
-            // Total: +28-D
-            } else {
-                features.extend_from_slice(&[0.0; 28]);
-            }
-        }
-
-        if flags.use_impulse_detection {
-            let mod_features = self.modulation_analyzer.extract(time_domain_samples);
-
-            features.extend_from_slice(&mod_features.modulation_envelope); // +64-D
-            features.push(mod_features.modulation_frequency / 10000.0); // +1-D (normalized)
-            features.push(mod_features.modulation_entropy); // +1-D
-            features.push(mod_features.modulation_periodicity); // +1-D
-                                                                // Total: +67-D
-        } else {
-            features.extend_from_slice(&[0.0; 67]);
-        }
-
-        features
+    if impulse_times.len() < 2 {
+        return (0.0, 0.0, 0.0);
     }
+
+    let mut spacings = Vec::new();
+    for i in 1..impulse_times.len() {
+        spacings.push(impulse_times[i] - impulse_times[i - 1]);
+    }
+
+    let mean_spacing = spacings.iter().sum::<usize>() as f32 / spacings.len() as f32;
+    let variance: f32 = spacings.iter()
+        .map(|&s| (s as f32 - mean_spacing).powi(2))
+        .sum::<f32>() / spacings.len() as f32;
+
+    let jitter = (variance.sqrt() / mean_spacing).clamp(0.0, 1.0);
+    let spacing_hz = sample_rate as f32 / mean_spacing;
+    let confidence = 1.0 - jitter;
+
+    (spacing_hz, jitter, confidence)
 }
