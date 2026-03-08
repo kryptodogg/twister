@@ -8,6 +8,7 @@ name = "twister"
 path = "src/main.rs"
 
 [dependencies]
+half = "*"
 # ── Error handling ─────────────────────────────────────────────────────────────
 anyhow = "*"
 bytemuck = { version = "*", features = ["derive"] }
