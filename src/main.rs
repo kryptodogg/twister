@@ -1,3 +1,4 @@
+pub mod active_denial;
 // src/main.rs — Twister v0.5  (Harassment Frequency Auto-Tuner + Forensic Evidence System)
 //
 // Renamed from SIREN.  All forensic / evidence functionality fully intact.
@@ -15,7 +16,7 @@
 //   trainer_loop  — tokio::spawn: Mamba online training
 //   sdr_loop      — tokio::spawn: RTL-SDR IQ capture + Twister auto-tune
 
-#![allow(clippy::too_many_arguments)]
+#[allow(clippy::too_many_arguments)]
 
 slint::include_modules!();
 

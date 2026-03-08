@@ -2,31 +2,30 @@
 /// TimeGNN: Graph Neural Network for event embedding via burn-wgpu
 ///
 /// Architecture:
-/// - Input: 1092-D tensor (196 audio + 768 wav2vec2 + 128 ray features)
-/// - Layer 1: Linear(1092 → 512) + ReLU + Dropout
+/// - Input: 1297-D tensor (196 audio + 768 wav2vec2 + 128 ray features)
+/// - Layer 1: Linear(1297 → 512) + ReLU + Dropout
 /// - Layer 2: Linear(512 → 256) + ReLU + Dropout
 /// - Layer 3: Linear(256 → 128)  ← output embeddings
 /// - Output: 128-D event embeddings for 3D visualization
 ///
 /// Compute: Native Vulkan via burn-wgpu on RX 6700 XT
 /// Memory: Zero-copy GPU tensors shared with RT pipeline
-
 use burn::module::Module;
 use burn::nn::{Dropout, DropoutConfig, Linear, LinearConfig};
 use burn::prelude::*;
 use burn::tensor::activation::relu;
 
-/// TimeGNN model for 1092-D → 128-D event embedding transformation
+/// TimeGNN model for 1297-D → 128-D event embedding transformation
 /// Implements three fully-connected layers with ReLU activation and dropout
 ///
 /// Physics/Design Rationale:
-/// - Linear layers learn feature transformations (1092 → 512 → 256 → 128)
+/// - Linear layers learn feature transformations (1297 → 512 → 256 → 128)
 /// - ReLU non-linearity enables learning complex feature interactions
 /// - Dropout (0.1) regularizes during training, prevents overfitting
 /// - 128-D bottleneck preserves semantic information for visualization
 #[derive(Module, Debug)]
 pub struct TimeGnnModel<B: Backend> {
-    /// Layer 1: Dense projection from 1092-D to 512-D
+    /// Layer 1: Dense projection from 1297-D to 512-D
     /// Maps concatenated audio + wav2vec2 + ray features to intermediate space
     #[module]
     linear1: Linear<B>,
@@ -51,14 +50,14 @@ impl<B: Backend> TimeGnnModel<B> {
     /// Create new TimeGNN model on specified device
     ///
     /// # Arguments
-    /// * `input_dim` - Input feature dimension (expected: 1092)
+    /// * `input_dim` - Input feature dimension (expected: 1297)
     /// * `device` - Burn backend device (e.g., WgpuDevice for Vulkan GPU)
     ///
     /// # Architecture
     /// ```text
-    /// Input (1092)
+    /// Input (1297)
     ///   ↓
-    /// Linear(1092 → 512) + ReLU + Dropout(0.1)
+    /// Linear(1297 → 512) + ReLU + Dropout(0.1)
     ///   ↓
     /// Linear(512 → 256) + ReLU + Dropout(0.1)
     ///   ↓
@@ -67,20 +66,16 @@ impl<B: Backend> TimeGnnModel<B> {
     /// Output (128)
     /// ```
     pub fn new(input_dim: usize, device: &B::Device) -> Self {
-        // Configuration: Layer 1 (1092 → 512)
+        // Configuration: Layer 1 (1297 → 512)
         let linear1_config = LinearConfig::new(input_dim, 512)
-            .with_bias(true)  // Use bias terms for flexibility
+            .with_bias(true) // Use bias terms for flexibility
             .init(device);
 
         // Configuration: Layer 2 (512 → 256)
-        let linear2_config = LinearConfig::new(512, 256)
-            .with_bias(true)
-            .init(device);
+        let linear2_config = LinearConfig::new(512, 256).with_bias(true).init(device);
 
         // Configuration: Layer 3 (256 → 128) — output embeddings
-        let linear3_config = LinearConfig::new(256, 128)
-            .with_bias(true)
-            .init(device);
+        let linear3_config = LinearConfig::new(256, 128).with_bias(true).init(device);
 
         // Dropout: 0.1 rate (10% neuron dropout during training)
         let dropout_config = DropoutConfig::new(0.1).init();
@@ -93,10 +88,10 @@ impl<B: Backend> TimeGnnModel<B> {
         }
     }
 
-    /// Forward pass: compute 128-D embeddings from 1092-D input
+    /// Forward pass: compute 128-D embeddings from 1297-D input
     ///
     /// # Arguments
-    /// * `x` - Input tensor shape: (batch_size, 1092)
+    /// * `x` - Input tensor shape: (batch_size, 1297)
     ///   - Concatenated features: 196 audio + 768 wav2vec2 + 128 ray
     ///
     /// # Returns
@@ -104,7 +99,7 @@ impl<B: Backend> TimeGnnModel<B> {
     ///   - Event embeddings for visualization
     ///
     /// # Computation Flow
-    /// 1. x → Linear(1092 → 512) → ReLU → Dropout
+    /// 1. x → Linear(1297 → 512) → ReLU → Dropout
     /// 2. ... → Linear(512 → 256) → ReLU → Dropout
     /// 3. ... → Linear(256 → 128) → embedding
     pub fn forward(&self, x: Tensor<B, 2>) -> Tensor<B, 2> {
@@ -134,14 +129,14 @@ mod tests {
     type TestBackend = NdArray;
 
     /// Test: TimeGNN produces correct output dimension
-    /// Verifies: (1, 1092) → (1, 128)
+    /// Verifies: (1, 1297) → (1, 128)
     #[test]
     fn test_forward_output_shape() {
         let device = <TestBackend as Backend>::Device::default();
-        let model = TimeGnnModel::<TestBackend>::new(1092, &device);
+        let model = TimeGnnModel::<TestBackend>::new(1297, &device);
 
-        // Create dummy input: (batch=1, features=1092)
-        let input = Tensor::<TestBackend, 2>::zeros([1, 1092], &device);
+        // Create dummy input: (batch=1, features=1297)
+        let input = Tensor::<TestBackend, 2>::zeros([1, 1297], &device);
 
         // Forward pass
         let output = model.forward(input);
@@ -153,14 +148,14 @@ mod tests {
     }
 
     /// Test: TimeGNN handles batches correctly
-    /// Verifies: (batch_size=32, 1092) → (32, 128)
+    /// Verifies: (batch_size=32, 1297) → (32, 128)
     #[test]
     fn test_batch_processing() {
         let device = <TestBackend as Backend>::Device::default();
-        let model = TimeGnnModel::<TestBackend>::new(1092, &device);
+        let model = TimeGnnModel::<TestBackend>::new(1297, &device);
 
-        // Create batch input: (batch=32, features=1092)
-        let input = Tensor::<TestBackend, 2>::zeros([32, 1092], &device);
+        // Create batch input: (batch=32, features=1297)
+        let input = Tensor::<TestBackend, 2>::zeros([32, 1297], &device);
 
         // Forward pass
         let output = model.forward(input);
@@ -176,10 +171,10 @@ mod tests {
     #[test]
     fn test_deterministic_eval() {
         let device = <TestBackend as Backend>::Device::default();
-        let model = TimeGnnModel::<TestBackend>::new(1092, &device);
+        let model = TimeGnnModel::<TestBackend>::new(1297, &device);
 
         // Create input
-        let input = Tensor::<TestBackend, 2>::zeros([1, 1092], &device);
+        let input = Tensor::<TestBackend, 2>::zeros([1, 1297], &device);
 
         // Forward pass 1
         let output1 = model.forward(input.clone());
@@ -199,13 +194,13 @@ mod tests {
     #[test]
     fn test_layer_dimensions() {
         let device = <TestBackend as Backend>::Device::default();
-        let model = TimeGnnModel::<TestBackend>::new(1092, &device);
+        let model = TimeGnnModel::<TestBackend>::new(1297, &device);
 
         // Verify Linear layer 1 input/output dimensions
-        let input1 = Tensor::<TestBackend, 2>::zeros([1, 1092], &device);
+        let input1 = Tensor::<TestBackend, 2>::zeros([1, 1297], &device);
         let output1 = model.linear1.forward(input1);
         let dims1: [usize; 2] = output1.shape().dims();
-        assert_eq!(dims1[1], 512); // 1092 → 512
+        assert_eq!(dims1[1], 512); // 1297 → 512
 
         // Verify Linear layer 2
         let input2 = Tensor::<TestBackend, 2>::zeros([1, 512], &device);
@@ -225,10 +220,10 @@ mod tests {
     #[test]
     fn test_relu_activation() {
         let device = <TestBackend as Backend>::Device::default();
-        let model = TimeGnnModel::<TestBackend>::new(1092, &device);
+        let model = TimeGnnModel::<TestBackend>::new(1297, &device);
 
         // Create input with all ones
-        let input = Tensor::<TestBackend, 2>::ones([1, 1092], &device);
+        let input = Tensor::<TestBackend, 2>::ones([1, 1297], &device);
 
         // Forward pass (applies ReLU in hidden layers)
         let output = model.forward(input);

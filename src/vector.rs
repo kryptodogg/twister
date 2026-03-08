@@ -1,9 +1,9 @@
 use anyhow::{Context, Result};
-use qdrant_client::Qdrant;
 use qdrant_client::qdrant::{
-    CreateCollectionBuilder, Distance, VectorsConfig, VectorParams,
-    UpsertPointsBuilder, PointStruct, Value, value::Kind, SearchPointsBuilder,
+    value::Kind, CreateCollectionBuilder, Distance, PointStruct, SearchPointsBuilder,
+    UpsertPointsBuilder, Value, VectorParams, VectorsConfig,
 };
+use qdrant_client::Qdrant;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -58,7 +58,9 @@ impl QdrantClient {
                 .create_collection(
                     CreateCollectionBuilder::new(&collection_name)
                         .vectors_config(VectorsConfig {
-                            config: Some(qdrant_client::qdrant::vectors_config::Config::Params(vector_params)),
+                            config: Some(qdrant_client::qdrant::vectors_config::Config::Params(
+                                vector_params,
+                            )),
                         })
                         .build(),
                 )
@@ -140,7 +142,10 @@ impl QdrantClient {
             .collect();
 
         self.client
-            .upsert_points(UpsertPointsBuilder::new(&self.collection_name, qdrant_points))
+            .upsert_points(UpsertPointsBuilder::new(
+                &self.collection_name,
+                qdrant_points,
+            ))
             .await
             .context("Failed to upsert embeddings to Qdrant")?;
 
@@ -153,7 +158,8 @@ impl QdrantClient {
         embedding: &[f32],
         limit: usize,
     ) -> Result<Vec<(u64, f32, SignalMetadata)>> {
-        let search_result = self.client
+        let search_result = self
+            .client
             .search_points(
                 SearchPointsBuilder::new(&self.collection_name, embedding.to_vec(), limit as u64)
                     .with_payload(true)
@@ -279,11 +285,7 @@ impl QdrantClient {
     }
 
     /// Update point metadata (e.g., link to Neo4j graph node)
-    pub async fn update_metadata(
-        &self,
-        point_id: u64,
-        graph_node_id: String,
-    ) -> Result<()> {
+    pub async fn update_metadata(&self, point_id: u64, graph_node_id: String) -> Result<()> {
         let mut payload = HashMap::new();
         payload.insert(
             "graph_node_id".to_string(),
@@ -293,12 +295,10 @@ impl QdrantClient {
         );
 
         self.client
-            .upsert_points(
-                UpsertPointsBuilder::new(
-                    &self.collection_name,
-                    vec![PointStruct::new(point_id, vec![], payload)],
-                ),
-            )
+            .upsert_points(UpsertPointsBuilder::new(
+                &self.collection_name,
+                vec![PointStruct::new(point_id, vec![], payload)],
+            ))
             .await
             .context("Failed to update point metadata")?;
 
@@ -307,7 +307,7 @@ impl QdrantClient {
 
     /// Delete points by ID
     pub async fn delete_points(&self, point_ids: &[u64]) -> Result<()> {
-        use qdrant_client::qdrant::{DeletePointsBuilder, PointsIdsList, PointId};
+        use qdrant_client::qdrant::{DeletePointsBuilder, PointId, PointsIdsList};
 
         let ids: Vec<PointId> = point_ids
             .iter()
@@ -332,7 +332,8 @@ impl QdrantClient {
     pub async fn scroll_all(&self, limit: u64) -> Result<Vec<(u64, SignalMetadata)>> {
         use qdrant_client::qdrant::ScrollPointsBuilder;
 
-        let scroll_result = self.client
+        let scroll_result = self
+            .client
             .scroll(
                 ScrollPointsBuilder::new(&self.collection_name)
                     .limit(limit as u32)

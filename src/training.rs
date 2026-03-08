@@ -354,7 +354,7 @@ pub fn spawn_background_training(
                 // Emit telemetry event for UI consumption
                 let _evt_result = ui_tx.send(crate::state::UiEvent::TrainingProgress {
                     iteration: epoch,
-                    total_iterations: 100_000,  // Arbitrary upper bound for progress bar
+                    total_iterations: 100_000, // Arbitrary upper bound for progress bar
                     loss,
                     loss_min: loss.min(0.5), // Approximate min for progress display
                 });

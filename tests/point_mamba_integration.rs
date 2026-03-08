@@ -16,7 +16,9 @@
 
 #[cfg(test)]
 mod point_mamba_tests {
-    use twister::ml::{PointNetEncoder, PointMamba, PointDecoder, PointMambaModel, PointMambaTrainingConfig};
+    use twister::ml::{
+        PointDecoder, PointMamba, PointMambaModel, PointMambaTrainingConfig, PointNetEncoder,
+    };
     use twister::visualization::GaussianSplatRenderer;
 
     // ============================================================================
@@ -34,14 +36,22 @@ mod point_mamba_tests {
     fn test_phase3a_encoder_expected_architecture() {
         // Verify expected layer dimensions
         let encoder_layers = vec![
-            ("Input", 6, "Spatial coordinates: azimuth, elevation, frequency, intensity, time, confidence"),
+            (
+                "Input",
+                6,
+                "Spatial coordinates: azimuth, elevation, frequency, intensity, time, confidence",
+            ),
             ("Linear1", 64, "First MLP reduces dimensionality"),
             ("BatchNorm1", 64, "Normalizes first hidden layer"),
             ("Linear2", 128, "Second MLP expands expressivity"),
             ("BatchNorm2", 128, "Normalizes second hidden layer"),
             ("Linear3", 256, "Third MLP produces final embeddings"),
             ("BatchNorm3", 256, "Normalizes output"),
-            ("GlobalMaxPool", 256, "Aggregates across points via max pooling"),
+            (
+                "GlobalMaxPool",
+                256,
+                "Aggregates across points via max pooling",
+            ),
         ];
 
         println!("Phase 3A: PointNet Encoder Architecture");
@@ -49,7 +59,11 @@ mod point_mamba_tests {
             println!("  {} (dim={}): {}", name, dim, desc);
         }
 
-        assert_eq!(encoder_layers.len(), 8, "Should have 8 architectural components");
+        assert_eq!(
+            encoder_layers.len(),
+            8,
+            "Should have 8 architectural components"
+        );
     }
 
     #[test]
@@ -62,7 +76,8 @@ mod point_mamba_tests {
         let linear3_params = 128 * 256 + 256;
         let bn3_params = 256 * 2;
 
-        let total = linear1_params + bn1_params + linear2_params + bn2_params + linear3_params + bn3_params;
+        let total =
+            linear1_params + bn1_params + linear2_params + bn2_params + linear3_params + bn3_params;
 
         println!("Phase 3A: PointNet Encoder Parameter Count");
         println!("  Linear1: {}", linear1_params);
@@ -231,7 +246,10 @@ mod point_mamba_tests {
 
         for (intensity, name, _expected_rgb) in test_intensities {
             let (r, g, b) = intensity_to_rgb(intensity);
-            println!("  {}: intensity={} → RGB({}, {}, {})", name, intensity, r, g, b);
+            println!(
+                "  {}: intensity={} → RGB({}, {}, {})",
+                name, intensity, r, g, b
+            );
         }
 
         // Test blue region (intensity ≈ 0)
@@ -244,7 +262,11 @@ mod point_mamba_tests {
 
         // Test white region (intensity > 1.0)
         let (r, g, b) = intensity_to_rgb(2.0);
-        assert_eq!((r, g, b), (255, 255, 255), "Very high intensity should be white");
+        assert_eq!(
+            (r, g, b),
+            (255, 255, 255),
+            "Very high intensity should be white"
+        );
     }
 
     #[test]
@@ -383,7 +405,9 @@ mod point_mamba_tests {
         println!("  • Status: ✓ Trainer framework implemented, training loop stubbed");
 
         println!("\n📈 ARCHITECTURE SUMMARY");
-        println!("  6-D Input → [Encoder: 256-D] → [Mamba: 8 blocks] → [Decoder: 3-D] → Displacement");
+        println!(
+            "  6-D Input → [Encoder: 256-D] → [Mamba: 8 blocks] → [Decoder: 3-D] → Displacement"
+        );
         println!("  Total Parameters: ~1M (reasonable for point cloud networks)");
         println!("  GPU Memory: ~100-200 MB (point buffers + textures)");
 
