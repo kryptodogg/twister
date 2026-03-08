@@ -3,14 +3,14 @@
 // Evidence collection for harassment defense and investigation.
 // Logs detections with court-admissible timestamps and calibration data.
 
-use std::collections::HashMap;
-use std::fs::{File, OpenOptions, create_dir_all};
-use std::io::{Write, BufWriter};
-use std::path::PathBuf;
-use std::time::{SystemTime, UNIX_EPOCH};
+use crate::detection::DetectionEvent;
 use chrono;
 use csv;
-use crate::detection::DetectionEvent;
+use std::collections::HashMap;
+use std::fs::{create_dir_all, File, OpenOptions};
+use std::io::{BufWriter, Write};
+use std::path::PathBuf;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Forensic event types for evidence classification
 #[derive(Debug, Clone, serde::Serialize)]
@@ -88,21 +88,21 @@ pub struct EquipmentMetadata {
     pub sdr_model: String,
     pub sdr_sample_rate_hz: u32,
     pub antenna_type: String,
-    
+
     /// Audio input devices
     pub webcam_mic_model: String,
     pub webcam_mic_sample_rate_hz: u32,
     pub webcam_mic_channels: u32,
     pub webcam_mic_bit_depth: u32,
-    
+
     pub line_in_snr_db: f32,
     pub line_in_bit_depth: u32,
     pub line_in_sample_rate_hz: u32,
-    
+
     pub mic_in_snr_db: f32,
     pub mic_in_bit_depth: u32,
     pub mic_in_sample_rate_hz: u32,
-    
+
     /// Calibration metadata
     pub calibration_date: String,
     pub calibration_verified: bool,
@@ -115,22 +115,22 @@ impl Default for EquipmentMetadata {
             sdr_model: "RTL-SDR Blog V4".to_string(),
             sdr_sample_rate_hz: 2048000,
             antenna_type: "YouLoop".to_string(),
-            
+
             // Logitech C925e webcam microphone specs
             webcam_mic_model: "Logitech C925e".to_string(),
             webcam_mic_sample_rate_hz: 32000,
             webcam_mic_channels: 2,
             webcam_mic_bit_depth: 16,
-            
+
             // Realtek ALC S1200A onboard audio
             line_in_snr_db: 103.0,
             line_in_bit_depth: 24,
             line_in_sample_rate_hz: 192000,
-            
+
             mic_in_snr_db: 103.0,
             mic_in_bit_depth: 24,
             mic_in_sample_rate_hz: 192000,
-            
+
             calibration_date: chrono::Utc::now().to_rfc3339(),
             calibration_verified: true,
             calibration_notes: String::new(),
@@ -146,7 +146,10 @@ impl ForensicEvent {
         equipment: EquipmentMetadata,
     ) -> Self {
         let now = SystemTime::now();
-        let unix_ts = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs_f64();
+        let unix_ts = now
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs_f64();
         let utc_ts = chrono::DateTime::from_timestamp(unix_ts as i64, 0)
             .unwrap_or_default()
             .to_rfc3339();
@@ -176,7 +179,11 @@ impl ForensicEvent {
     }
 
     /// Convert to enhanced JSONL with forensic analysis fields
-    pub fn to_enhanced_jsonl(&self, logger: &ForensicLogger, event: &DetectionEvent) -> anyhow::Result<String> {
+    pub fn to_enhanced_jsonl(
+        &self,
+        logger: &ForensicLogger,
+        event: &DetectionEvent,
+    ) -> anyhow::Result<String> {
         let rf_confidence = self.confidence;
         let mamba_anomaly_db = event.mamba_anomaly_db;
         let mamba_confidence = logger.compute_confidence(mamba_anomaly_db);
@@ -219,11 +226,11 @@ impl ForensicEvent {
 }
 
 pub struct ForensicLogger {
-    writer:      BufWriter<File>,
-    log_path:    PathBuf,
+    writer: BufWriter<File>,
+    log_path: PathBuf,
     event_count: u64,
-    session_id:  String,
-    equipment:   EquipmentMetadata,
+    session_id: String,
+    equipment: EquipmentMetadata,
 }
 
 impl ForensicLogger {
@@ -232,13 +239,16 @@ impl ForensicLogger {
         create_dir_all(&dir)?;
         let filename = format!("{}.jsonl", session_id.replace(':', "-"));
         let log_path = dir.join(&filename);
-        let file = OpenOptions::new().create(true).append(true).open(&log_path)?;
+        let file = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(&log_path)?;
         println!("[Forensic] Logging to: {}", log_path.display());
         let mut writer = BufWriter::new(file);
-        
+
         // Full equipment metadata for chain of custody
         let equipment = EquipmentMetadata::default();
-        
+
         let header = serde_json::json!({
             "record_type":   "session_start",
             "session_id":    session_id,
@@ -268,18 +278,21 @@ impl ForensicLogger {
         });
         writeln!(writer, "{}", header)?;
         writer.flush()?;
-        Ok(Self { writer, log_path, event_count: 0, session_id: session_id.to_string(), equipment })
+        Ok(Self {
+            writer,
+            log_path,
+            event_count: 0,
+            session_id: session_id.to_string(),
+            equipment,
+        })
     }
 
     pub fn log_detection(&mut self, event: &DetectionEvent) -> anyhow::Result<()> {
         self.event_count += 1;
 
         // Create forensic event with full metadata
-        let forensic_event = ForensicEvent::from_detection(
-            event,
-            &self.session_id,
-            self.equipment.clone(),
-        );
+        let forensic_event =
+            ForensicEvent::from_detection(event, &self.session_id, self.equipment.clone());
 
         // Log as forensic event
         let record = serde_json::to_string(&forensic_event)?;
@@ -287,13 +300,26 @@ impl ForensicLogger {
 
         // Also log summary to console
         let summary = match &forensic_event.event_type {
-            ForensicEventType::Bispectrum { f1_hz, f2_hz, product_hz, .. } => {
+            ForensicEventType::Bispectrum {
+                f1_hz,
+                f2_hz,
+                product_hz,
+                ..
+            } => {
                 format!(
                     "[{}] Bispectrum: {:.1}Hz + {:.1}Hz → {:.1}Hz (confidence: {:.2})",
-                    event.hardware.as_str(), f1_hz, f2_hz, product_hz, forensic_event.confidence
+                    event.hardware.as_str(),
+                    f1_hz,
+                    f2_hz,
+                    product_hz,
+                    forensic_event.confidence
                 )
             }
-            _ => format!("[{}] Detection: confidence={:.2}", event.hardware.as_str(), forensic_event.confidence),
+            _ => format!(
+                "[{}] Detection: confidence={:.2}",
+                event.hardware.as_str(),
+                forensic_event.confidence
+            ),
         };
 
         println!("[Forensic] #{}: {}", self.event_count, summary);
@@ -334,10 +360,10 @@ impl ForensicLogger {
         let synchronized = timestamp_sync_ms < 5;
 
         match (has_audio_dc, has_sdr_dc, high_rf, synchronized) {
-            (true, true, true, true) => "RF_DC_SIMULTANEOUS",    // Coordination proof
+            (true, true, true, true) => "RF_DC_SIMULTANEOUS", // Coordination proof
             (true, false, _, _) => "DC_BIAS_ONLY",
             (false, true, true, _) => "RF_ONLY",
-            (true, true, _, _) => "RF_DC_SEQUENTIAL",            // Both present, not sync
+            (true, true, _, _) => "RF_DC_SEQUENTIAL", // Both present, not sync
             _ => "MIXED_VECTOR",
         }
         .to_string()
@@ -355,31 +381,40 @@ impl ForensicLogger {
     ) -> anyhow::Result<()> {
         use std::fs::File;
         use std::io::BufReader;
-        
-        println!("[Forensic] Generating evidence report for case: {}", case_number);
-        
+
+        println!(
+            "[Forensic] Generating evidence report for case: {}",
+            case_number
+        );
+
         // Read all events from log
         let file = File::open(&self.log_path)?;
         let reader = BufReader::new(file);
-        
+
         let mut events: Vec<serde_json::Value> = Vec::new();
         let mut session_start: Option<String> = None;
         let mut session_end: Option<String> = None;
         let mut equipment_info: Option<serde_json::Value> = None;
-        
+
         for line in std::io::BufRead::lines(reader) {
             let line = line?;
             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&line) {
                 // Track session metadata
                 if let Some(record_type) = json.get("record_type").and_then(|v| v.as_str()) {
                     if record_type == "session_start" {
-                        session_start = json.get("timestamp_utc").and_then(|v| v.as_str()).map(String::from);
+                        session_start = json
+                            .get("timestamp_utc")
+                            .and_then(|v| v.as_str())
+                            .map(String::from);
                         equipment_info = json.get("equipment").cloned();
                     } else if record_type == "session_end" {
-                        session_end = json.get("timestamp_utc").and_then(|v| v.as_str()).map(String::from);
+                        session_end = json
+                            .get("timestamp_utc")
+                            .and_then(|v| v.as_str())
+                            .map(String::from);
                     }
                 }
-                
+
                 // Filter detection events by date range
                 if let Some(ts) = json.get("timestamp_utc").and_then(|v| v.as_str()) {
                     if let (Some(start), Some(end)) = (start_date, end_date) {
@@ -387,14 +422,15 @@ impl ForensicLogger {
                             continue;
                         }
                     }
-                    if json.get("record_type").and_then(|v| v.as_str()) == Some("detection") 
-                        || json.get("event_type").is_some() {
+                    if json.get("record_type").and_then(|v| v.as_str()) == Some("detection")
+                        || json.get("event_type").is_some()
+                    {
                         events.push(json);
                     }
                 }
             }
         }
-        
+
         // Generate comprehensive HTML report
         let mut html = String::new();
         html.push_str(&format!(r#"<!DOCTYPE html>
@@ -447,10 +483,11 @@ impl ForensicLogger {
             events.len(),
             self.log_path.display()
         ));
-        
+
         // Equipment section
         if let Some(equip) = &equipment_info {
-            html.push_str(&format!(r#"
+            html.push_str(&format!(
+                r#"
     <h2>Equipment Configuration</h2>
     <table>
         <tr><th>SDR Model</th><td>{}</td></tr>
@@ -462,26 +499,72 @@ impl ForensicLogger {
         <tr><th>Calibration</th><td>{} (Verified: {})</td></tr>
     </table>
 "#,
-                equip.get("sdr_model").and_then(|v| v.as_str()).unwrap_or("Unknown"),
-                equip.get("sdr_sample_rate_hz").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("antenna_type").and_then(|v| v.as_str()).unwrap_or("Unknown"),
-                equip.get("webcam_mic_model").and_then(|v| v.as_str()).unwrap_or("Unknown"),
-                equip.get("webcam_mic_channels").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("webcam_mic_bit_depth").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("webcam_mic_sample_rate_hz").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("line_in_snr_db").and_then(|v| v.as_f64()).unwrap_or(0.0),
-                equip.get("line_in_bit_depth").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("line_in_sample_rate_hz").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("mic_in_snr_db").and_then(|v| v.as_f64()).unwrap_or(0.0),
-                equip.get("mic_in_bit_depth").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("mic_in_sample_rate_hz").and_then(|v| v.as_u64()).unwrap_or(0),
-                equip.get("calibration_date").and_then(|v| v.as_str()).unwrap_or("Unknown"),
-                equip.get("calibration_verified").and_then(|v| v.as_bool()).unwrap_or(false)
+                equip
+                    .get("sdr_model")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("Unknown"),
+                equip
+                    .get("sdr_sample_rate_hz")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("antenna_type")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("Unknown"),
+                equip
+                    .get("webcam_mic_model")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("Unknown"),
+                equip
+                    .get("webcam_mic_channels")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("webcam_mic_bit_depth")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("webcam_mic_sample_rate_hz")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("line_in_snr_db")
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0),
+                equip
+                    .get("line_in_bit_depth")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("line_in_sample_rate_hz")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("mic_in_snr_db")
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0),
+                equip
+                    .get("mic_in_bit_depth")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("mic_in_sample_rate_hz")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0),
+                equip
+                    .get("calibration_date")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("Unknown"),
+                equip
+                    .get("calibration_verified")
+                    .and_then(|v| v.as_bool())
+                    .unwrap_or(false)
             ));
         }
-        
+
         // Detection events timeline
-        html.push_str(r#"
+        html.push_str(
+            r#"
     <h2>Detection Events Timeline</h2>
     <table>
         <tr>
@@ -492,35 +575,53 @@ impl ForensicLogger {
             <th>Confidence</th>
             <th>Duration (s)</th>
         </tr>
-"#);
-        
+"#,
+        );
+
         for event in &events {
-            let event_type = event.get("event_type")
+            let event_type = event
+                .get("event_type")
                 .or_else(|| event.get("product_type"))
                 .and_then(|v| v.as_str())
                 .unwrap_or("Unknown");
-            
-            let freq = event.get("f1_hz")
+
+            let freq = event
+                .get("f1_hz")
                 .or_else(|| event.get("frequency_hz"))
                 .or_else(|| event.get("carrier_hz"))
                 .or_else(|| event.get("center_freq_hz"))
                 .or_else(|| event.get("product_hz"))
                 .and_then(|v| v.as_f64())
                 .unwrap_or(0.0);
-            
-            let amplitude = event.get("magnitude")
+
+            let amplitude = event
+                .get("magnitude")
                 .or_else(|| event.get("amplitude_dbfs"))
                 .and_then(|v| v.as_f64())
                 .unwrap_or(0.0);
-            
-            let confidence = event.get("confidence").and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let duration = event.get("duration_seconds").and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let timestamp = event.get("timestamp_utc").and_then(|v| v.as_str()).unwrap_or("Unknown");
-            
+
+            let confidence = event
+                .get("confidence")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
+            let duration = event
+                .get("duration_seconds")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
+            let timestamp = event
+                .get("timestamp_utc")
+                .and_then(|v| v.as_str())
+                .unwrap_or("Unknown");
+
             // Highlight high-confidence detections
-            let row_class = if confidence >= 0.8 { "style=\"background-color: #ffcdd2;\"" } else { "" };
-            
-            html.push_str(&format!(r#"
+            let row_class = if confidence >= 0.8 {
+                "style=\"background-color: #ffcdd2;\""
+            } else {
+                ""
+            };
+
+            html.push_str(&format!(
+                r#"
         <tr{}>
             <td class="timestamp">{}</td>
             <td>{}</td>
@@ -529,9 +630,11 @@ impl ForensicLogger {
             <td>{:.3}</td>
             <td>{:.3}</td>
         </tr>
-"#, row_class, timestamp, event_type, freq, amplitude, confidence, duration));
+"#,
+                row_class, timestamp, event_type, freq, amplitude, confidence, duration
+            ));
         }
-        
+
         html.push_str(&format!(r#"
     </table>
 
@@ -552,23 +655,27 @@ impl ForensicLogger {
             case_number,
             events.len()
         ));
-        
+
         // Write HTML report
         std::fs::write(output_path, html)?;
-        println!("[Forensic] Evidence report exported: {} ({} events)", output_path, events.len());
-        
+        println!(
+            "[Forensic] Evidence report exported: {} ({} events)",
+            output_path,
+            events.len()
+        );
+
         // Also export CSV for data analysis
         let csv_path = output_path.replace(".html", ".csv");
         self.export_csv(&csv_path, &events)?;
         println!("[Forensic] CSV export: {}", csv_path);
-        
+
         Ok(())
     }
-    
+
     /// Export events as CSV for data analysis
     fn export_csv(&self, output_path: &str, events: &[serde_json::Value]) -> anyhow::Result<()> {
         let mut csv_writer = csv::Writer::from_path(output_path)?;
-        
+
         // Write header
         csv_writer.write_record(&[
             "timestamp_utc",
@@ -580,29 +687,43 @@ impl ForensicLogger {
             "session_id",
             "notes",
         ])?;
-        
+
         // Write events
         for event in events {
             if let Some(event_type) = event.get("event_type").and_then(|v| v.as_str()) {
-                let freq = event.get("f1_hz")
+                let freq = event
+                    .get("f1_hz")
                     .or_else(|| event.get("frequency_hz"))
                     .or_else(|| event.get("carrier_hz"))
                     .or_else(|| event.get("center_freq_hz"))
                     .or_else(|| event.get("product_hz"))
                     .and_then(|v| v.as_f64())
                     .unwrap_or(0.0);
-                
-                let amplitude = event.get("magnitude")
+
+                let amplitude = event
+                    .get("magnitude")
                     .or_else(|| event.get("amplitude_dbfs"))
                     .and_then(|v| v.as_f64())
                     .unwrap_or(0.0);
-                
-                let confidence = event.get("confidence").and_then(|v| v.as_f64()).unwrap_or(0.0);
-                let duration = event.get("duration_seconds").and_then(|v| v.as_f64()).unwrap_or(0.0);
-                let timestamp = event.get("timestamp_utc").and_then(|v| v.as_str()).unwrap_or("");
-                let session = event.get("session_id").and_then(|v| v.as_str()).unwrap_or("");
+
+                let confidence = event
+                    .get("confidence")
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0);
+                let duration = event
+                    .get("duration_seconds")
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0);
+                let timestamp = event
+                    .get("timestamp_utc")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("");
+                let session = event
+                    .get("session_id")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("");
                 let notes = event.get("summary").and_then(|v| v.as_str()).unwrap_or("");
-                
+
                 csv_writer.write_record(&[
                     timestamp,
                     event_type,
@@ -615,13 +736,17 @@ impl ForensicLogger {
                 ])?;
             }
         }
-        
+
         csv_writer.flush()?;
         Ok(())
     }
 
-    pub fn log_path(&self)    -> &PathBuf { &self.log_path }
-    pub fn event_count(&self) -> u64      { self.event_count }
+    pub fn log_path(&self) -> &PathBuf {
+        &self.log_path
+    }
+    pub fn event_count(&self) -> u64 {
+        self.event_count
+    }
 }
 
 impl Drop for ForensicLogger {
@@ -642,6 +767,9 @@ impl Drop for ForensicLogger {
         });
         let _ = writeln!(self.writer, "{}", footer);
         let _ = self.writer.flush();
-        println!("[Forensic] Session complete: {} events logged", self.event_count);
+        println!(
+            "[Forensic] Session complete: {} events logged",
+            self.event_count
+        );
     }
 }

@@ -16,11 +16,11 @@
 //   - Autosave every SAVE_INTERVAL_EPOCHS epochs.
 
 use crossbeam_channel::Receiver;
-use std::sync::Arc;
 use std::sync::atomic::Ordering;
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use crate::mamba::{MAMBA_CONTEXT_LEN, MAMBA_INPUT_BINS, OnlineTrainer};
+use crate::mamba::{OnlineTrainer, MAMBA_CONTEXT_LEN, MAMBA_INPUT_BINS};
 use crate::state::AppState;
 use crate::vbuffer::V_FREQ_BINS;
 
@@ -118,7 +118,8 @@ impl TrainerThread {
                         let idx = (std::time::SystemTime::now()
                             .duration_since(std::time::UNIX_EPOCH)
                             .unwrap_or_default()
-                            .as_nanos() as usize) % self.replay.len();
+                            .as_nanos() as usize)
+                            % self.replay.len();
                         self.replay[idx].clone()
                     })
                     .collect();
@@ -190,7 +191,8 @@ impl TrainerThread {
             let idx = (std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
                 .unwrap_or_default()
-                .as_nanos() as usize) % REPLAY_CAP;
+                .as_nanos() as usize)
+                % REPLAY_CAP;
             self.replay[idx] = w;
         }
     }

@@ -35,7 +35,7 @@ use std::sync::Arc;
 pub const V_DEPTH: usize = 512; // must be power of 2
 pub const V_FREQ_BINS: usize = 512; // matches BISPEC_BINS and waterfall bins
 pub const V_BUF_CELLS: usize = V_DEPTH * V_FREQ_BINS;
-pub const V_BUF_BYTES: u64 = (V_BUF_CELLS * 4) as u64;
+pub const V_BUF_BYTES: u64 = (V_BUF_CELLS * 8) as u64; // vec4<f16> is 8 bytes
 
 /// Push-constant block passed to every shader that reads the V-buffer.
 /// Must be ≤ 128 bytes (Vulkan minimum push constant size guarantee).
@@ -52,6 +52,41 @@ pub struct VBufferPushConst {
 pub struct VBufferMeta {
     /// Monotonically increasing write counter.  Never resets.
     pub version: u64,
+}
+
+
+/// Buffer for raw IQ samples from RTL-SDR.
+/// Holds 512 complex samples as [i8; 2] for the GPU FFT pass.
+pub struct IqVBuffer {
+    pub buffer: wgpu::Buffer,
+    pub staging: wgpu::Buffer,
+}
+
+impl IqVBuffer {
+    pub fn new(device: &wgpu::Device) -> Self {
+        let size = (V_FREQ_BINS * 2) as u64; // 512 bins * 2 bytes (i8, i8) = 1024 bytes
+        let buffer = device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("iq-vbuffer-main"),
+            size,
+            usage: wgpu::BufferUsages::STORAGE | wgpu::BufferUsages::COPY_DST,
+            mapped_at_creation: false,
+        });
+        let staging = device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("iq-vbuffer-staging"),
+            size,
+            usage: wgpu::BufferUsages::COPY_SRC | wgpu::BufferUsages::MAP_WRITE,
+            mapped_at_creation: false,
+        });
+        Self { buffer, staging }
+    }
+
+    /// Push exactly 512 raw [i8; 2] samples to the GPU.
+    pub fn push_frame(&self, queue: &wgpu::Queue, samples: &[[i8; 2]]) {
+        let n = samples.len().min(V_FREQ_BINS);
+        let mut row = vec![[0i8, 0i8]; V_FREQ_BINS];
+        row[..n].copy_from_slice(&samples[..n]);
+        queue.write_buffer(&self.buffer, 0, bytemuck::cast_slice(&row));
+    }
 }
 
 /// The actual GPU resource.
@@ -75,7 +110,7 @@ impl GpuVBuffer {
         });
         let staging = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("vbuffer-staging"),
-            size: (V_FREQ_BINS * 4) as u64, // one row at a time
+            size: (V_FREQ_BINS * 8) as u64, // one row at a time (vec4<f16>)
             usage: wgpu::BufferUsages::COPY_SRC | wgpu::BufferUsages::MAP_WRITE,
             mapped_at_creation: false,
         });
@@ -88,13 +123,13 @@ impl GpuVBuffer {
 
     /// Append one frame of frequency-domain magnitudes.
     /// `magnitudes` must have exactly V_FREQ_BINS elements (zero-padded if shorter).
-    pub fn push_frame(&mut self, queue: &wgpu::Queue, magnitudes: &[f32]) {
+    pub fn push_frame(&mut self, queue: &wgpu::Queue, frame_data: &[[half::f16; 4]]) {
         let slot = (self.meta.version as usize) % V_DEPTH;
-        let offset = (slot * V_FREQ_BINS * 4) as u64;
+        let offset = (slot * V_FREQ_BINS * 8) as u64;
 
-        let mut row = [0.0f32; V_FREQ_BINS];
-        let n = magnitudes.len().min(V_FREQ_BINS);
-        row[..n].copy_from_slice(&magnitudes[..n]);
+        let n = frame_data.len().min(V_FREQ_BINS);
+        let mut row = vec![[half::f16::from_f32_const(0.0); 4]; V_FREQ_BINS];
+        row[..n].copy_from_slice(&frame_data[..n]);
 
         queue.write_buffer(&self.buffer, offset, bytemuck::cast_slice(&row));
         self.meta.version += 1;
@@ -160,13 +195,13 @@ fn vbuf_slot(version: u32, depth: u32) -> u32 {
     return version & (depth - 1u);
 }
 
-fn vbuf_read(vbuf: ptr<storage, array<f32>, read>,
-             slot: u32, bin: u32, freq_bins: u32) -> f32 {
+fn vbuf_read(vbuf: ptr<storage, array<vec4<f16>>, read>,
+             slot: u32, bin: u32, freq_bins: u32) -> vec4<f16> {
     return (*vbuf)[slot * freq_bins + bin];
 }
 
-fn vbuf_lookup(vbuf: ptr<storage, array<f32>, read>,
-               pc: VBufferPC, frames_back: u32, bin: u32) -> f32 {
+fn vbuf_lookup(vbuf: ptr<storage, array<vec4<f16>>, read>,
+               pc: VBufferPC, frames_back: u32, bin: u32) -> vec4<f16> {
     let slot = vbuf_slot(pc.write_version - frames_back, pc.depth);
     return vbuf_read(vbuf, slot, bin, pc.freq_bins);
 }

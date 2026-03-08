@@ -11,13 +11,13 @@
 
 #[cfg(test)]
 mod timegnn_training_tests {
-    use twister::ml::{
-        train_timegnn, discover_patterns, cosine_similarity, compute_nt_xent_loss,
-        kmeans, compute_silhouette_score, compute_temporal_frequency, generate_pattern_label,
-        TimeGnnTrainingConfig, ContrastiveLossConfig, TrainingEvent, TrainingMetrics,
-        Event, KMeansConfig,
-    };
     use std::collections::HashMap;
+    use twister::ml::{
+        compute_nt_xent_loss, compute_silhouette_score, compute_temporal_frequency,
+        cosine_similarity, discover_patterns, generate_pattern_label, kmeans, train_timegnn,
+        ContrastiveLossConfig, Event, KMeansConfig, TimeGnnTrainingConfig, TrainingEvent,
+        TrainingMetrics,
+    };
 
     // Test 1: Contrastive Loss - Basic NT-Xent Computation
     #[test]
@@ -42,20 +42,15 @@ mod timegnn_training_tests {
     #[test]
     fn test_contrastive_loss_pulls_similar_embeddings() {
         // Batch 1: Similar embeddings (should have low loss)
-        let similar_embeddings = vec![
-            vec![1.0, 0.0, 0.0, 0.0],
-            vec![0.999, 0.001, 0.0, 0.0],
-        ];
+        let similar_embeddings = vec![vec![1.0, 0.0, 0.0, 0.0], vec![0.999, 0.001, 0.0, 0.0]];
         let similar_labels = vec![0, 0];
         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
 
         // Batch 2: Dissimilar embeddings (should have high loss or skip)
-        let dissimilar_embeddings = vec![
-            vec![1.0, 0.0, 0.0, 0.0],
-            vec![0.0, 0.0, 1.0, 0.0],
-        ];
+        let dissimilar_embeddings = vec![vec![1.0, 0.0, 0.0, 0.0], vec![0.0, 0.0, 1.0, 0.0]];
         let dissimilar_labels = vec![0, 1]; // Different labels = no positive pair
-        let loss_dissimilar = compute_nt_xent_loss(&dissimilar_embeddings, &dissimilar_labels, 0.07);
+        let loss_dissimilar =
+            compute_nt_xent_loss(&dissimilar_embeddings, &dissimilar_labels, 0.07);
 
         // Loss should be 0 when no positive pairs exist
         assert_eq!(loss_dissimilar, 0.0);
@@ -91,7 +86,8 @@ mod timegnn_training_tests {
         // In production, would load from HDF5
         let mut metrics = TrainingMetrics::default();
         metrics.total_events = corpus.len();
-        metrics.avg_confidence = corpus.iter().map(|e| e.confidence).sum::<f32>() / corpus.len() as f32;
+        metrics.avg_confidence =
+            corpus.iter().map(|e| e.confidence).sum::<f32>() / corpus.len() as f32;
 
         assert_eq!(metrics.total_events, 50);
         assert!((metrics.avg_confidence - 0.85).abs() < 1e-6);
@@ -120,9 +116,17 @@ mod timegnn_training_tests {
         let result = kmeans(&embeddings, config).unwrap();
 
         // Verify output shapes
-        assert_eq!(result.assignments.len(), 100, "Should have assignment for all 100 points");
+        assert_eq!(
+            result.assignments.len(),
+            100,
+            "Should have assignment for all 100 points"
+        );
         assert_eq!(result.centroids.len(), 10, "Should have 10 centroids");
-        assert_eq!(result.centroids[0].len(), 128, "Each centroid should be 128-D");
+        assert_eq!(
+            result.centroids[0].len(),
+            128,
+            "Each centroid should be 128-D"
+        );
 
         // Verify all assignments are valid cluster IDs
         for &assignment in &result.assignments {
@@ -159,7 +163,11 @@ mod timegnn_training_tests {
         let clustering = kmeans(&embeddings, config).unwrap();
         let silhouette = compute_silhouette_score(&embeddings, &clustering);
 
-        assert!(silhouette > 0.5, "Well-separated clusters should have silhouette > 0.5, got {}", silhouette);
+        assert!(
+            silhouette > 0.5,
+            "Well-separated clusters should have silhouette > 0.5, got {}",
+            silhouette
+        );
     }
 
     // Test 6: Temporal Frequency Detection - Daily Pattern
@@ -182,7 +190,11 @@ mod timegnn_training_tests {
         let cluster_members: Vec<usize> = (0..7).collect();
         let frequency = compute_temporal_frequency(&events, &cluster_members);
 
-        assert!((frequency - 24.0).abs() < 2.0, "Expected ~24 hour frequency, got {}", frequency);
+        assert!(
+            (frequency - 24.0).abs() < 2.0,
+            "Expected ~24 hour frequency, got {}",
+            frequency
+        );
     }
 
     // Test 7: Temporal Frequency Detection - Weekly Pattern
@@ -195,7 +207,11 @@ mod timegnn_training_tests {
                 id: format!("event_{}", i),
                 embedding: vec![0.0; 128],
                 timestamp_micros: (i as i64) * 7 * 24 * 3600 * 1_000_000,
-                timestamp_iso: format!("2025-{:02}-{:02}T12:00:00Z", ((i / 4) + 12), (i % 4) * 7 + 1),
+                timestamp_iso: format!(
+                    "2025-{:02}-{:02}T12:00:00Z",
+                    ((i / 4) + 12),
+                    (i % 4) * 7 + 1
+                ),
                 tag: "WEEKLY_PATTERN".to_string(),
                 rf_frequency_hz: 2.4e9,
                 anomaly_score: 2.5,
@@ -205,7 +221,11 @@ mod timegnn_training_tests {
         let cluster_members: Vec<usize> = (0..4).collect();
         let frequency = compute_temporal_frequency(&events, &cluster_members);
 
-        assert!((frequency - 168.0).abs() < 10.0, "Expected ~168 hour frequency, got {}", frequency);
+        assert!(
+            (frequency - 168.0).abs() < 10.0,
+            "Expected ~168 hour frequency, got {}",
+            frequency
+        );
     }
 
     // Test 8: Temporal Frequency Detection - Irregular Pattern
@@ -225,33 +245,52 @@ mod timegnn_training_tests {
         let cluster_members = vec![0];
         let frequency = compute_temporal_frequency(&events, &cluster_members);
 
-        assert_eq!(frequency, -1.0, "Single event should return -1.0 (no pattern)");
+        assert_eq!(
+            frequency, -1.0,
+            "Single event should return -1.0 (no pattern)"
+        );
     }
 
     // Test 9: Pattern Label Generation - Frequency-Based Heuristics
     #[test]
     fn test_pattern_label_generation_daily() {
         let label = generate_pattern_label(0, 24.0, 2.4e9);
-        assert!(label.contains("Daily"), "Expected 'Daily' in label, got {}", label);
+        assert!(
+            label.contains("Daily"),
+            "Expected 'Daily' in label, got {}",
+            label
+        );
         assert!(label.contains("RF"), "Expected RF frequency in label");
     }
 
     #[test]
     fn test_pattern_label_generation_weekly() {
         let label = generate_pattern_label(1, 168.0, 1.5e9);
-        assert!(label.contains("Weekly"), "Expected 'Weekly' in label, got {}", label);
+        assert!(
+            label.contains("Weekly"),
+            "Expected 'Weekly' in label, got {}",
+            label
+        );
     }
 
     #[test]
     fn test_pattern_label_generation_twice_daily() {
         let label = generate_pattern_label(2, 12.0, 2.4e9);
-        assert!(label.contains("Twice_Daily"), "Expected 'Twice_Daily' in label, got {}", label);
+        assert!(
+            label.contains("Twice_Daily"),
+            "Expected 'Twice_Daily' in label, got {}",
+            label
+        );
     }
 
     #[test]
     fn test_pattern_label_generation_irregular() {
         let label = generate_pattern_label(5, -1.0, 2.4e9);
-        assert!(label.contains("Pattern_5"), "Expected 'Pattern_5' for irregular, got {}", label);
+        assert!(
+            label.contains("Pattern_5"),
+            "Expected 'Pattern_5' for irregular, got {}",
+            label
+        );
     }
 
     // Test 10: Pattern Tag Distribution
@@ -427,6 +466,9 @@ mod timegnn_training_tests {
         // Verify convergence
         let initial_loss = metrics.epoch_losses[0];
         let final_loss = metrics.epoch_losses[metrics.epoch_losses.len() - 1];
-        assert!(final_loss < initial_loss, "Loss should decrease during training");
+        assert!(
+            final_loss < initial_loss,
+            "Loss should decrease during training"
+        );
     }
 }

@@ -27,16 +27,14 @@ mod rt_attack_viz_tests {
 
         let (device, queue) = pollster::block_on(async {
             adapter
-                .request_device(
-                    &wgpu::DeviceDescriptor {
-                        label: Some("RT Test Device"),
-                        required_features: wgpu::Features::empty(),
-                        required_limits: wgpu::Limits::default(),
-                        memory_hints: wgpu::MemoryHints::default(),
-                        experimental_features: wgpu::ExperimentalFeatures::disabled(),
-                        trace: wgpu::Trace::Off,
-                    },
-                )
+                .request_device(&wgpu::DeviceDescriptor {
+                    label: Some("RT Test Device"),
+                    required_features: wgpu::Features::empty(),
+                    required_limits: wgpu::Limits::default(),
+                    memory_hints: wgpu::MemoryHints::default(),
+                    experimental_features: wgpu::ExperimentalFeatures::disabled(),
+                    trace: wgpu::Trace::Off,
+                })
                 .await
         })
         .expect("Failed to create wgpu device");
@@ -57,7 +55,10 @@ mod rt_attack_viz_tests {
         });
 
         // Verify shader compiled
-        assert!(!shader_source.is_empty(), "Shader source should not be empty");
+        assert!(
+            !shader_source.is_empty(),
+            "Shader source should not be empty"
+        );
     }
 
     #[test]
@@ -114,13 +115,13 @@ mod rt_attack_viz_tests {
         // blue (0.0) → red (0.33) → yellow (0.67) → white (1.0)
 
         let test_cases = vec![
-            (0.0, (0.0, 0.0, 1.0)),      // Blue
-            (0.165, (0.5, 0.0, 0.5)),    // Blue-Red mix
-            (0.33, (1.0, 0.0, 0.0)),     // Red
-            (0.5, (1.0, 0.5, 0.0)),      // Red-Yellow mix
-            (0.67, (1.0, 1.0, 0.0)),     // Yellow
-            (0.835, (1.0, 1.0, 0.5)),    // Yellow-White mix
-            (1.0, (1.0, 1.0, 1.0)),      // White
+            (0.0, (0.0, 0.0, 1.0)),   // Blue
+            (0.165, (0.5, 0.0, 0.5)), // Blue-Red mix
+            (0.33, (1.0, 0.0, 0.0)),  // Red
+            (0.5, (1.0, 0.5, 0.0)),   // Red-Yellow mix
+            (0.67, (1.0, 1.0, 0.0)),  // Yellow
+            (0.835, (1.0, 1.0, 0.5)), // Yellow-White mix
+            (1.0, (1.0, 1.0, 1.0)),   // White
         ];
 
         for (intensity, _expected_approx) in test_cases {
@@ -318,9 +319,8 @@ mod rt_attack_viz_tests {
         let a = 1.0;
 
         // b = 2 * (oc · dir) = 2 * (-5) = -10
-        let b = 2.0 * (oc[0] * ray_direction[0]
-            + oc[1] * ray_direction[1]
-            + oc[2] * ray_direction[2]);
+        let b =
+            2.0 * (oc[0] * ray_direction[0] + oc[1] * ray_direction[1] + oc[2] * ray_direction[2]);
 
         // c = oc · oc - r^2 = 25 - 1 = 24
         let c = oc[0] * oc[0] + oc[1] * oc[1] + oc[2] * oc[2] - sphere_radius * sphere_radius;

@@ -1,7 +1,11 @@
 
 use burn::module::Module;
 use burn::tensor::backend::Backend;
+<<<<<<< HEAD
+use burn::tensor::{Distribution, Tensor};
+=======
 use burn::tensor::{Distribution, Tensor, TensorData};
+>>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
 /// PointNet Encoder: Point Cloud (N, 6) → (N, 256) Features
 /// GPU-optimized with Wave64 function packing (no dead padding)
 ///

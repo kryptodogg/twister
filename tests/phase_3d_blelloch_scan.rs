@@ -29,7 +29,10 @@ mod blelloch_scan_tests {
         let mut sorted = input_keys.clone();
         sorted.sort();
 
-        assert_eq!(sorted, expected_sorted, "Radix sort produces incorrect order");
+        assert_eq!(
+            sorted, expected_sorted,
+            "Radix sort produces incorrect order"
+        );
     }
 
     /// Test 2: Single Element Edge Case
@@ -172,7 +175,10 @@ mod blelloch_scan_tests {
         let workgroup_count = (point_count + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
         // 10000 / 128 = 78.125 → ceil = 79 workgroups
-        assert_eq!(workgroup_count, 79, "10K points should dispatch to 79 workgroups");
+        assert_eq!(
+            workgroup_count, 79,
+            "10K points should dispatch to 79 workgroups"
+        );
 
         // Verify last workgroup doesn't overflow
         let last_block_start = (workgroup_count - 1) * BLOCK_SIZE;
@@ -208,7 +214,11 @@ mod blelloch_scan_tests {
             sum = sum.saturating_add(val); // Use saturating_add to avoid overflow
         }
 
-        assert_eq!(output, vec![0, 1, 3, 6, 10], "Exclusive prefix sum mismatch");
+        assert_eq!(
+            output,
+            vec![0, 1, 3, 6, 10],
+            "Exclusive prefix sum mismatch"
+        );
     }
 
     /// Test 10: Zero-Length Input (Empty Point Cloud)
@@ -230,7 +240,7 @@ mod blelloch_scan_tests {
     #[test]
     fn test_blelloch_scan_memory_alignment() {
         const PAYLOAD_SIZE: u64 = 8; // vec4<f16> = 8 bytes
-        const KEY_SIZE: u64 = 4;     // u32 = 4 bytes
+        const KEY_SIZE: u64 = 4; // u32 = 4 bytes
 
         let test_point_counts = vec![1, 128, 256, 1024, 10000];
 
@@ -271,7 +281,10 @@ mod blelloch_scan_tests {
 
         let expected_barriers = 15;
         // This is a documentation test; actual verification would require GPU trace
-        assert!(expected_barriers > 0, "Blelloch Scan requires synchronization barriers");
+        assert!(
+            expected_barriers > 0,
+            "Blelloch Scan requires synchronization barriers"
+        );
     }
 
     /// Helper: Verify radix sort by checking all keys are in ascending order
@@ -304,6 +317,10 @@ mod blelloch_scan_tests {
 
         // Payloads at corresponding indices would also be reordered
         let payload_indices = indices;
-        assert_eq!(payload_indices, vec![1, 2, 0, 3], "Payload indices correspond to sorted keys");
+        assert_eq!(
+            payload_indices,
+            vec![1, 2, 0, 3],
+            "Payload indices correspond to sorted keys"
+        );
     }
 }

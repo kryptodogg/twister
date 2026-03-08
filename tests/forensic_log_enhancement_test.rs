@@ -6,7 +6,6 @@
 /// - Mamba anomaly scoring
 /// - Attack vector classification
 /// - Timestamp synchronization
-
 use std::fs;
 use tempfile::TempDir;
 
@@ -35,18 +34,54 @@ fn test_jsonl_contains_forensic_fields() {
     let parsed = parse_jsonl_line(line);
 
     // Assert all required forensic fields are present
-    assert!(parsed["event_id"].is_string(), "event_id missing or not a string");
-    assert!(parsed["timestamp_utc"].is_string(), "timestamp_utc missing or not a string");
-    assert!(parsed["detection_method"].is_string(), "detection_method missing or not a string");
-    assert!(parsed["rf_freq_hz"].is_number(), "rf_freq_hz missing or not a number");
-    assert!(parsed["rf_confidence"].is_number(), "rf_confidence missing or not a number");
-    assert!(parsed["dc_bias_audio_v"].is_number(), "dc_bias_audio_v missing or not a number");
-    assert!(parsed["dc_bias_sdr_v"].is_number(), "dc_bias_sdr_v missing or not a number");
-    assert!(parsed["mamba_anomaly_db"].is_number(), "mamba_anomaly_db missing or not a number");
-    assert!(parsed["mamba_confidence"].is_number(), "mamba_confidence missing or not a number");
-    assert!(parsed["attack_vector"].is_string(), "attack_vector missing or not a string");
-    assert!(parsed["timestamp_sync_ms"].is_number(), "timestamp_sync_ms missing or not a number");
-    assert!(parsed["classification"].is_string(), "classification missing or not a string");
+    assert!(
+        parsed["event_id"].is_string(),
+        "event_id missing or not a string"
+    );
+    assert!(
+        parsed["timestamp_utc"].is_string(),
+        "timestamp_utc missing or not a string"
+    );
+    assert!(
+        parsed["detection_method"].is_string(),
+        "detection_method missing or not a string"
+    );
+    assert!(
+        parsed["rf_freq_hz"].is_number(),
+        "rf_freq_hz missing or not a number"
+    );
+    assert!(
+        parsed["rf_confidence"].is_number(),
+        "rf_confidence missing or not a number"
+    );
+    assert!(
+        parsed["dc_bias_audio_v"].is_number(),
+        "dc_bias_audio_v missing or not a number"
+    );
+    assert!(
+        parsed["dc_bias_sdr_v"].is_number(),
+        "dc_bias_sdr_v missing or not a number"
+    );
+    assert!(
+        parsed["mamba_anomaly_db"].is_number(),
+        "mamba_anomaly_db missing or not a number"
+    );
+    assert!(
+        parsed["mamba_confidence"].is_number(),
+        "mamba_confidence missing or not a number"
+    );
+    assert!(
+        parsed["attack_vector"].is_string(),
+        "attack_vector missing or not a string"
+    );
+    assert!(
+        parsed["timestamp_sync_ms"].is_number(),
+        "timestamp_sync_ms missing or not a number"
+    );
+    assert!(
+        parsed["classification"].is_string(),
+        "classification missing or not a string"
+    );
 
     // Verify specific values
     assert_eq!(parsed["event_id"].as_str().unwrap(), "twister_001_4521");
@@ -57,9 +92,15 @@ fn test_jsonl_contains_forensic_fields() {
     assert_eq!(parsed["dc_bias_sdr_v"].as_f64().unwrap(), 2.679);
     assert_eq!(parsed["mamba_anomaly_db"].as_f64().unwrap(), 22.66);
     assert_eq!(parsed["mamba_confidence"].as_f64().unwrap(), 0.87);
-    assert_eq!(parsed["attack_vector"].as_str().unwrap(), "RF_DC_SIMULTANEOUS");
+    assert_eq!(
+        parsed["attack_vector"].as_str().unwrap(),
+        "RF_DC_SIMULTANEOUS"
+    );
     assert_eq!(parsed["timestamp_sync_ms"].as_i64().unwrap(), 3);
-    assert_eq!(parsed["classification"].as_str().unwrap(), "COORDINATED_ATTACK");
+    assert_eq!(
+        parsed["classification"].as_str().unwrap(),
+        "COORDINATED_ATTACK"
+    );
 }
 
 #[test]
@@ -71,10 +112,10 @@ fn test_attack_vector_classification_rf_dc_simultaneous() {
     // The actual implementation will be in forensic.rs
 
     // Scenario: RF and DC biases detected within 5ms
-    let _audio_dc = Some(0.15);  // 0.15V threshold
-    let _sdr_dc = Some(2.5);     // 2.5V threshold
-    let _rf_confidence = 0.92;   // High RF confidence
-    let _sync_ms = 3;            // < 5ms = synchronized
+    let _audio_dc = Some(0.15); // 0.15V threshold
+    let _sdr_dc = Some(2.5); // 2.5V threshold
+    let _rf_confidence = 0.92; // High RF confidence
+    let _sync_ms = 3; // < 5ms = synchronized
 
     // Expected output
     let expected = "RF_DC_SIMULTANEOUS";
@@ -89,7 +130,7 @@ fn test_attack_vector_classification_rf_only() {
     let _audio_dc: Option<f32> = None;
     let _sdr_dc: Option<f32> = None;
     let _rf_confidence = 0.90;
-    let _sync_ms = 100;  // > 5ms = not synchronized
+    let _sync_ms = 100; // > 5ms = not synchronized
 
     // Expected output
     let expected = "RF_ONLY";
@@ -99,9 +140,9 @@ fn test_attack_vector_classification_rf_only() {
 #[test]
 fn test_attack_vector_classification_dc_only() {
     // When only DC bias detected (audio or SDR) with low RF confidence
-    let _audio_dc = Some(0.25);  // Audio DC spike present
+    let _audio_dc = Some(0.25); // Audio DC spike present
     let _sdr_dc: Option<f32> = None;
-    let _rf_confidence = 0.3;    // Low RF confidence
+    let _rf_confidence = 0.3; // Low RF confidence
     let _sync_ms = 0;
 
     // Expected output
@@ -117,17 +158,26 @@ fn test_mamba_confidence_scoring() {
     // Low anomaly → low confidence
     let anomaly_db_low = 2.0;
     let confidence_low = compute_test_confidence(anomaly_db_low);
-    assert!(confidence_low < 0.3, "Low anomaly should have low confidence");
+    assert!(
+        confidence_low < 0.3,
+        "Low anomaly should have low confidence"
+    );
 
     // Medium anomaly → medium confidence
     let anomaly_db_med = 10.0;
     let confidence_med = compute_test_confidence(anomaly_db_med);
-    assert!(confidence_med > 0.2 && confidence_med < 0.8, "Medium anomaly should have medium confidence");
+    assert!(
+        confidence_med > 0.2 && confidence_med < 0.8,
+        "Medium anomaly should have medium confidence"
+    );
 
     // High anomaly → high confidence
     let anomaly_db_high = 25.0;
     let confidence_high = compute_test_confidence(anomaly_db_high);
-    assert!(confidence_high > 0.8, "High anomaly should have high confidence");
+    assert!(
+        confidence_high > 0.8,
+        "High anomaly should have high confidence"
+    );
 }
 
 #[test]
@@ -160,7 +210,10 @@ fn test_jsonl_preserves_detection_chain() {
 
     // Verify DC event second
     assert_eq!(dc_line["event_id"].as_str().unwrap(), "evt_002");
-    assert_eq!(dc_line["attack_vector"].as_str().unwrap(), "RF_DC_SIMULTANEOUS");
+    assert_eq!(
+        dc_line["attack_vector"].as_str().unwrap(),
+        "RF_DC_SIMULTANEOUS"
+    );
 
     // Verify timestamps are in order
     let rf_ts = rf_line["timestamp_utc"].as_str().unwrap();
@@ -216,10 +269,14 @@ fn test_forensic_field_json_serialization() {
 
     // Serialize and deserialize
     let json_str = serde_json::to_string(&forensic_line).expect("Failed to serialize");
-    let reparsed = serde_json::from_str::<serde_json::Value>(&json_str).expect("Failed to deserialize");
+    let reparsed =
+        serde_json::from_str::<serde_json::Value>(&json_str).expect("Failed to deserialize");
 
     // Verify all fields survive round-trip
     assert_eq!(forensic_line["event_id"], reparsed["event_id"]);
     assert_eq!(forensic_line["attack_vector"], reparsed["attack_vector"]);
-    assert_eq!(forensic_line["mamba_anomaly_db"], reparsed["mamba_anomaly_db"]);
+    assert_eq!(
+        forensic_line["mamba_anomaly_db"],
+        reparsed["mamba_anomaly_db"]
+    );
 }

@@ -43,14 +43,14 @@ pub struct RayFeatures {
 }
 
 // Physics constants
-const SPEED_OF_SOUND_MPS: f32 = 343.0;  // m/s at 20°C
+const SPEED_OF_SOUND_MPS: f32 = 343.0; // m/s at 20°C
 const MAX_REFLECTION_DELAY_MS: f32 = 100.0;
 const DELAY_BIN_COUNT: usize = 32;
-const _DELAY_BIN_WIDTH_MS: f32 = MAX_REFLECTION_DELAY_MS / (DELAY_BIN_COUNT as f32);  // Kept for reference
+const _DELAY_BIN_WIDTH_MS: f32 = MAX_REFLECTION_DELAY_MS / (DELAY_BIN_COUNT as f32); // Kept for reference
 const AZIMUTH_BIN_COUNT: usize = 16;
 const ELEVATION_BIN_COUNT: usize = 16;
 const DIFFUSE_BIN_COUNT: usize = 32;
-const _ROOM_MODE_COUNT: usize = 4;  // Matches room_modes_4 vector size
+const _ROOM_MODE_COUNT: usize = 4; // Matches room_modes_4 vector size
 const TEMPORAL_SPREAD_COUNT: usize = 8;
 
 /// Helper: Clamp angle to [-π, π]
@@ -75,39 +75,35 @@ fn normalize_elevation(rad: f32) -> f32 {
 fn reflect_azimuth_across_wall(azimuth: f32, wall_idx: usize) -> f32 {
     let az = normalize_azimuth(azimuth);
     let reflected = match wall_idx {
-        0 => -az,           // Right wall: reflect across x=0
-        1 => PI - az,       // Back wall: reflect across y=0
-        2 => -az,           // Left wall: reflect across x=0
-        3 => PI - az,       // Front wall: reflect across y=0
+        0 => -az,     // Right wall: reflect across x=0
+        1 => PI - az, // Back wall: reflect across y=0
+        2 => -az,     // Left wall: reflect across x=0
+        3 => PI - az, // Front wall: reflect across y=0
         _ => az,
     };
     normalize_azimuth(reflected)
 }
 
 /// Helper: Estimate reflection delay from room dimensions and wall index
-fn estimate_reflection_delay_ms(
-    room_dim: &[f32; 3],
-    wall_idx: usize,
-) -> f32 {
+fn estimate_reflection_delay_ms(room_dim: &[f32; 3], wall_idx: usize) -> f32 {
     // Wall indices: 0,2=x walls (right, left), 1,3=y walls (back, front), 4=ceiling, 5=floor
     let distance_m = match wall_idx {
-        0 | 2 => room_dim[0] * 2.0,  // x-dimension walls
-        1 | 3 => room_dim[1] * 2.0,  // y-dimension walls
-        4 | 5 => room_dim[2] * 2.0,  // z-dimension walls
+        0 | 2 => room_dim[0] * 2.0, // x-dimension walls
+        1 | 3 => room_dim[1] * 2.0, // y-dimension walls
+        4 | 5 => room_dim[2] * 2.0, // z-dimension walls
         _ => room_dim[0],
     };
-    (distance_m / SPEED_OF_SOUND_MPS) * 1000.0  // Convert to ms
+    (distance_m / SPEED_OF_SOUND_MPS) * 1000.0 // Convert to ms
 }
 
 /// Helper: Compute fundamental room modes from dimensions
 fn compute_room_modes(room_dim: &[f32; 3]) -> Vec<f32> {
     // Room mode frequencies: f = c / (2 * dimension) for each dimension
     let modes = vec![
-        SPEED_OF_SOUND_MPS / (2.0 * room_dim[0]),  // x-dimension mode
-        SPEED_OF_SOUND_MPS / (2.0 * room_dim[1]),  // y-dimension mode
-        SPEED_OF_SOUND_MPS / (2.0 * room_dim[2]),  // z-dimension mode
-        (SPEED_OF_SOUND_MPS / (2.0 * room_dim[0]))
-            + (SPEED_OF_SOUND_MPS / (2.0 * room_dim[1])),  // Combined x+y mode
+        SPEED_OF_SOUND_MPS / (2.0 * room_dim[0]), // x-dimension mode
+        SPEED_OF_SOUND_MPS / (2.0 * room_dim[1]), // y-dimension mode
+        SPEED_OF_SOUND_MPS / (2.0 * room_dim[2]), // z-dimension mode
+        (SPEED_OF_SOUND_MPS / (2.0 * room_dim[0])) + (SPEED_OF_SOUND_MPS / (2.0 * room_dim[1])), // Combined x+y mode
     ];
 
     // Normalize modes to [0, 1] range (assuming modes span ~0-400 Hz)
@@ -220,7 +216,7 @@ fn compute_temporal_spread(delays_ms: &[f32]) -> Vec<f32> {
 
 /// Main function: Generate 128-D ray features from image-source method
 pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
-    let mut all_rays: Vec<(f32, f32, f32, f32)> = Vec::new();  // (azimuth, elevation, delay_ms, strength)
+    let mut all_rays: Vec<(f32, f32, f32, f32)> = Vec::new(); // (azimuth, elevation, delay_ms, strength)
 
     // Direct path
     let direct_azimuth = normalize_azimuth(image.source_azimuth_rad);
@@ -237,7 +233,7 @@ pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
             direct_elevation
         };
         let delay_ms = estimate_reflection_delay_ms(&image.room_dimension_m, wall_idx);
-        let strength = 0.7;  // Single reflection attenuation
+        let strength = 0.7; // Single reflection attenuation
         all_rays.push((reflected_az, reflected_el, delay_ms, strength));
     }
 
@@ -249,14 +245,11 @@ pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
             let (az1, el1, delay1, _) = all_rays[i];
             for wall_idx in 0..6 {
                 let reflected_az = reflect_azimuth_across_wall(az1, wall_idx);
-                let reflected_el = if wall_idx >= 4 {
-                    -el1
-                } else {
-                    el1
-                };
-                let additional_delay = estimate_reflection_delay_ms(&image.room_dimension_m, wall_idx);
+                let reflected_el = if wall_idx >= 4 { -el1 } else { el1 };
+                let additional_delay =
+                    estimate_reflection_delay_ms(&image.room_dimension_m, wall_idx);
                 let delay_ms = delay1 + additional_delay;
-                let strength = 0.5;  // Double reflection attenuation
+                let strength = 0.5; // Double reflection attenuation
                 if delay_ms <= MAX_REFLECTION_DELAY_MS {
                     all_rays.push((reflected_az, reflected_el, delay_ms, strength));
                 }
@@ -283,13 +276,13 @@ pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
 
     // Concatenate all features into 128-D vector
     let mut feature_vector: Vec<f32> = Vec::new();
-    feature_vector.push(direct_path_strength);  // 1-D
-    feature_vector.extend(reflection_delays_32.clone());  // 32-D
-    feature_vector.extend(diffuse_distribution_32.clone());  // 32-D
-    feature_vector.extend(room_modes_4.clone());  // 4-D
-    feature_vector.extend(azimuth_ray_density_16.clone());  // 16-D
-    feature_vector.extend(elevation_ray_density_16.clone());  // 16-D
-    feature_vector.extend(temporal_spread_8.clone());  // 8-D
+    feature_vector.push(direct_path_strength); // 1-D
+    feature_vector.extend(reflection_delays_32.clone()); // 32-D
+    feature_vector.extend(diffuse_distribution_32.clone()); // 32-D
+    feature_vector.extend(room_modes_4.clone()); // 4-D
+    feature_vector.extend(azimuth_ray_density_16.clone()); // 16-D
+    feature_vector.extend(elevation_ray_density_16.clone()); // 16-D
+    feature_vector.extend(temporal_spread_8.clone()); // 8-D
 
     // Pad to exactly 128-D if needed
     while feature_vector.len() < 128 {
@@ -299,7 +292,11 @@ pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
     // Truncate if somehow longer than 128 (shouldn't happen)
     feature_vector.truncate(128);
 
-    assert_eq!(feature_vector.len(), 128, "Feature vector must be exactly 128-D");
+    assert_eq!(
+        feature_vector.len(),
+        128,
+        "Feature vector must be exactly 128-D"
+    );
 
     RayFeatures {
         direct_path_strength,

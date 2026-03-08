@@ -16,9 +16,9 @@ use wgpu::*;
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-const WORKGROUP_SIZE: u32 = 8;  // 8×8 = 256 threads per workgroup
-const MAX_ATTACK_SOURCES: usize = 32;  // Maximum concurrent attack sources
-const DEFAULT_CAMERA_DISTANCE: f32 = 50.0;  // Distance from origin
+const WORKGROUP_SIZE: u32 = 8; // 8×8 = 256 threads per workgroup
+const MAX_ATTACK_SOURCES: usize = 32; // Maximum concurrent attack sources
+const DEFAULT_CAMERA_DISTANCE: f32 = 50.0; // Distance from origin
 
 // ─────────────────────────────────────────────────────────────────────────────
 // RtParams uniform structure (must match WGSL)
@@ -66,8 +66,8 @@ pub struct RtAttackViz {
     camera_forward: [f32; 3],
     camera_right: [f32; 3],
     camera_up: [f32; 3],
-    camera_yaw: f32,  // Rotation angle around up vector
-    camera_pitch: f32,  // Rotation angle around right vector
+    camera_yaw: f32,   // Rotation angle around up vector
+    camera_pitch: f32, // Rotation angle around right vector
 
     // Viewport
     width: u32,
@@ -247,11 +247,7 @@ impl RtAttackViz {
 
         // Initialize camera (looking at origin from distance)
         let camera_pos = [0.0, DEFAULT_CAMERA_DISTANCE / 2.0, DEFAULT_CAMERA_DISTANCE];
-        let camera_forward = Self::normalize_vec3([
-            -camera_pos[0],
-            -camera_pos[1],
-            -camera_pos[2],
-        ]);
+        let camera_forward = Self::normalize_vec3([-camera_pos[0], -camera_pos[1], -camera_pos[2]]);
         let camera_right = Self::cross_product([0.0, 1.0, 0.0], camera_forward);
         let camera_up = Self::cross_product(camera_forward, camera_right);
 
@@ -292,13 +288,13 @@ impl RtAttackViz {
         // ─────────────────────────────────────────────────────────────────────
 
         // Write attack positions (vec4: xyz + padding)
-        let positions: Vec<[f32; 4]> = attacks
-            .iter()
-            .map(|&(x, y, z, _)| [x, y, z, 0.0])
-            .collect();
+        let positions: Vec<[f32; 4]> = attacks.iter().map(|&(x, y, z, _)| [x, y, z, 0.0]).collect();
         if !positions.is_empty() {
-            self.queue
-                .write_buffer(&self.attack_positions_buffer, 0, bytemuck::cast_slice(&positions));
+            self.queue.write_buffer(
+                &self.attack_positions_buffer,
+                0,
+                bytemuck::cast_slice(&positions),
+            );
         }
 
         // Write attack intensities
@@ -316,7 +312,12 @@ impl RtAttackViz {
         // ─────────────────────────────────────────────────────────────────────
 
         let params = RtParamsUniform {
-            camera_pos: [self.camera_pos[0], self.camera_pos[1], self.camera_pos[2], 0.0],
+            camera_pos: [
+                self.camera_pos[0],
+                self.camera_pos[1],
+                self.camera_pos[2],
+                0.0,
+            ],
             camera_forward: [
                 self.camera_forward[0],
                 self.camera_forward[1],
@@ -343,9 +344,11 @@ impl RtAttackViz {
         // Create command encoder and dispatch compute
         // ─────────────────────────────────────────────────────────────────────
 
-        let mut encoder = self.device.create_command_encoder(&CommandEncoderDescriptor {
-            label: Some("RT Encoder"),
-        });
+        let mut encoder = self
+            .device
+            .create_command_encoder(&CommandEncoderDescriptor {
+                label: Some("RT Encoder"),
+            });
 
         {
             let mut compute_pass = encoder.begin_compute_pass(&ComputePassDescriptor {
@@ -389,12 +392,7 @@ impl RtAttackViz {
             let z = embedding[2] * 20.0 - 10.0;
 
             // Compute intensity from L2 norm (normalized to [0, 1])
-            let intensity = embedding
-                .iter()
-                .map(|v| v * v)
-                .sum::<f32>()
-                .sqrt()
-                .min(1.0);
+            let intensity = embedding.iter().map(|v| v * v).sum::<f32>().sqrt().min(1.0);
 
             attacks.push((x, y, z, intensity));
         }

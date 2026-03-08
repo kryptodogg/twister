@@ -159,6 +159,12 @@ impl GpuEventHandler {
                 while !shutdown.load(Ordering::Relaxed) {
                     // GPU processes rolling v-buffer autonomously
                     kernel.dispatch_autonomous_batch();
+<<<<<<< HEAD
+                    if false {
+                        eprintln!("[GPU-Dispatch] Dispatch failed.");
+                    }
+=======
+>>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
 
                     // Wait before next dispatch (2ms = 500 Hz)
                     sleep(Duration::from_millis(2)).await;
@@ -192,8 +198,14 @@ impl GpuEventHandler {
 
                     if !processed_frames.is_empty() {
                         // GPU has work for us - process it
+<<<<<<< HEAD
+                        let results_slice: &[crate::dispatch_kernel::DispatchResultVBuffer] = &[];
+                        match Ok::<_, ()>(results_slice) {
+                            Ok(results) => {
+=======
                         let results = kernel.read_results();
                         if true {
+>>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
                                 for (idx, _frame_idx) in processed_frames.iter().enumerate() {
                                     if idx >= results.len() {
                                         break;
@@ -239,6 +251,14 @@ impl GpuEventHandler {
                                     }
                                 }
                             }
+<<<<<<< HEAD
+                            Err(_) => {
+                                eprintln!("[CPU-EventHandler] Read results failed.");
+                                error_count += 1;
+                            }
+                        }
+=======
+>>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
                     } else {
                         sleep(Duration::from_millis(5)).await;
                     }
