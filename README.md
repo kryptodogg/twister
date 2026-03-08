@@ -107,10 +107,10 @@ representation of the signal structure, enabling phase-coherent separation
 of heterodyned carriers. The output path (readback → AppState → cpal) does
 not change at all.
 
-## Building
+## Running
 
 ```bash
-cargo build --release
+cargo run --release
 ```
 
 Requires: Rust 1.96+, Vulkan-capable GPU (RX 6700 XT, any RDNA3), cpal-compatible audio device.
