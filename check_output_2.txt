@@ -1,0 +1,1 @@
+error: expected a table, but found a array for `target.x86_64-pc-windows-msvc.rustc-link-search` in C:\Users\pixel\Downloads\twister\.cargo\config.toml

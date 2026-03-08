@@ -1,0 +1,926 @@
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:58:5
+   |
+52 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+58 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: `twister` (lib) generated 2 warnings
+warning: unused import: `num_complex::Complex`
+ --> src\reconstruct.rs:6:5
+  |
+6 | use num_complex::Complex;
+  |     ^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `FftPlanner` and `Fft`
+ --> src\reconstruct.rs:7:15
+  |
+7 | use rustfft::{Fft, FftPlanner};
+  |               ^^^  ^^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> src\reconstruct.rs:8:5
+  |
+8 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+
+warning: methods `phase_for` and `status` are never used
+   --> src\anc.rs:551:12
+    |
+518 | impl AncEngine {
+    | -------------- methods in this implementation
+...
+551 |     pub fn phase_for(&self, freq_hz: f32) -> f32 {
+    |            ^^^^^^^^^
+...
+581 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `last_calibration` is never used
+   --> src\anc_calibration.rs:223:12
+    |
+ 40 | impl FullRangeCalibration {
+    | ------------------------- method in this implementation
+...
+223 |     pub fn last_calibration(&self) -> Option<&str> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: variant `Complete` is never constructed
+  --> src\anc_recording.rs:18:5
+   |
+14 | pub enum CalibrationState {
+   |          ---------------- variant in this enum
+...
+18 |     Complete,
+   |     ^^^^^^^^
+   |
+   = note: `CalibrationState` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `ref_sr` is never read
+  --> src\anc_recording.rs:29:9
+   |
+23 | pub struct RecordingBuffer {
+   |            --------------- field in this struct
+...
+29 |     pub ref_sr: f32,
+   |         ^^^^^^
+   |
+   = note: `RecordingBuffer` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: method `status` is never used
+   --> src\anc_recording.rs:115:12
+    |
+ 34 | impl RecordingBuffer {
+    | -------------------- method in this implementation
+...
+115 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+
+warning: function `device_name` is never used
+   --> src\anc_recording.rs:157:8
+    |
+157 | pub fn device_name(idx: usize) -> &'static str {
+    |        ^^^^^^^^^^^
+
+warning: constant `BASEBAND_FFT_SIZE` is never used
+  --> src\audio.rs:23:11
+   |
+23 | pub const BASEBAND_FFT_SIZE: usize = 2048;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `MAX_INPUT_DEVICES` is never used
+  --> src\audio.rs:26:11
+   |
+26 | pub const MAX_INPUT_DEVICES: usize = 8;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: function `linear_resample` is never used
+   --> src\audio.rs:142:8
+    |
+142 | pub fn linear_resample(input: &[f32], in_rate: f32, out_rate: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^^^
+
+warning: method `as_str` is never used
+  --> src\bispectrum.rs:45:12
+   |
+35 | impl FrequencyBand {
+   | ------------------ method in this implementation
+...
+45 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: method `as_str` is never used
+  --> src\detection.rs:15:12
+   |
+14 | impl ProductType {
+   | ---------------- method in this implementation
+15 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: variants `Carrier`, `Modulated`, `Burst`, `Harmonic`, and `Intermodulation` are never constructed
+  --> src\forensic.rs:20:5
+   |
+18 | pub enum ForensicEventType {
+   |          ----------------- variants in this enum
+19 |     /// Continuous narrowband carrier (potential surveillance transmitter)
+20 |     Carrier {
+   |     ^^^^^^^
+...
+26 |     Modulated {
+   |     ^^^^^^^^^
+...
+32 |     Burst {
+   |     ^^^^^
+...
+38 |     Harmonic {
+   |     ^^^^^^^^
+...
+44 |     Intermodulation {
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `ForensicEventType` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: method `with_metadata` is never used
+   --> src\forensic.rs:179:12
+    |
+141 | impl ForensicEvent {
+    | ------------------ method in this implementation
+...
+179 |     pub fn with_metadata(mut self, key: &str, value: &str) -> Self {
+    |            ^^^^^^^^^^^^^
+
+warning: method `event_count` is never used
+   --> src\forensic.rs:546:12
+    |
+193 | impl ForensicLogger {
+    | ------------------- method in this implementation
+...
+546 |     pub fn event_count(&self) -> u64      { self.event_count }
+    |            ^^^^^^^^^^^
+
+warning: field `reconstruction` is never read
+  --> src\mamba.rs:50:9
+   |
+48 | pub struct MambaOutput {
+   |            ----------- field in this struct
+49 |     pub latent: Vec<f32>,
+50 |     pub reconstruction: Vec<f32>,
+   |         ^^^^^^^^^^^^^^
+   |
+   = note: `MambaOutput` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `center_freq_hz` and `timestamp_ms` are never read
+   --> src\mamba.rs:508:9
+    |
+507 | pub struct TrainingPair {
+    |            ------------ fields in this struct
+508 |     pub center_freq_hz: u32,
+    |         ^^^^^^^^^^^^^^
+...
+511 |     pub timestamp_ms:   u64,
+    |         ^^^^^^^^^^^^
+    |
+    = note: `TrainingPair` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `extract_window_from_vbuf_snapshot` is never used
+   --> src\mamba.rs:531:8
+    |
+531 | pub fn extract_window_from_vbuf_snapshot(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `TargetConfig` is never constructed
+ --> src\parametric.rs:7:17
+  |
+7 |      pub struct TargetConfig {
+  |                 ^^^^^^^^^^^^
+
+warning: field `base_carrier_hz` is never read
+  --> src\parametric.rs:43:14
+   |
+42 |      pub struct ParametricManager {
+   |                 ----------------- field in this struct
+43 |          pub base_carrier_hz: f32,
+   |              ^^^^^^^^^^^^^^^
+
+warning: methods `generate_targets` and `beam_half_angle_deg` are never used
+  --> src\parametric.rs:51:17
+   |
+46 |      impl ParametricManager {
+   |      ---------------------- methods in this implementation
+...
+51 |          pub fn generate_targets(&self, base_freqs: &[f32], _pdm_active: bool) -> Vec<TargetConfig> {
+   |                 ^^^^^^^^^^^^^^^^
+...
+73 |          pub fn beam_half_angle_deg(&self, diameter_m: f32) -> f32 {
+   |                 ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `CIC_ORDER` is never used
+  --> src\pdm.rs:26:11
+   |
+26 | pub const CIC_ORDER: usize = 5;
+   |           ^^^^^^^^^
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: associated function `cic_decimate_cpu` is never used
+   --> src\pdm.rs:374:12
+    |
+166 | impl PdmEngine {
+    | -------------- associated function in this implementation
+...
+374 |     pub fn cic_decimate_cpu(pcm_1st_order: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `rms` is never used
+   --> src\pdm.rs:444:4
+    |
+444 | fn rms(samples: &[f32]) -> f32 {
+    |    ^^^
+
+warning: field `confidence` is never read
+  --> src\reconstruct.rs:13:9
+   |
+10 | pub struct TrueSignal {
+   |            ---------- field in this struct
+...
+13 |     pub confidence: f32,
+   |         ^^^^^^^^^^
+
+warning: field `baseband_rate` is never read
+  --> src\reconstruct.rs:17:5
+   |
+16 | pub struct CrystalBall {
+   |            ----------- field in this struct
+17 |     baseband_rate: f32,
+   |     ^^^^^^^^^^^^^
+
+warning: constant `N_TAPS` is never used
+  --> src\resample.rs:35:7
+   |
+35 | const N_TAPS: usize = 128;
+   |       ^^^^^^
+
+warning: constant `N_PHASES` is never used
+  --> src\resample.rs:38:7
+   |
+38 | const N_PHASES: usize = 256;
+   |       ^^^^^^^^
+
+warning: constant `PROTO_LEN` is never used
+  --> src\resample.rs:41:7
+   |
+41 | const PROTO_LEN: usize = N_TAPS * N_PHASES;
+   |       ^^^^^^^^^
+
+warning: constant `KAISER_BETA` is never used
+  --> src\resample.rs:44:7
+   |
+44 | const KAISER_BETA: f64 = 8.96;
+   |       ^^^^^^^^^^^
+
+warning: function `bessel_i0` is never used
+  --> src\resample.rs:50:4
+   |
+50 | fn bessel_i0(x: f64) -> f64 {
+   |    ^^^^^^^^^
+
+warning: function `kaiser_window` is never used
+  --> src\resample.rs:65:4
+   |
+65 | fn kaiser_window(n: usize, beta: f64) -> Vec<f64> {
+   |    ^^^^^^^^^^^^^
+
+warning: function `build_prototype` is never used
+  --> src\resample.rs:81:4
+   |
+81 | fn build_prototype(fc: f64) -> Vec<f32> {
+   |    ^^^^^^^^^^^^^^^
+
+warning: struct `SincResampler` is never constructed
+   --> src\resample.rs:103:12
+    |
+103 | pub struct SincResampler {
+    |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `process`, and `reset` are never used
+   --> src\resample.rs:124:12
+    |
+119 | impl SincResampler {
+    | ------------------ associated items in this implementation
+...
+124 |     pub fn new(in_rate: f32, out_rate: f32) -> Self {
+    |            ^^^
+...
+167 |     pub fn process(&mut self, input: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^
+...
+215 |     pub fn reset(&mut self) {
+    |            ^^^^^
+
+warning: function `sinc_resample` is never used
+   --> src\resample.rs:231:8
+    |
+231 | pub fn sinc_resample(input: &[f32], in_rate: f32, out_rate: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^
+
+warning: constant `RIDGE_ROWS` is never used
+  --> src\ridge_plot.rs:16:11
+   |
+16 | pub const RIDGE_ROWS: usize = 48;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_BINS` is never used
+  --> src\ridge_plot.rs:19:11
+   |
+19 | pub const RIDGE_BINS: usize = 256;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_W` is never used
+  --> src\ridge_plot.rs:22:11
+   |
+22 | pub const RIDGE_W: u32 = 640;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_H` is never used
+  --> src\ridge_plot.rs:23:11
+   |
+23 | pub const RIDGE_H: u32 = 420;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_PIXELS` is never used
+  --> src\ridge_plot.rs:25:7
+   |
+25 | const RIDGE_PIXELS: usize = (RIDGE_W * RIDGE_H) as usize;
+   |       ^^^^^^^^^^^^
+
+warning: constant `HISTORY_FLOATS` is never used
+  --> src\ridge_plot.rs:26:7
+   |
+26 | const HISTORY_FLOATS: usize = RIDGE_ROWS * RIDGE_BINS;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `RIDGE_SHADER` is never used
+  --> src\ridge_plot.rs:46:7
+   |
+46 | const RIDGE_SHADER: &str = r#"
+   |       ^^^^^^^^^^^^
+
+warning: struct `RidgePlotGpu` is never constructed
+   --> src\ridge_plot.rs:177:12
+    |
+177 | pub struct RidgePlotGpu {
+    |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `render`, `width`, and `height` are never used
+   --> src\ridge_plot.rs:190:12
+    |
+189 | impl RidgePlotGpu {
+    | ----------------- associated items in this implementation
+190 |     pub fn new(device: wgpu::Device, queue: wgpu::Queue) -> anyhow::Result<Self> {
+    |            ^^^
+...
+330 |     pub fn render(&mut self, history_flat: &[f32], n_rows: usize) -> Vec<u32> {
+    |            ^^^^^^
+...
+385 |     pub fn width(&self) -> u32 {
+    |            ^^^^^
+...
+388 |     pub fn height(&self) -> u32 {
+    |            ^^^^^^
+
+warning: multiple associated items are never used
+   --> src\rtlsdr.rs:41:12
+    |
+ 39 | impl RtlSdrDevice {
+    | ----------------- associated items in this implementation
+ 40 |     /// Enumerate available RTL-SDR devices
+ 41 |     pub fn enumerate() -> Vec<DeviceInfo> {
+    |            ^^^^^^^^^
+...
+123 |     pub fn center_freq(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+152 |     pub fn sample_rate(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+176 |     pub fn gain(&self) -> f32 {
+    |            ^^^^
+...
+200 |     pub fn agc_enabled(&self) -> bool {
+    |            ^^^^^^^^^^^
+...
+273 |     pub fn iq_u8_to_f32(buf: &[u8]) -> Vec<Complex<f32>> {
+    |            ^^^^^^^^^^^^
+...
+284 |     pub fn device_info(&self) -> DeviceInfo {
+    |            ^^^^^^^^^^^
+...
+292 |     pub fn is_open(&self) -> bool {
+    |            ^^^^^^^
+
+warning: struct `DeviceInfo` is never constructed
+   --> src\rtlsdr.rs:318:12
+    |
+318 | pub struct DeviceInfo {
+    |            ^^^^^^^^^^
+
+warning: field `running` is never read
+   --> src\rtlsdr.rs:327:5
+    |
+324 | pub struct RtlSdrEngine {
+    |            ------------ field in this struct
+...
+327 |     running: AtomicBool,
+    |     ^^^^^^^
+
+warning: methods `device`, `set_running`, and `is_running` are never used
+   --> src\rtlsdr.rs:395:12
+    |
+330 | impl RtlSdrEngine {
+    | ----------------- methods in this implementation
+...
+395 |     pub fn device(&self) -> &RtlSdrDevice {
+    |            ^^^^^^
+...
+400 |     pub fn set_running(&self, running: bool) {
+    |            ^^^^^^^^^^^
+...
+404 |     pub fn is_running(&self) -> bool {
+    |            ^^^^^^^^^^
+
+warning: type alias `rtlsdr_read_async_cb_t` is never used
+  --> src\rtlsdr_ffi.rs:34:10
+   |
+34 | pub type rtlsdr_read_async_cb_t =
+   |          ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_device_count` is never used
+  --> src\rtlsdr_ffi.rs:41:12
+   |
+41 |     pub fn rtlsdr_get_device_count() -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_device_name` is never used
+  --> src\rtlsdr_ffi.rs:42:12
+   |
+42 |     pub fn rtlsdr_get_device_name(index: u32) -> *const c_int;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_center_freq` is never used
+  --> src\rtlsdr_ffi.rs:47:12
+   |
+47 |     pub fn rtlsdr_get_center_freq(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_sample_rate` is never used
+  --> src\rtlsdr_ffi.rs:49:12
+   |
+49 |     pub fn rtlsdr_get_sample_rate(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_set_tuner_gain_mode` is never used
+  --> src\rtlsdr_ffi.rs:50:12
+   |
+50 |     pub fn rtlsdr_set_tuner_gain_mode(dev: *mut rtlsdr_dev_t, manual: c_int) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_read_async` is never used
+  --> src\rtlsdr_ffi.rs:60:12
+   |
+60 |     pub fn rtlsdr_read_async(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_cancel_async` is never used
+  --> src\rtlsdr_ffi.rs:67:12
+   |
+67 |     pub fn rtlsdr_cancel_async(dev: *mut rtlsdr_dev_t) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_BLOCK_SAMPLES` is never used
+  --> src\sdr.rs:19:11
+   |
+19 | pub const SDR_BLOCK_SAMPLES: usize = 16384;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_RATE` is never used
+  --> src\sdr.rs:20:11
+   |
+20 | pub const SDR_DEFAULT_RATE:  u32   = 2_048_000;
+   |           ^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_GAIN` is never used
+  --> src\sdr.rs:21:11
+   |
+21 | pub const SDR_DEFAULT_GAIN:  f32   = 20.0; // dB; 0.0 = auto AGC
+   |           ^^^^^^^^^^^^^^^^
+
+warning: function `soundcard_harmonic_candidates` is never used
+  --> src\sdr.rs:24:8
+   |
+24 | pub fn soundcard_harmonic_candidates(audio_rate: f32) -> Vec<f32> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `IqBlock` is never constructed
+  --> src\sdr.rs:38:12
+   |
+38 | pub struct IqBlock {
+   |            ^^^^^^^
+
+warning: function `list_devices` is never used
+   --> src\sdr.rs:196:8
+    |
+196 | pub fn list_devices() -> Vec<String> {
+    |        ^^^^^^^^^^^^
+
+warning: enum `WaveshapeMode` is never used
+  --> src\state.rs:19:10
+   |
+19 | pub enum WaveshapeMode {
+   |          ^^^^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+  --> src\state.rs:28:12
+   |
+27 | impl WaveshapeMode {
+   | ------------------ associated function in this implementation
+28 |     pub fn from_u32(v: u32) -> Self {
+   |            ^^^^^^^^
+
+warning: enum `DenialMode` is never used
+  --> src\state.rs:41:10
+   |
+41 | pub enum DenialMode {
+   |          ^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+  --> src\state.rs:50:12
+   |
+49 | impl DenialMode {
+   | --------------- associated function in this implementation
+50 |     pub fn from_u32(v: u32) -> Self {
+   |            ^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\state.rs:306:12
+    |
+190 | impl AppState {
+    | ------------- associated items in this implementation
+...
+306 |     pub fn get_mode(&self) -> DenialMode {
+    |            ^^^^^^^^
+...
+310 |     pub fn set_mode(&self, m: DenialMode) {
+    |            ^^^^^^^^
+...
+315 |     pub fn get_pdm_clock_mhz(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^
+...
+319 |     pub fn set_pdm_clock_mhz(&self, v: f32) {
+    |            ^^^^^^^^^^^^^^^^^
+...
+351 |     pub fn get_waveshape_mode(&self) -> WaveshapeMode {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+355 |     pub fn set_waveshape_mode(&self, m: WaveshapeMode) {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+393 |     pub fn set_polarization_angle(&self, v: f32) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+502 |     pub fn set_training_recording_enabled(&self, v: bool) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+525 |     pub fn get_anc_ok(&self) -> bool {
+    |            ^^^^^^^^^^
+...
+551 |     pub fn snap_to_nearest_note(freq_hz: f32) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^^
+...
+590 |     pub fn set_twister_active(&self, v: bool) {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: struct `KnownSignal` is never constructed
+  --> src\testing.rs:37:12
+   |
+37 | pub struct KnownSignal {
+   |            ^^^^^^^^^^^
+
+warning: associated items `new_sum`, `new_harmonic`, `new_difference`, `new_intermod`, and `expected_product_hz` are never used
+  --> src\testing.rs:49:12
+   |
+48 | impl KnownSignal {
+   | ---------------- associated items in this implementation
+49 |     pub fn new_sum(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^
+...
+52 |     pub fn new_harmonic(f1: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+...
+55 |     pub fn new_difference(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^^^
+...
+58 |     pub fn new_intermod(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+...
+63 |     pub fn expected_product_hz(&self) -> f32 {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `SyntheticSignalGen` is never constructed
+  --> src\testing.rs:77:12
+   |
+77 | pub struct SyntheticSignalGen {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\testing.rs:84:12
+    |
+ 83 | impl SyntheticSignalGen {
+    | ----------------------- associated items in this implementation
+ 84 |     pub fn new(sample_rate: f32) -> Self {
+    |            ^^^
+...
+ 89 |     pub fn bin_hz(&self) -> f32 {
+    |            ^^^^^^
+...
+ 94 |     fn freq_to_bin(&self, hz: f32) -> usize {
+    |        ^^^^^^^^^^^
+...
+103 |     pub fn noise_frame(&mut self, noise_rms: f32) -> Vec<f32> {
+    |            ^^^^^^^^^^^
+...
+121 |     pub fn signal_frame(
+    |            ^^^^^^^^^^^^
+...
+172 |     pub fn coherent_run(
+    |            ^^^^^^^^^^^^
+...
+190 |     pub fn noise_run(&mut self, noise_rms: f32, n_frames: usize) -> Vec<Vec<f32>> {
+    |            ^^^^^^^^^
+...
+196 |     fn randn(&mut self) -> f32 {
+    |        ^^^^^
+...
+204 |     fn lcg_f32(&mut self) -> f32 {
+    |        ^^^^^^^
+
+warning: struct `DetectionValidator` is never constructed
+   --> src\testing.rs:217:12
+    |
+217 | pub struct DetectionValidator {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> src\testing.rs:240:12
+    |
+234 | impl DetectionValidator {
+    | ----------------------- methods in this implementation
+...
+240 |     pub fn evaluate_detections(
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+287 |     pub fn precision(&self) -> f32 {
+    |            ^^^^^^^^^
+...
+294 |     pub fn recall(&self) -> f32 {
+    |            ^^^^^^
+...
+301 |     pub fn f1_score(&self) -> f32 {
+    |            ^^^^^^^^
+...
+308 |     pub fn false_positive_rate(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+315 |     pub fn mean_freq_error_hz(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+320 |     pub fn report(&self) -> String {
+    |            ^^^^^^
+
+warning: function `benchmark_bispectrum` is never used
+   --> src\testing.rs:341:8
+    |
+341 | pub fn benchmark_bispectrum(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run_self_test` is never used
+   --> src\testing.rs:372:8
+    |
+372 | pub fn run_self_test(
+    |        ^^^^^^^^^^^^^
+
+warning: struct `ValidationReport` is never constructed
+   --> src\testing.rs:464:12
+    |
+464 | pub struct ValidationReport {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: methods `passed` and `summary_line` are never used
+   --> src\testing.rs:474:12
+    |
+473 | impl ValidationReport {
+    | --------------------- methods in this implementation
+474 |     pub fn passed(&self) -> bool {
+    |            ^^^^^^
+...
+478 |     pub fn summary_line(&self) -> String {
+    |            ^^^^^^^^^^^^
+
+warning: constant `REPLAY_CAP` is never used
+  --> src\trainer.rs:28:11
+   |
+28 | pub const REPLAY_CAP: usize = 4096;
+   |           ^^^^^^^^^^
+
+warning: constant `MIN_WINDOWS` is never used
+  --> src\trainer.rs:29:11
+   |
+29 | pub const MIN_WINDOWS: usize = 32;
+   |           ^^^^^^^^^^^
+
+warning: constant `BATCH_SIZE` is never used
+  --> src\trainer.rs:30:11
+   |
+30 | pub const BATCH_SIZE: usize = 8;
+   |           ^^^^^^^^^^
+
+warning: constant `STEPS_PER_BATCH` is never used
+  --> src\trainer.rs:31:11
+   |
+31 | pub const STEPS_PER_BATCH: usize = 1;
+   |           ^^^^^^^^^^^^^^^
+
+warning: constant `TRAIN_SLEEP_MS` is never used
+  --> src\trainer.rs:32:11
+   |
+32 | pub const TRAIN_SLEEP_MS: u64 = 20;
+   |           ^^^^^^^^^^^^^^
+
+warning: constant `SAVE_INTERVAL_EPOCHS` is never used
+  --> src\trainer.rs:33:11
+   |
+33 | pub const SAVE_INTERVAL_EPOCHS: u32 = 50;
+   |           ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `Window` is never used
+  --> src\trainer.rs:36:10
+   |
+36 | pub type Window = Vec<f32>;
+   |          ^^^^^^
+
+warning: enum `TrainerCmd` is never used
+  --> src\trainer.rs:39:10
+   |
+39 | pub enum TrainerCmd {
+   |          ^^^^^^^^^^
+
+warning: struct `TrainerThread` is never constructed
+  --> src\trainer.rs:52:12
+   |
+52 | pub struct TrainerThread {
+   |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `run`, and `ingest` are never used
+   --> src\trainer.rs:62:12
+    |
+ 61 | impl TrainerThread {
+    | ------------------ associated items in this implementation
+ 62 |     pub fn new(state: Arc<AppState>) -> anyhow::Result<Self> {
+    |            ^^^
+...
+ 75 |     pub fn run(&mut self, rx: Receiver<TrainerCmd>) {
+    |            ^^^
+...
+176 |     fn ingest(&mut self, w: Window) {
+    |        ^^^^^^
+
+warning: function `extract_window_from_vbuf_snapshot` is never used
+   --> src\trainer.rs:198:8
+    |
+198 | pub fn extract_window_from_vbuf_snapshot(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `try_enqueue` and `get_metrics` are never used
+  --> src\training.rs:50:12
+   |
+33 | impl TrainingSession {
+   | -------------------- methods in this implementation
+...
+50 |     pub fn try_enqueue(&self, pair: TrainingPair) -> bool {
+   |            ^^^^^^^^^^^
+...
+78 |     pub async fn get_metrics(&self) -> TrainingMetrics {
+   |                  ^^^^^^^^^^^
+
+warning: struct `RtlSdrTrainingScan` is never constructed
+   --> src\training.rs:258:12
+    |
+258 | pub struct RtlSdrTrainingScan {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `advance` are never used
+   --> src\training.rs:266:12
+    |
+265 | impl RtlSdrTrainingScan {
+    | ----------------------- associated items in this implementation
+266 |     pub fn new(start_hz: u32, stop_hz: u32, step_hz: u32) -> Self {
+    |            ^^^
+...
+275 |     pub fn advance(&mut self) -> bool {
+    |            ^^^^^^^
+
+warning: variants `Minor` and `Unison` are never constructed
+  --> src\twister.rs:30:5
+   |
+26 | pub enum ChordMode {
+   |          --------- variants in this enum
+...
+30 |     Minor,
+   |     ^^^^^
+31 |     /// Root only ΓÇö pure tone, most aggressive anti-phase
+32 |     Unison,
+   |     ^^^^^^
+   |
+   = note: `ChordMode` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `midi` is never read
+  --> src\twister.rs:51:9
+   |
+47 | pub struct NoteResult {
+   |            ---------- field in this struct
+...
+51 |     pub midi: i32,
+   |         ^^^^
+   |
+   = note: `NoteResult` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `snap_freq` is never used
+   --> src\twister.rs:153:8
+    |
+153 | pub fn snap_freq(freq_hz: f32) -> f32 {
+    |        ^^^^^^^^^
+
+warning: field `staging` is never read
+  --> src\vbuffer.rs:62:9
+   |
+58 | pub struct GpuVBuffer {
+   |            ---------- field in this struct
+...
+62 |     pub staging: wgpu::Buffer,
+   |         ^^^^^^^
+
+warning: methods `push_const` and `ready` are never used
+   --> src\vbuffer.rs:104:12
+    |
+ 66 | impl GpuVBuffer {
+    | --------------- methods in this implementation
+...
+104 |     pub fn push_const(&self, context_len: u32) -> VBufferPushConst {
+    |            ^^^^^^^^^^
+...
+119 |     pub fn ready(&self, context_len: u32) -> bool {
+    |            ^^^^^
+
+warning: constant `VBUF_WGSL_HELPERS` is never used
+   --> src\vbuffer.rs:151:11
+    |
+151 | pub const VBUF_WGSL_HELPERS: &str = r#"
+    |           ^^^^^^^^^^^^^^^^^
+
+warning: `twister` (bin "twister") generated 101 warnings (run `cargo fix --bin "twister" -p twister` to apply 3 suggestions)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.42s

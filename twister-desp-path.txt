@@ -1,0 +1,1 @@
+C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\desperado-0.3.0\src\rtlsdr.rs

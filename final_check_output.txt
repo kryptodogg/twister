@@ -1,0 +1,74 @@
+    Blocking waiting for file lock on build directory
+    Checking siren v0.4.0 (C:\Users\pixel\Downloads\twister)
+error[E0277]: the trait bound `MambaBlock: std::clone::Clone` is not satisfied
+   --> src\mamba.rs:290:5
+    |
+288 | #[derive(Clone)]
+    |          ----- in this derive macro expansion
+289 | pub struct MambaAutoencoder {
+290 |     pub block: MambaBlock,
+    |     ^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` is not implemented for `MambaBlock`
+    |
+help: consider annotating `MambaBlock` with `#[derive(Clone)]`
+    |
+ 79 + #[derive(Clone)]
+ 80 | struct MambaBlock {
+    |
+
+warning: unused variable: `nx`
+   --> src\anc.rs:133:13
+    |
+133 |         let nx = speaker_out.len().min(n);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_nx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `ny`
+   --> src\anc.rs:134:13
+    |
+134 |         let ny = mic_in.len().min(n);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_ny`
+
+error[E0384]: cannot assign twice to immutable variable `gain_db`
+   --> src\sdr.rs:343:29
+    |
+299 |             let gain_db = state.get_sdr_gain_db();
+    |                 ------- first assignment to `gain_db`
+...
+343 |                             gain_db = new_gain;
+    |                             ^^^^^^^^^^^^^^^^^^ cannot assign twice to immutable variable
+    |
+help: consider making this binding mutable
+    |
+299 |             let mut gain_db = state.get_sdr_gain_db();
+    |                 +++
+
+error[E0507]: cannot move out of an `Arc`
+   --> src\main.rs:182:5
+    |
+182 | /     mamba_trainer
+183 | |         .clone()
+    | |________________^ move occurs because value has type `MambaTrainer`, which does not implement the `Copy` trait
+    |
+note: if `MambaTrainer` implemented `Clone`, you could clone the value
+   --> src\training.rs:264:1
+    |
+264 |   pub struct MambaTrainer {
+    |   ^^^^^^^^^^^^^^^^^^^^^^^ consider implementing `Clone` for this type
+    |
+   ::: src\main.rs:182:5
+    |
+182 | /     mamba_trainer
+183 | |         .clone()
+    | |________________- you could clone this value
+
+warning: unused variable: `vbuf`
+   --> src\main.rs:439:13
+    |
+439 |         let vbuf = vbuffer.clone();
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_vbuf`
+
+Some errors have detailed explanations: E0277, E0384, E0507.
+For more information about an error, try `rustc --explain E0277`.
+warning: `siren` (bin "siren") generated 3 warnings
+error: could not compile `siren` (bin "siren") due to 3 previous errors; 3 warnings emitted

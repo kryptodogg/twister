@@ -1,0 +1,1092 @@
+    Blocking waiting for file lock on build directory
+warning: unused import: `RtlSdrDevice`
+  --> src\training.rs:10:47
+   |
+10 | use crate::rtlsdr::{MAX_FREQ_HZ, MIN_FREQ_HZ, RtlSdrDevice, RtlSdrEngine};
+   |                                               ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `AtomicBool`
+  --> src\training.rs:15:25
+   |
+15 | use std::sync::atomic::{AtomicBool, Ordering};
+   |                         ^^^^^^^^^^
+
+warning: unused variable: `nx`
+   --> src\anc.rs:133:13
+    |
+133 |         let nx = speaker_out.len().min(n);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_nx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `ny`
+   --> src\anc.rs:134:13
+    |
+134 |         let ny = mic_in.len().min(n);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_ny`
+
+warning: unused variable: `batcher`
+   --> src\training.rs:271:13
+    |
+271 |         let batcher = MambaBatcher::<B>::new(self.device.clone());
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_batcher`
+
+warning: unused variable: `vbuf`
+   --> src\main.rs:429:13
+    |
+429 |         let vbuf = vbuffer.clone();
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_vbuf`
+
+warning: constant `SESSION_TIMEOUT_SECS` is never used
+  --> src\main.rs:75:7
+   |
+75 | const SESSION_TIMEOUT_SECS: u64 = 3600;
+   |       ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `LMS_MU` is never used
+  --> src\anc.rs:49:7
+   |
+49 | const LMS_MU: f32 = 0.0005;
+   |       ^^^^^^
+
+warning: constant `LMS_TAPS` is never used
+  --> src\anc.rs:54:7
+   |
+54 | const LMS_TAPS: usize = 64;
+   |       ^^^^^^^^
+
+warning: constant `MAX_DELAY_S` is never used
+  --> src\anc.rs:58:7
+   |
+58 | const MAX_DELAY_S: f32 = 0.010;
+   |       ^^^^^^^^^^^
+
+warning: constant `CALIB_SWEEP_S` is never used
+  --> src\anc.rs:61:11
+   |
+61 | pub const CALIB_SWEEP_S: f32 = 0.5;
+   |           ^^^^^^^^^^^^^
+
+warning: struct `AcousticTransfer` is never constructed
+  --> src\anc.rs:67:12
+   |
+67 | pub struct AcousticTransfer {
+   |            ^^^^^^^^^^^^^^^^
+
+warning: struct `PhaseCalibrator` is never constructed
+  --> src\anc.rs:86:12
+   |
+86 | pub struct PhaseCalibrator {
+   |            ^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `calibrate`, `phase_advance_for`, `generate_sweep`, and `estimate_delay_gcc` are never used
+   --> src\anc.rs:95:12
+    |
+ 94 | impl PhaseCalibrator {
+    | -------------------- associated items in this implementation
+ 95 |     pub fn new(sample_rate: f32) -> Self {
+    |            ^^^
+...
+109 |     pub fn calibrate(&mut self, speaker_out: &[f32], mic_in: &[f32]) {
+    |            ^^^^^^^^^
+...
+189 |     pub fn phase_advance_for(&self, freq_hz: f32) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^
+...
+228 |     pub fn generate_sweep(sample_rate: f32, n_samples: usize) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^
+...
+245 |     fn estimate_delay_gcc(&self, x: &[f32], y: &[f32], n: usize) -> f32 {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: struct `LmsFilter` is never constructed
+   --> src\anc.rs:304:12
+    |
+304 | pub struct LmsFilter {
+    |            ^^^^^^^^^
+
+warning: associated items `new`, `default_for`, `update`, `reset`, `power`, and `weight_rms` are never used
+   --> src\anc.rs:327:12
+    |
+323 | impl LmsFilter {
+    | -------------- associated items in this implementation
+...
+327 |     pub fn new(secondary_path: Vec<f32>, mu: f32) -> Self {
+    |            ^^^
+...
+344 |     pub fn default_for(sample_rate: f32, delay_s: f32) -> Self {
+    |            ^^^^^^^^^^^
+...
+359 |     pub fn update(&mut self, reference: &[f32], error: &[f32]) -> Vec<f32> {
+    |            ^^^^^^
+...
+411 |     pub fn reset(&mut self) {
+    |            ^^^^^
+...
+423 |     pub fn power(&self) -> f32 { self.power }
+    |            ^^^^^
+...
+426 |     pub fn weight_rms(&self) -> f32 {
+    |            ^^^^^^^^^^
+
+warning: struct `AncEngine` is never constructed
+   --> src\anc.rs:453:12
+    |
+453 | pub struct AncEngine {
+    |            ^^^^^^^^^
+
+warning: associated items `new`, `calibrate`, `phase_for`, `update`, `calibration_sweep`, and `status` are never used
+   --> src\anc.rs:464:12
+    |
+460 | impl AncEngine {
+    | -------------- associated items in this implementation
+...
+464 |     pub fn new(sample_rate: f32, nominal_distance_m: f32) -> Self {
+    |            ^^^
+...
+472 |     pub fn calibrate(&mut self, sweep_played: &[f32], mic_recorded: &[f32]) {
+    |            ^^^^^^^^^
+...
+485 |     pub fn phase_for(&self, freq_hz: f32) -> f32 {
+    |            ^^^^^^^^^
+...
+491 |     pub fn update(&mut self, reference: &[f32], error: &[f32]) -> Vec<f32> {
+    |            ^^^^^^
+...
+496 |     pub fn calibration_sweep(sample_rate: f32) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+502 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+
+warning: constant `BASEBAND_FFT_SIZE` is never used
+  --> src\audio.rs:23:11
+   |
+23 | pub const BASEBAND_FFT_SIZE: usize = 2048;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: function `linear_resample` is never used
+   --> src\audio.rs:136:8
+    |
+136 | pub fn linear_resample(input: &[f32], in_rate: f32, out_rate: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^^^
+
+warning: struct `SimilarDetection` is never constructed
+  --> src\embeddings.rs:15:12
+   |
+15 | pub struct SimilarDetection {
+   |            ^^^^^^^^^^^^^^^^
+
+warning: methods `find_similar` and `store_latents` are never used
+  --> src\embeddings.rs:43:18
+   |
+21 | impl EmbeddingStore {
+   | ------------------- methods in this implementation
+...
+43 |     pub async fn find_similar(&self, _event: &DetectionEvent, _limit: usize) -> Result<Vec<SimilarDetection>> {
+   |                  ^^^^^^^^^^^^
+...
+51 |     pub async fn store_latents(&self, _latents: &[f32], _events: &[DetectionEvent]) -> Result<()> {
+   |                  ^^^^^^^^^^^^^
+
+warning: method `event_count` is never used
+  --> src\forensic.rs:74:12
+   |
+15 | impl ForensicLogger {
+   | ------------------- method in this implementation
+...
+74 |     pub fn event_count(&self) -> u64      { self.event_count }
+   |            ^^^^^^^^^^^
+
+warning: struct `FusionWeights` is never constructed
+  --> src\fusion.rs:18:12
+   |
+18 | pub struct FusionWeights {
+   |            ^^^^^^^^^^^^^
+
+warning: struct `FusedTarget` is never constructed
+  --> src\fusion.rs:39:12
+   |
+39 | pub struct FusedTarget {
+   |            ^^^^^^^^^^^
+
+warning: enum `TargetSource` is never used
+  --> src\fusion.rs:54:10
+   |
+54 | pub enum TargetSource {
+   |          ^^^^^^^^^^^^
+
+warning: struct `GraphContext` is never constructed
+  --> src\fusion.rs:67:12
+   |
+67 | pub struct GraphContext {
+   |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `add_neighbor`, and `build_adjacency` are never used
+  --> src\fusion.rs:83:12
+   |
+82 | impl GraphContext {
+   | ----------------- associated items in this implementation
+83 |     pub fn new() -> Self {
+   |            ^^^
+...
+88 |     pub fn add_neighbor(&mut self, freq_hz: f32, mag: f32, phase_rad: f32) {
+   |            ^^^^^^^^^^^^
+...
+95 |     pub fn build_adjacency(&mut self, threshold_hz: f32) {
+   |            ^^^^^^^^^^^^^^^
+
+warning: function `fuse_bispec_latent` is never used
+   --> src\fusion.rs:129:8
+    |
+129 | pub fn fuse_bispec_latent(
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `latent_to_targets` is never used
+   --> src\fusion.rs:174:4
+    |
+174 | fn latent_to_targets(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `graph_to_targets` is never used
+   --> src\fusion.rs:224:4
+    |
+224 | fn graph_to_targets(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `merge_nearby_targets` is never used
+   --> src\fusion.rs:279:4
+    |
+279 | fn merge_nearby_targets(targets: &mut Vec<FusedTarget>, threshold_hz: f32) {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rank_targets` is never used
+   --> src\fusion.rs:312:8
+    |
+312 | pub fn rank_targets(targets: &[FusedTarget], events: &[DetectionEvent]) -> Vec<DenialTarget> {
+    |        ^^^^^^^^^^^^
+
+warning: function `fused_to_denial_targets` is never used
+   --> src\fusion.rs:337:8
+    |
+337 | pub fn fused_to_denial_targets(fused: &[FusedTarget]) -> Vec<(f32, f32)> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `LatentBuffer` is never constructed
+  --> src\mamba.rs:45:12
+   |
+45 | pub struct LatentBuffer {
+   |            ^^^^^^^^^^^^
+
+warning: struct `MambaConfig` is never constructed
+  --> src\mamba.rs:51:12
+   |
+51 | pub struct MambaConfig {
+   |            ^^^^^^^^^^^
+
+warning: field `device` is never read
+   --> src\mamba.rs:285:5
+    |
+281 | pub struct MambaAutoencoder {
+    |            ---------------- field in this struct
+...
+285 |     device: Device,
+    |     ^^^^^^
+
+warning: struct `MambaDataset` is never constructed
+   --> src\mamba.rs:485:12
+    |
+485 | pub struct MambaDataset {
+    |            ^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> src\mamba.rs:490:12
+    |
+489 | impl MambaDataset {
+    | ----------------- associated function in this implementation
+490 |     pub fn new(items: Vec<TrainingPair>) -> Self {
+    |            ^^^
+
+warning: struct `MambaBatcher` is never constructed
+   --> src\mamba.rs:504:12
+    |
+504 | pub struct MambaBatcher<B: burn::tensor::backend::Backend> {
+    |            ^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> src\mamba.rs:509:12
+    |
+508 | impl<B: burn::tensor::backend::Backend> MambaBatcher<B> {
+    | ------------------------------------------------------- associated function in this implementation
+509 |     pub fn new(_device: B::Device) -> Self {
+    |            ^^^
+
+warning: struct `MambaBatch` is never constructed
+   --> src\mamba.rs:515:12
+    |
+515 | pub struct MambaBatch<B: burn::tensor::backend::Backend> {
+    |            ^^^^^^^^^^
+
+warning: method `beam_half_angle_deg` is never used
+  --> src\parametric.rs:49:12
+   |
+32 | impl ParametricManager {
+   | ---------------------- method in this implementation
+...
+49 |     pub fn beam_half_angle_deg(&self, diameter_m: f32) -> f32 {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `CIC_ORDER` is never used
+  --> src\pdm.rs:26:11
+   |
+26 | pub const CIC_ORDER: usize = 5;
+   |           ^^^^^^^^^
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: associated function `cic_decimate_cpu` is never used
+   --> src\pdm.rs:374:12
+    |
+166 | impl PdmEngine {
+    | -------------- associated function in this implementation
+...
+374 |     pub fn cic_decimate_cpu(pcm_1st_order: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `rms` is never used
+   --> src\pdm.rs:444:4
+    |
+444 | fn rms(samples: &[f32]) -> f32 {
+    |    ^^^
+
+warning: constant `N_TAPS` is never used
+  --> src\resample.rs:35:7
+   |
+35 | const N_TAPS: usize = 128;
+   |       ^^^^^^
+
+warning: constant `N_PHASES` is never used
+  --> src\resample.rs:38:7
+   |
+38 | const N_PHASES: usize = 256;
+   |       ^^^^^^^^
+
+warning: constant `PROTO_LEN` is never used
+  --> src\resample.rs:41:7
+   |
+41 | const PROTO_LEN: usize = N_TAPS * N_PHASES;
+   |       ^^^^^^^^^
+
+warning: constant `KAISER_BETA` is never used
+  --> src\resample.rs:44:7
+   |
+44 | const KAISER_BETA: f64 = 8.96;
+   |       ^^^^^^^^^^^
+
+warning: function `bessel_i0` is never used
+  --> src\resample.rs:50:4
+   |
+50 | fn bessel_i0(x: f64) -> f64 {
+   |    ^^^^^^^^^
+
+warning: function `kaiser_window` is never used
+  --> src\resample.rs:63:4
+   |
+63 | fn kaiser_window(n: usize, beta: f64) -> Vec<f64> {
+   |    ^^^^^^^^^^^^^
+
+warning: function `build_prototype` is never used
+  --> src\resample.rs:79:4
+   |
+79 | fn build_prototype(fc: f64) -> Vec<f32> {
+   |    ^^^^^^^^^^^^^^^
+
+warning: struct `SincResampler` is never constructed
+   --> src\resample.rs:101:12
+    |
+101 | pub struct SincResampler {
+    |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `process`, and `reset` are never used
+   --> src\resample.rs:122:12
+    |
+117 | impl SincResampler {
+    | ------------------ associated items in this implementation
+...
+122 |     pub fn new(in_rate: f32, out_rate: f32) -> Self {
+    |            ^^^
+...
+163 |     pub fn process(&mut self, input: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^
+...
+209 |     pub fn reset(&mut self) {
+    |            ^^^^^
+
+warning: function `sinc_resample` is never used
+   --> src\resample.rs:225:8
+    |
+225 | pub fn sinc_resample(input: &[f32], in_rate: f32, out_rate: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^
+
+warning: constant `RIDGE_ROWS` is never used
+  --> src\ridge_plot.rs:16:11
+   |
+16 | pub const RIDGE_ROWS: usize = 48;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_BINS` is never used
+  --> src\ridge_plot.rs:19:11
+   |
+19 | pub const RIDGE_BINS: usize = 256;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_W` is never used
+  --> src\ridge_plot.rs:22:11
+   |
+22 | pub const RIDGE_W: u32 = 640;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_H` is never used
+  --> src\ridge_plot.rs:23:11
+   |
+23 | pub const RIDGE_H: u32 = 420;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_PIXELS` is never used
+  --> src\ridge_plot.rs:25:7
+   |
+25 | const RIDGE_PIXELS: usize = (RIDGE_W * RIDGE_H) as usize;
+   |       ^^^^^^^^^^^^
+
+warning: constant `HISTORY_FLOATS` is never used
+  --> src\ridge_plot.rs:26:7
+   |
+26 | const HISTORY_FLOATS: usize = RIDGE_ROWS * RIDGE_BINS;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `RIDGE_SHADER` is never used
+  --> src\ridge_plot.rs:46:7
+   |
+46 | const RIDGE_SHADER: &str = r#"
+   |       ^^^^^^^^^^^^
+
+warning: struct `RidgePlotGpu` is never constructed
+   --> src\ridge_plot.rs:177:12
+    |
+177 | pub struct RidgePlotGpu {
+    |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `render`, `width`, and `height` are never used
+   --> src\ridge_plot.rs:190:12
+    |
+189 | impl RidgePlotGpu {
+    | ----------------- associated items in this implementation
+190 |     pub fn new(device: wgpu::Device, queue: wgpu::Queue) -> anyhow::Result<Self> {
+    |            ^^^
+...
+330 |     pub fn render(&mut self, history_flat: &[f32], n_rows: usize) -> Vec<u32> {
+    |            ^^^^^^
+...
+385 |     pub fn width(&self) -> u32 {
+    |            ^^^^^
+...
+388 |     pub fn height(&self) -> u32 {
+    |            ^^^^^^
+
+warning: field `gain_db` is never read
+  --> src\rtlsdr.rs:31:5
+   |
+27 | pub struct RtlSdrDevice {
+   |            ------------ field in this struct
+...
+31 |     gain_db: f32,
+   |     ^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\rtlsdr.rs:41:12
+    |
+ 39 | impl RtlSdrDevice {
+    | ----------------- associated items in this implementation
+ 40 |     /// Enumerate available RTL-SDR devices
+ 41 |     pub fn enumerate() -> Vec<DeviceInfo> {
+    |            ^^^^^^^^^
+...
+123 |     pub fn center_freq(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+152 |     pub fn sample_rate(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+157 |     pub fn set_gain(&mut self, gain_db: f32) -> anyhow::Result<()> {
+    |            ^^^^^^^^
+...
+176 |     pub fn gain(&self) -> f32 {
+    |            ^^^^
+...
+200 |     pub fn agc_enabled(&self) -> bool {
+    |            ^^^^^^^^^^^
+...
+280 |     pub fn iq_u8_to_f32(buf: &[u8]) -> Vec<Complex<f32>> {
+    |            ^^^^^^^^^^^^
+...
+291 |     pub fn device_info(&self) -> DeviceInfo {
+    |            ^^^^^^^^^^^
+...
+299 |     pub fn is_open(&self) -> bool {
+    |            ^^^^^^^
+
+warning: struct `DeviceInfo` is never constructed
+   --> src\rtlsdr.rs:325:12
+    |
+325 | pub struct DeviceInfo {
+    |            ^^^^^^^^^^
+
+warning: field `running` is never read
+   --> src\rtlsdr.rs:334:5
+    |
+331 | pub struct RtlSdrEngine {
+    |            ------------ field in this struct
+...
+334 |     running: AtomicBool,
+    |     ^^^^^^^
+
+warning: methods `device`, `set_running`, and `is_running` are never used
+   --> src\rtlsdr.rs:392:12
+    |
+337 | impl RtlSdrEngine {
+    | ----------------- methods in this implementation
+...
+392 |     pub fn device(&self) -> &RtlSdrDevice {
+    |            ^^^^^^
+...
+397 |     pub fn set_running(&self, running: bool) {
+    |            ^^^^^^^^^^^
+...
+401 |     pub fn is_running(&self) -> bool {
+    |            ^^^^^^^^^^
+
+warning: type alias `rtlsdr_read_async_cb_t` is never used
+  --> src\rtlsdr_ffi.rs:32:10
+   |
+32 | pub type rtlsdr_read_async_cb_t =
+   |          ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_device_count` is never used
+  --> src\rtlsdr_ffi.rs:39:12
+   |
+39 |     pub fn rtlsdr_get_device_count() -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_device_name` is never used
+  --> src\rtlsdr_ffi.rs:42:12
+   |
+42 |     pub fn rtlsdr_get_device_name(index: u32) -> *const c_int;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_center_freq` is never used
+  --> src\rtlsdr_ffi.rs:57:12
+   |
+57 |     pub fn rtlsdr_get_center_freq(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_sample_rate` is never used
+  --> src\rtlsdr_ffi.rs:63:12
+   |
+63 |     pub fn rtlsdr_get_sample_rate(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_set_tuner_gain_mode` is never used
+  --> src\rtlsdr_ffi.rs:66:12
+   |
+66 |     pub fn rtlsdr_set_tuner_gain_mode(dev: *mut rtlsdr_dev_t, manual: c_int) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_set_tuner_gain` is never used
+  --> src\rtlsdr_ffi.rs:69:12
+   |
+69 |     pub fn rtlsdr_set_tuner_gain(dev: *mut rtlsdr_dev_t, gain: c_int) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_read_async` is never used
+  --> src\rtlsdr_ffi.rs:86:12
+   |
+86 |     pub fn rtlsdr_read_async(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_cancel_async` is never used
+  --> src\rtlsdr_ffi.rs:95:12
+   |
+95 |     pub fn rtlsdr_cancel_async(dev: *mut rtlsdr_dev_t) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_BLOCK_SAMPLES` is never used
+  --> src\sdr.rs:31:11
+   |
+31 | pub const SDR_BLOCK_SAMPLES: usize = 16384; // RTL-SDR read block size (IQ pairs)
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_RATE` is never used
+  --> src\sdr.rs:32:11
+   |
+32 | pub const SDR_DEFAULT_RATE: u32 = 2_048_000;
+   |           ^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_GAIN` is never used
+  --> src\sdr.rs:33:11
+   |
+33 | pub const SDR_DEFAULT_GAIN: f32 = 20.0; // dB; 0 = auto
+   |           ^^^^^^^^^^^^^^^^
+
+warning: function `soundcard_harmonic_candidates` is never used
+  --> src\sdr.rs:37:8
+   |
+37 | pub fn soundcard_harmonic_candidates(audio_rate: f32) -> Vec<f32> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `IqBlock` is never constructed
+  --> src\sdr.rs:59:12
+   |
+59 | pub struct IqBlock {
+   |            ^^^^^^^
+
+warning: fields `state`, `vbuf`, and `planner` are never read
+  --> src\sdr.rs:67:5
+   |
+66 | pub struct SdrEngine {
+   |            --------- fields in this struct
+67 |     state: Arc<AppState>,
+   |     ^^^^^
+68 |     vbuf: SharedVBuffer,
+   |     ^^^^
+69 |     planner: FftPlanner<f32>,
+   |     ^^^^^^^
+
+warning: associated items `new`, `run`, `run_device`, and `process_block` are never used
+   --> src\sdr.rs:73:12
+    |
+ 72 | impl SdrEngine {
+    | -------------- associated items in this implementation
+ 73 |     pub fn new(state: Arc<AppState>, vbuf: SharedVBuffer) -> Self {
+    |            ^^^
+...
+ 82 |     pub fn run(&mut self) {
+    |            ^^^
+...
+100 |     fn run_device(&mut self, dev_idx: u32) -> anyhow::Result<()> {
+    |        ^^^^^^^^^^
+...
+165 |     fn process_block(&mut self, block: &IqBlock) {
+    |        ^^^^^^^^^^^^^
+
+warning: function `list_devices` is never used
+   --> src\sdr.rs:380:8
+    |
+380 | pub fn list_devices() -> Vec<String> {
+    |        ^^^^^^^^^^^^
+
+warning: enum `WaveshapeMode` is never used
+  --> src\state.rs:18:10
+   |
+18 | pub enum WaveshapeMode {
+   |          ^^^^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+  --> src\state.rs:27:12
+   |
+26 | impl WaveshapeMode {
+   | ------------------ associated function in this implementation
+27 |     pub fn from_u32(v: u32) -> Self {
+   |            ^^^^^^^^
+
+warning: enum `DenialMode` is never used
+  --> src\state.rs:40:10
+   |
+40 | pub enum DenialMode {
+   |          ^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+  --> src\state.rs:49:12
+   |
+48 | impl DenialMode {
+   | --------------- associated function in this implementation
+49 |     pub fn from_u32(v: u32) -> Self {
+   |            ^^^^^^^^
+
+warning: multiple methods are never used
+   --> src\state.rs:243:12
+    |
+150 | impl AppState {
+    | ------------- methods in this implementation
+...
+243 |     pub fn get_mode(&self) -> DenialMode {
+    |            ^^^^^^^^
+...
+247 |     pub fn set_mode(&self, m: DenialMode) {
+    |            ^^^^^^^^
+...
+252 |     pub fn get_pdm_clock_mhz(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^
+...
+256 |     pub fn set_pdm_clock_mhz(&self, v: f32) {
+    |            ^^^^^^^^^^^^^^^^^
+...
+288 |     pub fn get_waveshape_mode(&self) -> WaveshapeMode {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+292 |     pub fn set_waveshape_mode(&self, m: WaveshapeMode) {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+330 |     pub fn set_polarization_angle(&self, v: f32) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `KnownSignal` is never constructed
+  --> src\testing.rs:37:12
+   |
+37 | pub struct KnownSignal {
+   |            ^^^^^^^^^^^
+
+warning: associated items `new_sum`, `new_harmonic`, `new_difference`, `new_intermod`, and `expected_product_hz` are never used
+  --> src\testing.rs:49:12
+   |
+48 | impl KnownSignal {
+   | ---------------- associated items in this implementation
+49 |     pub fn new_sum(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^
+...
+52 |     pub fn new_harmonic(f1: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+...
+55 |     pub fn new_difference(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^^^
+...
+58 |     pub fn new_intermod(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+...
+63 |     pub fn expected_product_hz(&self) -> f32 {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `SyntheticSignalGen` is never constructed
+  --> src\testing.rs:77:12
+   |
+77 | pub struct SyntheticSignalGen {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\testing.rs:84:12
+    |
+ 83 | impl SyntheticSignalGen {
+    | ----------------------- associated items in this implementation
+ 84 |     pub fn new(sample_rate: f32) -> Self {
+    |            ^^^
+...
+ 89 |     pub fn bin_hz(&self) -> f32 {
+    |            ^^^^^^
+...
+ 94 |     fn freq_to_bin(&self, hz: f32) -> usize {
+    |        ^^^^^^^^^^^
+...
+103 |     pub fn noise_frame(&mut self, noise_rms: f32) -> Vec<f32> {
+    |            ^^^^^^^^^^^
+...
+121 |     pub fn signal_frame(
+    |            ^^^^^^^^^^^^
+...
+172 |     pub fn coherent_run(
+    |            ^^^^^^^^^^^^
+...
+190 |     pub fn noise_run(&mut self, noise_rms: f32, n_frames: usize) -> Vec<Vec<f32>> {
+    |            ^^^^^^^^^
+...
+196 |     fn randn(&mut self) -> f32 {
+    |        ^^^^^
+...
+204 |     fn lcg_f32(&mut self) -> f32 {
+    |        ^^^^^^^
+
+warning: struct `DetectionValidator` is never constructed
+   --> src\testing.rs:217:12
+    |
+217 | pub struct DetectionValidator {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> src\testing.rs:240:12
+    |
+234 | impl DetectionValidator {
+    | ----------------------- methods in this implementation
+...
+240 |     pub fn evaluate_detections(
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+287 |     pub fn precision(&self) -> f32 {
+    |            ^^^^^^^^^
+...
+294 |     pub fn recall(&self) -> f32 {
+    |            ^^^^^^
+...
+301 |     pub fn f1_score(&self) -> f32 {
+    |            ^^^^^^^^
+...
+308 |     pub fn false_positive_rate(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+315 |     pub fn mean_freq_error_hz(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+320 |     pub fn report(&self) -> String {
+    |            ^^^^^^
+
+warning: function `benchmark_bispectrum` is never used
+   --> src\testing.rs:341:8
+    |
+341 | pub fn benchmark_bispectrum(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run_self_test` is never used
+   --> src\testing.rs:372:8
+    |
+372 | pub fn run_self_test(
+    |        ^^^^^^^^^^^^^
+
+warning: struct `ValidationReport` is never constructed
+   --> src\testing.rs:464:12
+    |
+464 | pub struct ValidationReport {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: methods `passed` and `summary_line` are never used
+   --> src\testing.rs:474:12
+    |
+473 | impl ValidationReport {
+    | --------------------- methods in this implementation
+474 |     pub fn passed(&self) -> bool {
+    |            ^^^^^^
+...
+478 |     pub fn summary_line(&self) -> String {
+    |            ^^^^^^^^^^^^
+
+warning: constant `STEPS_PER_BATCH` is never used
+  --> src\trainer.rs:31:11
+   |
+31 | pub const STEPS_PER_BATCH: usize = 1;
+   |           ^^^^^^^^^^^^^^^
+
+warning: variants `Save` and `Load` are never constructed
+  --> src\trainer.rs:45:5
+   |
+39 | pub enum TrainerCmd {
+   |          ---------- variants in this enum
+...
+45 |     Save(String),
+   |     ^^^^
+46 |     /// Load weights from path.
+47 |     Load(String),
+   |     ^^^^
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:58:5
+   |
+52 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+58 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: constant `RTL_SPECTRUM_BINS` is never used
+  --> src\training.rs:19:11
+   |
+19 | pub const RTL_SPECTRUM_BINS: usize = 256;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `SCAN_STEP_HZ` is never used
+  --> src\training.rs:22:11
+   |
+22 | pub const SCAN_STEP_HZ: u32 = 500_000;
+   |           ^^^^^^^^^^^^
+
+warning: struct `TrainingPair` is never constructed
+  --> src\training.rs:26:12
+   |
+26 | pub struct TrainingPair {
+   |            ^^^^^^^^^^^^
+
+warning: struct `TrainingSession` is never constructed
+  --> src\training.rs:34:12
+   |
+34 | pub struct TrainingSession {
+   |            ^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\training.rs:49:12
+    |
+ 47 | impl TrainingSession {
+    | -------------------- associated items in this implementation
+ 48 |     /// Create a new training session. RTL-SDR is opened lazily on first scan.
+ 49 |     pub fn new() -> Self {
+    |            ^^^
+...
+ 65 |     pub fn connect(&mut self) -> bool {
+    |            ^^^^^^^
+...
+ 81 |     pub fn is_connected(&self) -> bool {
+    |            ^^^^^^^^^^^^
+...
+ 86 |     pub fn set_scan_range(&mut self, start_hz: u32, stop_hz: u32) {
+    |            ^^^^^^^^^^^^^^
+...
+ 94 |     pub fn capture_step(&mut self, state: &AppState) -> Option<Vec<f32>> {
+    |            ^^^^^^^^^^^^
+...
+128 |     pub fn advance_scan(&mut self) -> bool {
+    |            ^^^^^^^^^^^^
+...
+138 |     pub fn push_pair(&mut self, pair: TrainingPair) {
+    |            ^^^^^^^^^
+...
+142 |     pub fn disconnect(&mut self) {
+    |            ^^^^^^^^^^
+...
+147 |     pub fn scan_range(&mut self, start_hz: u32, stop_hz: u32) {
+    |            ^^^^^^^^^^
+...
+153 |     pub fn get_spectrum(&self) -> Option<Vec<f32>> {
+    |            ^^^^^^^^^^^^
+...
+157 |     pub fn tick(&mut self) {
+    |            ^^^^
+...
+176 |     pub fn pair_count(&self) -> usize {
+    |            ^^^^^^^^^^
+...
+180 |     pub fn pairs_collected(&self) -> u32 {
+    |            ^^^^^^^^^^^^^^^
+...
+184 |     pub fn collect_pair(&mut self, tx_spec: &[f32], rx_spec: &[f32]) {
+    |            ^^^^^^^^^^^^
+...
+196 |     pub fn pairs(&self) -> &[TrainingPair] {
+    |            ^^^^^
+...
+201 |     fn compute_spectrum(&mut self, iq: &[Complex<f32>]) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: struct `MambaTrainer` is never constructed
+   --> src\training.rs:248:12
+    |
+248 | pub struct MambaTrainer<B: AutodiffBackend> {
+    |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `train`, and `spawn_background_training` are never used
+   --> src\training.rs:255:12
+    |
+254 | impl<B: AutodiffBackend> MambaTrainer<B> {
+    | ---------------------------------------- associated items in this implementation
+255 |     pub fn new(config: MambaConfig, device: B::Device) -> Self {
+    |            ^^^
+...
+265 |     pub fn train(&self, state: Arc<AppState>, pairs: Vec<TrainingPair>) {
+    |            ^^^^^
+...
+286 |     pub fn spawn_background_training(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `staging` is never read
+  --> src\vbuffer.rs:62:9
+   |
+58 | pub struct GpuVBuffer {
+   |            ---------- field in this struct
+...
+62 |     pub staging: wgpu::Buffer,
+   |         ^^^^^^^
+
+warning: methods `push_const` and `ready` are never used
+   --> src\vbuffer.rs:104:12
+    |
+ 66 | impl GpuVBuffer {
+    | --------------- methods in this implementation
+...
+104 |     pub fn push_const(&self, context_len: u32) -> VBufferPushConst {
+    |            ^^^^^^^^^^
+...
+119 |     pub fn ready(&self, context_len: u32) -> bool {
+    |            ^^^^^
+
+warning: constant `VBUF_WGSL_HELPERS` is never used
+   --> src\vbuffer.rs:151:11
+    |
+151 | pub const VBUF_WGSL_HELPERS: &str = r#"
+    |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `EMBEDDING_DIM` is never used
+  --> src\vector.rs:10:7
+   |
+10 | const EMBEDDING_DIM: usize = 32; // Mamba latent dimension
+   |       ^^^^^^^^^^^^^
+
+warning: struct `SignalMetadata` is never constructed
+  --> src\vector.rs:14:12
+   |
+14 | pub struct SignalMetadata {
+   |            ^^^^^^^^^^^^^^
+
+warning: struct `QdrantClient` is never constructed
+  --> src\vector.rs:25:12
+   |
+25 | pub struct QdrantClient {
+   |            ^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\vector.rs:32:18
+    |
+ 30 | impl QdrantClient {
+    | ----------------- associated items in this implementation
+ 31 |     /// Connect to Qdrant server and ensure collection exists
+ 32 |     pub async fn new(url: &str, collection: &str) -> Result<Self> {
+    |                  ^^^
+...
+ 74 |     pub async fn health(&self) -> Result<bool> {
+    |                  ^^^^^^
+...
+ 83 |     pub async fn upsert_embeddings(
+    |                  ^^^^^^^^^^^^^^^^^
+...
+149 |     pub async fn search_similar(
+    |                  ^^^^^^^^^^^^^^
+...
+280 |     pub async fn update_metadata(
+    |                  ^^^^^^^^^^^^^^^
+...
+307 |     pub async fn delete_points(&self, point_ids: &[u64]) -> Result<()> {
+    |                  ^^^^^^^^^^^^^
+...
+330 |     pub async fn scroll_all(&self, limit: u64) -> Result<Vec<(u64, SignalMetadata)>> {
+    |                  ^^^^^^^^^^
+
+warning: method `set_pdm_mode` is never used
+   --> src\waterfall.rs:301:12
+    |
+148 | impl WaterfallEngine {
+    | -------------------- method in this implementation
+...
+301 |     pub fn set_pdm_mode(&mut self, pdm: bool) {
+    |            ^^^^^^^^^^^^
+
+warning: `siren` (bin "siren") generated 121 warnings (run `cargo fix --bin "siren" -p siren` to apply 6 suggestions)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 8.02s

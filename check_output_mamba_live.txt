@@ -1,0 +1,103 @@
+    Blocking waiting for file lock on build directory
+    Checking siren v0.4.0 (C:\Users\pixel\Downloads\twister)
+error[E0425]: cannot find type `MambaAutoencoder` in this scope
+   --> src\mamba.rs:288:6
+    |
+288 | impl MambaAutoencoder {
+    |      ^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `MambaAutoencoder` in this scope
+   --> src\mamba.rs:389:22
+    |
+389 |     pub autoencoder: MambaAutoencoder,
+    |                      ^^^^^^^^^^^^^^^^ not found in this scope
+
+warning: unnecessary parentheses around block return value
+   --> src\mamba.rs:361:9
+    |
+361 |         (mse + l2_reg)
+    |         ^            ^
+    |
+    = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+    |
+361 -         (mse + l2_reg)
+361 +         mse + l2_reg
+    |
+
+warning: unused import: `MambaConfig`
+ --> src\training.rs:9:20
+  |
+9 | use crate::mamba::{MambaConfig, OnlineTrainer};
+  |                    ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `AtomicBool`
+  --> src\training.rs:13:25
+   |
+13 | use std::sync::atomic::{AtomicBool, Ordering};
+   |                         ^^^^^^^^^^
+
+error[E0277]: the `?` operator can only be applied to values that implement `Try`
+   --> src\mamba.rs:330:20
+    |
+330 |         let diff = (x - &recon)?;
+    |                    ^^^^^^^^^^^^^ the `?` operator cannot be applied to type `candle_core::Tensor`
+    |
+    = help: the nightly-only, unstable trait `Try` is not implemented for `candle_core::Tensor`
+
+error[E0277]: the `?` operator can only be applied to values that implement `Try`
+   --> src\mamba.rs:356:20
+    |
+356 |         let diff = (x - &recon)?;
+    |                    ^^^^^^^^^^^^^ the `?` operator cannot be applied to type `candle_core::Tensor`
+    |
+    = help: the nightly-only, unstable trait `Try` is not implemented for `candle_core::Tensor`
+
+error[E0433]: cannot find type `MambaAutoencoder` in this scope
+   --> src\mamba.rs:398:37
+    |
+398 |         let (autoencoder, varmap) = MambaAutoencoder::new(device.clone())
+    |                                     ^^^^^^^^^^^^^^^^ use of undeclared type `MambaAutoencoder`
+
+error[E0308]: mismatched types
+   --> src\trainer.rs:155:39
+    |
+155 | ...                   if let Ok((lat, score)) = self.trainer.infer(newest) {
+    |                                 ^^^^^^^^^^^^    -------------------------- this expression has type `std::result::Result<MambaOutput, anyhow::Error>`
+    |                                 |
+    |                                 expected `MambaOutput`, found `(_, _)`
+    |
+    = note: expected struct `MambaOutput`
+                found tuple `(_, _)`
+
+error[E0308]: mismatched types
+   --> src\trainer.rs:166:31
+    |
+166 |                     if let Ok((_, score)) = self.trainer.infer(newest) {
+    |                               ^^^^^^^^^^    -------------------------- this expression has type `std::result::Result<MambaOutput, anyhow::Error>`
+    |                               |
+    |                               expected `MambaOutput`, found `(_, _)`
+    |
+    = note: expected struct `MambaOutput`
+                found tuple `(_, _)`
+
+warning: unused variable: `nx`
+   --> src\anc.rs:133:13
+    |
+133 |         let nx = speaker_out.len().min(n);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_nx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `ny`
+   --> src\anc.rs:134:13
+    |
+134 |         let ny = mic_in.len().min(n);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_ny`
+
+Some errors have detailed explanations: E0277, E0308, E0425, E0433.
+For more information about an error, try `rustc --explain E0277`.
+warning: `siren` (bin "siren") generated 5 warnings
+error: could not compile `siren` (bin "siren") due to 7 previous errors; 5 warnings emitted

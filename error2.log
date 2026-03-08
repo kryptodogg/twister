@@ -1,0 +1,25 @@
+    Checking siren v0.4.0 (C:\Users\pixel\Downloads\twister)
+error[E0425]: cannot find value `DECIMATION` in this scope
+  --> examples\wfm_radio.rs:82:39
+   |
+82 |     let mut sma_buffer = vec![0.0f32; DECIMATION];
+   |                                       ^^^^^^^^^^ not found in this scope
+
+warning: use of deprecated method `cpal::traits::DeviceTrait::name`: Use `description()` for comprehensive device information including name, manufacturer, and device type. Use `id()` for a unique, stable device identifier that persists across reboots and reconnections.
+  --> examples\wfm_radio.rs:41:16
+   |
+41 |         device.name().unwrap_or_else(|_| "Unknown".to_string())
+   |                ^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0610]: `u32` is a primitive type and therefore doesn't have fields
+  --> examples\wfm_radio.rs:49:50
+   |
+49 |     let audio_sample_rate = config.sample_rate().0;
+   |                                                  ^
+
+Some errors have detailed explanations: E0425, E0610.
+For more information about an error, try `rustc --explain E0425`.
+warning: `siren` (example "wfm_radio") generated 1 warning
+error: could not compile `siren` (example "wfm_radio") due to 2 previous errors; 1 warning emitted

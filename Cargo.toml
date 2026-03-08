@@ -1,0 +1,75 @@
+[package]
+name = "twister"
+version = "0.5.0"
+edition = "2021"
+
+[[bin]]
+name = "twister"
+path = "src/main.rs"
+
+[dependencies]
+# ── Error handling ─────────────────────────────────────────────────────────────
+anyhow = "*"
+bytemuck = { version = "*", features = ["derive"] }
+# ── ML: Burn framework (GPU-accelerated neural networks via wgpu/Vulkan) ────────
+burn = { version = "0.21.0-pre.2", features = ["std", "wgpu", "ndarray"] }
+burn-wgpu = "0.21.0-pre.2"
+burn-ndarray = { version = "0.21.0-pre.2", features = ["std"] }
+# ── ML: Candle (CPU tensor engine — Mamba SSM autoencoder) ────────────────────
+candle-core = "*"
+candle-nn = "*"
+# ── Forensic evidence export ───────────────────────────────────────────────────
+chrono = { version = "*", features = ["serde"] }
+# ── Audio ──────────────────────────────────────────────────────────────────────
+cpal = "*"
+# ── Concurrency ────────────────────────────────────────────────────────────────
+crossbeam-channel = "*"
+csv = "*"
+# ── Forensic databases ─────────────────────────────────────────────────────────
+neo4rs = "*"
+# ── Numerics / DSP ─────────────────────────────────────────────────────────────
+num-complex = "*"
+parking_lot = "*"
+pollster = "*"
+qdrant-client = "*"
+rand = { version = "*", features = ["std", "std_rng"] }
+rustfft = "*"
+# ── Serialisation ──────────────────────────────────────────────────────────────
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+# ── UI ─────────────────────────────────────────────────────────────────────────
+slint = { version ="1.15.1", default-features = false, features = [
+    "backend-winit",           # Required windowing backend
+    "renderer-femtovg-wgpu",    # Enables FemtoVG via WGPU (supports Vulkan)
+    "unstable-wgpu-28",         # Specifically enables WGPU v28 features
+    "compat-1-2"                # Forward compatibility with future versions
+] }
+tempfile = "*"
+tokio = { version = "*", features = ["full"] }
+# ── GPU compute ────────────────────────────────────────────────────────────────
+# DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
+# wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
+wgpu = { version = "*", features = ["vulkan"] }
+# ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
+hf-hub = "0.3"
+safetensors = "0.3"
+# Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
+
+[build-dependencies]
+slint-build = "*"
+
+[features]
+# Build with RTL-SDR hardware support enabled by default.
+# Gracefully detects if device is not plugged in (device_not_found error).
+# To disable: cargo build --no-default-features
+default = ["rtlsdr"]
+rtlsdr = []
+
+[profile.dev]
+# Keep DSP hot paths fast even in debug builds.
+opt-level = 2
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1

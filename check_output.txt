@@ -1,0 +1,124 @@
+    Checking siren v0.4.0 (C:\Users\pixel\Downloads\twister)
+error[E0425]: cannot find type `Mutex` in this scope
+   --> src\mamba.rs:251:27
+    |
+251 |     optimizer: Option<Arc<Mutex<candle_nn::AdamW>>>,
+    |                           ^^^^^ not found in this scope
+    |
+help: consider importing one of these items
+    |
+ 13 + use std::sync::Mutex;
+    |
+ 13 + use std::sync::nonpoison::Mutex;
+    |
+ 13 + use parking_lot::Mutex;
+    |
+ 13 + use tokio::sync::Mutex;
+    |
+
+error[E0433]: cannot find type `MambaTrainer` in this scope
+     --> src\main.rs:121:17
+      |
+  121 |     let mamba = MambaTrainer::new(candle_core::Device::Cpu).context("Mamba init")?;
+      |                 ^^^^^^^^^^^^ use of undeclared type `MambaTrainer`
+      |
+help: consider importing this struct
+     -->   C:\Users\pixel\Downloads\twister\target\debug\build\siren-5f3f927ac1df1ccd\out\app.rs:44398:2
+      |
+44398 +  use crate::training::MambaTrainer;
+      |
+
+error[E0433]: cannot find `ForensicGraph` in `forensic`
+     --> src\main.rs:137:33
+      |
+  137 |     let neo4j = match forensic::ForensicGraph::new().await {
+      |                                 ^^^^^^^^^^^^^ could not find `ForensicGraph` in `forensic`
+      |
+help: consider importing this struct
+     -->   C:\Users\pixel\Downloads\twister\target\debug\build\siren-5f3f927ac1df1ccd\out\app.rs:44398:2
+      |
+44398 +  use crate::graph::ForensicGraph;
+      |
+help: if you import `ForensicGraph`, refer to it directly
+      |
+  137 -     let neo4j = match forensic::ForensicGraph::new().await {
+  137 +     let neo4j = match ForensicGraph::new().await {
+      |
+
+error[E0425]: cannot find value `forensic_disp` in this scope
+   --> src\main.rs:327:36
+    |
+327 |                 if let Ok(mut f) = forensic_disp.lock() {
+    |                                    ^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `qdrant_disp` in this scope
+   --> src\main.rs:332:33
+    |
+332 |                 rt_store_async(&qdrant_disp, &neo4j_disp, &event);
+    |                                 ^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `neo4j_disp` in this scope
+   --> src\main.rs:332:47
+    |
+332 |                 rt_store_async(&qdrant_disp, &neo4j_disp, &event);
+    |                                               ^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `ForensicGraph` in module `forensic`
+     --> src\main.rs:662:34
+      |
+  662 |     neo4j: &Arc<Option<forensic::ForensicGraph>>,
+      |                                  ^^^^^^^^^^^^^ not found in `forensic`
+      |
+help: consider importing this struct
+     -->   C:\Users\pixel\Downloads\twister\target\debug\build\siren-5f3f927ac1df1ccd\out\app.rs:44398:2
+      |
+44398 +  use crate::graph::ForensicGraph;
+      |
+help: if you import `ForensicGraph`, refer to it directly
+      |
+  662 -     neo4j: &Arc<Option<forensic::ForensicGraph>>,
+  662 +     neo4j: &Arc<Option<ForensicGraph>>,
+      |
+
+warning: unused import: `MambaOutput`
+ --> src\training.rs:8:38
+  |
+8 | use crate::mamba::{MambaAutoencoder, MambaOutput, TrainingMetrics, TrainingPair};
+  |                                      ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `mamba::MAMBA_CONTEXT_LEN`
+  --> src\main.rs:58:5
+   |
+58 | use mamba::MAMBA_CONTEXT_LEN;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src\mamba.rs:219:42
+     |
+ 219 |                     let a_dn = a_neg.get((d, j))?.to_scalar::<f32>()?;
+     |                                      --- ^^^^^^ expected `usize`, found `(usize, usize)`
+     |                                      |
+     |                                      arguments to this method are incorrect
+     |
+     = note: expected type `usize`
+               found tuple `(usize, usize)`
+note: method defined here
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\candle-core-0.9.2\src\tensor.rs:2213:12
+     |
+2213 |     pub fn get(&self, i: usize) -> Result<Tensor> {
+     |            ^^^
+
+warning: unused variable: `t`
+   --> src\mamba.rs:115:14
+    |
+115 |         let (t, _f) = x.dims2()?;
+    |              ^ help: if this is intentional, prefix it with an underscore: `_t`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0308, E0425, E0433.
+For more information about an error, try `rustc --explain E0308`.
+warning: `siren` (bin "siren") generated 3 warnings
+error: could not compile `siren` (bin "siren") due to 8 previous errors; 3 warnings emitted

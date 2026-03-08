@@ -1,0 +1,47 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# Backup files
+*.rs.bk
+*.bak
+*.tmp
+*~
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.claude/
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# Logs and forensic data
+forensic_log/
+*.jsonl
+
+# Docker data
+.docker_data/
+
+# Git worktrees
+.worktrees/
+
+# Large binaries and tools
+**/bin/*.exe
+**/bin/*.dll
+**/bin/*.so
+**/bin/*.dylib
+
+# Project data and build folders
+/databases/
+/twister_rtc/target/
+/third_party/
+/fpga/
+/docs/
+/evidence/
+/forensic_log/
+/drivers/
+/conductor/

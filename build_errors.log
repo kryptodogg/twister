@@ -1,0 +1,267 @@
+    Checking twister v0.3.0 (C:\Users\pixel\Downloads\twister)
+error[E0432]: unresolved import `burn::train::LearnerBuilder`
+  --> src\mamba.rs:35:5
+   |
+35 | use burn::train::LearnerBuilder;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `LearnerBuilder` in `train`
+
+error[E0432]: unresolved import `burn::train::LearnerBuilder`
+  --> src\training.rs:14:5
+   |
+14 | use burn::train::LearnerBuilder;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `LearnerBuilder` in `train`
+
+error[E0432]: unresolved import `burn::train::LearnerBuilder`
+   --> src\main.rs:101:5
+    |
+101 | use burn::train::LearnerBuilder;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `LearnerBuilder` in `train`
+
+error[E0050]: method `batch` has 2 parameters but the declaration in trait `burn::data::dataloader::batcher::Batcher::batch` has 3
+   --> src\mamba.rs:276:14
+    |
+276 |     fn batch(&self, items: Vec<TrainingPair>) -> MambaBatch<B> {
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected 3 parameters, found 2
+    |
+    = note: `batch` from trait: `fn(&Self, Vec<I>, &<B as burn::prelude::Backend>::Device) -> O`
+help: add the missing parameter from the trait
+    |
+276 |     fn batch(&self, items: Vec<TrainingPair>, device: &<B as burn::prelude::Backend>::Device) -> MambaBatch<B> {
+    |                                             ++++++++++++++++++++++++++++++++++++++++++++++++
+
+error[E0061]: this method takes 0 arguments but 1 argument was supplied
+   --> src\mamba.rs:218:50
+    |
+218 |         let latent = self.encoder_head.forward(x.squeeze(1));
+    |                                                  ^^^^^^^ - unexpected argument of type `{integer}`
+    |
+note: method defined here
+   --> C:\Users\pixel\.cargo\git\checkouts\burn-6c277d792b0d5d7a\c44e764\crates\burn-tensor\src\tensor\api\base.rs:756:12
+    |
+756 |     pub fn squeeze<const D2: usize>(self) -> Tensor<B, D2, K> {
+    |            ^^^^^^^
+help: remove the extra argument
+    |
+218 -         let latent = self.encoder_head.forward(x.squeeze(1));
+218 +         let latent = self.encoder_head.forward(x.squeeze());
+    |
+
+error[E0061]: this method takes 0 arguments but 1 argument was supplied
+   --> src\mamba.rs:230:37
+    |
+230 |         self.encoder_head.forward(x.squeeze(1))
+    |                                     ^^^^^^^ - unexpected argument of type `{integer}`
+    |
+note: method defined here
+   --> C:\Users\pixel\.cargo\git\checkouts\burn-6c277d792b0d5d7a\c44e764\crates\burn-tensor\src\tensor\api\base.rs:756:12
+    |
+756 |     pub fn squeeze<const D2: usize>(self) -> Tensor<B, D2, K> {
+    |            ^^^^^^^
+help: remove the extra argument
+    |
+230 -         self.encoder_head.forward(x.squeeze(1))
+230 +         self.encoder_head.forward(x.squeeze())
+    |
+
+error[E0308]: arguments to this function are incorrect
+   --> src\mamba.rs:305:9
+    |
+305 |         TrainOutput::new(loss, item.backward(), Vec::new())
+    |         ^^^^^^^^^^^^^^^^
+    |
+note: expected `&_`, found `Tensor<B, 1>`
+   --> src\mamba.rs:305:26
+    |
+305 |         TrainOutput::new(loss, item.backward(), Vec::new())
+    |                          ^^^^
+    = note: expected reference `&_`
+                  found struct `burn::Tensor<B, 1>`
+note: expected `RegressionOutput<B>`, found `Vec<_>`
+   --> src\mamba.rs:305:49
+    |
+305 |         TrainOutput::new(loss, item.backward(), Vec::new())
+    |                                                 ^^^^^^^^^^
+    = note: expected struct `RegressionOutput<B>`
+               found struct `Vec<_>`
+note: associated function defined here
+   --> C:\Users\pixel\.cargo\git\checkouts\burn-6c277d792b0d5d7a\c44e764\crates\burn-train\src\learner\train_val.rs:27:12
+    |
+ 27 |     pub fn new<B: AutodiffBackend, M: AutodiffModule<B>>(
+    |            ^^^
+help: consider borrowing here
+    |
+305 |         TrainOutput::new(&loss, item.backward(), Vec::new())
+    |                          +
+
+error[E0061]: this function takes 3 arguments but 1 argument was supplied
+   --> src\mamba.rs:318:9
+    |
+318 |         RegressionOutput::new(loss)
+    |         ^^^^^^^^^^^^^^^^^^^^^------ two arguments of type `burn::Tensor<B, 2>` and `burn::Tensor<B, 2>` are missing
+    |
+note: associated function defined here
+   --> C:\Users\pixel\.cargo\git\checkouts\burn-6c277d792b0d5d7a\c44e764\crates\burn-train\src\learner\regression.rs:8:10
+    |
+  8 | #[derive(new)]
+    |          ^^^
+    = note: this error originates in the derive macro `new` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: provide the arguments
+    |
+318 |         RegressionOutput::new(loss, /* burn::Tensor<B, 2> */, /* burn::Tensor<B, 2> */)
+    |                                   ++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:830:44
+    |
+830 | ...                   let _ = write!(path_green, " L {:.1} {:.1}", x, y);
+    |                                      ^^^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:830:44
+    |
+830 | ...                   let _ = write!(path_green, " L {:.1} {:.1}", x, y);
+    |                                      ^^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:832:40
+    |
+832 |                         let _ = write!(path_green, " L {:.1} 100 Z", 85.0 * X_SCALE);
+    |                                        ^^^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:832:40
+    |
+832 |                         let _ = write!(path_green, " L {:.1} 100 Z", 85.0 * X_SCALE);
+    |                                        ^^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:835:40
+    |
+835 |                         let _ = write!(path_cyan, "M {:.1} 100", 86.0 * X_SCALE);
+    |                                        ^^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:835:40
+    |
+835 |                         let _ = write!(path_cyan, "M {:.1} 100", 86.0 * X_SCALE);
+    |                                        ^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:839:44
+    |
+839 | ...                   let _ = write!(path_cyan, " L {:.1} {:.1}", x, y);
+    |                                      ^^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:839:44
+    |
+839 | ...                   let _ = write!(path_cyan, " L {:.1} {:.1}", x, y);
+    |                                      ^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:841:40
+    |
+841 |                         let _ = write!(path_cyan, " L {:.1} 100 Z", 170.0 * X_SCALE);
+    |                                        ^^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:841:40
+    |
+841 |                         let _ = write!(path_cyan, " L {:.1} 100 Z", 170.0 * X_SCALE);
+    |                                        ^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:844:40
+    |
+844 |                         let _ = write!(path_red, "M {:.1} 100", 171.0 * X_SCALE);
+    |                                        ^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:844:40
+    |
+844 |                         let _ = write!(path_red, "M {:.1} 100", 171.0 * X_SCALE);
+    |                                        ^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:848:44
+    |
+848 | ...                   let _ = write!(path_red, " L {:.1} {:.1}", x, y);
+    |                                      ^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:848:44
+    |
+848 | ...                   let _ = write!(path_red, " L {:.1} {:.1}", x, y);
+    |                                      ^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+error[E0599]: cannot write into `std::string::String`
+   --> src\main.rs:850:40
+    |
+850 |                         let _ = write!(path_red, " L 1000 100 Z");
+    |                                        ^^^^^^^^
+    |
+note: must implement `io::Write`, `fmt::Write`, or have a `write_fmt` method
+   --> src\main.rs:850:40
+    |
+850 |                         let _ = write!(path_red, " L 1000 100 Z");
+    |                                        ^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: the following traits which provide `write_fmt` are implemented but not in scope; perhaps you want to import one of them
+    |
+ 31 + use pulldown_cmark_escape::StrWrite;
+    |
+ 31 + use std::fmt::Write;
+    |
+
+Some errors have detailed explanations: E0050, E0061, E0308, E0432, E0599.
+For more information about an error, try `rustc --explain E0050`.
+error: could not compile `twister` (bin "twister") due to 16 previous errors
