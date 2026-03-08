@@ -14,9 +14,9 @@
 //
 // All features normalized to [0, 1] or [-1, 1] for neural network training.
 
-use std::f32::consts::PI;
-use rustfft::FftPlanner;
 use num_complex::Complex;
+use rustfft::FftPlanner;
+use std::f32::consts::PI;
 
 use crate::audio::SparsePdmSignature;
 
@@ -84,7 +84,11 @@ pub fn extract_audio_features(
 
     // 1. Extract STFT Mel features (162-D: 81 magnitude + 81 phase)
     let (stft_magnitude, stft_phase) = extract_stft_mel_features(buffer, sample_rate);
-    assert_eq!(stft_magnitude.len(), MEL_BINS, "STFT magnitude should be 81-D");
+    assert_eq!(
+        stft_magnitude.len(),
+        MEL_BINS,
+        "STFT magnitude should be 81-D"
+    );
     assert_eq!(stft_phase.len(), MEL_BINS, "STFT phase should be 81-D");
 
     // 2. Extract TDOA features (2-D: azimuth + elevation normalized)
@@ -97,15 +101,30 @@ pub fn extract_audio_features(
 
     // 4. Extract Bispectrum anomaly features (3-D: top 3 peaks)
     let bispectrum_features = extract_bispectrum_anomaly(buffer, sample_rate);
-    assert_eq!(bispectrum_features.len(), BISPECTRUM_TOP_N, "Bispectrum should be 3-D");
+    assert_eq!(
+        bispectrum_features.len(),
+        BISPECTRUM_TOP_N,
+        "Bispectrum should be 3-D"
+    );
 
     // 5. Normalize wave topology coherence (9-D)
-    let wave_features: Vec<f32> = wave_coherence.iter().map(|&v| v.max(0.0).min(1.0)).collect();
-    assert_eq!(wave_features.len(), MICROPHONE_PAIRS, "Wave coherence should be 9-D");
+    let wave_features: Vec<f32> = wave_coherence
+        .iter()
+        .map(|&v| v.max(0.0).min(1.0))
+        .collect();
+    assert_eq!(
+        wave_features.len(),
+        MICROPHONE_PAIRS,
+        "Wave coherence should be 9-D"
+    );
 
     // 6. Extract musical features (12-D: chromatic energy)
     let music_features = extract_musical_features(buffer, sample_rate);
-    assert_eq!(music_features.len(), NUM_CHROMATIC_PITCHES, "Musical features should be 12-D");
+    assert_eq!(
+        music_features.len(),
+        NUM_CHROMATIC_PITCHES,
+        "Musical features should be 12-D"
+    );
 
     // 7. Concatenate all features into 196-D vector
     let mut feature_vector = Vec::with_capacity(196);
@@ -117,7 +136,11 @@ pub fn extract_audio_features(
     feature_vector.extend_from_slice(&wave_features);
     feature_vector.extend_from_slice(&music_features);
 
-    assert_eq!(feature_vector.len(), 196, "Feature vector must be exactly 196-D");
+    assert_eq!(
+        feature_vector.len(),
+        196,
+        "Feature vector must be exactly 196-D"
+    );
 
     AudioFeatures {
         stft_mel_magnitude: stft_magnitude,
@@ -157,16 +180,10 @@ fn extract_stft_mel_features(buffer: &[f32], sample_rate: f32) -> (Vec<f32>, Vec
     let (magnitude, phase) = map_to_mel_scale(&fft_bins, nyquist_hz);
 
     // Normalize magnitude to [0, 1]
-    let normalized_magnitude: Vec<f32> = magnitude
-        .iter()
-        .map(|&v| v.max(0.0).min(1.0))
-        .collect();
+    let normalized_magnitude: Vec<f32> = magnitude.iter().map(|&v| v.max(0.0).min(1.0)).collect();
 
     // Normalize phase to [-1, 1]
-    let normalized_phase: Vec<f32> = phase
-        .iter()
-        .map(|&v| (v / PI).max(-1.0).min(1.0))
-        .collect();
+    let normalized_phase: Vec<f32> = phase.iter().map(|&v| (v / PI).max(-1.0).min(1.0)).collect();
 
     (normalized_magnitude, normalized_phase)
 }
@@ -264,8 +281,10 @@ fn extract_sparse_pdm_features(sig: &SparsePdmSignature, sample_rate: f32) -> Ve
 
     // 2. Inter-pulse variance: compute variance of inter-pulse intervals
     let inter_pulse_var = if sig.inter_pulse_micros.len() > 1 {
-        let mean: f32 = sig.inter_pulse_micros.iter().sum::<f32>() / sig.inter_pulse_micros.len() as f32;
-        let variance: f32 = sig.inter_pulse_micros
+        let mean: f32 =
+            sig.inter_pulse_micros.iter().sum::<f32>() / sig.inter_pulse_micros.len() as f32;
+        let variance: f32 = sig
+            .inter_pulse_micros
             .iter()
             .map(|&v| (v - mean).powi(2))
             .sum::<f32>()
@@ -281,9 +300,9 @@ fn extract_sparse_pdm_features(sig: &SparsePdmSignature, sample_rate: f32) -> Ve
     // 4. Phoneme confidence: map phoneme type to confidence score
     let phoneme_conf = match sig.phoneme_candidate.as_str() {
         "a" | "e" | "i" | "o" | "u" => 0.9, // High confidence for vowels
-        "s" | "f" | "th" => 0.7,              // Medium for fricatives
-        "t" | "p" | "k" => 0.8,               // High for stops
-        _ => 0.3,                              // Low confidence for unknown
+        "s" | "f" | "th" => 0.7,            // Medium for fricatives
+        "t" | "p" | "k" => 0.8,             // High for stops
+        _ => 0.3,                           // Low confidence for unknown
     };
 
     // 5-8. Four timing statistics from inter-pulse intervals
@@ -302,15 +321,22 @@ fn extract_timing_statistics(inter_pulse_micros: &[f32]) -> Vec<f32> {
     }
 
     // 1. Mean inter-pulse interval (normalized to [0, 1])
-    let mean_interval: f32 = inter_pulse_micros.iter().sum::<f32>() / inter_pulse_micros.len() as f32;
+    let mean_interval: f32 =
+        inter_pulse_micros.iter().sum::<f32>() / inter_pulse_micros.len() as f32;
     let mean_norm = (mean_interval / 1000.0).max(0.0).min(1.0);
 
     // 2. Min inter-pulse interval
-    let min_interval = inter_pulse_micros.iter().cloned().fold(f32::INFINITY, f32::min);
+    let min_interval = inter_pulse_micros
+        .iter()
+        .cloned()
+        .fold(f32::INFINITY, f32::min);
     let min_norm = (min_interval / 100.0).max(0.0).min(1.0);
 
     // 3. Max inter-pulse interval
-    let max_interval = inter_pulse_micros.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+    let max_interval = inter_pulse_micros
+        .iter()
+        .cloned()
+        .fold(f32::NEG_INFINITY, f32::max);
     let max_norm = (max_interval / 1000.0).max(0.0).min(1.0);
 
     // 4. Regularity (inverse of coefficient of variation)
@@ -320,7 +346,11 @@ fn extract_timing_statistics(inter_pulse_micros: &[f32]) -> Vec<f32> {
         .sum::<f32>()
         / inter_pulse_micros.len() as f32;
     let std_dev = variance.sqrt();
-    let cv = if mean_interval > 0.0 { std_dev / mean_interval } else { 0.0 };
+    let cv = if mean_interval > 0.0 {
+        std_dev / mean_interval
+    } else {
+        0.0
+    };
     let regularity = (1.0 / (1.0 + cv)).max(0.0).min(1.0);
 
     vec![mean_norm, min_norm, max_norm, regularity]
@@ -408,7 +438,10 @@ fn extract_musical_features(buffer: &[f32], sample_rate: f32) -> Vec<f32> {
     }
 
     // Normalize to [0, 1]
-    let max_energy = chromatic_energy.iter().cloned().fold(f32::NEG_INFINITY, f32::max);
+    let max_energy = chromatic_energy
+        .iter()
+        .cloned()
+        .fold(f32::NEG_INFINITY, f32::max);
     if max_energy > 0.0 {
         chromatic_energy.iter_mut().for_each(|e| {
             *e = (*e / max_energy).max(0.0).min(1.0);

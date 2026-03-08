@@ -1,6 +1,5 @@
 /// Mock data sources for ANALYSIS tab visualization
 /// Task D.2: Provides test data for temporal scatter, heatmap, dendrogram, and correlation graph
-
 use std::f32;
 
 #[derive(Clone, Debug)]
@@ -316,7 +315,12 @@ pub fn heat_map_color(importance: f32) -> String {
     if clamped < 0.5 {
         let r = clamped * 2.0;
         let b = 1.0 - clamped * 2.0;
-        format!("#{:02x}{:02x}{:02x}", (r * 255.0) as u8, 0, (b * 255.0) as u8)
+        format!(
+            "#{:02x}{:02x}{:02x}",
+            (r * 255.0) as u8,
+            0,
+            (b * 255.0) as u8
+        )
     } else {
         let r = 1.0;
         let gb = (clamped - 0.5) * 2.0;

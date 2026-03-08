@@ -57,10 +57,10 @@ const TOTAL_LOD_LEVELS: usize = 28;
 const MAX_ATTACK_SOURCES: usize = 32;
 
 // Screen coverage thresholds for LOD selection
-const COVERAGE_THRESHOLD_LEVEL_0_6: u32 = 2048;    // High detail
-const COVERAGE_THRESHOLD_LEVEL_7_13: u32 = 512;   // Medium
-const COVERAGE_THRESHOLD_LEVEL_14_20: u32 = 128;  // Low
-const COVERAGE_THRESHOLD_LEVEL_21_27: u32 = 64;   // Very low
+const COVERAGE_THRESHOLD_LEVEL_0_6: u32 = 2048; // High detail
+const COVERAGE_THRESHOLD_LEVEL_7_13: u32 = 512; // Medium
+const COVERAGE_THRESHOLD_LEVEL_14_20: u32 = 128; // Low
+const COVERAGE_THRESHOLD_LEVEL_21_27: u32 = 64; // Very low
 
 // ─────────────────────────────────────────────────────────────────────────
 // GPU Buffer Structures (must match WGSL)
@@ -69,7 +69,7 @@ const COVERAGE_THRESHOLD_LEVEL_21_27: u32 = 64;   // Very low
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct CameraUniform {
-    view_proj: [[f32; 4]; 4],  // 4×4 matrix
+    view_proj: [[f32; 4]; 4], // 4×4 matrix
     camera_pos: [f32; 3],
     _padding1: u32,
     viewport_width: u32,
@@ -279,7 +279,7 @@ impl MeshShaderPipeline {
             vertex: VertexState {
                 module: &mesh_shader,
                 entry_point: Some("vertex_main"),
-                buffers: &[],  // Procedural geometry, no vertex buffer
+                buffers: &[], // Procedural geometry, no vertex buffer
                 compilation_options: Default::default(),
             },
             primitive: PrimitiveState {
@@ -395,7 +395,12 @@ impl MeshShaderPipeline {
                 COVERAGE_THRESHOLD_LEVEL_21_27
             };
 
-            levels.push(MeshLodLevel::new(level_u32, vertex_count, triangle_count, coverage));
+            levels.push(MeshLodLevel::new(
+                level_u32,
+                vertex_count,
+                triangle_count,
+                coverage,
+            ));
         }
 
         levels
@@ -410,13 +415,13 @@ impl MeshShaderPipeline {
     /// - screen_size < 128px → Level 21+ (very low)
     pub fn select_lod_for_screen_size(screen_size: f32, _lod_levels: &[MeshLodLevel]) -> u32 {
         if screen_size >= 2048.0 {
-            0u32  // Highest detail
+            0u32 // Highest detail
         } else if screen_size >= 512.0 {
-            7u32  // Medium
+            7u32 // Medium
         } else if screen_size >= 128.0 {
-            14u32  // Low
+            14u32 // Low
         } else {
-            27u32  // Lowest detail
+            27u32 // Lowest detail
         }
     }
 
@@ -441,20 +446,19 @@ impl MeshShaderPipeline {
             .collect();
 
         if !instances.is_empty() {
-            self.queue.write_buffer(
-                &self.instance_buffer,
-                0,
-                bytemuck::cast_slice(&instances),
-            );
+            self.queue
+                .write_buffer(&self.instance_buffer, 0, bytemuck::cast_slice(&instances));
         }
 
         // ─────────────────────────────────────────────────────────────────
         // Create command encoder and dispatch render pass
         // ─────────────────────────────────────────────────────────────────
 
-        let mut encoder = self.device.create_command_encoder(&CommandEncoderDescriptor {
-            label: Some("Mesh Shader Encoder"),
-        });
+        let mut encoder = self
+            .device
+            .create_command_encoder(&CommandEncoderDescriptor {
+                label: Some("Mesh Shader Encoder"),
+            });
 
         {
             let mut render_pass = encoder.begin_render_pass(&RenderPassDescriptor {
@@ -558,13 +562,13 @@ mod tests {
     fn test_lod_selection_high_detail() {
         let levels = MeshShaderPipeline::create_lod_levels();
         let lod = MeshShaderPipeline::select_lod_for_screen_size(3000.0, &levels);
-        assert!(lod < 7);  // Should be in high-detail range
+        assert!(lod < 7); // Should be in high-detail range
     }
 
     #[test]
     fn test_lod_selection_low_detail() {
         let levels = MeshShaderPipeline::create_lod_levels();
         let lod = MeshShaderPipeline::select_lod_for_screen_size(50.0, &levels);
-        assert!(lod >= 21);  // Should be in low-detail range
+        assert!(lod >= 21); // Should be in low-detail range
     }
 }

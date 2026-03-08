@@ -1,4 +1,4 @@
-# SIREN v0.2 — GPU-First Acoustic Active Denial
+# Twister v0.2 — GPU-First Harmonic Self-defense and Harassment Investigation Workstation
 
 ## The Core Architectural Principle
 
@@ -107,14 +107,13 @@ representation of the signal structure, enabling phase-coherent separation
 of heterodyned carriers. The output path (readback → AppState → cpal) does
 not change at all.
 
-## Building
+## Running
 
 ```bash
-cargo build --release
+cargo run --release
 ```
 
-Requires: Rust 1.75+, Vulkan-capable GPU (RX 6700 XT, any RDNA2/3, or Nvidia
-with Vulkan), cpal-compatible audio device.
+Requires: Rust 1.96+, Vulkan-capable GPU (RX 6700 XT, any RDNA3), cpal-compatible audio device.
 
 For best performance on AMD, ensure the amdvlk or mesa radv Vulkan driver is
 installed. On Linux with Mesa, SAM is enabled by default when ReBAR is active

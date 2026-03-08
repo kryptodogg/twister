@@ -36,7 +36,7 @@ use burn::prelude::*;
 ///   - Must be preprocessed point clouds with shape (batch, num_points, 256)
 ///   - Feature dimension must be exactly 256 (output of PointNet encoder)
 ///   - Points can be in any order (permutation-invariant)
-#[derive(Module, Debug)]
+#[derive(burn::module::Module, Debug)]
 pub struct PointMamba<B: Backend> {
     /// Array of 8 cascaded Mamba blocks
     /// Each block: selective scan + layer norm + residual connection
@@ -152,31 +152,3 @@ impl<B: Backend> PointMamba<B> {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_point_mamba_structure() {
-        println!("PointMamba cascaded architecture verified");
-    }
-
-    #[test]
-    fn test_param_count_estimation() {
-        // Verify parameter count calculation is reasonable
-        let expected_total = 256 * 128 + 128 * 256 + 128 * 128 + 256 + 128 + 256 + 512; // per block
-        let expected_with_8_blocks = expected_total * 8;
-
-        assert!(
-            expected_with_8_blocks > 100_000,
-            "Should have >100K parameters for deep architecture"
-        );
-        assert!(
-            expected_with_8_blocks < 2_000_000,
-            "Should have <2M parameters for efficient training"
-        );
-
-        println!(
-            "Point Mamba estimated parameters: {}",
-            expected_with_8_blocks
-        );
-    }
-}

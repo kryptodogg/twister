@@ -1,0 +1,7 @@
+ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch
+
+* Introduced `ModularFeatureExtractor` for dynamic tensor extraction
+* Wired `SignalFeaturePayload` via async channel in `dispatch_loop`
+* Transitioned from enum `DetectionMode` to bitfield `FeatureFlags`
+* Retained `DenialMode` to prevent regression of active denial subsystems
+* Adapted `gaussian_splatting.wgsl` to apply forensic feature confidence mask

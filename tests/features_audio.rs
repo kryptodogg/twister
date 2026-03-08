@@ -30,8 +30,7 @@ fn create_test_pdm_signature() -> twister::audio::SparsePdmSignature {
         total_samples: 10000,
         density_hz: 500.0,
         inter_pulse_micros: vec![
-            100.0, 150.0, 120.0, 180.0, 110.0,
-            130.0, 160.0, 140.0, 125.0, 155.0,
+            100.0, 150.0, 120.0, 180.0, 110.0, 130.0, 160.0, 140.0, 125.0, 155.0,
         ],
         crest_ratio: 0.75,
         phoneme_candidate: "s".to_string(),
@@ -49,8 +48,8 @@ fn test_audio_features_dimension_196() {
     let features = extract_audio_features(
         &buffer,
         192000.0,
-        0.5,  // azimuth_rad
-        0.3,  // elevation_rad
+        0.5, // azimuth_rad
+        0.3, // elevation_rad
         &pdm_sig,
         &wave_coherence,
     );
@@ -72,14 +71,7 @@ fn test_stft_mel_extraction() {
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.5; 9];
 
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     // STFT magnitude + phase = 162-D (81 mag + 81 phase)
     assert_eq!(
@@ -87,36 +79,38 @@ fn test_stft_mel_extraction() {
         81,
         "STFT magnitude must be 81-D (Mel bins)"
     );
-    assert_eq!(
-        features.stft_mel_phase.len(),
-        81,
-        "STFT phase must be 81-D"
-    );
+    assert_eq!(features.stft_mel_phase.len(), 81, "STFT phase must be 81-D");
 
     // All values should be normalized
     for &val in &features.stft_mel_magnitude {
         assert!(val.is_finite(), "STFT magnitude values must be finite");
-        assert!(val >= 0.0 && val <= 1.0, "STFT magnitude must be normalized to [0, 1]");
+        assert!(
+            val >= 0.0 && val <= 1.0,
+            "STFT magnitude must be normalized to [0, 1]"
+        );
     }
 
     for &val in &features.stft_mel_phase {
         assert!(val.is_finite(), "STFT phase values must be finite");
-        assert!(val >= -1.0 && val <= 1.0, "STFT phase must be normalized to [-1, 1]");
+        assert!(
+            val >= -1.0 && val <= 1.0,
+            "STFT phase must be normalized to [-1, 1]"
+        );
     }
 }
 
 #[test]
 fn test_tdoa_feature_normalization() {
-    use twister::features::audio::extract_audio_features;
     use std::f32::consts::PI;
+    use twister::features::audio::extract_audio_features;
 
     let buffer = create_test_buffer(192000.0, 1000.0, 50.0);
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.5; 9];
 
     // Test with positive azimuth and elevation
-    let azimuth_rad = PI / 4.0;  // 45 degrees
-    let elevation_rad = PI / 6.0;  // 30 degrees
+    let azimuth_rad = PI / 4.0; // 45 degrees
+    let elevation_rad = PI / 6.0; // 30 degrees
 
     let features = extract_audio_features(
         &buffer,
@@ -151,14 +145,7 @@ fn test_sparse_pdm_integration() {
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.5; 9];
 
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     // Sparse PDM must be 8-D: [density, inter_pulse_var, crest_ratio, phoneme_conf, 4 timing stats]
     assert_eq!(
@@ -186,14 +173,7 @@ fn test_bispectrum_anomaly_extraction() {
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.5; 9];
 
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     // Bispectrum anomaly must be 3-D: top 3 anomaly peaks
     assert_eq!(
@@ -220,14 +200,7 @@ fn test_wave_topology_coherence() {
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
 
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     // Wave coherence must be 9-D (from 4-mic array cross-pairs)
     assert_eq!(
@@ -242,7 +215,8 @@ fn test_wave_topology_coherence() {
         assert!(
             val >= 0.0 && val <= 1.0,
             "Wave coherence[{}] must be normalized to [0, 1], got {}",
-            i, val
+            i,
+            val
         );
     }
 }
@@ -255,14 +229,7 @@ fn test_musical_features() {
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.5; 9];
 
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     // Musical features must be 12-D (chromatic pitches: C, C#, D, D#, E, F, F#, G, G#, A, A#, B)
     assert_eq!(
@@ -289,14 +256,7 @@ fn test_feature_vector_concatenation() {
     let pdm_sig = create_test_pdm_signature();
     let wave_coherence = [0.5; 9];
 
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.5,
-        0.3,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.5, 0.3, &pdm_sig, &wave_coherence);
 
     // Verify concatenation order: 162 + 2 + 8 + 3 + 9 + 12 = 196
     let expected_size = 162 + 2 + 8 + 3 + 9 + 12;
@@ -327,14 +287,7 @@ fn test_short_buffer_handling() {
     let wave_coherence = [0.5; 9];
 
     // Should not panic and should still return 196-D
-    let features = extract_audio_features(
-        &buffer,
-        192000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features = extract_audio_features(&buffer, 192000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     assert_eq!(features.feature_vector.len(), 196);
 }
@@ -348,14 +301,8 @@ fn test_different_sample_rates() {
     let wave_coherence = [0.5; 9];
 
     // Should work with different sample rates
-    let features = extract_audio_features(
-        &buffer_48k,
-        48000.0,
-        0.0,
-        0.0,
-        &pdm_sig,
-        &wave_coherence,
-    );
+    let features =
+        extract_audio_features(&buffer_48k, 48000.0, 0.0, 0.0, &pdm_sig, &wave_coherence);
 
     assert_eq!(features.feature_vector.len(), 196);
     assert_eq!(features.total_dimension, 196);

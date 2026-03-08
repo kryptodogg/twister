@@ -14,7 +14,7 @@
 
 use std::sync::Arc;
 use std::time::Instant;
-use twister::gpu_memory::{UnifiedBuffer, GpuWorkQueue};
+use twister::gpu_memory::{GpuWorkQueue, UnifiedBuffer};
 
 /// Helper: Create real wgpu Device for RX 6700 XT
 fn create_test_device() -> (wgpu::Device, wgpu::Queue) {
@@ -23,26 +23,25 @@ fn create_test_device() -> (wgpu::Device, wgpu::Queue) {
         ..Default::default()
     });
 
-    let adapter = pollster::block_on(instance.request_adapter(
-        &wgpu::RequestAdapterOptions {
-            power_preference: wgpu::PowerPreference::HighPerformance,
-            compatible_surface: None,
-            force_fallback_adapter: false,
-        },
-    ))
+    let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
+        power_preference: wgpu::PowerPreference::HighPerformance,
+        compatible_surface: None,
+        force_fallback_adapter: false,
+    }))
     .expect("Failed to find GPU adapter (RX 6700 XT not detected?)");
 
     let info = adapter.get_info();
-    println!("[GPU Device] {} ({:?}) via {:?}", info.name, info.device_type, info.backend);
+    println!(
+        "[GPU Device] {} ({:?}) via {:?}",
+        info.name, info.device_type, info.backend
+    );
 
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor {
-            label: Some("test-device"),
-            required_features: wgpu::Features::empty(),
-            required_limits: wgpu::Limits::default(),
-            ..Default::default()
-        },
-    ))
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        label: Some("test-device"),
+        required_features: wgpu::Features::empty(),
+        required_limits: wgpu::Limits::default(),
+        ..Default::default()
+    }))
     .expect("Failed to create device");
 
     (device, queue)
@@ -107,9 +106,7 @@ fn test_unified_buffer_gpu_write_with_offset() {
 
     // Write at offset
     let data = vec![10, 20, 30];
-    buffer
-        .gpu_write(&queue, &data, 5)
-        .expect("Write failed");
+    buffer.gpu_write(&queue, &data, 5).expect("Write failed");
 
     let cpu_view = buffer.cpu_read();
     assert_eq!(cpu_view[5], 10);
@@ -140,7 +137,10 @@ fn test_unified_buffer_write_offset_exceeds_capacity() {
     let data = vec![1.0; 50];
     let result = buffer.gpu_write(&queue, &data, 60);
 
-    assert!(result.is_err(), "Write should fail when offset+len exceeds capacity");
+    assert!(
+        result.is_err(),
+        "Write should fail when offset+len exceeds capacity"
+    );
 }
 
 #[test]
@@ -410,9 +410,7 @@ fn test_multi_batch_gpu_cpu_pipeline() {
     // Simulate: 3 batches of data processed
     for batch_idx in 0..3 {
         // GPU writes batch data
-        let batch_data: Vec<f32> = (0..10)
-            .map(|i| (batch_idx * 10 + i) as f32)
-            .collect();
+        let batch_data: Vec<f32> = (0..10).map(|i| (batch_idx * 10 + i) as f32).collect();
         buffer
             .gpu_write(&queue_wgpu, &batch_data, 0)
             .expect("Write failed");
@@ -445,9 +443,7 @@ fn test_unified_buffer_write_throughput() {
     let data: Vec<f32> = (0..10000).map(|i| i as f32).collect();
 
     let start = Instant::now();
-    buffer
-        .gpu_write(&queue, &data, 0)
-        .expect("Write failed");
+    buffer.gpu_write(&queue, &data, 0).expect("Write failed");
     let write_time = start.elapsed();
 
     println!(
@@ -475,10 +471,7 @@ fn test_work_queue_enqueue_throughput() {
     }
     let enqueue_time = start.elapsed();
 
-    println!(
-        "[Performance] GPU enqueue 100000 items: {:?}",
-        enqueue_time
-    );
+    println!("[Performance] GPU enqueue 100000 items: {:?}", enqueue_time);
     assert_eq!(queue.pending_count(), 100000);
 
     // Dequeue all
@@ -489,10 +482,7 @@ fn test_work_queue_enqueue_throughput() {
     }
     let dequeue_time = dequeue_start.elapsed();
 
-    println!(
-        "[Performance] CPU dequeue 100000 items: {:?}",
-        dequeue_time
-    );
+    println!("[Performance] CPU dequeue 100000 items: {:?}", dequeue_time);
 }
 
 // ============================================================================

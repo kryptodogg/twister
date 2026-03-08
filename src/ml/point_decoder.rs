@@ -48,14 +48,14 @@ impl<B: Backend> PointDecoder<B> {
     /// No dead padding. Each intermediate tensor is tightly-scoped and freed immediately.
     /// VGPRs minimized via vec4 packing in GPU execution.
     pub fn forward(&self, features: &Tensor<B, 2>) -> Result<Tensor<B, 2>, Box<dyn Error>> {
-        let [n_points, _n_features] = features.dims();
+        let [_n_points, _n_features] = features.dims();
 
         // MLP1: (N, 128) → (N, 256) with ReLU, function-packed
         let h1 = {
             let x = features
                 .clone()
                 .matmul(self.mlp1_w.clone())
-                .add(self.mlp1_b.clone().unsqueeze_dim(0));
+                .add(self.mlp1_b.clone().unsqueeze_dim::<2>(0));
             x.clamp_min(0.0) // ReLU: max(0, x)
         }; // h1 freed after scope
 
@@ -64,7 +64,7 @@ impl<B: Backend> PointDecoder<B> {
             let x = h1
                 .clone()
                 .matmul(self.mlp2_w.clone())
-                .add(self.mlp2_b.clone().unsqueeze_dim(0));
+                .add(self.mlp2_b.clone().unsqueeze_dim::<2>(0));
             x.clamp_min(0.0)
         }; // h2 freed after scope
 
@@ -72,9 +72,9 @@ impl<B: Backend> PointDecoder<B> {
         let offsets = h2
             .clone()
             .matmul(self.mlp3_w.clone())
-            .add(self.mlp3_b.clone().unsqueeze_dim(0));
+            .add(self.mlp3_b.clone().unsqueeze_dim::<2>(0));
 
-        let [n_out, d_out] = offsets.dims();
+        let [_n_out, d_out] = offsets.dims();
         if d_out != 3 {
             return Err(format!("Expected 3 output dimensions, got {}", d_out).into());
         }
@@ -168,7 +168,7 @@ mod tests {
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::from_data(
-            TensorData::random([512, 128], burn::tensor::Distribution::Default, &device),
+            TensorData::random([512, 128], Distribution::Default, &device),
             &device,
         );
         let out = decoder.forward(&features).expect("Forward failed");
@@ -186,7 +186,7 @@ mod tests {
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::from_data(
-            TensorData::random([512, 128], burn::tensor::Distribution::Default, &device),
+            TensorData::random([512, 128], Distribution::Default, &device),
             &device,
         );
         let out = decoder.forward(&features).expect("Forward failed");
@@ -206,7 +206,7 @@ mod tests {
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::from_data(
-            TensorData::random([256, 128], burn::tensor::Distribution::Default, &device),
+            TensorData::random([256, 128], Distribution::Default, &device),
             &device,
         );
         let _out = decoder.forward(&features).expect("Forward failed");
@@ -218,7 +218,7 @@ mod tests {
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::from_data(
-            TensorData::random([256, 128], burn::tensor::Distribution::Default, &device),
+            TensorData::random([256, 128], Distribution::Default, &device),
             &device,
         );
         let out1 = decoder.forward(&features).expect("Forward 1 failed");
@@ -237,7 +237,7 @@ mod tests {
         let decoder = create_zero_decoder(&device);
 
         let features = Tensor::from_data(
-            TensorData::random([512, 128], burn::tensor::Distribution::Default, &device),
+            TensorData::random([512, 128], Distribution::Default, &device),
             &device,
         );
         let out = decoder.forward(&features).expect("Forward failed");

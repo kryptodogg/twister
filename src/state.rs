@@ -1,3 +1,4 @@
+use crate::ml::modular_features::FeatureFlags;
 // src/state.rs — Shared Atomic State  (v0.4)
 //
 // Changes from v0.3:
@@ -423,6 +424,10 @@ pub struct AppState {
     pub denial_freq_override: AtomicF32,
     pub master_gain: AtomicF32,
     pub mode: AtomicU32,
+    pub feature_flags: Mutex<FeatureFlags>,
+    pub feature_confidence: AtomicF32,
+    pub impulse_anomaly_score: AtomicF32,
+    pub harassment_detected: AtomicBool,
     pub auto_tune: AtomicBool,
     pub running: AtomicBool,
     pub anc_ok: AtomicBool, // Indicates if the Active Defense is armed and aligned
@@ -573,6 +578,10 @@ impl AppState {
             denial_freq_override: AtomicF32::new(0.0),
             master_gain: AtomicF32::new(0.0), // 0dB clean output
             mode: AtomicU32::new(0),
+            feature_flags: Mutex::new(FeatureFlags::default()),
+            feature_confidence: AtomicF32::new(0.0),
+            impulse_anomaly_score: AtomicF32::new(0.0),
+            harassment_detected: AtomicBool::new(false),
             auto_tune: AtomicBool::new(true), // AUTO-TUNE ON
             running: AtomicBool::new(false),
             anc_ok: AtomicBool::new(false),
@@ -1367,5 +1376,25 @@ mod tests {
         let retrieved = state.get_tx_spectral_deltas();
         assert_eq!(retrieved.len(), 512);
         assert_eq!(retrieved, deltas);
+    }
+}
+
+impl AppState {
+    pub fn get_feature_flags(&self) -> FeatureFlags {
+        self.feature_flags.lock().unwrap().clone()
+    }
+
+    pub fn set_feature_flags(&self, flags: FeatureFlags) {
+        if let Ok(mut f) = self.feature_flags.lock() {
+            *f = flags;
+        }
+    }
+
+    pub fn get_feature_confidence(&self) -> f32 {
+        self.feature_confidence.load(Ordering::Relaxed)
+    }
+
+    pub fn set_feature_confidence(&self, val: f32) {
+        self.feature_confidence.store(val, Ordering::Relaxed);
     }
 }

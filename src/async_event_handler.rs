@@ -32,8 +32,8 @@
 use crate::dispatch_kernel::AutonomousDispatchKernel;
 use crate::state::AppState;
 use anyhow::Result;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 use tokio::sync::Mutex;
 use tokio::time::sleep;

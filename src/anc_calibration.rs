@@ -10,7 +10,7 @@
 // Mamba-weighted confidence per FFT bin
 //
 
-use rustfft::{FftPlanner, num_complex::Complex};
+use rustfft::{num_complex::Complex, FftPlanner};
 use std::f32::consts::{PI, TAU};
 
 const AUDIO_SR: f32 = 192_000.0;
@@ -114,7 +114,11 @@ impl FullRangeCalibration {
 
         // FFT size: largest power-of-2 <= min of available channels.
         // ch2 may be empty if Blue line-in is not connected — exclude it from min.
-        let ch2_len = if ch2.is_empty() { usize::MAX } else { ch2.len() };
+        let ch2_len = if ch2.is_empty() {
+            usize::MAX
+        } else {
+            ch2.len()
+        };
         let min_len = ch0.len().min(ch1.len()).min(ch2_len).min(sweep.len());
         let fft_size = (min_len as f32).log2().floor() as u32;
         let fft_size = 2_usize.pow(fft_size.max(12).min(20));
@@ -130,7 +134,11 @@ impl FullRangeCalibration {
         // Guard: ch2 (Blue line-in) may be absent if only 2 devices are connected.
         // Use a zero-filled FFT buffer as a neutral placeholder — xcorr will be
         // near-zero magnitude so confidence for ch2-dependent bins stays at 0.
-        let ch2_safe: &[f32] = if ch2.len() >= fft_size { &ch2[..fft_size] } else { &[] };
+        let ch2_safe: &[f32] = if ch2.len() >= fft_size {
+            &ch2[..fft_size]
+        } else {
+            &[]
+        };
 
         let mut ch0_fft = to_complex_fft(&ch0[..fft_size], fft_size);
         let mut ch1_fft = to_complex_fft(&ch1[..fft_size], fft_size);
