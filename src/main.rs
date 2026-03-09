@@ -398,6 +398,10 @@ async fn main() -> anyhow::Result<()> {
                 tdoa_confidence: Some(state_disp.get_beam_confidence()),
                 device_corr: None,
                 vbuffer_coherence: None,
+                impulse_detection: None,
+                video_frame: None,
+                video_frame_timestamp_us: 0,
+                visual_features: None,
                 anc_phase: None,
                 harmonic_energy: None,
             };
@@ -670,6 +674,27 @@ async fn main() -> anyhow::Result<()> {
                         latent.push(state_disp.get_audio_dc_bias());
                         latent.push(state_disp.get_sdr_dc_bias());
                         state_disp.set_mamba_anomaly(anomaly);
+                        // --- Track C.2/C.4 Real-time Anomaly Gate ---
+                        let mut fft_mag = [0.0f32; 128];
+                        for i in 0..128 {
+                            fft_mag[i] = if i < mags.len() { mags[i] } else { 0.0 };
+                        }
+                        let frame = crate::ml::spectral_frame::SpectralFrame {
+                            timestamp_micros: chrono::Utc::now().timestamp_micros() as u64,
+                            fft_magnitude: fft_mag,
+                            bispectrum: [0.0; 64], // Populated later if needed
+                            itd_ild: [0.0; 4],
+                            beamformer_outputs: [0.0; 3],
+                            mamba_anomaly_score: anomaly,
+                        };
+                        let gate = crate::ml::anomaly_gate::evaluate_gate(&frame, anomaly, 2.0);
+                        if gate.forward_to_trainer {
+                            // We would enqueue to trainer_tx here in a real setup.
+                            // For now, we just log it if confidence is high.
+                            if gate.confidence > 0.8 {
+                                // println!("[GATE] Forwarding: {}", gate.reason);
+                            }
+                        }
                         state_disp.set_latent_embedding(latent.clone());
 
                         let beam_az = state_disp.get_beam_azimuth_deg().to_radians();
