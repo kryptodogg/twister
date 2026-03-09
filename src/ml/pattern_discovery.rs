@@ -12,7 +12,6 @@
 /// 5. Per-cluster analysis: temporal frequency, confidence, tag distribution
 ///
 /// Output: Vec<Pattern> with full metadata for harassment signature library
-
 use std::collections::HashMap;
 
 /// Harassment pattern discovered from event clustering
@@ -110,10 +109,7 @@ fn euclidean_distance(a: &[f32], b: &[f32]) -> f32 {
 
 /// Initialize K cluster centers from data (K-means++)
 /// Uses probabilistic selection to spread initial centers
-fn initialize_centroids_kmeans_pp(
-    embeddings: &[Vec<f32>],
-    k: usize,
-) -> Vec<Vec<f32>> {
+fn initialize_centroids_kmeans_pp(embeddings: &[Vec<f32>], k: usize) -> Vec<Vec<f32>> {
     if embeddings.is_empty() || k == 0 {
         return Vec::new();
     }
@@ -149,10 +145,7 @@ fn initialize_centroids_kmeans_pp(
 }
 
 /// K-means clustering on 128-D embeddings
-pub fn kmeans(
-    embeddings: &[Vec<f32>],
-    config: KMeansConfig,
-) -> Result<ClusteringResult, String> {
+pub fn kmeans(embeddings: &[Vec<f32>], config: KMeansConfig) -> Result<ClusteringResult, String> {
     if embeddings.is_empty() {
         return Err("No embeddings provided".to_string());
     }
@@ -265,10 +258,7 @@ pub fn kmeans(
 /// Compute silhouette score for a clustering result
 /// Measures how similar an object is to its own cluster vs other clusters
 /// Range: [-1, 1] where 1 = perfect clustering, -1 = wrong assignment
-pub fn compute_silhouette_score(
-    embeddings: &[Vec<f32>],
-    clustering: &ClusteringResult,
-) -> f32 {
+pub fn compute_silhouette_score(embeddings: &[Vec<f32>], clustering: &ClusteringResult) -> f32 {
     if embeddings.is_empty() || embeddings.len() != clustering.assignments.len() {
         return 0.0;
     }
@@ -514,11 +504,7 @@ pub fn discover_patterns(
 mod tests {
     use super::*;
 
-    fn create_test_event(
-        idx: usize,
-        timestamp_micros: i64,
-        cluster_id: usize,
-    ) -> Event {
+    fn create_test_event(idx: usize, timestamp_micros: i64, cluster_id: usize) -> Event {
         Event {
             id: format!("event_{}", idx),
             embedding: vec![idx as f32 / 100.0; 128],
@@ -598,7 +584,10 @@ mod tests {
         };
 
         let score = compute_silhouette_score(&embeddings, &clustering);
-        assert!(score > 0.5, "Well-separated clusters should have high silhouette score");
+        assert!(
+            score > 0.5,
+            "Well-separated clusters should have high silhouette score"
+        );
     }
 
     #[test]
@@ -618,7 +607,10 @@ mod tests {
 
         let cluster_members: Vec<usize> = (0..7).collect();
         let frequency = compute_temporal_frequency(&events, &cluster_members);
-        assert!((frequency - 24.0).abs() < 2.0, "Expected ~24 hour frequency");
+        assert!(
+            (frequency - 24.0).abs() < 2.0,
+            "Expected ~24 hour frequency"
+        );
     }
 
     #[test]
@@ -638,7 +630,10 @@ mod tests {
 
         let cluster_members: Vec<usize> = (0..4).collect();
         let frequency = compute_temporal_frequency(&events, &cluster_members);
-        assert!((frequency - 168.0).abs() < 10.0, "Expected ~168 hour frequency");
+        assert!(
+            (frequency - 168.0).abs() < 10.0,
+            "Expected ~168 hour frequency"
+        );
     }
 
     #[test]

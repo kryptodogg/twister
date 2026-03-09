@@ -24,19 +24,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }))
     .map_err(|e| format!("No adapter found: {e:?}"))?;
 
-    println!("[GaussianSplat Bench] Adapter: {} ({:?})",
-             adapter.get_info().name,
-             adapter.get_info().backend);
+    println!(
+        "[GaussianSplat Bench] Adapter: {} ({:?})",
+        adapter.get_info().name,
+        adapter.get_info().backend
+    );
 
     // Request device with TIMESTAMP_QUERY feature
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor {
-            label: Some("gaussian_splat_bench_device"),
-            required_features: wgpu::Features::TIMESTAMP_QUERY,
-            required_limits: wgpu::Limits::default(),
-            ..Default::default()
-        }
-    ))?;
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        label: Some("gaussian_splat_bench_device"),
+        required_features: wgpu::Features::TIMESTAMP_QUERY,
+        required_limits: wgpu::Limits::default(),
+        ..Default::default()
+    }))?;
 
     println!("[GaussianSplat Bench] Device initialized with TIMESTAMP_QUERY support");
 
@@ -65,7 +65,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         });
     }
 
-    println!("[GaussianSplat Bench] Generated {} particles", particles.len());
+    println!(
+        "[GaussianSplat Bench] Generated {} particles",
+        particles.len()
+    );
 
     // Upload to GPU
     renderer.upload_particles(&particles)?;

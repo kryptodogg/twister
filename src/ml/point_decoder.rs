@@ -1,5 +1,10 @@
 use burn::prelude::Module;
+<<<<<<< HEAD
 use burn::tensor::{backend::Backend, Tensor};
+=======
+use burn::tensor::backend::Backend;
+use burn::tensor::{Distribution, Tensor};
+>>>>>>> origin/main
 use std::error::Error;
 
 /// Point Decoder: Mamba Features (N, 128) → 3D Offsets (N, 3)
@@ -84,6 +89,7 @@ impl<B: Backend> PointDecoder<B> {
     }
 }
 
+<<<<<<< HEAD
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -220,3 +226,6 @@ mod tests {
         }
     }
 }
+=======
+
+>>>>>>> origin/main

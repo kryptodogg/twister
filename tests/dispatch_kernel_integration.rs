@@ -9,10 +9,10 @@
 
 #[cfg(test)]
 mod dispatch_kernel_tests {
-    use twister::dispatch_kernel::{
-        AutonomousDispatchKernel, AudioFrameVBuffer, DispatchKernelConfig, DispatchResultVBuffer,
-    };
     use std::time::Instant;
+    use twister::dispatch_kernel::{
+        AudioFrameVBuffer, AutonomousDispatchKernel, DispatchKernelConfig, DispatchResultVBuffer,
+    };
 
     /// Helper to create a test wgpu device and queue
     fn create_test_device() -> Option<(wgpu::Device, wgpu::Queue)> {

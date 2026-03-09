@@ -1,5 +1,5 @@
 use burn::prelude::*;
-use burn::tensor::{backend::Backend, Tensor};
+use burn::tensor::{Tensor, backend::Backend};
 
 /// Single Mamba block with selective scan
 #[derive(Module, Debug)]

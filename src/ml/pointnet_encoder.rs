@@ -1,5 +1,8 @@
-use burn::prelude::*;
-use burn::tensor::Tensor;
+
+use burn::module::Module;
+use burn::tensor::backend::Backend;
+use burn::tensor::{Distribution, Tensor, TensorData};
+
 /// PointNet Encoder: Point Cloud (N, 6) → (N, 256) Features
 /// GPU-optimized with Wave64 function packing (no dead padding)
 ///
@@ -75,6 +78,7 @@ impl<B: Backend> PointNetEncoder<B> {
     }
 }
 
+<<<<<<< HEAD
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -208,3 +212,6 @@ mod tests {
         let _out = encoder.forward(&points).expect("Forward failed");
     }
 }
+=======
+
+>>>>>>> origin/main

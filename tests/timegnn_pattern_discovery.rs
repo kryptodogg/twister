@@ -68,7 +68,7 @@ mod timegnn_pattern_tests {
         let distance = a
             .iter()
             .zip(&b)
-            .map(|(x, y)| (x - y).powi(2))
+            .map(|(x, y)| ((x - y) as f32).powi(2))
             .sum::<f32>()
             .sqrt();
 
@@ -87,7 +87,7 @@ mod timegnn_pattern_tests {
         let distance: f32 = a
             .iter()
             .zip(&b)
-            .map(|(x, y)| (x - y).powi(2))
+            .map(|(x, y)| ((x - y) as f32).powi(2))
             .sum::<f32>()
             .sqrt();
 
@@ -349,7 +349,7 @@ mod timegnn_pattern_tests {
         let mut embedding = vec![3.0_f32, 4.0_f32, 0.0_f32, 0.0_f32];
 
         // L2 norm
-        let norm = embedding.iter().map(|&x| x.powi(2)).sum::<f32>().sqrt();
+        let norm = embedding.iter().map(||&x| x.powi(2)x: &f32| x.powi(2)).sum::<f32>().sqrt();
         assert!(
             (norm - 5.0_f32).abs() < 1e-6_f32,
             "L2 norm of [3,4,0,0] should be 5"
@@ -361,7 +361,7 @@ mod timegnn_pattern_tests {
         }
 
         // Verify unit norm
-        let normalized_norm = embedding.iter().map(|&x| x.powi(2)).sum::<f32>().sqrt();
+        let normalized_norm = embedding.iter().map(||&x| x.powi(2)x: &f32| x.powi(2)).sum::<f32>().sqrt();
         assert!(
             (normalized_norm - 1.0_f32).abs() < 1e-6_f32,
             "Normalized vector should have unit norm"

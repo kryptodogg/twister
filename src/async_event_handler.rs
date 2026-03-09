@@ -194,11 +194,12 @@ impl GpuEventHandler {
                         // GPU has work for us - process it
                         let results = kernel.read_results();
                         for (idx, _frame_idx) in processed_frames.iter().enumerate() {
-                            if idx >= results.len() {
-                                break;
-                            }
-                            let result = &results[idx];
-                            frame_count += 1;
+                                    if idx >= results.len() {
+                                        break;
+                                    }
+                                    let result = &results[idx];
+                                    frame_count += 1;
+
 
                             {
                                 let st = app_state.lock().await;
@@ -227,12 +228,8 @@ impl GpuEventHandler {
                                     );
                                 }
                             }
-
-                            if result.anomaly_score_db > 1.0 {
-                                let st = app_state.lock().await;
-                                st.replay_buf_len.fetch_add(1, Ordering::Relaxed);
-                            }
                         }
+
                     } else {
                         sleep(Duration::from_millis(5)).await;
                     }
