@@ -111,9 +111,9 @@ VI.4 (Mamba Materials) + VI.5 (Tonemap)
 
 ## Parallel Development
 
-**VI.1-VI.3 independent**:
-- Developer A: VI.1 (Mesh Shaders) ← foundation
-- Developer B: VI.2 (Particles) + VI.3 (Illumination) ← parallel
+**VI.1-VI.3 independent (Resonance Physics → Aether Particles → Emerald City)**:
+- Developer A: VI.1 (Resonance Physics) ← foundation
+- Developer B: VI.2 (Aether Particles) + VI.3 (Emerald City) ← parallel
 - Developer C: VI.4 (Materials) + VI.5 (Tonemap) ← after VI.1
 
 ---
