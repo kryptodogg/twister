@@ -692,15 +692,59 @@ async fn main() -> anyhow::Result<()> {
                             itd_ild: [0.0; 4],
                             beamformer_outputs: [0.0; 3],
                             mamba_anomaly_score: anomaly,
+                            confidence: 1.0,
                         };
                         let gate = crate::ml::anomaly_gate::evaluate_gate(&frame, anomaly, 2.0);
+
+                        // Sync to UI
+                        if let Ok(mut gs) = state_disp.gate_status.lock() {
+                            *gs = if gate.forward_to_trainer { "FORWARD".to_string() } else { "REJECTED".to_string() };
+                        }
+                        if let Ok(mut gr) = state_disp.last_gate_reason.lock() {
+                            *gr = gate.reason.clone();
+                        }
+
                         if gate.forward_to_trainer {
-                            // We would enqueue to trainer_tx here in a real setup.
-                            // For now, we just log it if confidence is high.
-                            if gate.confidence > 0.8 {
-                                // println!("[GATE] Forwarding: {}", gate.reason);
+                            // High anomaly, check for training data
+                            if state_disp.get_training_recording_enabled() && gate.confidence > 0.8 {
+                                let tx_cur = if let Ok(tx) = state_disp.tx_mags.lock() {
+                                    let mut t = tx.clone(); t.resize(512, 0.0); t
+                                } else { vec![0.0; 512] };
+
+                                let mut rx_cur = if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
+                                    let mut r = sdr_mags.clone(); r.resize(512, 0.0); r
+                                } else {
+                                    let mut r = mags.clone(); r.resize(512, 0.0); r
+                                };
+
+                                let pair = mamba::TrainingPair::new(
+                                    state_disp.get_sdr_center_hz() as u32,
+                                    tx_cur,
+                                    rx_cur,
+                                );
+
+                                if !training_session_disp.try_enqueue(pair) {
+                                    state_disp.training_pairs_dropped.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                                }
+                            }
+                        } else {
+                            if gate.reason.contains("Below threshold") {
+                                state_disp.gate_rejections_low_anomaly.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                            } else if gate.reason.contains("low confidence") {
+                                state_disp.gate_rejections_low_confidence.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                            } else {
+                                state_disp.gate_rejections_other.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
                             }
                         }
+
+                        // Forensic log the gate decision
+                        let fdc2 = forensic_disp.clone();
+                        let reason = gate.reason.clone();
+                        tokio::spawn(async move {
+                            if let Ok(mut f) = fdc2.lock() {
+                                let _ = f.log_gate_decision(anomaly, gate.confidence, 2.0, gate.forward_to_trainer, &reason);
+                            }
+                        });
                         state_disp.set_latent_embedding(latent.clone());
 
                         let beam_az = state_disp.get_beam_azimuth_deg().to_radians();
@@ -1323,6 +1367,16 @@ async fn main() -> anyhow::Result<()> {
                 ui.set_rtl_freq_mhz(st.get_sdr_center_hz() / 1e6);
                 ui.set_rtl_scanning(st.get_sdr_sweeping());
                 ui.set_training_pairs(training_session_timer.total_pairs() as i32);
+
+                if let Ok(gs) = st.gate_status.try_lock() {
+                    ui.set_gate_status(gs.clone().into());
+                }
+                if let Ok(gr) = st.last_gate_reason.try_lock() {
+                    ui.set_last_gate_reason(gr.clone().into());
+                }
+                ui.set_training_pairs_dropped(st.training_pairs_dropped.load(Ordering::Relaxed) as i32);
+                ui.set_gate_rejections_low_anomaly(st.gate_rejections_low_anomaly.load(Ordering::Relaxed) as i32);
+                ui.set_gate_rejections_low_confidence(st.gate_rejections_low_confidence.load(Ordering::Relaxed) as i32);
 
                 // Mamba safety sync
                 ui.set_mamba_emergency_off(st.get_mamba_emergency_off());

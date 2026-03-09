@@ -16,6 +16,7 @@ pub struct SpectralFrame {
     pub beamformer_outputs: [f32; 3],
     /// From Mamba latent reconstruction MSE (historical or previous frame's prediction)
     pub mamba_anomaly_score: f32,
+    pub confidence: f32,
 }
 
 impl Default for SpectralFrame {
@@ -27,6 +28,40 @@ impl Default for SpectralFrame {
             itd_ild: [0.0; 4],
             beamformer_outputs: [0.0; 3],
             mamba_anomaly_score: 0.0,
+            confidence: 0.0,
         }
+    }
+}
+
+
+impl SpectralFrame {
+    pub fn new(
+        timestamp_micros: u64,
+        fft_magnitude: [f32; 128],
+        bispectrum: [f32; 64],
+        itd_ild: [f32; 4],
+        beamformer_outputs: [f32; 3],
+        mamba_anomaly_score: f32,
+        confidence: f32,
+    ) -> Self {
+        Self {
+            timestamp_micros,
+            fft_magnitude,
+            bispectrum,
+            itd_ild,
+            beamformer_outputs,
+            mamba_anomaly_score,
+            confidence,
+        }
+    }
+
+    pub fn is_valid(&self) -> bool {
+        self.fft_magnitude.iter().all(|x| x.is_finite()) &&
+        self.bispectrum.iter().all(|x| x.is_finite()) &&
+        self.itd_ild.iter().all(|x| x.is_finite()) &&
+        self.beamformer_outputs.iter().all(|x| x.is_finite()) &&
+        self.mamba_anomaly_score.is_finite() &&
+        self.confidence.is_finite() &&
+        self.confidence >= 0.0 && self.confidence <= 1.0
     }
 }
