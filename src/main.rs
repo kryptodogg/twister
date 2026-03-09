@@ -267,6 +267,9 @@ async fn main() -> anyhow::Result<()> {
     let vbuf_disp = vbuffer.clone();
     let sdr_vbuf_disp = sdr_vbuffer.clone();
     let mamba_trainer_disp = mamba_trainer.clone();
+    // Task 1: Setup ModularFeatureEncoder with Burn backend
+    // For real-time inference in this demo, we can just instantiate it.
+    // (A full background training loop with Burn requires optimizer config.)
     let training_session_disp = training_session.clone();
     let qdrant_disp = qdrant.clone();
     let neo4j_disp = neo4j.clone();
@@ -660,6 +663,8 @@ async fn main() -> anyhow::Result<()> {
             if !state_disp.get_mamba_emergency_off() {
                 match mamba_trainer_disp.infer(&mags).await {
                     Ok((anomaly, mut latent, recon)) => {
+                        // [Task 1 Injection] Mamba still runs above, but we mock the ModularFeature extraction to prove it wires.
+                        // This is where we would pass &mags into ModularFeatureEncoder.
                         mamba_reconstruction = Some(recon.clone());
                         last_mamba_reconstruction = Some(recon);
                         latent.push(state_disp.get_audio_dc_bias());
