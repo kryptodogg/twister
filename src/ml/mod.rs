@@ -17,6 +17,8 @@ pub mod timegnn;
 pub mod timegnn_trainer;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
+pub mod spectral_frame;
+pub mod anomaly_gate;
 
 pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
 
@@ -60,3 +62,5 @@ pub use timegnn_trainer::{
     compute_nt_xent_loss, cosine_similarity, train_timegnn,
 };
 pub use wav2vec2_loader::{Wav2Vec2Model, infer_wav2vec2_embedding, load_wav2vec2};
+pub use spectral_frame::SpectralFrame;
+pub use anomaly_gate::{AnomalyGateConfig, AnomalyGateDecision, evaluate_anomaly_gate};

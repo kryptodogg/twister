@@ -1,3 +1,4 @@
+pub mod spatial;
 pub mod active_denial;
 // src/lib.rs — Library exports for forensic queries tests
 
