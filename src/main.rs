@@ -45,6 +45,7 @@ mod mamba;
 mod ml;
 mod parametric;
 mod particle_system;
+mod physics;
 mod pdm;
 mod reconstruct;
 mod resample;
@@ -421,7 +422,8 @@ async fn main() -> anyhow::Result<()> {
             let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
                 burn::backend::NdArray,
             >::new(&device);
-            let (feature_vec, _) = extractor.extract(&payload, &feature_flags);
+            let modular_flags = crate::ml::modular_features::FeatureFlags::default();
+            let (feature_vec, _) = extractor.extract(&payload, &modular_flags);
             let _ = feature_tx.try_send((payload, feature_vec));
             if pdm_spike_count > 0 {
                 eprintln!(
@@ -1819,8 +1821,8 @@ fn _start_trainer_loop(
             if let Ok((payload, feature_vec)) = feature_rx.recv() {
                 batch.push((payload, feature_vec));
                 if batch.len() >= 16 {
-                    let flags = state.lock().unwrap().get_feature_flags();
-                    if let Ok(loss) = mamba_trainer.train_step_modular(&batch, &flags) {
+                    let modular_flags = crate::ml::modular_features::FeatureFlags::default();
+                    if let Ok(loss) = mamba_trainer.train_step_modular(&batch, &modular_flags) {
                         state.lock().unwrap().set_train_loss(loss);
                     }
                     batch.clear();

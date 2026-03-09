@@ -5,7 +5,7 @@
 
 use bytemuck::{Pod, Zeroable};
 use std::mem;
-use wgpu::{Buffer, BufferBinding, Device, Queue};
+use wgpu::{Buffer, Device, Queue};
 
 use crate::ml::data_contracts::FieldParticle;
 
@@ -135,8 +135,8 @@ impl FieldParticleBuffer {
     }
 
     /// Get buffer binding for compute shader
-    pub fn as_binding(&self, offset: u64) -> BufferBinding {
-        self.buffer.as_entire_binding()
+    pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource {
+        wgpu::BindingResource::Buffer(self.buffer.as_entire_buffer_binding())
     }
 
     /// Check if buffer should trigger Mamba batch solve

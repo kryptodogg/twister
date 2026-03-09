@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+// src/visualization/data_contracts.rs
+use bytemuck::{Pod, Zeroable};
+
 #[derive(Clone, Debug, Default)]
 pub struct PoseFrame {
     pub keypoints: Vec<(f32, f32, f32)>, // 33 keypoints
@@ -17,9 +19,7 @@ impl Default for RoomGeometry {
             max_bound: (5.0, 3.0, 5.0),
         }
     }
-=======
-// src/visualization/data_contracts.rs
-use bytemuck::{Pod, Zeroable};
+}
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Pod, Zeroable)]
@@ -74,5 +74,4 @@ pub struct ParticleGPU {
     pub velocity: [f32; 3],
     pub color: [f32; 4],
     pub life: f32,
->>>>>>> origin/jules-8785004280032322965-cd8141de
 }
