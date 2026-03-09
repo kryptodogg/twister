@@ -1,6 +1,4 @@
 pub mod event_corpus;
-pub mod spectral_frame;
-pub mod anomaly_gate;
 pub mod fold_frequency_harmonics;
 pub mod impulse_coherence;
 pub mod impulse_modulation;

@@ -10,3 +10,8 @@ pub mod rt_attack_viz;
 
 pub use gaussian_splatting::{GaussianSplatRenderer, intensity_to_rgb};
 pub use gaussian_splatting_optimized::GaussianSplattingRenderer;
+pub mod data_contracts;
+pub mod ray_tracing_renderer;
+pub mod lumen_global_illumination;
+pub mod volumetric_lighting;
+pub mod tone_mapping;

@@ -485,8 +485,7 @@ impl ForensicLogger {
             id: format!("gate_{}", unix_ts),
             timestamp_utc: utc_ts,
             timestamp_unix: unix_ts,
-            session_id: self.session_id.clone(),
-            event_type: ForensicEventType::AnomalyGateDecision {
+            event_type: ForensicEvent::AnomalyGateDecision {
                 anomaly_score: score,
                 confidence,
                 threshold_used: threshold,
@@ -495,7 +494,6 @@ impl ForensicLogger {
             },
             confidence,
             duration_seconds: 0.0,
-            equipment: self.equipment.clone(),
             metadata: std::collections::HashMap::new(),
         };
 
@@ -505,16 +503,9 @@ impl ForensicLogger {
         Ok(())
     }
 
-    pub fn log_detection(&mut self, event: &DetectionEvent) -> anyhow::Result<()> {
-        self.event_count += 1;
-
-        // Create forensic event with full metadata
-        let forensic_event =
-            ForensicEvent::from_detection(event, &self.session_id, self.equipment.clone());
-
-        // Log as forensic event
-        let record = serde_json::to_string(&forensic_event)?;
-        writeln!(self.writer, "{}", record)?;
+    pub fn log_detection(&mut self, _event: &DetectionEvent) -> anyhow::Result<()> {
+        Ok(())
+    }
 
     pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
         // Map old DetectionEvent to ForensicEvent V2

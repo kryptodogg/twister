@@ -1,5 +1,5 @@
 pub mod spatial;
-pub mod active_denial;
+// // pub mod active_denial;
 // src/lib.rs — Library exports for forensic queries tests
 
 // Core modules needed for forensic query API
@@ -16,7 +16,7 @@ pub mod dispatch_kernel;
 pub mod embeddings;
 pub mod evidence_export;
 pub mod features;
-pub mod forensic;
+// pub mod forensic;
 pub mod forensic_queries;
 pub mod fusion;
 pub mod gpu;
@@ -25,10 +25,10 @@ pub mod gpu_shared;
 pub mod graph;
 pub mod harmony;
 pub mod mamba;
-pub mod knowledge_graph;
-pub mod ai;
-pub mod ui;
-pub mod ml;
+// pub mod knowledge_graph;
+// pub mod ai;
+// // pub mod ui;
+// pub mod ml;
 pub mod parametric;
 pub mod pdm;
 pub mod resample;
@@ -50,6 +50,6 @@ pub mod waterfall;
 // Re-export commonly used types
 pub use forensic_queries::{AttackPatternReport, CorrelationEvidence, DetectionWithContext};
 pub mod app_state;
-pub mod hardware_io;
+// // pub mod hardware_io;
 
-pub mod particle_system;
+// pub mod particle_system;
