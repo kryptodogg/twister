@@ -1,3 +1,4 @@
+pub mod active_denial;
 // src/main.rs — Twister v0.5  (Harassment Frequency Auto-Tuner + Forensic Evidence System)
 //
 // Renamed from SIREN.  All forensic / evidence functionality fully intact.
@@ -15,7 +16,7 @@
 //   trainer_loop  — tokio::spawn: Mamba online training
 //   sdr_loop      — tokio::spawn: RTL-SDR IQ capture + Twister auto-tune
 
-#![allow(clippy::too_many_arguments)]
+#[allow(clippy::too_many_arguments)]
 
 slint::include_modules!();
 
@@ -37,6 +38,7 @@ mod gpu_shared;
 mod graph;
 mod harmony;
 mod mamba;
+mod ml;
 mod parametric;
 mod pdm;
 mod reconstruct;
@@ -111,7 +113,9 @@ async fn main() -> anyhow::Result<()> {
     let vbuffer = new_shared_vbuffer(&gpu_shared.device);
     let sdr_vbuffer = new_shared_vbuffer(&gpu_shared.device);
 
-    let (merge_tx, merge_rx) = bounded::<Vec<f32>>(256);
+    let (merge_tx, merge_rx) = crossbeam_channel::bounded::<Vec<f32>>(256);
+    let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(crate::ml::modular_features::SignalFeaturePayload, burn::tensor::Tensor<burn::backend::NdArray, 1>)>(256);
+    let (impulse_tx, impulse_rx) = crossbeam_channel::bounded::<crate::ml::modular_features::ImpulseTrainEvent>(256);
     let (tdoa_tx, tdoa_rx) = tdoa_channel();
     let (record_tx, record_rx) = record_channel();
 
@@ -268,6 +272,8 @@ async fn main() -> anyhow::Result<()> {
     let forensic_disp = forensic.clone();
     let gpu_shared_disp = gpu_shared.clone();
     let session_identity_clone = session_identity.clone();
+    let feature_tx = feature_tx.clone();
+    let impulse_tx = impulse_tx.clone();
 
     tokio::spawn(async move {
         let mut waterfall = waterfall;
@@ -299,6 +305,7 @@ async fn main() -> anyhow::Result<()> {
         let mut last_mamba_reconstruction: Option<Vec<f32>> = None;
 
         loop {
+            let feature_flags = state_disp.get_feature_flags();
             let pdm_enabled = state_disp.pdm_active.load(Ordering::Relaxed);
             waterfall.set_pdm_mode(pdm_enabled);
 
@@ -379,6 +386,21 @@ async fn main() -> anyhow::Result<()> {
             // PDM spike rejection: detect and interpolate crest-targeting spikes
             let (filtered_chunk, pdm_spike_count) = audio::reject_pdm_spikes(&chunk);
             chunk = filtered_chunk;
+
+            // Extract modular features based on flags
+            let payload = crate::ml::modular_features::SignalFeaturePayload {
+                audio_samples: chunk.clone(),
+                freq_hz: state_disp.get_detected_freq(),
+                tdoa_confidence: Some(state_disp.get_beam_confidence()),
+                device_corr: None,
+                vbuffer_coherence: None,
+                anc_phase: None,
+                harmonic_energy: None,
+            };
+            let device = burn::backend::ndarray::NdArrayDevice::Cpu;
+            let extractor = crate::ml::modular_features::ModularFeatureExtractor::<burn::backend::NdArray>::new(&device);
+            let (feature_vec, _) = extractor.extract(&payload, &feature_flags);
+            let _ = feature_tx.try_send((payload, feature_vec));
             if pdm_spike_count > 0 {
                 eprintln!(
                     "[PDM] Detected and rejected {} spikes in frame {}",
@@ -434,7 +456,7 @@ async fn main() -> anyhow::Result<()> {
                     .map(|(i, _)| i)
                     .unwrap_or(0);
                 let raw_freq = peak_bin as f32 * freq_scale;
-                let note = twister::snap_to_note(raw_freq);
+                let note = crate::twister::snap_to_note(raw_freq);
                 state_disp.set_detected_freq(note.freq_hz);
                 state_disp.set_note_name(note.name.clone());
                 state_disp.set_note_cents(note.cents_offset);
@@ -835,7 +857,7 @@ async fn main() -> anyhow::Result<()> {
             } else if state_disp.get_twister_active()
                 && state_disp.auto_tune.load(Ordering::Relaxed)
             {
-                twister::twister_targets(denial_freq, twister::ChordMode::Major)
+                crate::twister::twister_targets(denial_freq, crate::twister::ChordMode::Major)
             } else {
                 vec![
                     (denial_freq * 0.5, 0.2),
@@ -1636,4 +1658,56 @@ fn snr_db(original: &[f32], decoded: &[f32]) -> f32 {
         return 120.0;
     }
     10.0 * (sp / ep).log10()
+}
+
+// Add trainer loop
+fn _start_impulse_trainer_loop(
+    state: std::sync::Arc<std::sync::Mutex<crate::state::AppState>>,
+    impulse_rx: crossbeam_channel::Receiver<crate::ml::modular_features::ImpulseTrainEvent>
+) {
+    tokio::spawn(async move {
+        let impulse_model = crate::ml::modular_features::ImpulsePatternModel::new();
+        loop {
+            if let Ok(impulse_event) = impulse_rx.recv() {
+                let pattern = impulse_model.extract_pattern(&impulse_event);
+                let anomaly_score = impulse_model.score_anomaly(&pattern);
+
+                let st = state.lock().unwrap();
+                st.impulse_anomaly_score.store(anomaly_score, std::sync::atomic::Ordering::Relaxed);
+
+                if anomaly_score > 0.7 {
+                    st.harassment_detected.store(true, std::sync::atomic::Ordering::Relaxed);
+                }
+            } else {
+                break;
+            }
+        }
+    });
+}
+
+fn _start_trainer_loop(
+    state: std::sync::Arc<std::sync::Mutex<crate::state::AppState>>,
+    feature_rx: crossbeam_channel::Receiver<(
+        crate::ml::modular_features::SignalFeaturePayload,
+        burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>
+    )>,
+    mut mamba_trainer: crate::ml::point_mamba_trainer::PointMambaTrainer
+) {
+    tokio::spawn(async move {
+        let mut batch = Vec::new();
+        loop {
+            if let Ok((payload, feature_vec)) = feature_rx.recv() {
+                batch.push((payload, feature_vec));
+                if batch.len() >= 16 {
+                    let flags = state.lock().unwrap().get_feature_flags();
+                    if let Ok(loss) = mamba_trainer.train_step_modular(&batch, &flags) {
+                        state.lock().unwrap().set_train_loss(loss);
+                    }
+                    batch.clear();
+                }
+            } else {
+                break;
+            }
+        }
+    });
 }

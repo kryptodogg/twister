@@ -8,9 +8,7 @@ use chrono::{DateTime, Duration, Utc};
 
 // Helper: Parse ISO 8601 timestamp
 fn parse_time(s: &str) -> DateTime<Utc> {
-    DateTime::parse_from_rfc3339(s)
-        .unwrap()
-        .with_timezone(&Utc)
+    DateTime::parse_from_rfc3339(s).unwrap().with_timezone(&Utc)
 }
 
 #[tokio::test]
@@ -39,7 +37,10 @@ async fn test_synchronized_attacks() {
 
     // Verify the synchronization threshold is reasonable for forensic proof
     assert!(time_delta_ms > 0);
-    assert!(time_delta_ms < 100, "5ms is the standard correlation window");
+    assert!(
+        time_delta_ms < 100,
+        "5ms is the standard correlation window"
+    );
 }
 
 #[tokio::test]
@@ -117,8 +118,14 @@ fn test_dc_bias_correlation_threshold() {
     let correlation_proof_percent = 80.0f32;
 
     // Must be significantly above random chance
-    assert!(correlation_proof_percent > 50.0, ">50% = better than random");
-    assert!(correlation_proof_percent < 100.0, "allow for false negatives");
+    assert!(
+        correlation_proof_percent > 50.0,
+        ">50% = better than random"
+    );
+    assert!(
+        correlation_proof_percent < 100.0,
+        "allow for false negatives"
+    );
 }
 
 #[test]

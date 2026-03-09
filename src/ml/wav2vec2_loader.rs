@@ -12,7 +12,6 @@
 ///
 /// Frozen weights: No gradient computation, eval mode only
 /// Device: Single wgpu::Device for zero-copy tensor sharing
-
 use burn::backend::Wgpu;
 use burn::module::Module;
 use burn::nn::{Linear, LinearConfig};
@@ -41,9 +40,7 @@ impl<B: Backend> Wav2Vec2Model<B> {
     pub fn new(device: &B::Device) -> Self {
         // Projection: 512-dim features → 768-dim embedding space (std wav2vec2 size)
         // In production: input would be 512-dim from conv feature extractor
-        let embedding_projection = LinearConfig::new(512, 768)
-            .with_bias(true)
-            .init(device);
+        let embedding_projection = LinearConfig::new(512, 768).with_bias(true).init(device);
 
         Self {
             embedding_projection,

@@ -6,8 +6,8 @@
 //! Run with:
 //!   cargo run --example alignment_comparison --release
 
-use twister::visualization::gaussian_splatting_optimized::*;
 use std::mem::size_of;
+use twister::visualization::gaussian_splatting_optimized::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("═══════════════════════════════════════════════════════════");
@@ -31,21 +31,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("[Backend] {:?}\n", adapter.get_info().backend);
 
     // Request device with TIMESTAMP_QUERY feature
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor {
-            label: Some("alignment_compare_device"),
-            required_features: wgpu::Features::TIMESTAMP_QUERY,
-            required_limits: wgpu::Limits::default(),
-            ..Default::default()
-        }
-    ))?;
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        label: Some("alignment_compare_device"),
+        required_features: wgpu::Features::TIMESTAMP_QUERY,
+        required_limits: wgpu::Limits::default(),
+        ..Default::default()
+    }))?;
 
     // Test parameters
     let particle_counts = vec![1000, 5000, 10000];
 
     for count in particle_counts {
         println!("╔════════════════════════════════════════════╗");
-        println!("║ Testing with {} particles", format!("{} particles", count).to_uppercase());
+        println!(
+            "║ Testing with {} particles",
+            format!("{} particles", count).to_uppercase()
+        );
         println!("╚════════════════════════════════════════════╝");
 
         // Test 128-byte alignment
@@ -84,7 +85,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     renderer.render(count as u32)?;
 
                     // Measurement (run 3 times for stability)
-                    let mut times = Vec::new();
+                    let mut times: Vec<f64> = Vec::new();
                     for run in 1..=3 {
                         renderer.render(count as u32)?;
                         // Extract timing from the renderer's output (it prints it)
@@ -134,7 +135,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     renderer.render(count as u32)?;
 
                     // Measurement (run 3 times for stability)
-                    let mut times = Vec::new();
+                    let mut times: Vec<f64> = Vec::new();
                     for run in 1..=3 {
                         renderer.render(count as u32)?;
                         // Extract timing from the renderer's output (it prints it)
@@ -148,8 +149,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
-        println!("\n{separator}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n",
-                 separator = "");
+        println!(
+            "\n{separator}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n",
+            separator = ""
+        );
     }
 
     println!("═══════════════════════════════════════════════════════════");

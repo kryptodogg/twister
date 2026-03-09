@@ -1,4 +1,4 @@
-use neo4rs::{Graph, query};
+use neo4rs::{query, Graph};
 
 // src/graph.rs — Graph DB Facade  (v0.4)
 

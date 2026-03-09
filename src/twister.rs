@@ -35,8 +35,8 @@ pub enum ChordMode {
 impl ChordMode {
     pub fn semitone_offsets(self) -> [i32; 3] {
         match self {
-            ChordMode::Major  => [0, 4, 7],
-            ChordMode::Minor  => [0, 3, 7],
+            ChordMode::Major => [0, 4, 7],
+            ChordMode::Minor => [0, 3, 7],
             ChordMode::Unison => [0, 0, 0],
         }
     }
@@ -98,8 +98,8 @@ pub fn freq_to_midi(freq_hz: f32) -> f32 {
 /// Return a display name for a MIDI note number.
 /// Works for any integer, including numbers > 127 or < 0.
 pub fn midi_note_name(midi: i32) -> String {
-    let semitone = ((midi % 12) + 12) % 12;      // always 0-11
-    let octave   = (midi as f32 / 12.0).floor() as i32 - 1;
+    let semitone = ((midi % 12) + 12) % 12; // always 0-11
+    let octave = (midi as f32 / 12.0).floor() as i32 - 1;
     format!("{}{}", NOTE_NAMES[semitone as usize], octave)
 }
 
@@ -120,9 +120,9 @@ pub fn snap_to_note_chord(freq_hz: f32, mode: ChordMode) -> NoteResult {
         return NoteResult::silent();
     }
 
-    let midi_f       = freq_to_midi(freq_hz);
+    let midi_f = freq_to_midi(freq_hz);
     let midi_rounded = midi_f.round() as i32;
-    let snapped      = midi_to_freq(midi_rounded as f32);
+    let snapped = midi_to_freq(midi_rounded as f32);
 
     // Cents: positive = raw was sharp vs the snapped note.
     let cents = if snapped > 0.0 {
@@ -140,8 +140,8 @@ pub fn snap_to_note_chord(freq_hz: f32, mode: ChordMode) -> NoteResult {
 
     NoteResult {
         freq_hz: snapped,
-        midi:    midi_rounded,
-        name:    midi_note_name(midi_rounded),
+        midi: midi_rounded,
+        name: midi_note_name(midi_rounded),
         cents_offset: cents,
         chord,
     }
@@ -151,7 +151,9 @@ pub fn snap_to_note_chord(freq_hz: f32, mode: ChordMode) -> NoteResult {
 /// Equivalent to `AppState::snap_to_nearest_note` but lives here.
 #[inline]
 pub fn snap_freq(freq_hz: f32) -> f32 {
-    if freq_hz < 0.5 { return freq_hz; }
+    if freq_hz < 0.5 {
+        return freq_hz;
+    }
     midi_to_freq(freq_to_midi(freq_hz).round())
 }
 
@@ -170,11 +172,11 @@ pub fn twister_targets(freq_hz: f32, mode: ChordMode) -> Vec<(f32, f32)> {
     // All three voices at equal gain 1/3 so the mix sums to unity.
     // The octave doublings sit at −6 dB to avoid clipping.
     vec![
-        (root,         1.0 / 3.0),
-        (third,        1.0 / 3.0),
-        (fifth,        1.0 / 3.0),
-        (root * 2.0,   1.0 / 6.0),   // root, up one octave
-        (fifth * 2.0,  1.0 / 6.0),   // fifth, up one octave
+        (root, 1.0 / 3.0),
+        (third, 1.0 / 3.0),
+        (fifth, 1.0 / 3.0),
+        (root * 2.0, 1.0 / 6.0),  // root, up one octave
+        (fifth * 2.0, 1.0 / 6.0), // fifth, up one octave
     ]
 }
 

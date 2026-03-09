@@ -1,14 +1,14 @@
 // tests/ray_tracer_integration.rs
 // Integration tests for RayTracer image-source method (Task D.1a)
 
-use twister::visualization::ray_tracer::{RayImage, compute_ray_features};
+use twister::visualization::ray_tracer::{compute_ray_features, RayImage};
 
 #[test]
 fn test_ray_features_dimension_128() {
     let ray_image = RayImage {
-        source_azimuth_rad: 0.5,              // ~29°
-        source_elevation_rad: -0.5,           // ~-29° (below horizontal)
-        room_dimension_m: [4.0, 5.0, 3.0],   // 4m × 5m × 3m room
+        source_azimuth_rad: 0.5,           // ~29°
+        source_elevation_rad: -0.5,        // ~-29° (below horizontal)
+        room_dimension_m: [4.0, 5.0, 3.0], // 4m × 5m × 3m room
         reflections_per_wall: 2,
     };
 
@@ -49,14 +49,21 @@ fn test_reflection_delays_histogram() {
 
     // All delays should be in [0, 1] (normalized)
     for &delay in &features.reflection_delays_32 {
-        assert!(delay >= 0.0 && delay <= 1.0, "Delay out of range: {}", delay);
+        assert!(
+            delay >= 0.0 && delay <= 1.0,
+            "Delay out of range: {}",
+            delay
+        );
     }
 
     // Delays should be generally decreasing (more energy at shorter delays)
     // at least on average
     let first_half_sum: f32 = features.reflection_delays_32[0..16].iter().sum();
     let second_half_sum: f32 = features.reflection_delays_32[16..32].iter().sum();
-    assert!(first_half_sum >= second_half_sum, "Delays should decrease over time");
+    assert!(
+        first_half_sum >= second_half_sum,
+        "Delays should decrease over time"
+    );
 }
 
 #[test]
@@ -64,7 +71,7 @@ fn test_room_modes_from_dimensions() {
     let ray_image = RayImage {
         source_azimuth_rad: 0.0,
         source_elevation_rad: 0.0,
-        room_dimension_m: [4.0, 5.0, 3.0],   // 4m × 5m × 3m
+        room_dimension_m: [4.0, 5.0, 3.0], // 4m × 5m × 3m
         reflections_per_wall: 1,
     };
 
@@ -75,7 +82,11 @@ fn test_room_modes_from_dimensions() {
 
     // Room modes should be normalized [0, 1]
     for &mode in &features.room_modes_4 {
-        assert!(mode >= 0.0 && mode <= 1.0, "Room mode out of range: {}", mode);
+        assert!(
+            mode >= 0.0 && mode <= 1.0,
+            "Room mode out of range: {}",
+            mode
+        );
     }
 
     // Room modes should have meaningful values (not all zero)
@@ -102,11 +113,19 @@ fn test_azimuth_elevation_distribution() {
 
     // All values should be normalized [0, 1]
     for &az in &features.azimuth_ray_density_16 {
-        assert!(az >= 0.0 && az <= 1.0, "Azimuth density out of range: {}", az);
+        assert!(
+            az >= 0.0 && az <= 1.0,
+            "Azimuth density out of range: {}",
+            az
+        );
     }
 
     for &el in &features.elevation_ray_density_16 {
-        assert!(el >= 0.0 && el <= 1.0, "Elevation density out of range: {}", el);
+        assert!(
+            el >= 0.0 && el <= 1.0,
+            "Elevation density out of range: {}",
+            el
+        );
     }
 
     // Should have at least some energy in azimuth/elevation
@@ -145,9 +164,12 @@ fn test_second_order_reflections() {
     let total_2nd: f32 = features_2nd.reflection_delays_32.iter().sum();
 
     // Second-order should have at least as much or different distribution
-    assert!(total_2nd >= total_1st * 0.9,
+    assert!(
+        total_2nd >= total_1st * 0.9,
         "Second-order should preserve delay distribution: {} vs {}",
-        total_2nd, total_1st);
+        total_2nd,
+        total_1st
+    );
 }
 
 #[test]
@@ -166,7 +188,11 @@ fn test_diffuse_distribution_histogram() {
 
     // All values should be normalized [0, 1]
     for &diff in &features.diffuse_distribution_32 {
-        assert!(diff >= 0.0 && diff <= 1.0, "Diffuse distribution out of range: {}", diff);
+        assert!(
+            diff >= 0.0 && diff <= 1.0,
+            "Diffuse distribution out of range: {}",
+            diff
+        );
     }
 }
 
@@ -186,7 +212,11 @@ fn test_temporal_spread_metrics() {
 
     // All values should be normalized [0, 1]
     for &spread in &features.temporal_spread_8 {
-        assert!(spread >= 0.0 && spread <= 1.0, "Temporal spread out of range: {}", spread);
+        assert!(
+            spread >= 0.0 && spread <= 1.0,
+            "Temporal spread out of range: {}",
+            spread
+        );
     }
 }
 
@@ -251,9 +281,16 @@ fn test_consistency_same_input() {
     let features1 = compute_ray_features(&ray_image);
     let features2 = compute_ray_features(&ray_image);
 
-    assert_eq!(features1.feature_vector.len(), features2.feature_vector.len());
+    assert_eq!(
+        features1.feature_vector.len(),
+        features2.feature_vector.len()
+    );
 
-    for (v1, v2) in features1.feature_vector.iter().zip(features2.feature_vector.iter()) {
+    for (v1, v2) in features1
+        .feature_vector
+        .iter()
+        .zip(features2.feature_vector.iter())
+    {
         assert_eq!(v1, v2, "Inconsistent feature computation");
     }
 }
