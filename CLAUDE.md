@@ -377,6 +377,87 @@ When writing `dispatch_kernel.wgsl`, `gaussian_splatting.wgsl`, or TimeGNN clust
 
 ---
 
+## Parallel Development: Interface Contracts & Stubs
+
+**Principle**: Tracks work in parallel by defining interfaces (data structures) upfront, then providing stub implementations.
+
+- **Interface Contract**: Define data struct at the START (e.g., `SpatialPoint`, `PoseFrame`). Producer outputs it, consumer imports it.
+- **Stub Implementation**: Consumer provides realistic stub (not zeros) so they can proceed independently.
+- **Follow-Up Tracks**: If producer delayed, create follow-up track (AA, BB, CC, DD, EE) for stub→implementation swap (1-2 hour integration task).
+- **No Blocking**: All tracks work in parallel; integration happens when real implementations arrive.
+
+---
+
+## Track Organization & Naming
+
+**Primary Tracks**: A-I (core features)
+**Follow-Up Tracks**: AA-EE (stub-to-implementation swaps when dependencies arrive)
+
+Each track spec must include:
+- File ownership (exclusive, no conflicts between implementers)
+- Interface contracts (stable data structures for parallelism)
+- Pre-commit hooks (local validation, no GitHub CI)
+- Generation protection constraints (what breaks if violated)
+
+---
+
+## Generation Protection: Specs First
+
+Specifications are written FIRST to protect generation capability (novel RF analysis, uncapped systems, phase-aware synthesis).
+
+**Generation-Critical Constraints** (must be enforced locally):
+- No artificial particle count caps (use mesh shaders for scaling)
+- Audio not limited to radio standards (can use high frequencies)
+- RF phase must be tracked (Complex<f32>, not magnitude-only)
+- Material-aware physics (hardness, roughness, wetness affect RF coupling)
+- Heterodyne mixing requires phase coherence (not approximate)
+
+Violations of these constraints break generation capability silently. Pre-commit hooks catch them.
+
+---
+
+## Aether Terminology (Not Third-Party Names)
+
+Specs use reference architectures (Lumen, Niagara, Megalights) for clarity only.
+**Implementation must use "Aether" terminology exclusively.**
+
+| Reference | Implementation | Files |
+|-----------|-----------------|-------|
+| Lumen GI | Aether Indirect Lighting | `aether_indirect_lighting.rs` |
+| Niagara Particles | Aether Particles | `aether_particles.rs` |
+| Megalights | Aether Rendering | `aether_rendering.rs` |
+
+Pre-commit hook checks: `if grep -r "Lumen\|Niagara\|Megalights" src/ → ERROR`
+
+---
+
+## Local CI: Pre-Commit Hooks in Track Specs
+
+Each track spec includes `.git/hooks/pre-commit` validation for generation-critical constraints.
+
+Examples:
+- Check wav2vec2 frozen encoder stays float32 (not quantized)
+- Validate contrastive loss τ = 0.07 (not arbitrary values)
+- Ensure RF phase tracked (Complex<f32>, not f32)
+- Verify material-aware physics (hardness → elasticity)
+
+No GitHub Actions. All validation happens locally before commit.
+
+---
+
+## Material-Aware Physics (RF-Critical)
+
+RF interactions must account for material properties:
+- **Hardness** (0-1): Determines reflection coefficient and bounce elasticity
+- **Roughness** (0-1): Determines scattering (diffuse vs specular)
+- **Wetness** (0-1): Water content affects RF absorption and friction in particle dynamics
+
+Example: Human body is ~60% water → extremely high RF absorption (~50-70% loss per 10cm at 2.4 GHz).
+
+Never treat materials as uniform. Never skip body-interaction model.
+
+---
+
 ## Common Development Tasks
 
 ### Adding a New Detection Mode

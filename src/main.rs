@@ -1467,15 +1467,26 @@ async fn main() -> anyhow::Result<()> {
     // ── Clean shutdown ────────────────────────────────────────────────────────
     println!("[Twister] UI closed. Saving checkpoint and exporting evidence...");
 
-    // Final Mamba checkpoint
+    // Final Mamba checkpoint (FIX #1: Persist training state with metadata)
     {
         let ckpt = state
             .checkpoint_path
             .lock()
             .map(|p| p.clone())
             .unwrap_or_else(|_| "weights/mamba_siren.safetensors".to_string());
-        match mamba_trainer.save(&ckpt, None).await {
-            Ok(_) => println!("[Mamba] Final checkpoint: {}", ckpt),
+
+        // Capture current training progress
+        let epoch = state.train_epoch.load(Ordering::Relaxed);
+        let loss_avg = state.train_loss.load(Ordering::Relaxed);
+        let metadata = crate::state::CheckpointMetadata::new(
+            epoch,
+            loss_avg,
+            loss_avg,  // loss_min = current (will be improved on next training session)
+            loss_avg,  // loss_max = current
+        );
+
+        match mamba_trainer.save(&ckpt, Some(metadata)).await {
+            Ok(_) => println!("[Mamba] Final checkpoint: {} (epoch {}, loss {:.6})", ckpt, epoch, loss_avg),
             Err(e) => eprintln!("[Mamba] Final save failed: {e}"),
         }
     }
