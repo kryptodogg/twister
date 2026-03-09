@@ -10,6 +10,7 @@
 
 use crate::ml::mamba_block::MambaBlock;
 use burn::prelude::*;
+use burn::tensor::Distribution;
 
 /// Full Point Mamba: 8 cascaded Mamba blocks
 ///
