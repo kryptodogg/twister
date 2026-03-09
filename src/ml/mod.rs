@@ -2,6 +2,7 @@ pub mod anomaly_gate;
 pub mod body_region_classifier;
 pub mod data_contracts;
 pub mod event_corpus;
+pub mod field_particle;
 pub mod fold_frequency_harmonics;
 pub mod impulse_coherence;
 pub mod impulse_modulation;

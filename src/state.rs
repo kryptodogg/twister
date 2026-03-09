@@ -1,4 +1,22 @@
-use crate::ml::modular_features::FeatureFlags;
+
+#[derive(Clone)]
+pub struct FeatureFlags {
+    pub enhanced_audio: bool,
+    pub sparse_pdm: bool,
+    pub coherence: bool,
+    pub mamba_siren: bool,
+}
+impl Default for FeatureFlags {
+    fn default() -> Self {
+        Self {
+            enhanced_audio: true,
+            sparse_pdm: false,
+            coherence: false,
+            mamba_siren: false,
+        }
+    }
+}
+
 
 // src/state.rs — Shared Atomic State  (v0.4)
 //
