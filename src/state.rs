@@ -549,6 +549,13 @@ pub struct AppState {
     pub reconstructed_peak: AtomicF32,
 
     // ── Twister: musical auto-tuner ────────────────────────────────────────────
+    pub gate_status: Mutex<String>,
+    pub last_gate_reason: Mutex<String>,
+    pub training_pairs_dropped: AtomicU32,
+    pub gate_rejections_low_anomaly: AtomicU32,
+    pub gate_rejections_low_confidence: AtomicU32,
+    pub gate_rejections_other: AtomicU32,
+
     /// Most recent snapped note name, e.g. "A4", "C#5". "---" when silent.
     pub note_name: Mutex<String>,
     /// Cents offset: how far the raw detected freq was from the snapped note.
@@ -658,6 +665,13 @@ impl AppState {
 
             reconstruction_mags: Mutex::new(Vec::new()),
             reconstructed_peak: AtomicF32::new(0.0),
+
+            gate_status: Mutex::new("IDLE".to_string()),
+            last_gate_reason: Mutex::new("".to_string()),
+            training_pairs_dropped: AtomicU32::new(0),
+            gate_rejections_low_anomaly: AtomicU32::new(0),
+            gate_rejections_low_confidence: AtomicU32::new(0),
+            gate_rejections_other: AtomicU32::new(0),
 
             note_name: Mutex::new("---".to_string()),
             note_cents: AtomicF32::new(0.0),
