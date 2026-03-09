@@ -101,7 +101,7 @@ mod wav2vec2_integration {
         let ray = [0.5f32; 128];
         let wav2vec2 = [0.5f32; 768];
 
-        let fused = fuse_multimodal(&audio, &ray, &wav2vec2);
+        let fused = fuse_multimodal(&audio, &[0.0; 138], &[0.0; 67], &ray, &wav2vec2);
 
         assert_eq!(fused.len(), 1092, "Fused output must be 1092-D");
         eprintln!("  Audio: 196-D");
@@ -124,7 +124,7 @@ mod wav2vec2_integration {
         let ray = [2.0f32; 128];
         let wav2vec2 = [0.5f32; 768];
 
-        let fused = fuse_multimodal(&audio, &ray, &wav2vec2);
+        let fused = fuse_multimodal(&audio, &[0.0; 138], &[0.0; 67], &ray, &wav2vec2);
 
         // Verify each modality is normalized
         let audio_slice = &fused[0..196];
@@ -179,7 +179,7 @@ mod wav2vec2_integration {
         ray[0] = 2.0;
         wav2vec2[0] = 3.0;
 
-        let fused = fuse_multimodal(&audio, &ray, &wav2vec2);
+        let fused = fuse_multimodal(&audio, &[0.0; 138], &[0.0; 67], &ray, &wav2vec2);
 
         // After normalization, markers will be scaled but should maintain order
         let audio_start = fused[0];
@@ -214,7 +214,7 @@ mod wav2vec2_integration {
         let ray = [0.5f32; 128];
         let wav2vec2 = [0.5f32; 768];
 
-        let fused = fuse_multimodal(&audio, &ray, &wav2vec2);
+        let fused = fuse_multimodal(&audio, &[0.0; 138], &[0.0; 67], &ray, &wav2vec2);
 
         let mut nan_count = 0;
         let mut inf_count = 0;
@@ -412,7 +412,7 @@ mod wav2vec2_integration {
         let ray = [0.1f32; 128];
         let wav2vec2 = [0.1f32; 768];
 
-        let fused = fuse_multimodal(&audio, &ray, &wav2vec2);
+        let fused = fuse_multimodal(&audio, &[0.0; 138], &[0.0; 67], &ray, &wav2vec2);
         let stats = compute_modality_stats(&fused);
 
         eprintln!(

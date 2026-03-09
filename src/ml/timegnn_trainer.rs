@@ -1,11 +1,12 @@
+use std::collections::HashMap;
 /// src/ml/timegnn_trainer.rs
 /// TimeGNN Contrastive Training — Learn harassment patterns via NT-Xent loss
 ///
-/// Purpose: Train TimeGNN model on 1092-D multimodal event corpus using contrastive learning
+/// Purpose: Train TimeGNN model on 1297-D multimodal event corpus using contrastive learning
 /// to discover 23 harassment motifs from forensic evidence.
 ///
 /// Algorithm: NT-Xent (Normalized Temperature-scaled Cross Entropy)
-/// - Input: 1092-D multimodal features + event metadata (timestamps, tags, confidence)
+/// - Input: 1297-D multimodal features + event metadata (timestamps, tags, confidence)
 /// - Process: 50 epochs of contrastive training on 32-sample batches
 /// - Output: 128-D embeddings + trained model checkpoint
 ///
@@ -16,9 +17,7 @@
 /// - e_i, e_j+ = embeddings of similar events (same tag or temporal proximity)
 /// - e_k- = embeddings of dissimilar events
 /// - τ (temperature) = 0.07
-
 use std::error::Error;
-use std::collections::HashMap;
 
 /// Contrastive loss configuration
 pub struct ContrastiveLossConfig {
@@ -28,9 +27,7 @@ pub struct ContrastiveLossConfig {
 
 impl Default for ContrastiveLossConfig {
     fn default() -> Self {
-        Self {
-            temperature: 0.07,
-        }
+        Self { temperature: 0.07 }
     }
 }
 
@@ -68,7 +65,7 @@ impl Default for TimeGnnTrainingConfig {
 pub struct TrainingEvent {
     /// Unique event identifier
     pub id: String,
-    /// 1092-D multimodal feature vector
+    /// 1297-D multimodal feature vector
     pub features: Vec<f32>,
     /// Unix timestamp (microseconds)
     pub timestamp_micros: i64,
@@ -110,7 +107,7 @@ impl Default for TrainingMetrics {
 /// * `_corpus_path` - Path to corpus file or directory
 ///
 /// # Returns
-/// Vector of training events with 1092-D features
+/// Vector of training events with 1297-D features
 pub fn load_corpus(_corpus_path: &str) -> Result<Vec<TrainingEvent>, Box<dyn Error>> {
     // Stub: In production, this would load from HDF5 or JSON
     // For now, return empty corpus (tests will provide synthetic data)
@@ -303,7 +300,11 @@ pub async fn train_timegnn(
             let batch_labels: Vec<usize> = labels[batch_start..batch_end].to_vec();
 
             // Compute loss
-            let batch_loss = compute_nt_xent_loss(&batch_embeddings, &batch_labels, config.loss_config.temperature);
+            let batch_loss = compute_nt_xent_loss(
+                &batch_embeddings,
+                &batch_labels,
+                config.loss_config.temperature,
+            );
             epoch_loss += batch_loss;
             batch_count += 1;
         }
@@ -340,7 +341,10 @@ mod tests {
         let a = vec![1.0, 0.0, 0.0];
         let b = vec![1.0, 0.0, 0.0];
         let sim = cosine_similarity(&a, &b);
-        assert!((sim - 1.0).abs() < 1e-6, "Identical vectors should have similarity 1.0");
+        assert!(
+            (sim - 1.0).abs() < 1e-6,
+            "Identical vectors should have similarity 1.0"
+        );
     }
 
     #[test]
@@ -348,7 +352,10 @@ mod tests {
         let a = vec![1.0, 0.0, 0.0];
         let b = vec![0.0, 1.0, 0.0];
         let sim = cosine_similarity(&a, &b);
-        assert!(sim.abs() < 1e-6, "Orthogonal vectors should have similarity 0.0");
+        assert!(
+            sim.abs() < 1e-6,
+            "Orthogonal vectors should have similarity 0.0"
+        );
     }
 
     #[test]
@@ -356,16 +363,16 @@ mod tests {
         let a = vec![1.0, 0.0, 0.0];
         let b = vec![-1.0, 0.0, 0.0];
         let sim = cosine_similarity(&a, &b);
-        assert!((sim + 1.0).abs() < 1e-6, "Opposite vectors should have similarity -1.0");
+        assert!(
+            (sim + 1.0).abs() < 1e-6,
+            "Opposite vectors should have similarity -1.0"
+        );
     }
 
     #[test]
     fn test_nt_xent_loss_simple_batch() {
         // Create simple batch: 2 events, both same label
-        let embeddings = vec![
-            vec![1.0, 0.0, 0.0, 0.0],
-            vec![0.99, 0.01, 0.0, 0.0],
-        ];
+        let embeddings = vec![vec![1.0, 0.0, 0.0, 0.0], vec![0.99, 0.01, 0.0, 0.0]];
         let labels = vec![0, 0]; // Same label = positive pair
 
         let loss = compute_nt_xent_loss(&embeddings, &labels, 0.07);
@@ -410,7 +417,7 @@ mod tests {
             let tag = if i < 50 { "TAG_A" } else { "TAG_B" };
             corpus.push(TrainingEvent {
                 id: format!("event_{}", i),
-                features: vec![0.5; 1092],
+                features: vec![0.5; 1297],
                 timestamp_micros: (i as i64) * 1000,
                 tag: tag.to_string(),
                 confidence: 0.8,
@@ -422,7 +429,8 @@ mod tests {
         // we'll test the metrics initialization
         let mut metrics = TrainingMetrics::default();
         metrics.total_events = corpus.len();
-        metrics.avg_confidence = corpus.iter().map(|e| e.confidence).sum::<f32>() / corpus.len() as f32;
+        metrics.avg_confidence =
+            corpus.iter().map(|e| e.confidence).sum::<f32>() / corpus.len() as f32;
 
         assert_eq!(metrics.total_events, 100);
         assert!((metrics.avg_confidence - 0.8).abs() < 1e-6);

@@ -42,7 +42,7 @@ mod tests {
         event_a_idx: usize,
         event_b_idx: usize,
         correlation_type: u32, // 0=temporal, 1=spectral, 2=spatial
-        strength: f32, // 0.0-1.0
+        strength: f32,         // 0.0-1.0
     }
 
     // ── Temporal Scatter Plot Tests ────────────────────────────────────────
@@ -66,9 +66,18 @@ mod tests {
         ];
 
         // Verify bounding box: time should span [0, 52], intensity [0, 1]
-        let min_time = events.iter().map(|e| e.timestamp_weeks).fold(f32::INFINITY, f32::min);
-        let max_time = events.iter().map(|e| e.timestamp_weeks).fold(f32::NEG_INFINITY, f32::max);
-        let min_intensity = events.iter().map(|e| e.intensity).fold(f32::INFINITY, f32::min);
+        let min_time = events
+            .iter()
+            .map(|e| e.timestamp_weeks)
+            .fold(f32::INFINITY, f32::min);
+        let max_time = events
+            .iter()
+            .map(|e| e.timestamp_weeks)
+            .fold(f32::NEG_INFINITY, f32::max);
+        let min_intensity = events
+            .iter()
+            .map(|e| e.intensity)
+            .fold(f32::INFINITY, f32::min);
         let max_intensity = events
             .iter()
             .map(|e| e.intensity)
@@ -97,8 +106,14 @@ mod tests {
                 0.5
             };
 
-            assert!(x_normalized >= 0.0 && x_normalized <= 1.0, "x must be in [0, 1]");
-            assert!(y_normalized >= 0.0 && y_normalized <= 1.0, "y must be in [0, 1]");
+            assert!(
+                x_normalized >= 0.0 && x_normalized <= 1.0,
+                "x must be in [0, 1]"
+            );
+            assert!(
+                y_normalized >= 0.0 && y_normalized <= 1.0,
+                "y must be in [0, 1]"
+            );
         }
     }
 
@@ -146,7 +161,10 @@ mod tests {
             // Should display "No events recorded" message
             assert!(true);
         } else {
-            let _min_time = events.iter().map(|e| e.timestamp_weeks).fold(f32::INFINITY, f32::min);
+            let _min_time = events
+                .iter()
+                .map(|e| e.timestamp_weeks)
+                .fold(f32::INFINITY, f32::min);
         }
     }
 
@@ -264,7 +282,10 @@ mod tests {
         // Verify root cluster size = sum of children (logical check)
         let root = &clusters[0];
         let children_sum: usize = clusters[1..].iter().map(|c| c.size).sum();
-        assert_eq!(root.size, children_sum, "Root size should equal sum of children");
+        assert_eq!(
+            root.size, children_sum,
+            "Root size should equal sum of children"
+        );
     }
 
     #[test]
@@ -331,10 +352,10 @@ mod tests {
 
         fn edge_color(corr_type: u32) -> &'static str {
             match corr_type {
-                0 => "#ff4040",  // red (temporal)
-                1 => "#0099ff",  // blue (spectral)
-                2 => "#00ff00",  // green (spatial)
-                _ => "#888888",  // gray (unknown)
+                0 => "#ff4040", // red (temporal)
+                1 => "#0099ff", // blue (spectral)
+                2 => "#00ff00", // green (spatial)
+                _ => "#888888", // gray (unknown)
             }
         }
 
@@ -363,8 +384,14 @@ mod tests {
         ];
 
         // Simulate duration: max_time - min_time
-        let min_time = events.iter().map(|e| e.timestamp_weeks).fold(f32::INFINITY, f32::min);
-        let max_time = events.iter().map(|e| e.timestamp_weeks).fold(f32::NEG_INFINITY, f32::max);
+        let min_time = events
+            .iter()
+            .map(|e| e.timestamp_weeks)
+            .fold(f32::INFINITY, f32::min);
+        let max_time = events
+            .iter()
+            .map(|e| e.timestamp_weeks)
+            .fold(f32::NEG_INFINITY, f32::max);
         let duration = max_time - min_time;
 
         // Node sizes should scale with duration (e.g., 8px + duration * scale_factor)
@@ -378,7 +405,8 @@ mod tests {
             } else {
                 0.5
             };
-            let _node_size = min_node_size_px + normalized_duration * (max_node_size_px - min_node_size_px);
+            let _node_size =
+                min_node_size_px + normalized_duration * (max_node_size_px - min_node_size_px);
         }
     }
 
@@ -462,24 +490,20 @@ mod tests {
             },
         ];
 
-        let signatures = vec![
-            MockSignature {
-                name: "Sig1".to_string(),
-                frequency_hz: 1500.0,
-                occurrence_count: 12,
-                features: vec![("Audio".to_string(), 0.8), ("RF".to_string(), 0.3)],
-            },
-        ];
+        let signatures = vec![MockSignature {
+            name: "Sig1".to_string(),
+            frequency_hz: 1500.0,
+            occurrence_count: 12,
+            features: vec![("Audio".to_string(), 0.8), ("RF".to_string(), 0.3)],
+        }];
 
-        let clusters = vec![
-            MockCluster {
-                name: "All".to_string(),
-                size: events.len(),
-                coherence: 0.7,
-                x_position: 0.5,
-                y_position: 0.1,
-            },
-        ];
+        let clusters = vec![MockCluster {
+            name: "All".to_string(),
+            size: events.len(),
+            coherence: 0.7,
+            x_position: 0.5,
+            y_position: 0.1,
+        }];
 
         // Verify data consistency
         assert_eq!(events.len(), 2);

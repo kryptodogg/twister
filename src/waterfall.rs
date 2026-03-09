@@ -7,31 +7,31 @@
 //   • WGSL float literals corrected (no `f32` suffix — WGSL doesn't support it).
 //   • min_freq_hz default 1.0 Hz (no 20 Hz floor).
 
-use std::sync::Arc;
-use bytemuck::{Pod, Zeroable};
-use wgpu::util::DeviceExt;
 use crate::gpu_shared::GpuShared;
+use bytemuck::{Pod, Zeroable};
+use std::sync::Arc;
+use wgpu::util::DeviceExt;
 
-pub const WATERFALL_BINS:  usize = 512;
-pub const WATERFALL_ROWS:  usize = 128;
+pub const WATERFALL_BINS: usize = 512;
+pub const WATERFALL_ROWS: usize = 128;
 pub const WATERFALL_CELLS: usize = WATERFALL_BINS * WATERFALL_ROWS;
-pub const SPECTRUM_BINS:   usize = 256;
+pub const SPECTRUM_BINS: usize = 256;
 
 #[repr(C)]
 #[derive(Debug, Clone, Copy, Pod, Zeroable)]
 pub struct WaterfallParams {
-    pub n_bins:      u32,
-    pub n_rows:      u32,
+    pub n_bins: u32,
+    pub n_rows: u32,
     pub current_row: u32,
-    pub peak_mag:    f32,
-    pub floor_db:    f32,
-    pub range_db:    f32,
-    pub pdm_mode:    u32,
+    pub peak_mag: f32,
+    pub floor_db: f32,
+    pub range_db: f32,
+    pub pdm_mode: u32,
     pub sample_rate: f32,
-    pub raw_bins:    u32,
+    pub raw_bins: u32,
     pub min_freq_hz: f32,
     pub max_freq_hz: f32,
-    pub _pad0:       u32,
+    pub _pad0: u32,
 }
 
 const WATERFALL_SHADER: &str = r#"
@@ -128,21 +128,21 @@ fn colormap_all(@builtin(global_invocation_id) gid: vec3<u32>) {
 "#;
 
 pub struct WaterfallEngine {
-    shared:              Arc<GpuShared>,
+    shared: Arc<GpuShared>,
     downsample_pipeline: wgpu::ComputePipeline,
-    scroll_pipeline:     wgpu::ComputePipeline,
-    color_pipeline:      wgpu::ComputePipeline,
-    params_buf:          wgpu::Buffer,
-    raw_mag_buf:         wgpu::Buffer,
-    _mag_row_buf:        wgpu::Buffer,
-    _history_buf:        wgpu::Buffer,
-    rgba_buf:            wgpu::Buffer,
-    spectrum_buf:        wgpu::Buffer,
-    readback_rgba:       wgpu::Buffer,
-    readback_spectrum:   wgpu::Buffer,
-    bind_group:          wgpu::BindGroup,
-    pub params:          WaterfallParams,
-    auto_peak:           f32,
+    scroll_pipeline: wgpu::ComputePipeline,
+    color_pipeline: wgpu::ComputePipeline,
+    params_buf: wgpu::Buffer,
+    raw_mag_buf: wgpu::Buffer,
+    _mag_row_buf: wgpu::Buffer,
+    _history_buf: wgpu::Buffer,
+    rgba_buf: wgpu::Buffer,
+    spectrum_buf: wgpu::Buffer,
+    readback_rgba: wgpu::Buffer,
+    readback_spectrum: wgpu::Buffer,
+    bind_group: wgpu::BindGroup,
+    pub params: WaterfallParams,
+    auto_peak: f32,
 }
 
 impl WaterfallEngine {
@@ -150,46 +150,55 @@ impl WaterfallEngine {
         let device = &shared.device;
 
         let params_init = WaterfallParams {
-            n_bins: WATERFALL_BINS as u32, n_rows: WATERFALL_ROWS as u32,
-            current_row: 0, peak_mag: 1.0,
-            floor_db: -80.0, range_db: 70.0,
+            n_bins: WATERFALL_BINS as u32,
+            n_rows: WATERFALL_ROWS as u32,
+            current_row: 0,
+            peak_mag: 1.0,
+            floor_db: -80.0,
+            range_db: 70.0,
             pdm_mode: if pdm_mode { 1 } else { 0 },
-            sample_rate, raw_bins: 0,
-            min_freq_hz: 1.0, max_freq_hz: sample_rate / 2.0, _pad0: 0,
+            sample_rate,
+            raw_bins: 0,
+            min_freq_hz: 1.0,
+            max_freq_hz: sample_rate / 2.0,
+            _pad0: 0,
         };
 
         let params_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("wf-params"), contents: bytemuck::bytes_of(&params_init),
+            label: Some("wf-params"),
+            contents: bytemuck::bytes_of(&params_init),
             usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
         });
 
-        let max_raw_size  = (32_768 * 4) as u64;
-        let mag_row_size  = (WATERFALL_BINS  * 4) as u64;
-        let history_size  = (WATERFALL_CELLS * 4) as u64;
-        let rgba_size     = (WATERFALL_CELLS * 4) as u64;
-        let spectrum_size = (SPECTRUM_BINS   * 4) as u64;
+        let max_raw_size = (32_768 * 4) as u64;
+        let mag_row_size = (WATERFALL_BINS * 4) as u64;
+        let history_size = (WATERFALL_CELLS * 4) as u64;
+        let rgba_size = (WATERFALL_CELLS * 4) as u64;
+        let spectrum_size = (SPECTRUM_BINS * 4) as u64;
 
         let mk_storage = |label: &'static str, size: u64, extra: wgpu::BufferUsages| {
             device.create_buffer(&wgpu::BufferDescriptor {
-                label: Some(label), size,
+                label: Some(label),
+                size,
                 usage: wgpu::BufferUsages::STORAGE | extra,
                 mapped_at_creation: false,
             })
         };
         let mk_readback = |label: &'static str, size: u64| {
             device.create_buffer(&wgpu::BufferDescriptor {
-                label: Some(label), size,
+                label: Some(label),
+                size,
                 usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
                 mapped_at_creation: false,
             })
         };
 
-        let raw_mag_buf     = mk_storage("wf-raw-mag",  max_raw_size,  wgpu::BufferUsages::COPY_DST);
-        let mag_row_buf     = mk_storage("wf-mag-row",  mag_row_size,  wgpu::BufferUsages::empty());
-        let history_buf     = mk_storage("wf-history",  history_size,  wgpu::BufferUsages::empty());
-        let rgba_buf        = mk_storage("wf-rgba",     rgba_size,     wgpu::BufferUsages::COPY_SRC);
-        let spectrum_buf    = mk_storage("wf-spectrum", spectrum_size, wgpu::BufferUsages::COPY_SRC);
-        let readback_rgba   = mk_readback("wf-rb-rgba",    rgba_size);
+        let raw_mag_buf = mk_storage("wf-raw-mag", max_raw_size, wgpu::BufferUsages::COPY_DST);
+        let mag_row_buf = mk_storage("wf-mag-row", mag_row_size, wgpu::BufferUsages::empty());
+        let history_buf = mk_storage("wf-history", history_size, wgpu::BufferUsages::empty());
+        let rgba_buf = mk_storage("wf-rgba", rgba_size, wgpu::BufferUsages::COPY_SRC);
+        let spectrum_buf = mk_storage("wf-spectrum", spectrum_size, wgpu::BufferUsages::COPY_SRC);
+        let readback_rgba = mk_readback("wf-rb-rgba", rgba_size);
         let readback_spectrum = mk_readback("wf-rb-spectrum", spectrum_size);
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -209,46 +218,82 @@ impl WaterfallEngine {
             ],
         });
         let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-            label: Some("wf-bg"), layout: &bgl,
+            label: Some("wf-bg"),
+            layout: &bgl,
             entries: &[
-                wgpu::BindGroupEntry { binding: 0, resource: params_buf.as_entire_binding() },
-                wgpu::BindGroupEntry { binding: 1, resource: raw_mag_buf.as_entire_binding() },
-                wgpu::BindGroupEntry { binding: 2, resource: mag_row_buf.as_entire_binding() },
-                wgpu::BindGroupEntry { binding: 3, resource: history_buf.as_entire_binding() },
-                wgpu::BindGroupEntry { binding: 4, resource: rgba_buf.as_entire_binding() },
-                wgpu::BindGroupEntry { binding: 5, resource: spectrum_buf.as_entire_binding() },
+                wgpu::BindGroupEntry {
+                    binding: 0,
+                    resource: params_buf.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 1,
+                    resource: raw_mag_buf.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 2,
+                    resource: mag_row_buf.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 3,
+                    resource: history_buf.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 4,
+                    resource: rgba_buf.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 5,
+                    resource: spectrum_buf.as_entire_binding(),
+                },
             ],
         });
         let pl = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
-            label: Some("wf-pl"), bind_group_layouts: &[&bgl], immediate_size: 0,
+            label: Some("wf-pl"),
+            bind_group_layouts: &[&bgl],
+            immediate_size: 0,
         });
 
-        let mk_pipeline = |label, entry| device.create_compute_pipeline(
-            &wgpu::ComputePipelineDescriptor {
-                label: Some(label), layout: Some(&pl), module: &shader,
+        let mk_pipeline = |label, entry| {
+            device.create_compute_pipeline(&wgpu::ComputePipelineDescriptor {
+                label: Some(label),
+                layout: Some(&pl),
+                module: &shader,
                 entry_point: Some(entry),
-                compilation_options: Default::default(), cache: None,
-            }
-        );
+                compilation_options: Default::default(),
+                cache: None,
+            })
+        };
 
         Ok(Self {
             shared: shared.clone(),
             downsample_pipeline: mk_pipeline("wf-downsample", "downsample_raw"),
-            scroll_pipeline:     mk_pipeline("wf-scroll",     "scroll_and_insert"),
-            color_pipeline:      mk_pipeline("wf-colormap",   "colormap_all"),
-            params_buf, raw_mag_buf,
-            _mag_row_buf: mag_row_buf, _history_buf: history_buf,
-            rgba_buf, spectrum_buf, readback_rgba, readback_spectrum,
-            bind_group, params: params_init, auto_peak: 1.0,
+            scroll_pipeline: mk_pipeline("wf-scroll", "scroll_and_insert"),
+            color_pipeline: mk_pipeline("wf-colormap", "colormap_all"),
+            params_buf,
+            raw_mag_buf,
+            _mag_row_buf: mag_row_buf,
+            _history_buf: history_buf,
+            rgba_buf,
+            spectrum_buf,
+            readback_rgba,
+            readback_spectrum,
+            bind_group,
+            params: params_init,
+            auto_peak: 1.0,
         })
     }
 
-    pub fn push_row(&mut self, raw_magnitudes: &[f32], min_freq: f32, max_freq: f32) -> (Vec<u32>, Vec<f32>) {
+    pub fn push_row(
+        &mut self,
+        raw_magnitudes: &[f32],
+        min_freq: f32,
+        max_freq: f32,
+    ) -> (Vec<u32>, Vec<f32>) {
         let device = &self.shared.device;
-        let queue  = &self.shared.queue;
+        let queue = &self.shared.queue;
 
         let n = raw_magnitudes.len().min(32_768);
-        self.params.raw_bins    = n as u32;
+        self.params.raw_bins = n as u32;
         self.params.min_freq_hz = min_freq.max(1.0);
         self.params.max_freq_hz = max_freq;
 
@@ -257,14 +302,21 @@ impl WaterfallEngine {
         self.params.peak_mag = self.auto_peak;
 
         queue.write_buffer(&self.params_buf, 0, bytemuck::bytes_of(&self.params));
-        queue.write_buffer(&self.raw_mag_buf, 0, bytemuck::cast_slice(&raw_magnitudes[..n]));
+        queue.write_buffer(
+            &self.raw_mag_buf,
+            0,
+            bytemuck::cast_slice(&raw_magnitudes[..n]),
+        );
 
-        let mut encoder = device.create_command_encoder(
-            &wgpu::CommandEncoderDescriptor { label: Some("wf-enc") });
+        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+            label: Some("wf-enc"),
+        });
         {
-            let mut pass = encoder.begin_compute_pass(
-                &wgpu::ComputePassDescriptor { label: Some("wf-pass"), timestamp_writes: None });
-            let wg_bins  = ((WATERFALL_BINS  as u32) + 63) / 64;
+            let mut pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
+                label: Some("wf-pass"),
+                timestamp_writes: None,
+            });
+            let wg_bins = ((WATERFALL_BINS as u32) + 63) / 64;
             let wg_cells = ((WATERFALL_CELLS as u32) + 63) / 64;
             pass.set_bind_group(0, &self.bind_group, &[]);
             pass.set_pipeline(&self.downsample_pipeline);
@@ -275,18 +327,28 @@ impl WaterfallEngine {
             pass.dispatch_workgroups(wg_cells, 1, 1);
         }
 
-        let rgba_bytes     = (WATERFALL_CELLS * 4) as u64;
-        let spectrum_bytes = (SPECTRUM_BINS   * 4) as u64;
-        encoder.copy_buffer_to_buffer(&self.rgba_buf,     0, &self.readback_rgba,     0, rgba_bytes);
-        encoder.copy_buffer_to_buffer(&self.spectrum_buf, 0, &self.readback_spectrum, 0, spectrum_bytes);
+        let rgba_bytes = (WATERFALL_CELLS * 4) as u64;
+        let spectrum_bytes = (SPECTRUM_BINS * 4) as u64;
+        encoder.copy_buffer_to_buffer(&self.rgba_buf, 0, &self.readback_rgba, 0, rgba_bytes);
+        encoder.copy_buffer_to_buffer(
+            &self.spectrum_buf,
+            0,
+            &self.readback_spectrum,
+            0,
+            spectrum_bytes,
+        );
         queue.submit(std::iter::once(encoder.finish()));
 
         let sl_rgba = self.readback_rgba.slice(..);
         let sl_spec = self.readback_spectrum.slice(..);
         let (t1, r1) = std::sync::mpsc::channel();
         let (t2, r2) = std::sync::mpsc::channel();
-        sl_rgba.map_async(wgpu::MapMode::Read, move |r| { t1.send(r).unwrap(); });
-        sl_spec.map_async(wgpu::MapMode::Read, move |r| { t2.send(r).unwrap(); });
+        sl_rgba.map_async(wgpu::MapMode::Read, move |r| {
+            t1.send(r).unwrap();
+        });
+        sl_spec.map_async(wgpu::MapMode::Read, move |r| {
+            t2.send(r).unwrap();
+        });
         device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
         r1.recv().unwrap().expect("WF RGBA readback failed");
         r2.recv().unwrap().expect("WF spectrum readback failed");
@@ -305,8 +367,13 @@ impl WaterfallEngine {
 
 fn bgl_entry(binding: u32, ty: wgpu::BufferBindingType) -> wgpu::BindGroupLayoutEntry {
     wgpu::BindGroupLayoutEntry {
-        binding, visibility: wgpu::ShaderStages::COMPUTE,
-        ty: wgpu::BindingType::Buffer { ty, has_dynamic_offset: false, min_binding_size: None },
+        binding,
+        visibility: wgpu::ShaderStages::COMPUTE,
+        ty: wgpu::BindingType::Buffer {
+            ty,
+            has_dynamic_offset: false,
+            min_binding_size: None,
+        },
         count: None,
     }
 }

@@ -216,11 +216,11 @@ fn test_multiple_pair_fusion() {
     let final_el = (el_from_pair_02 * el_conf_02) / el_conf_02;
 
     assert!(
-        (final_az - az_from_pair_01).abs() < 0.01,
+        ((final_az - az_from_pair_01) as f32).abs() < 0.01,
         "Azimuth should be weighted from horizontal pair"
     );
     assert!(
-        (final_el - el_from_pair_02).abs() < 0.01,
+        ((final_el - el_from_pair_02) as f32).abs() < 0.01,
         "Elevation should be weighted from vertical pair"
     );
 }
