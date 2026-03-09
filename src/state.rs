@@ -624,7 +624,7 @@ impl AppState {
             output_peak_db: AtomicF32::new(-60.0),
 
             mamba_anomaly_score: AtomicF32::new(0.0),
-            latent_embedding: Mutex::new(vec![0.0; 64]), // Initialize 64-dim zero vector (MAMBA_LATENT_DIM)
+            latent_embedding: Mutex::new(vec![0.0; 128]), // Initialize 64-dim zero vector (MAMBA_LATENT_DIM)
             anc_calibration: Mutex::new(crate::anc_calibration::FullRangeCalibration::new()),
             anc_recording: Mutex::new(crate::anc_recording::RecordingBuffer::new(192_000.0)),
             anc_calibrated: AtomicBool::new(false),
