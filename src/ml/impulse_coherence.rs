@@ -1,8 +1,6 @@
 // src/ml/impulse_coherence.rs
 // Impulse coherence analyzer to detect phase-locked pulse trains (speech synthesis).
 
-use crate::vbuffer::V_FREQ_BINS;
-
 pub struct ImpulseCoherenceAnalyzer {
     pub window_frames: usize,
 }
@@ -66,7 +64,8 @@ impl ImpulseCoherenceAnalyzer {
 
         let mut correlation_sum = 0.0f32;
         for i in 0..frame_impulse_patterns.len() - 1 {
-            let corr = self.correlate_patterns(&frame_impulse_patterns[i], &frame_impulse_patterns[i + 1]);
+            let corr =
+                self.correlate_patterns(&frame_impulse_patterns[i], &frame_impulse_patterns[i + 1]);
             correlation_sum += corr;
         }
 
@@ -78,7 +77,11 @@ impl ImpulseCoherenceAnalyzer {
             return 0.0;
         }
 
-        let matches = pattern1.iter().zip(pattern2).filter(|(a, b)| a == b).count();
+        let matches = pattern1
+            .iter()
+            .zip(pattern2)
+            .filter(|(a, b)| a == b)
+            .count();
         matches as f32 / pattern1.len() as f32
     }
 
@@ -93,9 +96,11 @@ impl ImpulseCoherenceAnalyzer {
         }
 
         let mean: f32 = spacings.iter().sum::<usize>() as f32 / spacings.len() as f32;
-        let variance: f32 = spacings.iter()
+        let variance: f32 = spacings
+            .iter()
             .map(|&s| (s as f32 - mean).powi(2))
-            .sum::<f32>() / spacings.len() as f32;
+            .sum::<f32>()
+            / spacings.len() as f32;
 
         (variance.sqrt() / mean).clamp(0.0, 1.0)
     }
@@ -133,7 +138,11 @@ impl ImpulseCoherenceAnalyzer {
         frame.iter().map(|&s| s.abs() > threshold).collect()
     }
 
-    pub fn extract(&self, vbuffer: &CpuVBufferWindow, impulse_times: &[usize]) -> ImpulseCoherenceMetrics {
+    pub fn extract(
+        &self,
+        vbuffer: &CpuVBufferWindow,
+        impulse_times: &[usize],
+    ) -> ImpulseCoherenceMetrics {
         let phase_lock = self.phase_lock_strength(vbuffer);
         let jitter = self.timing_jitter(impulse_times);
         let coherence = self.cross_frame_coherence(vbuffer);

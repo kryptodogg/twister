@@ -1,6 +1,6 @@
 use burn::module::Module;
+use burn::tensor::Tensor;
 use burn::tensor::backend::Backend;
-use burn::tensor::{Distribution, Tensor, TensorData};
 
 /// PointNet Encoder: Point Cloud (N, 6) → (N, 256) Features
 /// GPU-optimized with Wave64 function packing (no dead padding)

@@ -208,7 +208,8 @@ impl DeviceManager {
         hdls[idx].center_freq_hz = freq_hz;
         hdls[idx].status = DeviceStatus::Ready;
 
-        self.dirty_flags.mark(&self.dirty_flags.frequency_lock_dirty);
+        self.dirty_flags
+            .mark(&self.dirty_flags.frequency_lock_dirty);
 
         Ok(())
     }

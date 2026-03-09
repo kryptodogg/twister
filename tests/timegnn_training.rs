@@ -13,10 +13,10 @@
 mod timegnn_training_tests {
     use std::collections::HashMap;
     use twister::ml::{
-        compute_nt_xent_loss, compute_silhouette_score, compute_temporal_frequency,
-        cosine_similarity, discover_patterns, generate_pattern_label, kmeans, train_timegnn,
         ContrastiveLossConfig, Event, KMeansConfig, TimeGnnTrainingConfig, TrainingEvent,
-        TrainingMetrics,
+        TrainingMetrics, compute_nt_xent_loss, compute_silhouette_score,
+        compute_temporal_frequency, cosine_similarity, discover_patterns, generate_pattern_label,
+        kmeans, train_timegnn,
     };
 
     // Test 1: Contrastive Loss - Basic NT-Xent Computation

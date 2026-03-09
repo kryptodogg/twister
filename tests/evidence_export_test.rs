@@ -115,10 +115,12 @@ fn test_json_export_event_classification() {
         events_arr[0]["forensic_classification"],
         "SIMULTANEOUS_RF_DC_ATTACK"
     );
-    assert!(events_arr[0]["attack_vector_proof"]
-        .as_str()
-        .unwrap()
-        .contains("simultaneously"));
+    assert!(
+        events_arr[0]["attack_vector_proof"]
+            .as_str()
+            .unwrap()
+            .contains("simultaneously")
+    );
 
     // Second event should be RF_ONLY_ATTACK (high confidence, no DC)
     assert_eq!(events_arr[1]["forensic_classification"], "RF_ONLY_ATTACK");

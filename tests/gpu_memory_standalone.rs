@@ -4,8 +4,8 @@
 use bytemuck::Pod;
 use parking_lot::Mutex;
 use std::collections::VecDeque;
-use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicU32, Ordering};
 use std::time::Instant;
 
 /// Unified memory buffer for zero-copy GPU ↔ CPU access.

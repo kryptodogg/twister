@@ -10,7 +10,6 @@
 
 use crate::ml::mamba_block::MambaBlock;
 use burn::prelude::*;
-use burn::tensor::Distribution;
 
 /// Full Point Mamba: 8 cascaded Mamba blocks
 ///
@@ -99,7 +98,7 @@ impl<B: Backend> PointMamba<B> {
 
         // Pass through all 8 blocks sequentially
         // Each block's output becomes the next block's input
-        for (block_idx, block) in self.mamba_blocks.iter().enumerate() {
+        for (_block_idx, block) in self.mamba_blocks.iter().enumerate() {
             output = block.forward(&output);
 
             // STUB: Optional debug logging for monitoring intermediate features
@@ -152,4 +151,3 @@ impl<B: Backend> PointMamba<B> {
         )
     }
 }
-

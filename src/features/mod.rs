@@ -11,4 +11,4 @@
 
 pub mod audio;
 
-pub use audio::{extract_audio_features, AudioFeatures};
+pub use audio::{AudioFeatures, extract_audio_features};

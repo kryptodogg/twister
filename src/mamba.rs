@@ -21,7 +21,7 @@
 
 use candle_core::{DType, Device, Result as CResult, Tensor};
 use candle_nn::{
-    layer_norm, linear, linear_no_bias, LayerNorm, Linear, Module, Optimizer, VarBuilder, VarMap,
+    LayerNorm, Linear, Module, Optimizer, VarBuilder, VarMap, layer_norm, linear, linear_no_bias,
 };
 
 // ── Hyper-parameters ──────────────────────────────────────────────────────────

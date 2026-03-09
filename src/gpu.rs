@@ -7,7 +7,7 @@
 // All engines share one physical Device / Queue via Arc<GpuShared>.
 
 use crate::gpu_shared::GpuShared;
-use crate::vbuffer::{GpuVBuffer, IqVBuffer, V_DEPTH, V_FREQ_BINS, VBufferPushConst};
+use crate::vbuffer::{GpuVBuffer, IqVBuffer, V_FREQ_BINS, VBufferPushConst};
 use bytemuck::{Pod, Zeroable};
 use std::sync::Arc;
 use wgpu::util::DeviceExt;

@@ -10,7 +10,7 @@
 // Mamba-weighted confidence per FFT bin
 //
 
-use rustfft::{num_complex::Complex, FftPlanner};
+use rustfft::{FftPlanner, num_complex::Complex};
 use std::f32::consts::{PI, TAU};
 
 const AUDIO_SR: f32 = 192_000.0;

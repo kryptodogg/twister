@@ -32,8 +32,8 @@
 use crate::dispatch_kernel::AutonomousDispatchKernel;
 use crate::state::AppState;
 use anyhow::Result;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 use tokio::sync::Mutex;
 use tokio::time::sleep;
@@ -178,7 +178,7 @@ impl GpuEventHandler {
                 eprintln!("[CPU-EventHandler] Task started (event-driven, awaits GPU work)");
 
                 let mut frame_count = 0u64;
-                let mut error_count = 0u64;
+                let error_count = 0u64;
 
                 while !shutdown.load(Ordering::Relaxed) {
                     // CPU Event Handler Loop (event-driven):
@@ -194,12 +194,11 @@ impl GpuEventHandler {
                         // GPU has work for us - process it
                         let results = kernel.read_results();
                         for (idx, _frame_idx) in processed_frames.iter().enumerate() {
-                                    if idx >= results.len() {
-                                        break;
-                                    }
-                                    let result = &results[idx];
-                                    frame_count += 1;
-
+                            if idx >= results.len() {
+                                break;
+                            }
+                            let result = &results[idx];
+                            frame_count += 1;
 
                             {
                                 let st = app_state.lock().await;
@@ -229,7 +228,6 @@ impl GpuEventHandler {
                                 }
                             }
                         }
-
                     } else {
                         sleep(Duration::from_millis(5)).await;
                     }

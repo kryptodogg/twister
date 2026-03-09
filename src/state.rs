@@ -587,10 +587,7 @@ impl AppState {
             running: AtomicBool::new(false),
             anc_ok: AtomicBool::new(false),
 
-            output_frames: Mutex::new(vec![
-                0.0f32;
-                1024 * 2
-            ]),
+            output_frames: Mutex::new(vec![0.0f32; 1024 * 2]),
             output_cursor: AtomicU32::new(0),
 
             waterfall_rgba: Mutex::new(vec![0u32; WATERFALL_DISPLAY_CELLS]),
@@ -1200,19 +1197,11 @@ impl AppState {
     pub fn enrich_event_forensics(&self, event: &mut crate::detection::DetectionEvent) {
         event.audio_dc_bias_v = {
             let v = self.get_audio_dc_bias();
-            if v > 0.0 {
-                Some(v)
-            } else {
-                None
-            }
+            if v > 0.0 { Some(v) } else { None }
         };
         event.sdr_dc_bias_v = {
             let v = self.get_sdr_dc_bias();
-            if v > 0.0 {
-                Some(v)
-            } else {
-                None
-            }
+            if v > 0.0 { Some(v) } else { None }
         };
         event.mamba_anomaly_db = self.get_mamba_anomaly();
 

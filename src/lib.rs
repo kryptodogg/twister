@@ -44,3 +44,7 @@ pub mod waterfall;
 
 // Re-export commonly used types
 pub use forensic_queries::{AttackPatternReport, CorrelationEvidence, DetectionWithContext};
+pub mod app_state;
+pub mod hardware_io;
+pub mod safe_sdr_wrapper;
+pub mod ui;

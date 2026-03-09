@@ -10,13 +10,13 @@
 // MambaAutoencoder directly; that type has no step() method, causing E0599.
 
 use crate::mamba::{
-    compute_rms_db, MambaAutoencoder, OnlineTrainer, TrainingMetrics, TrainingPair,
+    MambaAutoencoder, OnlineTrainer, TrainingMetrics, TrainingPair, compute_rms_db,
 };
 use crate::state::AppState;
 use candle_core::Device;
-use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
-use tokio::sync::{mpsc, Mutex};
+use std::sync::atomic::{AtomicU32, Ordering};
+use tokio::sync::{Mutex, mpsc};
 
 /// Number of training pairs per batch
 pub const BATCH_SIZE: usize = 32;

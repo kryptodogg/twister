@@ -65,6 +65,8 @@ slint-build = "*"
 # To disable: cargo build --no-default-features
 default = ["rtlsdr"]
 rtlsdr = []
+pluto-plus = []
+all-rf = ["rtlsdr", "pluto-plus"]
 
 [profile.dev]
 # Keep DSP hot paths fast even in debug builds.

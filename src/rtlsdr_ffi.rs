@@ -167,3 +167,54 @@ pub fn rtl_error_to_string(err: RtlSdrResult) -> &'static str {
 pub fn is_rtl_success(err: RtlSdrResult) -> bool {
     err == RTLSDR_SUCCESS
 }
+
+#[cfg(feature = "pluto-plus")]
+#[allow(non_camel_case_types)]
+pub type iio_context = c_void;
+#[cfg(feature = "pluto-plus")]
+#[allow(non_camel_case_types)]
+pub type iio_device = c_void;
+#[cfg(not(feature = "pluto-plus"))]
+#[allow(non_camel_case_types)]
+pub type iio_context = c_void;
+#[cfg(not(feature = "pluto-plus"))]
+#[allow(non_camel_case_types)]
+pub type iio_device = c_void;
+
+use std::os::raw::c_char;
+
+#[cfg(feature = "pluto-plus")]
+#[link(name = "iio")]
+unsafe extern "C" {
+    pub fn iio_create_default_context() -> *mut iio_context;
+    pub fn iio_context_destroy(ctx: *mut iio_context);
+    pub fn iio_context_find_device(ctx: *const iio_context, name: *const c_char)
+    -> *mut iio_device;
+    pub fn iio_device_attr_write_longlong(
+        dev: *mut iio_device,
+        attr: *const c_char,
+        val: i64,
+    ) -> c_int;
+}
+
+#[cfg(not(feature = "pluto-plus"))]
+pub unsafe fn iio_create_default_context() -> *mut iio_context {
+    std::ptr::null_mut()
+}
+#[cfg(not(feature = "pluto-plus"))]
+pub unsafe fn iio_context_destroy(_ctx: *mut iio_context) {}
+#[cfg(not(feature = "pluto-plus"))]
+pub unsafe fn iio_context_find_device(
+    _ctx: *const iio_context,
+    _name: *const c_char,
+) -> *mut iio_device {
+    std::ptr::null_mut()
+}
+#[cfg(not(feature = "pluto-plus"))]
+pub unsafe fn iio_device_attr_write_longlong(
+    _dev: *mut iio_device,
+    _attr: *const c_char,
+    _val: i64,
+) -> c_int {
+    -1
+}

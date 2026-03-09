@@ -357,7 +357,7 @@ fn extract_timing_statistics(inter_pulse_micros: &[f32]) -> Vec<f32> {
 }
 
 /// Extract Bispectrum anomaly components: top 3 peaks
-fn extract_bispectrum_anomaly(buffer: &[f32], sample_rate: f32) -> Vec<f32> {
+fn extract_bispectrum_anomaly(buffer: &[f32], _sample_rate: f32) -> Vec<f32> {
     // Compute bispectrum via triple correlation
     let window_size = STFT_WINDOW_SIZE.min(buffer.len());
     let analysis_buffer = if buffer.len() < STFT_WINDOW_SIZE {

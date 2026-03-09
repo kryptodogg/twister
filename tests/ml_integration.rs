@@ -1,7 +1,9 @@
-use twister::ml::modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+use burn::backend::NdArray;
 use burn::tensor::Tensor;
 use burn::tensor::backend::Backend;
-use burn::backend::NdArray;
+use twister::ml::modular_features::{
+    FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame,
+};
 
 type B = NdArray;
 

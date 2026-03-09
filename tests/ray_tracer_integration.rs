@@ -1,7 +1,7 @@
 // tests/ray_tracer_integration.rs
 // Integration tests for RayTracer image-source method (Task D.1a)
 
-use twister::visualization::ray_tracer::{compute_ray_features, RayImage};
+use twister::visualization::ray_tracer::{RayImage, compute_ray_features};
 
 #[test]
 fn test_ray_features_dimension_128() {

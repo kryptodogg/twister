@@ -7,7 +7,7 @@ use crate::detection::DetectionEvent;
 use chrono;
 use csv;
 use std::collections::HashMap;
-use std::fs::{create_dir_all, File, OpenOptions};
+use std::fs::{File, OpenOptions, create_dir_all};
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};

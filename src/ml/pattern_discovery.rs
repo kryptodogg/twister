@@ -183,11 +183,7 @@ pub fn kmeans(embeddings: &[Vec<f32>], config: KMeansConfig) -> Result<Clusterin
                 .enumerate()
                 .map(|(j, centroid)| (j, euclidean_distance(embedding, centroid)))
                 .fold((0, f32::INFINITY), |acc, (j, dist)| {
-                    if dist < acc.1 {
-                        (j, dist)
-                    } else {
-                        acc
-                    }
+                    if dist < acc.1 { (j, dist) } else { acc }
                 });
 
             assignments[i] = nearest_centroid;
