@@ -1,4 +1,3 @@
-
 use burn::module::Module;
 use burn::tensor::backend::Backend;
 use burn::tensor::{Distribution, Tensor, TensorData};
@@ -78,25 +77,22 @@ impl<B: Backend> PointNetEncoder<B> {
     }
 }
 
-<<<<<<< HEAD
 #[cfg(test)]
 mod tests {
     use super::*;
-    use burn::backend::ndarray::NdArray;
+    use burn::backend::ndarray::{NdArray, NdArrayDevice};
     use burn::tensor::Distribution;
 
     type Backend = NdArray<f32>;
 
     // Helper function to create an encoder with random weights for tests
-    fn create_test_encoder(
-        device: &<Backend as burn::tensor::backend::Backend>::Device,
-    ) -> PointNetEncoder<Backend> {
+    fn create_test_encoder(device: &NdArrayDevice) -> PointNetEncoder<Backend> {
         PointNetEncoder::new(device)
     }
 
     #[test]
     fn test_forward_shape() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([1024, 6], Distribution::Default, &device);
@@ -109,7 +105,7 @@ mod tests {
 
     #[test]
     fn test_batch_sizes() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         for size in [1, 32, 256, 1024] {
@@ -123,7 +119,7 @@ mod tests {
 
     #[test]
     fn test_no_nans() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([512, 6], Distribution::Default, &device);
@@ -138,7 +134,7 @@ mod tests {
 
     #[test]
     fn test_gradient_backprop() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([256, 6], Distribution::Default, &device);
@@ -147,7 +143,7 @@ mod tests {
 
     #[test]
     fn test_deterministic() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([256, 6], Distribution::Default, &device);
@@ -163,7 +159,7 @@ mod tests {
 
     #[test]
     fn test_output_bounds() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([512, 6], Distribution::Default, &device);
@@ -180,7 +176,7 @@ mod tests {
 
     #[test]
     fn test_large_batch() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([10000, 6], Distribution::Default, &device);
@@ -192,7 +188,7 @@ mod tests {
 
     #[test]
     fn test_minimal_batch() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let encoder = create_test_encoder(&device);
 
         let points = Tensor::<Backend, 2>::random([1, 6], Distribution::Default, &device);
@@ -204,7 +200,7 @@ mod tests {
 
     #[test]
     fn test_zero_weights() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         // Zero weights test requires a specialized new or manual tensor setting
         // For simplicity using create_test_encoder and checking it doesn't panic
         let encoder = create_test_encoder(&device);
@@ -212,6 +208,3 @@ mod tests {
         let _out = encoder.forward(&points).expect("Forward failed");
     }
 }
-=======
-
->>>>>>> origin/main

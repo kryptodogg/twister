@@ -1,0 +1,827 @@
+    Blocking waiting for file lock on build directory
+warning: unused import: `V_DEPTH`
+ --> src\gpu.rs:5:76
+  |
+5 | use crate::vbuffer::{IqVBuffer, GpuVBuffer, VBufferPushConst, V_FREQ_BINS, V_DEPTH};
+  |                                                                            ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\gpu.rs:7:5
+  |
+7 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::vbuffer::V_FREQ_BINS`
+ --> src\ml\impulse_coherence.rs:4:5
+  |
+4 | use crate::vbuffer::V_FREQ_BINS;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::forensic::ForensicEvent`
+ --> src\ml\modular_features.rs:3:5
+  |
+3 | use crate::forensic::ForensicEvent;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Distribution`
+ --> src\ml\point_decoder.rs:2:20
+  |
+2 | use burn::tensor::{Distribution, Tensor, backend::Backend};
+  |                    ^^^^^^^^^^^^
+
+warning: unused import: `burn::tensor::Distribution`
+  --> src\ml\point_mamba.rs:13:5
+   |
+13 | use burn::tensor::Distribution;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Tensor` and `backend::Backend`
+  --> src\ml\point_mamba_trainer.rs:13:20
+   |
+13 | use burn::tensor::{Tensor, backend::Backend};
+   |                    ^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Distribution` and `TensorData`
+ --> src\ml\pointnet_encoder.rs:3:20
+  |
+3 | use burn::tensor::{Distribution, Tensor, TensorData};
+  |                    ^^^^^^^^^^^^          ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> src\async_event_handler.rs:181:21
+    |
+181 |                 let mut error_count = 0u64;
+    |                     ----^^^^^^^^^^^
+    |                     |
+    |                     help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `r`
+   --> src\analysis_mock_data.rs:325:13
+    |
+325 |         let r = 1.0;
+    |             ^ help: if this is intentional, prefix it with an underscore: `_r`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sample_rate`
+   --> src\features\audio.rs:360:47
+    |
+360 | fn extract_bispectrum_anomaly(buffer: &[f32], sample_rate: f32) -> Vec<f32> {
+    |                                               ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sample_rate`
+
+warning: unused variable: `signal`
+   --> src\ml\modular_features.rs:153:5
+    |
+153 |     signal: &mut [f32],
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_signal`
+
+warning: unused variable: `anc_lut`
+   --> src\ml\modular_features.rs:155:5
+    |
+155 |     anc_lut: &FullRangeCalibration,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_anc_lut`
+
+warning: unused variable: `block_idx`
+   --> src\ml\point_mamba.rs:102:14
+    |
+102 |         for (block_idx, block) in self.mamba_blocks.iter().enumerate() {
+    |              ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_block_idx`
+
+warning: unused variable: `flags`
+   --> src\ml\point_mamba_trainer.rs:239:9
+    |
+239 |         flags: &crate::ml::modular_features::FeatureFlags,
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_flags`
+
+warning: unused variable: `payload`
+   --> src\ml\point_mamba_trainer.rs:246:14
+    |
+246 |         for (payload, feature_vec) in batch {
+    |              ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_payload`
+
+warning: unused variable: `model`
+   --> src\ml\wav2vec2_loader.rs:108:5
+    |
+108 |     model: &Wav2Vec2Model<Wgpu>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_model`
+
+warning: unused variable: `device`
+   --> src\ml\wav2vec2_loader.rs:111:5
+    |
+111 |     device: &<Wgpu as Backend>::Device,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_device`
+
+warning: variable does not need to be mutable
+   --> src\visualization\ray_tracer.rs:264:9
+    |
+264 |     let mut delays_ms: Vec<f32> = all_rays.iter().map(|(_, _, d, _)| *d).collect();
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> src\visualization\ray_tracer.rs:269:9
+    |
+269 |     let mut reflection_delays_32 = histogram_delays(&delays_ms, DELAY_BIN_COUNT);
+    |         ----^^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: field `sample_rate` is never read
+ --> src\ml\fold_frequency_harmonics.rs:2:5
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            --------------------- field in this struct
+2 |     sample_rate: u32,
+  |     ^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `bins_per_octave` is never read
+ --> src\ml\wideband_harmonic_analysis.rs:4:5
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ------------------------ field in this struct
+...
+4 |     bins_per_octave: u32, // 8 (96 total bins = 12 octaves ├ù 8)
+  |     ^^^^^^^^^^^^^^^
+
+warning: method `bin_to_freq` is never used
+  --> src\ml\wideband_harmonic_analysis.rs:38:8
+   |
+18 | impl WidebandHarmonicAnalyzer {
+   | ----------------------------- method in this implementation
+...
+38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+   |        ^^^^^^^^^^^
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src\visualization\radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: function `create_test_event` is never used
+   --> src\ml\pattern_discovery.rs:507:8
+    |
+507 |     fn create_test_event(idx: usize, timestamp_micros: i64, cluster_id: usize) -> Event {
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: `twister` (lib) generated 29 warnings (run `cargo fix --lib -p twister` to apply 20 suggestions)
+warning: `twister` (lib test) generated 29 warnings (28 duplicates)
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: unused import: `MeshLodLevel`
+ --> tests\mesh_shaders_integration.rs:6:48
+  |
+6 |     use twister::visualization::mesh_shaders::{MeshLodLevel, MeshShaderPipeline};
+  |                                                ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> examples\alignment_comparison.rs:88:25
+   |
+88 |                     let mut times: Vec<f64> = Vec::new();
+   |                         ----^^^^^
+   |                         |
+   |                         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> examples\alignment_comparison.rs:138:25
+    |
+138 |                     let mut times: Vec<f64> = Vec::new();
+    |                         ----^^^^^
+    |                         |
+    |                         help: remove this `mut`
+
+warning: unused variable: `times`
+  --> examples\alignment_comparison.rs:88:25
+   |
+88 |                     let mut times: Vec<f64> = Vec::new();
+   |                         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_times`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `run`
+  --> examples\alignment_comparison.rs:89:25
+   |
+89 |                     for run in 1..=3 {
+   |                         ^^^ help: if this is intentional, prefix it with an underscore: `_run`
+
+warning: unused variable: `times`
+   --> examples\alignment_comparison.rs:138:25
+    |
+138 |                     let mut times: Vec<f64> = Vec::new();
+    |                         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_times`
+
+warning: unused variable: `run`
+   --> examples\alignment_comparison.rs:139:25
+    |
+139 |                     for run in 1..=3 {
+    |                         ^^^ help: if this is intentional, prefix it with an underscore: `_run`
+
+warning: unused variable: `output`
+  --> tests\pdm_spike_rejection.rs:79:10
+   |
+79 |     let (output, spike_count) = twister::audio::reject_pdm_spikes(&input);
+   |          ^^^^^^ help: if this is intentional, prefix it with an underscore: `_output`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `c_freq`
+   --> tests\chord_dominance.rs:208:9
+    |
+208 |     let c_freq = 261.63;
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_c_freq`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `e_freq`
+   --> tests\chord_dominance.rs:209:9
+    |
+209 |     let e_freq = 329.63; // Major 3rd (5:4 ratio)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_e_freq`
+
+warning: unused variable: `g_freq`
+   --> tests\chord_dominance.rs:210:9
+    |
+210 |     let g_freq = 392.00; // Perfect 5th (3:2 ratio from C)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_g_freq`
+
+warning: unused variable: `grad_norm_encoder`
+  --> tests\phase_3e_trainer_integration.rs:41:13
+   |
+41 |         let grad_norm_encoder = 0.5f32;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_encoder`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `grad_norm_mamba`
+  --> tests\phase_3e_trainer_integration.rs:42:13
+   |
+42 |         let grad_norm_mamba = 0.8f32;
+   |             ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_mamba`
+
+warning: unused variable: `small_loss`
+   --> tests\phase_3e_trainer_integration.rs:140:13
+    |
+140 |         let small_loss = 0.5 * small_error * small_error;
+    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_small_loss`
+
+warning: `twister` (test "mesh_shaders_integration") generated 1 warning (run `cargo fix --test "mesh_shaders_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (example "alignment_comparison") generated 6 warnings (run `cargo fix --example "alignment_comparison" -p twister` to apply 6 suggestions)
+warning: `twister` (test "pdm_spike_rejection") generated 1 warning (run `cargo fix --test "pdm_spike_rejection" -p twister` to apply 1 suggestion)
+warning: `twister` (test "chord_dominance") generated 3 warnings (run `cargo fix --test "chord_dominance" -p twister` to apply 3 suggestions)
+warning: `twister` (test "phase_3e_trainer_integration") generated 3 warnings (run `cargo fix --test "phase_3e_trainer_integration" -p twister` to apply 3 suggestions)
+warning: unused variable: `beam_confidence`
+  --> tests\mamba_control_capture.rs:10:9
+   |
+10 |     let beam_confidence = 0.85;
+   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_beam_confidence`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_beams`
+  --> tests\mamba_control_capture.rs:98:9
+   |
+98 |     let num_beams = 4;
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_beams`
+
+warning: unused variable: `memo_uuid`
+   --> tests\mamba_control_capture.rs:307:9
+    |
+307 |     let memo_uuid = "abc-def-123";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_memo_uuid`
+
+warning: unused variable: `timestamp`
+   --> tests\mamba_control_capture.rs:308:9
+    |
+308 |     let timestamp = "2026-03-07T14:25:30Z";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
+
+warning: unused import: `std::sync::Arc`
+  --> tests\phase3_async_event_handler.rs:12:9
+   |
+12 |     use std::sync::Arc;
+   |         ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::time::Instant`
+  --> tests\phase3_async_event_handler.rs:13:9
+   |
+13 |     use std::time::Instant;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+  --> tests\phase3_async_event_handler.rs:14:9
+   |
+14 |     use tokio::sync::Mutex;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::fs`
+ --> tests\checkpoint_persistence.rs:1:5
+  |
+1 | use std::fs;
+  |     ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `last_block_end`
+   --> tests\phase_3d_blelloch_scan.rs:185:13
+    |
+185 |         let last_block_end = last_block_start + BLOCK_SIZE;
+    |             ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_last_block_end`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `PAYLOAD_SIZE` is never used
+   --> tests\phase_3d_blelloch_scan.rs:133:15
+    |
+133 |         const PAYLOAD_SIZE: usize = 8;
+    |               ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `KEY_SIZE` is never used
+   --> tests\phase_3d_blelloch_scan.rs:136:15
+    |
+136 |         const KEY_SIZE: usize = 4;
+    |               ^^^^^^^^
+
+warning: function `verify_sorted_order` is never used
+   --> tests\phase_3d_blelloch_scan.rs:291:8
+    |
+291 |     fn verify_sorted_order(keys: &[u32]) -> bool {
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::collections::HashMap`
+  --> tests\timegnn_training.rs:14:9
+   |
+14 |     use std::collections::HashMap;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `train_timegnn`
+  --> tests\timegnn_training.rs:17:79
+   |
+17 |         cosine_similarity, discover_patterns, generate_pattern_label, kmeans, train_timegnn,
+   |                                                                               ^^^^^^^^^^^^^
+
+warning: unused variable: `loss_similar`
+  --> tests\timegnn_training.rs:47:13
+   |
+47 |         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
+   |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_loss_similar`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `config`
+  --> tests\timegnn_training.rs:76:13
+   |
+76 |         let config = TimeGnnTrainingConfig {
+   |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+warning: unused variable: `audio`
+  --> tests\wav2vec2_integration.rs:71:13
+   |
+71 |         let audio: Vec<f32> = (0..16000)
+   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `active_tab` is never read
+   --> tests\analysis_ui_integration.rs:518:35
+    |
+518 |         let mut active_tab: i32 = 0;
+    |                                   ^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `frequency_hz` is never read
+  --> tests\analysis_ui_integration.rs:20:9
+   |
+16 |     struct MockEvent {
+   |            --------- field in this struct
+...
+20 |         frequency_hz: f32,
+   |         ^^^^^^^^^^^^
+   |
+   = note: `MockEvent` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `name` and `frequency_hz` are never read
+  --> tests\analysis_ui_integration.rs:25:9
+   |
+24 |     struct MockSignature {
+   |            ------------- fields in this struct
+25 |         name: String,
+   |         ^^^^
+26 |         frequency_hz: f32,
+   |         ^^^^^^^^^^^^
+   |
+   = note: `MockSignature` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `name`, `x_position`, and `y_position` are never read
+  --> tests\analysis_ui_integration.rs:33:9
+   |
+32 |     struct MockCluster {
+   |            ----------- fields in this struct
+33 |         name: String,
+   |         ^^^^
+...
+36 |         x_position: f32,
+   |         ^^^^^^^^^^
+37 |         y_position: f32,
+   |         ^^^^^^^^^^
+   |
+   = note: `MockCluster` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `event_a_idx`, `event_b_idx`, and `strength` are never read
+  --> tests\analysis_ui_integration.rs:42:9
+   |
+41 |     struct MockCorrelation {
+   |            --------------- fields in this struct
+42 |         event_a_idx: usize,
+   |         ^^^^^^^^^^^
+43 |         event_b_idx: usize,
+   |         ^^^^^^^^^^^
+44 |         correlation_type: u32, // 0=temporal, 1=spectral, 2=spatial
+45 |         strength: f32,         // 0.0-1.0
+   |         ^^^^^^^^
+   |
+   = note: `MockCorrelation` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: unused import: `std::marker::PhantomData`
+ --> tests\timegnn_integration.rs:7:9
+  |
+7 |     use std::marker::PhantomData;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+warning: `twister` (test "phase3_async_event_handler") generated 3 warnings (run `cargo fix --test "phase3_async_event_handler" -p twister` to apply 3 suggestions)
+warning: `twister` (test "checkpoint_persistence") generated 1 warning (run `cargo fix --test "checkpoint_persistence" -p twister` to apply 1 suggestion)
+warning: `twister` (test "phase_3d_blelloch_scan") generated 4 warnings (run `cargo fix --test "phase_3d_blelloch_scan" -p twister` to apply 1 suggestion)
+warning: `twister` (test "timegnn_training") generated 4 warnings (run `cargo fix --test "timegnn_training" -p twister` to apply 4 suggestions)
+warning: `twister` (test "wav2vec2_integration") generated 1 warning (run `cargo fix --test "wav2vec2_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "analysis_ui_integration") generated 5 warnings
+warning: `twister` (test "timegnn_integration") generated 1 warning (run `cargo fix --test "timegnn_integration" -p twister` to apply 1 suggestion)
+warning: unused variable: `detected_azimuth`
+   --> tests\tdoa_elevation.rs:164:9
+    |
+164 |     let detected_azimuth = 20.0_f32.to_radians();
+    |         ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_azimuth`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `detected_elevation`
+   --> tests\tdoa_elevation.rs:165:9
+    |
+165 |     let detected_elevation = (-30.0_f32).to_radians();
+    |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_elevation`
+
+warning: `twister` (test "tdoa_elevation") generated 2 warnings (run `cargo fix --test "tdoa_elevation" -p twister` to apply 2 suggestions)
+error: expected one of `)`, `,`, `.`, `?`, or an operator, found `x`
+   --> tests\timegnn_pattern_discovery.rs:352:56
+    |
+352 |         let norm = embedding.iter().map(||&x| x.powi(2)x: &f32| x.powi(2)).sum::<f32>().sqrt();
+    |                                                        ^
+    |                                                        |
+    |                                                        expected one of `)`, `,`, `.`, `?`, or an operator
+    |                                                        help: missing `,`
+
+error: expected one of `!`, `)`, `,`, `.`, `::`, `?`, `{`, or an operator, found `:`
+   --> tests\timegnn_pattern_discovery.rs:352:57
+    |
+352 |         let norm = embedding.iter().map(||&x| x.powi(2)x: &f32| x.powi(2)).sum::<f32>().sqrt();
+    |                                                         ^ expected one of 8 possible tokens
+
+error: could not compile `twister` (test "timegnn_pattern_discovery") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:307:45
+    |
+307 |         println!("  Num epochs: {}", config.num_epochs);
+    |                                             ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `weight_decay` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:308:47
+    |
+308 |         println!("  Weight decay: {}", config.weight_decay);
+    |                                               ^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `max_displacement` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:309:51
+    |
+309 |         println!("  Max displacement: {}", config.max_displacement);
+    |                                                   ^^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:312:27
+    |
+312 |         assert_eq!(config.num_epochs, 100);
+    |                           ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:321:16
+    |
+321 |         config.num_epochs = 50;
+    |                ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:325:27
+    |
+325 |         assert_eq!(config.num_epochs, 50);
+    |                           ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `twister` (test "point_mamba_integration") due to 6 previous errors
+error[E0432]: unresolved import `gpu::GpuContext`
+  --> src\main.rs:72:5
+   |
+72 | use gpu::GpuContext;
+   |     ^^^^^^^^^^^^^^^ no `GpuContext` in `gpu`
+
+warning: unused attribute `allow`
+  --> src\main.rs:19:1
+   |
+19 | #[allow(clippy::too_many_arguments)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the built-in attribute `allow` will be ignored, since it's applied to the macro invocation `slint::include_modules`
+  --> src\main.rs:21:1
+   |
+21 | slint::include_modules!();
+   | ^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\losses\mod.rs:14:28
+   |
+14 | pub use chamfer_distance::{ChamferDistance, HuberLoss};
+   |                            ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `CorpusStats`, `ForensicEventData`, `load_forensic_events`, and `prepare_event_corpus`
+  --> src\ml\mod.rs:38:5
+   |
+38 |     CorpusStats, ForensicEventData, load_forensic_events, prepare_event_corpus,
+   |     ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\mod.rs:40:36
+   |
+40 | pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
+   |                                    ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `mamba_block::MambaBlock`
+  --> src\ml\mod.rs:41:9
+   |
+41 | pub use mamba_block::MambaBlock;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ModalityStats`, `MultimodalFeatures`, `compute_modality_stats`, and `fuse_multimodal`
+  --> src\ml\mod.rs:43:5
+   |
+43 |     ModalityStats, MultimodalFeatures, compute_modality_stats, fuse_multimodal,
+   |     ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+
+warning: unused imports: `ClusteringResult`, `Event`, `KMeansConfig`, `Pattern`, `compute_silhouette_score`, `compute_temporal_frequency`, `discover_patterns`, `generate_pattern_label`, and `kmeans`
+  --> src\ml\mod.rs:46:5
+   |
+46 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+47 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+
+warning: unused import: `point_decoder::PointDecoder`
+  --> src\ml\mod.rs:49:9
+   |
+49 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `point_mamba::PointMamba`
+  --> src\ml\mod.rs:50:9
+   |
+50 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
+  --> src\ml\mod.rs:51:31
+   |
+51 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pointnet_encoder::PointNetEncoder`
+  --> src\ml\mod.rs:52:9
+   |
+52 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `timegnn::TimeGnnModel`
+  --> src\ml\mod.rs:53:9
+   |
+53 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
+  --> src\ml\mod.rs:55:5
+   |
+55 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+56 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused imports: `Wav2Vec2Model`, `infer_wav2vec2_embedding`, and `load_wav2vec2`
+  --> src\ml\mod.rs:58:27
+   |
+58 | pub use wav2vec2_loader::{Wav2Vec2Model, infer_wav2vec2_embedding, load_wav2vec2};
+   |                           ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `crossbeam_channel::bounded`
+  --> src\main.rs:66:5
+   |
+66 | use crossbeam_channel::bounded;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> src\main.rs:372:55
+    |
+372 |                 vb.push_frame(&gpu_shared_disp.queue, &mags);
+    |                    ----------                         ^^^^^ expected `&[[f16; 4]]`, found `&Vec<f32>`
+    |                    |
+    |                    arguments to this method are incorrect
+    |
+    = note: expected reference `&[[half::f16; 4]]`
+               found reference `&Vec<f32>`
+note: method defined here
+   --> src\vbuffer.rs:126:12
+    |
+126 |     pub fn push_frame(&mut self, queue: &wgpu::Queue, frame_data: &[[half::f16; 4]]) {
+    |            ^^^^^^^^^^                                 -----------------------------
+
+error[E0308]: mismatched types
+   --> src\main.rs:432:55
+    |
+432 |                 vb.push_frame(&gpu_shared_disp.queue, &mags);
+    |                    ----------                         ^^^^^ expected `&[[f16; 4]]`, found `&Vec<f32>`
+    |                    |
+    |                    arguments to this method are incorrect
+    |
+    = note: expected reference `&[[half::f16; 4]]`
+               found reference `&Vec<f32>`
+note: method defined here
+   --> src\vbuffer.rs:126:12
+    |
+126 |     pub fn push_frame(&mut self, queue: &wgpu::Queue, frame_data: &[[half::f16; 4]]) {
+    |            ^^^^^^^^^^                                 -----------------------------
+
+error[E0308]: mismatched types
+   --> src\main.rs:511:59
+    |
+511 |                     vb.push_frame(&gpu_shared_disp.queue, &wide_mags);
+    |                        ----------                         ^^^^^^^^^^ expected `&[[f16; 4]]`, found `&Vec<f32>`
+    |                        |
+    |                        arguments to this method are incorrect
+    |
+    = note: expected reference `&[[half::f16; 4]]`
+               found reference `&Vec<f32>`
+note: method defined here
+   --> src\vbuffer.rs:126:12
+    |
+126 |     pub fn push_frame(&mut self, queue: &wgpu::Queue, frame_data: &[[half::f16; 4]]) {
+    |            ^^^^^^^^^^                                 -----------------------------
+
+error[E0308]: mismatched types
+   --> src\main.rs:549:59
+    |
+549 |                     vb.push_frame(&gpu_shared_disp.queue, &mags);
+    |                        ----------                         ^^^^^ expected `&[[f16; 4]]`, found `&Vec<f32>`
+    |                        |
+    |                        arguments to this method are incorrect
+    |
+    = note: expected reference `&[[half::f16; 4]]`
+               found reference `&Vec<f32>`
+note: method defined here
+   --> src\vbuffer.rs:126:12
+    |
+126 |     pub fn push_frame(&mut self, queue: &wgpu::Queue, frame_data: &[[half::f16; 4]]) {
+    |            ^^^^^^^^^^                                 -----------------------------
+
+warning: unused variable: `signal`
+   --> src\ml\modular_features.rs:153:5
+    |
+153 |     signal: &mut [f32],
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_signal`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0308, E0432.
+For more information about an error, try `rustc --explain E0308`.
+warning: `twister` (bin "twister" test) generated 30 warnings (14 duplicates)
+error: could not compile `twister` (bin "twister" test) due to 5 previous errors; 30 warnings emitted

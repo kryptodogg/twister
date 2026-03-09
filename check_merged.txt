@@ -1,0 +1,22 @@
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+error: encountered diff marker
+  --> src\ml\mod.rs:2:1
+   |
+ 2 | <<<<<<< HEAD
+   | ^^^^^^^ between this marker and `=======` is the code that you are merging into
+...
+11 | =======
+   | ------- between this marker and `>>>>>>>` is the incoming code
+...
+26 | >>>>>>> origin/main
+   | ^^^^^^^ this marker concludes the conflict region
+   |
+   = note: conflict markers indicate that a merge was started but could not be completed due to merge conflicts
+           to resolve a conflict, keep only the code you want and then delete the lines containing conflict markers
+   = help: if you are in a merge, the top section is the code you already had checked out and the bottom section is the new code
+           if you are in a rebase, the top section is the code being rebased onto and the bottom section is the code you had checked out which is being rebased
+   = note: for an explanation on these markers from the `git` documentation, visit <https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging#_checking_out_conflicts>
+
+error: could not compile `twister` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `twister` (lib test) due to 1 previous error

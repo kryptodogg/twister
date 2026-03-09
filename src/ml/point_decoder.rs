@@ -1,10 +1,5 @@
 use burn::prelude::Module;
-<<<<<<< HEAD
-use burn::tensor::{backend::Backend, Tensor};
-=======
-use burn::tensor::backend::Backend;
-use burn::tensor::{Distribution, Tensor};
->>>>>>> origin/main
+use burn::tensor::{Distribution, Tensor, backend::Backend};
 use std::error::Error;
 
 /// Point Decoder: Mamba Features (N, 128) → 3D Offsets (N, 3)
@@ -89,19 +84,16 @@ impl<B: Backend> PointDecoder<B> {
     }
 }
 
-<<<<<<< HEAD
 #[cfg(test)]
 mod tests {
     use super::*;
-    use burn::backend::ndarray::NdArray;
+    use burn::backend::ndarray::{NdArray, NdArrayDevice};
     use burn::tensor::Distribution;
 
     type Backend = NdArray<f32>;
 
     // Helper function to create a decoder with random weights for tests
-    fn create_test_decoder(
-        device: &<Backend as burn::tensor::backend::Backend>::Device,
-    ) -> PointDecoder<Backend> {
+    fn create_test_decoder(device: &NdArrayDevice) -> PointDecoder<Backend> {
         PointDecoder::new(
             Tensor::<Backend, 2>::random([128, 256], Distribution::Default, device),
             Tensor::zeros([256], device),
@@ -113,9 +105,7 @@ mod tests {
     }
 
     // Helper function to create a decoder with zero weights for tests
-    fn create_zero_decoder(
-        device: &<Backend as burn::tensor::backend::Backend>::Device,
-    ) -> PointDecoder<Backend> {
+    fn create_zero_decoder(device: &NdArrayDevice) -> PointDecoder<Backend> {
         PointDecoder::new(
             Tensor::zeros([128, 256], device),
             Tensor::zeros([256], device),
@@ -128,7 +118,7 @@ mod tests {
 
     #[test]
     fn test_forward_shape() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::<Backend, 2>::random([1024, 128], Distribution::Default, &device);
@@ -141,7 +131,7 @@ mod tests {
 
     #[test]
     fn test_batch_sizes() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_test_decoder(&device);
 
         for size in [1, 32, 256, 1024] {
@@ -157,7 +147,7 @@ mod tests {
 
     #[test]
     fn test_no_nans() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::<Backend, 2>::random([512, 128], Distribution::Default, &device);
@@ -172,7 +162,7 @@ mod tests {
 
     #[test]
     fn test_offset_bounds() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::<Backend, 2>::random([512, 128], Distribution::Default, &device);
@@ -189,7 +179,7 @@ mod tests {
 
     #[test]
     fn test_gradient_backprop() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::<Backend, 2>::random([256, 128], Distribution::Default, &device);
@@ -198,7 +188,7 @@ mod tests {
 
     #[test]
     fn test_deterministic() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_test_decoder(&device);
 
         let features = Tensor::<Backend, 2>::random([256, 128], Distribution::Default, &device);
@@ -214,7 +204,7 @@ mod tests {
 
     #[test]
     fn test_zero_weights() {
-        let device = Default::default();
+        let device = NdArrayDevice::Cpu;
         let decoder = create_zero_decoder(&device);
 
         let features = Tensor::<Backend, 2>::random([512, 128], Distribution::Default, &device);
@@ -226,6 +216,3 @@ mod tests {
         }
     }
 }
-=======
-
->>>>>>> origin/main
