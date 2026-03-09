@@ -40,3 +40,5 @@ pub use pattern_discovery::{
     compute_silhouette_score, compute_temporal_frequency, generate_pattern_label,
 };
 pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
+
+pub mod modular_features;
