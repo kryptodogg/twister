@@ -54,7 +54,6 @@ pub struct VBufferMeta {
     pub version: u64,
 }
 
-
 /// Buffer for raw IQ samples from RTL-SDR.
 /// Holds 512 complex samples as [i8; 2] for the GPU FFT pass.
 pub struct IqVBuffer {
@@ -133,6 +132,22 @@ impl GpuVBuffer {
 
         queue.write_buffer(&self.buffer, offset, bytemuck::cast_slice(&row));
         self.meta.version += 1;
+    }
+
+    /// Helper to push f32 magnitudes (mapped to first channel of f16x4)
+    pub fn push_frame_f32(&mut self, queue: &wgpu::Queue, mags: &[f32]) {
+        let frame_data: Vec<[half::f16; 4]> = mags
+            .iter()
+            .map(|&f| {
+                [
+                    half::f16::from_f32(f),
+                    half::f16::from_f32(0.0),
+                    half::f16::from_f32(0.0),
+                    half::f16::from_f32(0.0),
+                ]
+            })
+            .collect();
+        self.push_frame(queue, &frame_data);
     }
 
     /// Build the push-constant block for shaders reading this buffer.

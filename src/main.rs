@@ -58,16 +58,16 @@ mod vector;
 mod waterfall;
 
 use crate::forensic::ForensicLogger;
-use std::sync::atomic::Ordering;
 use std::sync::Arc;
+use std::sync::atomic::Ordering;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use anyhow::Context;
 use crossbeam_channel::bounded;
-use rustfft::{num_complex::Complex, FftPlanner};
+use rustfft::{FftPlanner, num_complex::Complex};
 
-use audio::{record_channel, tdoa_channel, AudioEngine, TdoaEngine, DEFAULT_MIC_SPACING_M};
-use bispectrum::{BispectrumEngine, BISPEC_FFT_SIZE};
+use audio::{AudioEngine, DEFAULT_MIC_SPACING_M, TdoaEngine, record_channel, tdoa_channel};
+use bispectrum::{BISPEC_FFT_SIZE, BispectrumEngine};
 use detection::{DetectionEvent, HardwareLayer};
 use gpu::GpuContext;
 use gpu_shared::GpuShared;
@@ -75,7 +75,7 @@ use parametric::ParametricManager;
 use pdm::PdmEngine;
 use sdr::sdr_channel;
 use state::AppState;
-use vbuffer::{new_shared_vbuffer, V_DEPTH, V_FREQ_BINS};
+use vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
 use waterfall::WaterfallEngine;
 
 const PARAMETRIC_CARRIER_HZ: f32 = 40_000.0;
@@ -114,8 +114,12 @@ async fn main() -> anyhow::Result<()> {
     let sdr_vbuffer = new_shared_vbuffer(&gpu_shared.device);
 
     let (merge_tx, merge_rx) = crossbeam_channel::bounded::<Vec<f32>>(256);
-    let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(crate::ml::modular_features::SignalFeaturePayload, burn::tensor::Tensor<burn::backend::NdArray, 1>)>(256);
-    let (impulse_tx, impulse_rx) = crossbeam_channel::bounded::<crate::ml::modular_features::ImpulseTrainEvent>(256);
+    let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(
+        crate::ml::modular_features::SignalFeaturePayload,
+        burn::tensor::Tensor<burn::backend::NdArray, 1>,
+    )>(256);
+    let (impulse_tx, impulse_rx) =
+        crossbeam_channel::bounded::<crate::ml::modular_features::ImpulseTrainEvent>(256);
     let (tdoa_tx, tdoa_rx) = tdoa_channel();
     let (record_tx, record_rx) = record_channel();
 
@@ -369,7 +373,7 @@ async fn main() -> anyhow::Result<()> {
                 let dc = mags.get(mags.len() / 2).cloned().unwrap_or(0.0);
                 state_disp.set_sdr_dc_bias(dc);
                 let mut vb = sdr_vbuf_disp.lock();
-                vb.push_frame(&gpu_shared_disp.queue, &mags);
+                vb.push_frame_f32(&gpu_shared_disp.queue, &mags);
             }
 
             if acc.len() < BISPEC_FFT_SIZE {
@@ -395,7 +399,9 @@ async fn main() -> anyhow::Result<()> {
                 harmonic_energy: None,
             };
             let device = burn::backend::ndarray::NdArrayDevice::Cpu;
-            let extractor = crate::ml::modular_features::ModularFeatureExtractor::<burn::backend::NdArray>::new(&device);
+            let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
+                burn::backend::NdArray,
+            >::new(&device);
             let (feature_vec, _) = extractor.extract(&payload, &feature_flags);
             let _ = feature_tx.try_send((payload, feature_vec));
             if pdm_spike_count > 0 {
@@ -429,7 +435,8 @@ async fn main() -> anyhow::Result<()> {
             // V-buffer
             let vbuf_ver = {
                 let mut vb = vbuf_disp.lock();
-                vb.push_frame(&gpu_shared_disp.queue, &mags);
+                vb.push_frame_f32(&gpu_shared_disp.queue, &mags);
+
                 vb.version()
             };
             let slot = (vbuf_ver as usize).wrapping_sub(1) % V_DEPTH;
@@ -508,7 +515,8 @@ async fn main() -> anyhow::Result<()> {
                     .collect();
                 let v = {
                     let mut vb = vbuf_disp.lock();
-                    vb.push_frame(&gpu_shared_disp.queue, &wide_mags);
+                    vb.push_frame_f32(&gpu_shared_disp.queue, &wide_mags);
+
                     vb.version()
                 };
                 if let Ok(mut tm) = state_disp.tx_mags.lock() {
@@ -546,7 +554,8 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 let v = {
                     let mut vb = vbuf_disp.lock();
-                    vb.push_frame(&gpu_shared_disp.queue, &mags);
+                    vb.push_frame_f32(&gpu_shared_disp.queue, &mags);
+
                     vb.version()
                 };
                 if let Ok(mut tm) = state_disp.tx_mags.lock() {
@@ -1658,7 +1667,7 @@ fn snr_db(original: &[f32], decoded: &[f32]) -> f32 {
 // Add trainer loop
 fn _start_impulse_trainer_loop(
     state: std::sync::Arc<std::sync::Mutex<crate::state::AppState>>,
-    impulse_rx: crossbeam_channel::Receiver<crate::ml::modular_features::ImpulseTrainEvent>
+    impulse_rx: crossbeam_channel::Receiver<crate::ml::modular_features::ImpulseTrainEvent>,
 ) {
     tokio::spawn(async move {
         let impulse_model = crate::ml::modular_features::ImpulsePatternModel::new();
@@ -1668,10 +1677,12 @@ fn _start_impulse_trainer_loop(
                 let anomaly_score = impulse_model.score_anomaly(&pattern);
 
                 let st = state.lock().unwrap();
-                st.impulse_anomaly_score.store(anomaly_score, std::sync::atomic::Ordering::Relaxed);
+                st.impulse_anomaly_score
+                    .store(anomaly_score, std::sync::atomic::Ordering::Relaxed);
 
                 if anomaly_score > 0.7 {
-                    st.harassment_detected.store(true, std::sync::atomic::Ordering::Relaxed);
+                    st.harassment_detected
+                        .store(true, std::sync::atomic::Ordering::Relaxed);
                 }
             } else {
                 break;
@@ -1684,9 +1695,9 @@ fn _start_trainer_loop(
     state: std::sync::Arc<std::sync::Mutex<crate::state::AppState>>,
     feature_rx: crossbeam_channel::Receiver<(
         crate::ml::modular_features::SignalFeaturePayload,
-        burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>
+        burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>,
     )>,
-    mut mamba_trainer: crate::ml::point_mamba_trainer::PointMambaTrainer
+    mut mamba_trainer: crate::ml::point_mamba_trainer::PointMambaTrainer,
 ) {
     tokio::spawn(async move {
         let mut batch = Vec::new();

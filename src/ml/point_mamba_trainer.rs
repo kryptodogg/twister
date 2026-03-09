@@ -10,13 +10,8 @@
 //! **Gradient clipping**: L2 norm <= 1.0
 //! **Convergence**: 2.5-3.0 → 1.2 → 0.7 → 0.35-0.45
 
-<<<<<<< HEAD
+use burn::tensor::{Tensor, backend::Backend};
 use std::collections::VecDeque;
-=======
-use burn::tensor::{backend::Backend, Tensor};
-use std::collections::VecDeque;
-
->>>>>>> origin/main
 
 /// Training configuration
 #[derive(Clone, Debug)]
@@ -28,6 +23,9 @@ pub struct TrainerConfig {
     pub ema_decay: f32,
     pub huber_delta: f32,
     pub huber_weight: f32,
+    pub num_epochs: usize,
+    pub weight_decay: f32,
+    pub max_displacement: f32,
 }
 
 impl Default for TrainerConfig {
@@ -40,6 +38,9 @@ impl Default for TrainerConfig {
             ema_decay: 0.99,
             huber_delta: 1.0,
             huber_weight: 0.5,
+            num_epochs: 10,
+            weight_decay: 1e-4,
+            max_displacement: 1.0,
         }
     }
 }
@@ -73,7 +74,6 @@ pub struct Checkpoint {
 
 /// Point Mamba Trainer: Manages full training loop
 pub struct PointMambaTrainer {
-
     pub config: TrainerConfig,
     pub loss_history: Vec<LossTelemetry>,
     pub gradient_history: Vec<GradientTelemetry>,
@@ -238,7 +238,10 @@ mod tests {
 impl PointMambaTrainer {
     pub fn train_step_modular(
         &mut self,
-        batch: &[(crate::ml::modular_features::SignalFeaturePayload, burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>)],
+        batch: &[(
+            crate::ml::modular_features::SignalFeaturePayload,
+            burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>,
+        )],
         flags: &crate::ml::modular_features::FeatureFlags,
     ) -> Result<f32, String> {
         // Implement the masked input logic for the 361-D vector, ensuring inactive features
@@ -269,7 +272,11 @@ impl PointMambaTrainer {
             total_loss += sim_loss;
         }
 
-        let avg_loss = if batch.is_empty() { 0.0 } else { total_loss / batch.len() as f32 };
+        let avg_loss = if batch.is_empty() {
+            0.0
+        } else {
+            total_loss / batch.len() as f32
+        };
 
         // Record loss trajectory (epoch 0, step 0 for MVP)
         self.record_loss(avg_loss * 0.8, avg_loss * 0.2, 0, 0);
