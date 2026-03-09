@@ -178,6 +178,8 @@ pub struct RecordingState {
 impl RecordingState {
     /// Create a new RecordingState in IDLE state
     pub fn new() -> Self {
+        let material_library =
+            std::sync::Arc::new(tokio::sync::Mutex::new(MaterialLibrary::default()));
         RecordingState {
             state: RecordingStateEnum::Idle,
             remaining_ms: 0,
@@ -419,7 +421,10 @@ pub const AGC_MIN_GAIN_DB: f32 = 0.0;
 
 // ── AppState ──────────────────────────────────────────────────────────────────
 
+use crate::materials::material_library::MaterialLibrary;
+
 pub struct AppState {
+    pub material_library: std::sync::Arc<tokio::sync::Mutex<MaterialLibrary>>,
     // ── Core detection ────────────────────────────────────────────────────────
     pub detected_freq: AtomicF32,
     pub denial_freq_override: AtomicF32,
@@ -1211,11 +1216,19 @@ impl AppState {
     pub fn enrich_event_forensics(&self, event: &mut crate::detection::DetectionEvent) {
         event.audio_dc_bias_v = {
             let v = self.get_audio_dc_bias();
-            if v > 0.0 { Some(v) } else { None }
+            if v > 0.0 {
+                Some(v)
+            } else {
+                None
+            }
         };
         event.sdr_dc_bias_v = {
             let v = self.get_sdr_dc_bias();
-            if v > 0.0 { Some(v) } else { None }
+            if v > 0.0 {
+                Some(v)
+            } else {
+                None
+            }
         };
         event.mamba_anomaly_db = self.get_mamba_anomaly();
 

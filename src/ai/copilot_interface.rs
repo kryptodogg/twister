@@ -53,7 +53,9 @@ impl CopilotInterface {
         let (response, chain) = engine.process(query).await;
 
         // Map the reasoning chain's citations into the message
-        let citations: Vec<String> = chain.source_event_ids.iter()
+        let citations: Vec<String> = chain
+            .source_event_ids
+            .iter()
             .map(|id| format!("Event {}", id))
             .collect();
 

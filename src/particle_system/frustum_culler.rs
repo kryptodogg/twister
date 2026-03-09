@@ -1,6 +1,6 @@
+use crate::gpu_shared::GpuShared;
 use std::sync::Arc;
 use wgpu::util::DeviceExt;
-use crate::gpu_shared::GpuShared;
 
 pub struct FrustumCuller {
     shared: Arc<GpuShared>,
@@ -48,7 +48,9 @@ impl FrustumCuller {
         let draw_indirect_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("mesh_indirect_buffer"),
             size: 16, // wgpu DrawMeshTasksIndirect requires 12 bytes (or 16 with padding)
-            usage: wgpu::BufferUsages::STORAGE | wgpu::BufferUsages::INDIRECT | wgpu::BufferUsages::COPY_DST,
+            usage: wgpu::BufferUsages::STORAGE
+                | wgpu::BufferUsages::INDIRECT
+                | wgpu::BufferUsages::COPY_DST,
             mapped_at_creation: false,
         });
 
@@ -141,7 +143,11 @@ impl FrustumCuller {
         // Reset indirect buffer: task_count_x = 0, y=1, z=1
         // (y and z remain 1 for DrawMeshTasksIndirect)
         let reset_indirect = [6u32, 0u32, 0u32, 0u32];
-        queue.write_buffer(&self.draw_indirect_buffer, 0, bytemuck::cast_slice(&reset_indirect));
+        queue.write_buffer(
+            &self.draw_indirect_buffer,
+            0,
+            bytemuck::cast_slice(&reset_indirect),
+        );
 
         let uniform = FrustumUniform {
             view_proj,

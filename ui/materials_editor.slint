@@ -1,0 +1,256 @@
+import { Slider, Button, ComboBox } from "std-widgets.slint";
+
+export global MaterialEditor {
+    // Debye model
+    in-out property <float> epsilon-static: 80.0;
+    in-out property <float> epsilon-infinity: 4.8;
+    in-out property <float> relaxation-time-ps: 8.3;
+
+    // Conductivity
+    in-out property <float> conductivity-base: 0.05;       // log scale: 10^x roughly, but spec used normal here, we will adapt
+    in-out property <float> conductivity-exp: 0.5;
+
+    // Loss
+    in-out property <float> loss-tangent: 0.15;
+
+    // Mamba learning
+    in-out property <bool> mamba-training: false;
+    in-out property <float> mamba-confidence: 0.0;
+    in-out property <float> mamba-loss: 0.0;
+
+    // Callbacks
+    callback material_selected(string);
+    callback create_material();
+    callback delete_material();
+    callback update_epsilon_static(float);
+    callback update_epsilon_infinity(float);
+    callback update_relaxation_time(float);
+    callback update_conductivity_base(float);
+    callback update_conductivity_exp(float);
+    callback update_loss_tangent(float);
+    callback start_mamba_learning();
+    callback reset_material_properties();
+    callback enable_material_placement();
+    callback show_material_cloud();
+    callback export_materials_json();
+}
+
+export component MaterialsTab {
+    VerticalLayout {
+        spacing: 10px;
+        padding: 20px;
+
+        // ─────────────────────────────────────────────────────
+        // MATERIAL LIBRARY
+        // ─────────────────────────────────────────────────────
+        HorizontalLayout {
+            Text { text: "Material Library:"; font-weight: bold; min-width: 200px; color: white; }
+
+            ComboBox {
+                model: ["water", "glass", "human_tissue", "wood", "metal", "Custom"];
+                current-index: 0;
+                selected => { MaterialEditor.material_selected(self.current-value); }
+            }
+
+            Button {
+                text: "+ New";
+                clicked => { MaterialEditor.create_material(); }
+            }
+
+            Button {
+                text: "Delete";
+                clicked => { MaterialEditor.delete_material(); }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // DEBYE MODEL SLIDERS (RF-BSDF Parameters)
+        // ─────────────────────────────────────────────────────
+        HorizontalLayout {
+            spacing: 20px;
+
+            VerticalLayout {
+                width: 200px;
+                Text { text: "ε_s (Static Permittivity):"; color: white; }
+                Slider {
+                    value: MaterialEditor.epsilon-static;
+                    minimum: 1.0;
+                    maximum: 100.0;
+                    changed => { MaterialEditor.update_epsilon_static(self.value); }
+                }
+                Text { text: "{Math.round(MaterialEditor.epsilon-static * 100) / 100}"; color: #0f0; }
+            }
+
+            VerticalLayout {
+                width: 200px;
+                Text { text: "ε∞ (High-Freq Limit):"; color: white; }
+                Slider {
+                    value: MaterialEditor.epsilon-infinity;
+                    minimum: 1.0;
+                    maximum: 20.0;
+                    changed => { MaterialEditor.update_epsilon_infinity(self.value); }
+                }
+                Text { text: "{Math.round(MaterialEditor.epsilon-infinity * 100) / 100}"; color: #0f0; }
+            }
+
+            VerticalLayout {
+                width: 200px;
+                Text { text: "τ (Relaxation Time, ps):"; color: white; }
+                Slider {
+                    value: MaterialEditor.relaxation-time-ps;
+                    minimum: 0.001;
+                    maximum: 100.0;
+                    changed => { MaterialEditor.update_relaxation_time(self.value); }
+                }
+                Text { text: "{Math.round(MaterialEditor.relaxation-time-ps * 1000) / 1000} ps"; color: #0f0; }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // CONDUCTIVITY PARAMETERS
+        // ─────────────────────────────────────────────────────
+        HorizontalLayout {
+            spacing: 20px;
+
+            VerticalLayout {
+                width: 200px;
+                Text { text: "σ_base (S/m at 1 Hz):"; color: white; }
+                Slider {
+                    value: MaterialEditor.conductivity-base;
+                    minimum: -11.0;  // log scale: 10^-11
+                    maximum: 8.0;    // log scale: 10^8
+                    changed => { MaterialEditor.update_conductivity_base(self.value); }
+                }
+                Text {
+                    text: "{Math.pow(10.0, MaterialEditor.conductivity-base)} S/m";
+                    color: #0f0;
+                }
+            }
+
+            VerticalLayout {
+                width: 200px;
+                Text { text: "α (Frequency Exponent):"; color: white; }
+                Slider {
+                    value: MaterialEditor.conductivity-exp;
+                    minimum: -1.0;
+                    maximum: 1.0;
+                    changed => { MaterialEditor.update_conductivity_exp(self.value); }
+                }
+                Text { text: "{Math.round(MaterialEditor.conductivity-exp * 100) / 100}"; color: #0f0; }
+            }
+
+            VerticalLayout {
+                width: 200px;
+                Text { text: "tan(δ) @ 1 GHz:"; color: white; }
+                Slider {
+                    value: MaterialEditor.loss-tangent;
+                    minimum: 0.0;
+                    maximum: 1.0;
+                    changed => { MaterialEditor.update_loss_tangent(self.value); }
+                }
+                Text { text: "{Math.round(MaterialEditor.loss-tangent * 1000) / 1000}"; color: #0f0; }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // MAMBA LEARNING STATUS
+        // ─────────────────────────────────────────────────────
+        Rectangle {
+            background: #1a1a1a;
+            border-color: #444;
+            border-width: 2px;
+            height: 120px;
+
+            VerticalLayout {
+                padding: 10px;
+                spacing: 8px;
+
+                Text { text: "Mamba Material Learning"; font-weight: bold; color: #0f0; }
+
+                HorizontalLayout {
+                    Text { text: "Training: "; width: 80px; color: white; }
+                    Text {
+                        text: MaterialEditor.mamba-training ? "▶ Active" : "⏸ Paused";
+                        color: MaterialEditor.mamba-training ? #0f0 : #f80;
+                    }
+                }
+
+                HorizontalLayout {
+                    Text { text: "Confidence: "; width: 80px; color: white; }
+                    // Replaced ProgressBar with simple Rect for now to avoid styling errors
+                    Rectangle {
+                        width: 200px; height: 10px; background: #333;
+                        Rectangle {
+                            width: 200px * MaterialEditor.mamba-confidence;
+                            height: 10px;
+                            background: #0f0;
+                        }
+                    }
+                    Text { text: "{Math.round(MaterialEditor.mamba-confidence * 100)}%"; color: white; }
+                }
+
+                HorizontalLayout {
+                    Text { text: "Gradient Loss: "; width: 80px; color: white; }
+                    Text {
+                        text: "{Math.round(MaterialEditor.mamba-loss * 10000) / 10000}";
+                        color: MaterialEditor.mamba-loss < 0.1 ? #0f0 : (MaterialEditor.mamba-loss < 0.5 ? #ff0 : #f00);
+                    }
+                }
+
+                HorizontalLayout {
+                    spacing: 10px;
+                    Button {
+                        text: "Start Learning";
+                        width: 100px;
+                        clicked => { MaterialEditor.start_mamba_learning(); }
+                    }
+                    Button {
+                        text: "Reset Properties";
+                        width: 100px;
+                        clicked => { MaterialEditor.reset_material_properties(); }
+                    }
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────
+        // 3D PLACEMENT
+        // ─────────────────────────────────────────────────────
+        Rectangle {
+            background: #222;
+            border-color: #444;
+            border-width: 2px;
+            height: 150px;
+
+            VerticalLayout {
+                padding: 10px;
+                spacing: 5px;
+
+                Text { text: "Material Point Placement (in 3D wavefield)"; font-weight: bold; color: white; }
+
+                Text {
+                    text: "Click in 3D view to place this material at cursor position\nMaterials can move (velocity_xyz) to simulate sloshing water, breathing, etc.";
+                    color: #888;
+                    wrap: word-wrap;
+                }
+
+                HorizontalLayout {
+                    Button {
+                        text: "Place Material Point";
+                        clicked => { MaterialEditor.enable_material_placement(); }
+                    }
+
+                    Button {
+                        text: "Visualize Points";
+                        clicked => { MaterialEditor.show_material_cloud(); }
+                    }
+
+                    Button {
+                        text: "Export Library";
+                        clicked => { MaterialEditor.export_materials_json(); }
+                    }
+                }
+            }
+        }
+    }
+}

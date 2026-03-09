@@ -11,8 +11,8 @@ use std::fs::{File, OpenOptions, create_dir_all};
 use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
-use tokio::sync::mpsc;
 use tokio::io::AsyncWriteExt;
+use tokio::sync::mpsc;
 
 pub fn get_current_micros() -> u64 {
     SystemTime::now()
@@ -27,7 +27,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // Audio Processing Events (Track A)
     // ─────────────────────────────────────────────────────
-
     AudioFrameProcessed {
         timestamp_micros: u64,
         device_idx: u32,
@@ -49,7 +48,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // RF Detection Events (Track A)
     // ─────────────────────────────────────────────────────
-
     RFDetection {
         timestamp_micros: u64,
         frequency_hz: f32,
@@ -71,7 +69,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // TDOA Events (Spatial Analysis)
     // ─────────────────────────────────────────────────────
-
     TDOAEstimation {
         timestamp_micros: u64,
         mic_pair_indices: [u32; 2],
@@ -84,7 +81,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // Mamba Anomaly Detection (Track D)
     // ─────────────────────────────────────────────────────
-
     MambaInference {
         timestamp_micros: u64,
         input_dimension: u32,
@@ -113,7 +109,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // Training & Convergence (Track D)
     // ─────────────────────────────────────────────────────
-
     TrainingStepCompleted {
         timestamp_micros: u64,
         epoch: u32,
@@ -134,7 +129,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // Temporal Analysis (Phase 2C)
     // ─────────────────────────────────────────────────────
-
     MotifDiscovered {
         timestamp_micros: u64,
         motif_id: u32,
@@ -156,7 +150,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // GUI & Control Events (Track B)
     // ─────────────────────────────────────────────────────
-
     ControlAction {
         timestamp_micros: u64,
         action: String,
@@ -177,7 +170,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // Forensic Checkpoint (Track E)
     // ─────────────────────────────────────────────────────
-
     SessionStart {
         timestamp_micros: u64,
         app_version: String,
@@ -193,7 +185,6 @@ pub enum ForensicEvent {
     // ─────────────────────────────────────────────────────
     // Error & Recovery (Track E)
     // ─────────────────────────────────────────────────────
-
     EventValidationError {
         timestamp_micros: u64,
         original_event: String,
@@ -278,11 +269,13 @@ impl EventValidator {
             }
 
             ForensicEvent::MambaInference {
-                reconstruction_mse,
-                ..
+                reconstruction_mse, ..
             } => {
                 if !reconstruction_mse.is_finite() || *reconstruction_mse < 0.0 {
-                    return Err(format!("Invalid reconstruction_mse: {}", reconstruction_mse));
+                    return Err(format!(
+                        "Invalid reconstruction_mse: {}",
+                        reconstruction_mse
+                    ));
                 }
                 Ok(())
             }
@@ -355,7 +348,11 @@ impl LogRecoveryStrategy {
         match error {
             LogError::DiskFull => {
                 eprintln!("[Forensic] Disk full! Rotating log file...");
-                let rotated_path = format!("{}.{}.backup", original_path, chrono::Utc::now().format("%Y-%m-%d-%H%M%S"));
+                let rotated_path = format!(
+                    "{}.{}.backup",
+                    original_path,
+                    chrono::Utc::now().format("%Y-%m-%d-%H%M%S")
+                );
                 // Try renaming
                 let _ = tokio::fs::rename(original_path, &rotated_path).await;
                 // Create fresh file
@@ -377,16 +374,16 @@ impl LogRecoveryStrategy {
                     .await
                     .map_err(|e| LogError::IOError(e.to_string()))?;
                 let line = serde_json::to_string(event).unwrap() + "\n";
-                file.write_all(line.as_bytes()).await.map_err(|e| LogError::IOError(e.to_string()))?;
+                file.write_all(line.as_bytes())
+                    .await
+                    .map_err(|e| LogError::IOError(e.to_string()))?;
                 Ok(file)
             }
             LogError::IOError(msg) => {
                 eprintln!("[Forensic] IO error: {}", msg);
                 Err(LogError::IOError(msg))
             }
-            LogError::ValidationError(_) => {
-                Err(error)
-            }
+            LogError::ValidationError(_) => Err(error),
         }
     }
 }
@@ -400,13 +397,17 @@ pub struct ForensicLogger {
 impl ForensicLogger {
     pub async fn new(session_id: &str) -> Result<Self, LogError> {
         let dir = PathBuf::from("forensic_log");
-        tokio::fs::create_dir_all(&dir).await.map_err(|e| LogError::IOError(e.to_string()))?;
+        tokio::fs::create_dir_all(&dir)
+            .await
+            .map_err(|e| LogError::IOError(e.to_string()))?;
 
         let filename = format!("{}.jsonl", session_id.replace(':', "-"));
         let log_path = dir.join(&filename);
 
         if !log_path.exists() {
-            tokio::fs::File::create(&log_path).await.map_err(|e| LogError::IOError(e.to_string()))?;
+            tokio::fs::File::create(&log_path)
+                .await
+                .map_err(|e| LogError::IOError(e.to_string()))?;
         }
 
         let (sender, mut receiver) = mpsc::unbounded_channel();
@@ -443,8 +444,15 @@ impl ForensicLogger {
                             Ok(_) => {
                                 let _ = file.sync_all().await;
                             }
-                            Err(e) if e.kind() == std::io::ErrorKind::OutOfMemory => { // Approximation of ENOSPC
-                                match LogRecoveryStrategy::handle_error(LogError::DiskFull, &event, log_path_clone.to_str().unwrap()).await {
+                            Err(e) if e.kind() == std::io::ErrorKind::OutOfMemory => {
+                                // Approximation of ENOSPC
+                                match LogRecoveryStrategy::handle_error(
+                                    LogError::DiskFull,
+                                    &event,
+                                    log_path_clone.to_str().unwrap(),
+                                )
+                                .await
+                                {
                                     Ok(new_file) => {
                                         file = new_file;
                                         let _ = file.write_all(line.as_bytes()).await;
@@ -455,9 +463,20 @@ impl ForensicLogger {
                                 }
                             }
                             Err(e) if e.kind() == std::io::ErrorKind::PermissionDenied => {
-                                match LogRecoveryStrategy::handle_error(LogError::PermissionDenied, &event, log_path_clone.to_str().unwrap()).await {
-                                    Ok(new_file) => { file = new_file; }
-                                    Err(err) => eprintln!("[Forensic] Permission recovery failed: {:?}", err),
+                                match LogRecoveryStrategy::handle_error(
+                                    LogError::PermissionDenied,
+                                    &event,
+                                    log_path_clone.to_str().unwrap(),
+                                )
+                                .await
+                                {
+                                    Ok(new_file) => {
+                                        file = new_file;
+                                    }
+                                    Err(err) => eprintln!(
+                                        "[Forensic] Permission recovery failed: {:?}",
+                                        err
+                                    ),
                                 }
                             }
                             Err(e) => {
@@ -470,16 +489,25 @@ impl ForensicLogger {
             }
         });
 
-        Ok(Self {
-            sender,
-            log_path,
-        })
+        Ok(Self { sender, log_path })
     }
 
-    pub fn log_gate_decision(&mut self, score: f32, confidence: f32, threshold: f32, forward: bool, reason: &str) -> anyhow::Result<()> {
+    pub fn log_gate_decision(
+        &mut self,
+        score: f32,
+        confidence: f32,
+        threshold: f32,
+        forward: bool,
+        reason: &str,
+    ) -> anyhow::Result<()> {
         let now = std::time::SystemTime::now();
-        let unix_ts = now.duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_secs_f64();
-        let utc_ts = chrono::DateTime::from_timestamp(unix_ts as i64, 0).unwrap_or_default().to_rfc3339();
+        let unix_ts = now
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs_f64();
+        let utc_ts = chrono::DateTime::from_timestamp(unix_ts as i64, 0)
+            .unwrap_or_default()
+            .to_rfc3339();
 
         let event = ForensicEvent {
             id: format!("gate_{}", unix_ts),
@@ -515,8 +543,11 @@ impl ForensicLogger {
         // Log as forensic event
         let record = serde_json::to_string(&forensic_event)?;
         writeln!(self.writer, "{}", record)?;
+        self.writer.flush()?;
+        Ok(())
+    }
 
-    pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
+    pub fn log_detection_v2(&self, event: &DetectionEvent) -> Result<(), LogError> {
         // Map old DetectionEvent to ForensicEvent V2
         let confidence = (event.magnitude * event.coherence_frames as f32).min(1.0);
         let fe = ForensicEvent::Bispectrum {
@@ -561,7 +592,7 @@ impl ForensicLogger {
         let session_end = ForensicEvent::SessionEnd {
             timestamp_micros: get_current_micros(),
             events_logged_this_session: 0, // Simplified for now since counting requires shared state
-            total_events: 0, // Placeholder
+            total_events: 0,               // Placeholder
         };
 
         let _ = self.sender.send(session_end);
@@ -587,7 +618,10 @@ impl ForensicLogger {
     ) -> anyhow::Result<()> {
         use std::io::BufReader;
 
-        println!("[Forensic] Generating evidence report for case: {}", case_number);
+        println!(
+            "[Forensic] Generating evidence report for case: {}",
+            case_number
+        );
         let file = File::open(&self.log_path)?;
         let reader = BufReader::new(file);
 
@@ -663,10 +697,23 @@ impl ForensicLogger {
         );
 
         for event in &events {
-            let event_type = event.get("event_type").and_then(|v| v.as_str()).unwrap_or("Unknown");
-            let timestamp = event.get("timestamp_micros").and_then(|v| v.as_u64()).unwrap_or(0);
-            let freq = event.get("f1_hz").or_else(|| event.get("frequency_hz")).and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let confidence = event.get("confidence").and_then(|v| v.as_f64()).unwrap_or(0.0);
+            let event_type = event
+                .get("event_type")
+                .and_then(|v| v.as_str())
+                .unwrap_or("Unknown");
+            let timestamp = event
+                .get("timestamp_micros")
+                .and_then(|v| v.as_u64())
+                .unwrap_or(0);
+            let freq = event
+                .get("f1_hz")
+                .or_else(|| event.get("frequency_hz"))
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
+            let confidence = event
+                .get("confidence")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
 
             html.push_str(&format!(
                 r#"
@@ -681,7 +728,8 @@ impl ForensicLogger {
             ));
         }
 
-        html.push_str(&format!(r#"
+        html.push_str(&format!(
+            r#"
     </table>
     <div class="footer">
         <p>Generated: {} | Case: {} | Events: {}</p>
@@ -694,16 +742,35 @@ impl ForensicLogger {
         ));
 
         std::fs::write(output_path, html)?;
-        println!("[Forensic] Evidence report exported: {} ({} events)", output_path, events.len());
+        println!(
+            "[Forensic] Evidence report exported: {} ({} events)",
+            output_path,
+            events.len()
+        );
 
         let csv_path = output_path.replace(".html", ".csv");
         let mut csv_writer = csv::Writer::from_path(&csv_path)?;
-        csv_writer.write_record(&["timestamp_micros", "event_type", "frequency_hz", "confidence"])?;
+        csv_writer.write_record(&[
+            "timestamp_micros",
+            "event_type",
+            "frequency_hz",
+            "confidence",
+        ])?;
         for event in events {
             if let Some(event_type) = event.get("event_type").and_then(|v| v.as_str()) {
-                let ts = event.get("timestamp_micros").and_then(|v| v.as_u64()).unwrap_or(0);
-                let freq = event.get("f1_hz").or_else(|| event.get("frequency_hz")).and_then(|v| v.as_f64()).unwrap_or(0.0);
-                let conf = event.get("confidence").and_then(|v| v.as_f64()).unwrap_or(0.0);
+                let ts = event
+                    .get("timestamp_micros")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0);
+                let freq = event
+                    .get("f1_hz")
+                    .or_else(|| event.get("frequency_hz"))
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0);
+                let conf = event
+                    .get("confidence")
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0);
                 csv_writer.write_record(&[
                     ts.to_string(),
                     event_type.to_string(),
@@ -718,7 +785,9 @@ impl ForensicLogger {
 }
 
 pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
-    let file = tokio::fs::read_to_string(log_file).await.map_err(|e| e.to_string())?;
+    let file = tokio::fs::read_to_string(log_file)
+        .await
+        .map_err(|e| e.to_string())?;
 
     let mut valid_count = 0;
     let mut invalid_count = 0;
@@ -733,18 +802,33 @@ pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
         match serde_json::from_str::<ForensicEvent>(line) {
             Ok(event) => {
                 let ts = match &event {
-                    ForensicEvent::SessionStart { timestamp_micros, .. } => *timestamp_micros,
-                    ForensicEvent::AudioFrameProcessed { timestamp_micros, .. } => *timestamp_micros,
-                    ForensicEvent::RFDetection { timestamp_micros, .. } => *timestamp_micros,
-                    ForensicEvent::MambaInference { timestamp_micros, .. } => *timestamp_micros,
-                    ForensicEvent::Bispectrum { timestamp_micros, .. } => *timestamp_micros,
-                    ForensicEvent::SessionEnd { timestamp_micros, .. } => *timestamp_micros,
+                    ForensicEvent::SessionStart {
+                        timestamp_micros, ..
+                    } => *timestamp_micros,
+                    ForensicEvent::AudioFrameProcessed {
+                        timestamp_micros, ..
+                    } => *timestamp_micros,
+                    ForensicEvent::RFDetection {
+                        timestamp_micros, ..
+                    } => *timestamp_micros,
+                    ForensicEvent::MambaInference {
+                        timestamp_micros, ..
+                    } => *timestamp_micros,
+                    ForensicEvent::Bispectrum {
+                        timestamp_micros, ..
+                    } => *timestamp_micros,
+                    ForensicEvent::SessionEnd {
+                        timestamp_micros, ..
+                    } => *timestamp_micros,
                     _ => 0,
                 };
 
                 if ts > 0 && ts < last_timestamp {
                     out_of_order_count += 1;
-                    eprintln!("[Forensic] Event {} out of order: {} < {}", line_num, ts, last_timestamp);
+                    eprintln!(
+                        "[Forensic] Event {} out of order: {} < {}",
+                        line_num, ts, last_timestamp
+                    );
                 }
                 last_timestamp = ts.max(last_timestamp);
 
@@ -762,12 +846,17 @@ pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
         }
     }
 
-    eprintln!("[Forensic] Integrity check: {} valid, {} invalid, {} out of order",
-              valid_count, invalid_count, out_of_order_count);
+    eprintln!(
+        "[Forensic] Integrity check: {} valid, {} invalid, {} out of order",
+        valid_count, invalid_count, out_of_order_count
+    );
 
     if invalid_count == 0 && out_of_order_count == 0 {
         Ok(())
     } else {
-        Err(format!("{} errors found", invalid_count + out_of_order_count))
+        Err(format!(
+            "{} errors found",
+            invalid_count + out_of_order_count
+        ))
     }
 }

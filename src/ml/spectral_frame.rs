@@ -33,7 +33,6 @@ impl Default for SpectralFrame {
     }
 }
 
-
 impl SpectralFrame {
     pub fn new(
         timestamp_micros: u64,
@@ -56,12 +55,13 @@ impl SpectralFrame {
     }
 
     pub fn is_valid(&self) -> bool {
-        self.fft_magnitude.iter().all(|x| x.is_finite()) &&
-        self.bispectrum.iter().all(|x| x.is_finite()) &&
-        self.itd_ild.iter().all(|x| x.is_finite()) &&
-        self.beamformer_outputs.iter().all(|x| x.is_finite()) &&
-        self.mamba_anomaly_score.is_finite() &&
-        self.confidence.is_finite() &&
-        self.confidence >= 0.0 && self.confidence <= 1.0
+        self.fft_magnitude.iter().all(|x| x.is_finite())
+            && self.bispectrum.iter().all(|x| x.is_finite())
+            && self.itd_ild.iter().all(|x| x.is_finite())
+            && self.beamformer_outputs.iter().all(|x| x.is_finite())
+            && self.mamba_anomaly_score.is_finite()
+            && self.confidence.is_finite()
+            && self.confidence >= 0.0
+            && self.confidence <= 1.0
     }
 }

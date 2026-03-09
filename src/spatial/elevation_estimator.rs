@@ -31,10 +31,10 @@ impl ElevationEstimator {
     pub fn new() -> Self {
         Self {
             device_positions: [
-                Vec3::new(0.0, 0.0, 0.2),    // Device 0 (C925e, top)
-                Vec3::new(0.5, 0.0, 0.0),    // Device 1 (Rear Pink, middle)
-                Vec3::new(1.0, 0.0, -0.2),   // Device 2 (Rear Blue, bottom)
-                Vec3::new(0.25, 0.0, 0.5),   // Device 3 (RTL-SDR, external/elevated)
+                Vec3::new(0.0, 0.0, 0.2),  // Device 0 (C925e, top)
+                Vec3::new(0.5, 0.0, 0.0),  // Device 1 (Rear Pink, middle)
+                Vec3::new(1.0, 0.0, -0.2), // Device 2 (Rear Blue, bottom)
+                Vec3::new(0.25, 0.0, 0.5), // Device 3 (RTL-SDR, external/elevated)
             ],
             energy_history: VecDeque::with_capacity(10),
             elevation_smoothing_window: 10,
@@ -50,11 +50,7 @@ impl ElevationEstimator {
     ///
     /// # Returns
     /// (elevation_rad, confidence) where elevation ∈ [-π/2, π/2]
-    pub fn estimate_elevation(
-        &mut self,
-        amplitudes: &[f32; 4],
-        _azimuth_rad: f32,
-    ) -> (f32, f32) {
+    pub fn estimate_elevation(&mut self, amplitudes: &[f32; 4], _azimuth_rad: f32) -> (f32, f32) {
         // Store in history
         if self.energy_history.len() == self.elevation_smoothing_window {
             self.energy_history.pop_front();
@@ -92,7 +88,8 @@ impl ElevationEstimator {
         let raw_elevation = ratio.ln() * 0.5; // Scale factor 0.5 to keep it reasonable
 
         // Clamp to [-π/2, π/2]
-        let clamped_elevation = raw_elevation.clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
+        let clamped_elevation =
+            raw_elevation.clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
 
         self.smoothed_elevation = self.smooth_elevation(clamped_elevation);
 
@@ -112,7 +109,8 @@ impl ElevationEstimator {
         // path loss from a hypothetical source to each microphone given az/el.
         let mut losses = [0.0; 4];
         for i in 0..4 {
-             losses[i] = 20.0 * (self.device_positions[i].x.max(0.1)).log10() + 20.0 * freq_hz.log10();
+            losses[i] =
+                20.0 * (self.device_positions[i].x.max(0.1)).log10() + 20.0 * freq_hz.log10();
         }
         losses
     }

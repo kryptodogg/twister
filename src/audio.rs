@@ -856,7 +856,6 @@ pub fn reject_pdm_spikes(buffer: &[f32]) -> (Vec<f32>, usize) {
     (output, spike_count)
 }
 
-
 pub fn fft_to_mel_scale(fft_512: &[f32; 512]) -> [f32; 128] {
     let mut mel = [0.0f32; 128];
     // Simple linear decimation for mock mel-scale

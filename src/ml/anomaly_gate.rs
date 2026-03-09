@@ -24,7 +24,10 @@ pub fn evaluate_gate(
         return AnomalyGateDecision {
             forward_to_trainer: true,
             confidence: (mamba_score / 10.0).min(1.0), // Assuming 10.0 is near-max expected score
-            reason: format!("Mamba anomaly {:.2} >= threshold {:.2}", mamba_score, threshold),
+            reason: format!(
+                "Mamba anomaly {:.2} >= threshold {:.2}",
+                mamba_score, threshold
+            ),
         };
     }
 
@@ -51,7 +54,7 @@ pub fn evaluate_gate(
     }
 
     if mean > 1e-6 && max_val > mean * 15.0 {
-         return AnomalyGateDecision {
+        return AnomalyGateDecision {
             forward_to_trainer: true,
             confidence: 0.7,
             reason: "Coherent spectral peak detected".to_string(),

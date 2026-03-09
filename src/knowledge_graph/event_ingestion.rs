@@ -1,8 +1,8 @@
-use crate::knowledge_graph::cognee_schema::{EventNode, PatternNode};
 use crate::knowledge_graph::KnowledgeGraphClient;
+use crate::knowledge_graph::cognee_schema::{EventNode, PatternNode};
+use chrono::Utc;
 use std::sync::Arc;
 use tokio::sync::mpsc;
-use chrono::Utc;
 
 /// The Graph Ingestion Pipeline consumes Semantic Events from Tracks A-D asynchronously,
 /// adding them to the Neo4j Knowledge Graph without blocking the dispatch loop.
@@ -13,16 +13,12 @@ pub struct GraphIngestionPipeline {
 
 impl GraphIngestionPipeline {
     /// Initialize the pipeline with a Neo4j client and return the sender half.
-    pub fn new(neo4j_client: Arc<KnowledgeGraphClient>) -> (mpsc::UnboundedSender<EventNode>, Self) {
+    pub fn new(
+        neo4j_client: Arc<KnowledgeGraphClient>,
+    ) -> (mpsc::UnboundedSender<EventNode>, Self) {
         // Use an unbounded channel to ensure the dispatch loop never blocks
         let (tx, rx) = mpsc::unbounded_channel();
-        (
-            tx,
-            Self {
-                rx,
-                neo4j_client,
-            },
-        )
+        (tx, Self { rx, neo4j_client })
     }
 
     /// Run the ingestion loop. This should be spawned in a Tokio task.
@@ -43,7 +39,10 @@ impl GraphIngestionPipeline {
                 match client.find_matching_patterns(&event).await {
                     Ok(patterns) => {
                         for pattern_id in patterns {
-                            if let Err(e) = client.link_event_to_pattern(event.event_id, pattern_id).await {
+                            if let Err(e) = client
+                                .link_event_to_pattern(event.event_id, pattern_id)
+                                .await
+                            {
                                 eprintln!("Failed to link Event to Pattern {}: {}", pattern_id, e);
                             }
                         }
