@@ -261,12 +261,12 @@ pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
     let direct_path_strength = 1.0;
 
     // Collect delays and angles
-    let mut delays_ms: Vec<f32> = all_rays.iter().map(|(_, _, d, _)| *d).collect();
+    let delays_ms: Vec<f32> = all_rays.iter().map(|(_, _, d, _)| *d).collect();
     let azimuths: Vec<f32> = all_rays.iter().map(|(az, _, _, _)| *az).collect();
     let elevations: Vec<f32> = all_rays.iter().map(|(_, el, _, _)| *el).collect();
 
     // Compute feature histograms
-    let mut reflection_delays_32 = histogram_delays(&delays_ms, DELAY_BIN_COUNT);
+    let reflection_delays_32 = histogram_delays(&delays_ms, DELAY_BIN_COUNT);
     let diffuse_distribution_32 = histogram_delays(&delays_ms, DIFFUSE_BIN_COUNT);
     let room_modes_4 = compute_room_modes(&image.room_dimension_m);
     let azimuth_ray_density_16 = histogram_angles(&azimuths, AZIMUTH_BIN_COUNT, (-PI, PI));

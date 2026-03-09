@@ -16,11 +16,11 @@
 //   - Autosave every SAVE_INTERVAL_EPOCHS epochs.
 
 use crossbeam_channel::Receiver;
-use std::sync::atomic::Ordering;
 use std::sync::Arc;
+use std::sync::atomic::Ordering;
 use std::time::{Duration, Instant};
 
-use crate::mamba::{OnlineTrainer, MAMBA_CONTEXT_LEN, MAMBA_INPUT_BINS};
+use crate::mamba::{MAMBA_CONTEXT_LEN, MAMBA_INPUT_BINS, OnlineTrainer};
 use crate::state::AppState;
 use crate::vbuffer::V_FREQ_BINS;
 

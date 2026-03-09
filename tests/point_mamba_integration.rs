@@ -17,7 +17,7 @@
 #[cfg(test)]
 mod point_mamba_tests {
     use twister::ml::PointMambaTrainingConfig;
-    use twister::visualization::{intensity_to_rgb, GaussianSplatRenderer};
+    use twister::visualization::{GaussianSplatRenderer, intensity_to_rgb};
 
     // ============================================================================
     // PHASE 3A: PointNet Encoder Tests

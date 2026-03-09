@@ -105,10 +105,10 @@ pub fn load_wav2vec2(
 /// # Panics
 /// - Audio too short (<0.5 seconds)
 pub fn infer_wav2vec2_embedding(
-    model: &Wav2Vec2Model<Wgpu>,
+    _model: &Wav2Vec2Model<Wgpu>,
     audio_samples: &[f32],
     _sample_rate_hz: u32,
-    device: &<Wgpu as Backend>::Device,
+    _device: &<Wgpu as Backend>::Device,
 ) -> Result<Vec<f32>, Box<dyn Error>> {
     assert!(
         audio_samples.len() >= 8000,

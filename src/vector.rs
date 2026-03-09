@@ -1,9 +1,9 @@
 use anyhow::{Context, Result};
-use qdrant_client::qdrant::{
-    value::Kind, CreateCollectionBuilder, Distance, PointStruct, SearchPointsBuilder,
-    UpsertPointsBuilder, Value, VectorParams, VectorsConfig,
-};
 use qdrant_client::Qdrant;
+use qdrant_client::qdrant::{
+    CreateCollectionBuilder, Distance, PointStruct, SearchPointsBuilder, UpsertPointsBuilder,
+    Value, VectorParams, VectorsConfig, value::Kind,
+};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

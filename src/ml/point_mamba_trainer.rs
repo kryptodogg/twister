@@ -10,7 +10,6 @@
 //! **Gradient clipping**: L2 norm <= 1.0
 //! **Convergence**: 2.5-3.0 → 1.2 → 0.7 → 0.35-0.45
 
-use burn::tensor::{Tensor, backend::Backend};
 use std::collections::VecDeque;
 
 /// Training configuration
@@ -242,14 +241,14 @@ impl PointMambaTrainer {
             crate::ml::modular_features::SignalFeaturePayload,
             burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>,
         )],
-        flags: &crate::ml::modular_features::FeatureFlags,
+        _flags: &crate::ml::modular_features::FeatureFlags,
     ) -> Result<f32, String> {
         // Implement the masked input logic for the 361-D vector, ensuring inactive features
         // use a binary mask tensor to prevent accumulating zero noise in the S6 selective scan.
 
         let mut total_loss = 0.0;
 
-        for (payload, feature_vec) in batch {
+        for (_payload, feature_vec) in batch {
             // For MVP, we simulate a forward pass and loss calculation since the actual model
             // is not fully wired in this struct. In production, this would call self.model.forward()
             // Here we just ensure the tensor size is correct (196 to 361 depending on flags)

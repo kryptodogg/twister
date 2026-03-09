@@ -1,20 +1,19 @@
+use crate::anc_calibration::FullRangeCalibration;
 use burn::tensor::backend::Backend;
 use burn::tensor::{Tensor, TensorData};
-use crate::forensic::ForensicEvent;
-use crate::anc_calibration::FullRangeCalibration;
 use serde::{Deserialize, Serialize};
 
 /// Modular feature toggles for ML analysis and active denial
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct FeatureFlags {
-    pub use_audio: bool,              // Always true (baseline 196-D)
-    pub use_anc_phase: bool,          // +64-D
-    pub use_vbuffer_coherence: bool,  // +64-D
-    pub use_tdoa_confidence: bool,    // +1-D
-    pub use_multi_device_corr: bool,  // +4-D
+    pub use_audio: bool,             // Always true (baseline 196-D)
+    pub use_anc_phase: bool,         // +64-D
+    pub use_vbuffer_coherence: bool, // +64-D
+    pub use_tdoa_confidence: bool,   // +1-D
+    pub use_multi_device_corr: bool, // +4-D
     pub use_harmonic_analysis: bool,
     pub use_impulse_detection: bool,
-    pub use_impulse_phase_lock: bool,  // +32-D
+    pub use_impulse_phase_lock: bool, // +32-D
 }
 
 impl Default for FeatureFlags {
@@ -73,16 +72,20 @@ impl<B: Backend> ModularFeatureExtractor<B> {
     /// Extract features and apply binary masking based on flags
     /// Input: SignalFeaturePayload
     /// Output: (361-D Feature Tensor, Binary Mask Tensor)
-    pub fn extract(&self, payload: &SignalFeaturePayload, flags: &FeatureFlags) -> (Tensor<B, 1>, Tensor<B, 1>) {
+    pub fn extract(
+        &self,
+        payload: &SignalFeaturePayload,
+        flags: &FeatureFlags,
+    ) -> (Tensor<B, 1>, Tensor<B, 1>) {
         // 1. Audio Baseline (196-D)
         // Here we'd perform STFT or just load dummy features for MVP
         // Since we need to keep everything on VRAM, we construct a tensor directly.
         // For MVP, we'll generate a random 196-D tensor or extract from audio.
         let mut audio_features = vec![0.0f32; 196];
         if !payload.audio_samples.is_empty() {
-             for i in 0..196.min(payload.audio_samples.len()) {
-                 audio_features[i] = payload.audio_samples[i];
-             }
+            for i in 0..196.min(payload.audio_samples.len()) {
+                audio_features[i] = payload.audio_samples[i];
+            }
         }
 
         let mut features = audio_features;
@@ -102,7 +105,14 @@ impl<B: Backend> ModularFeatureExtractor<B> {
         } else {
             features.extend(vec![0.0f32; 64]);
         }
-        mask.extend(vec![if flags.use_vbuffer_coherence { 1.0f32 } else { 0.0f32 }; 64]);
+        mask.extend(vec![
+            if flags.use_vbuffer_coherence {
+                1.0f32
+            } else {
+                0.0f32
+            };
+            64
+        ]);
 
         // 4. TDOA Confidence (1-D)
         if let Some(tdoa) = payload.tdoa_confidence {
@@ -110,7 +120,11 @@ impl<B: Backend> ModularFeatureExtractor<B> {
         } else {
             features.push(0.0);
         }
-        mask.push(if flags.use_tdoa_confidence { 1.0f32 } else { 0.0f32 });
+        mask.push(if flags.use_tdoa_confidence {
+            1.0f32
+        } else {
+            0.0f32
+        });
 
         // 5. Multi-device Correlation (4-D)
         if let Some(corr) = &payload.device_corr {
@@ -118,7 +132,14 @@ impl<B: Backend> ModularFeatureExtractor<B> {
         } else {
             features.extend(vec![0.0f32; 4]);
         }
-        mask.extend(vec![if flags.use_multi_device_corr { 1.0f32 } else { 0.0f32 }; 4]);
+        mask.extend(vec![
+            if flags.use_multi_device_corr {
+                1.0f32
+            } else {
+                0.0f32
+            };
+            4
+        ]);
 
         // 6. Harmonic Energy (32-D)
         if let Some(harm) = &payload.harmonic_energy {
@@ -126,14 +147,23 @@ impl<B: Backend> ModularFeatureExtractor<B> {
         } else {
             features.extend(vec![0.0f32; 32]);
         }
-        mask.extend(vec![if flags.use_harmonic_analysis { 1.0f32 } else { 0.0f32 }; 32]);
+        mask.extend(vec![
+            if flags.use_harmonic_analysis {
+                1.0f32
+            } else {
+                0.0f32
+            };
+            32
+        ]);
 
         // Pad to exactly 361-D if needed (196 + 64 + 64 + 1 + 4 + 32 = 361)
         assert_eq!(features.len(), 361);
         assert_eq!(mask.len(), 361);
 
-        let feature_tensor = Tensor::<B, 1>::from_data(TensorData::from(features.as_slice()), &self.device);
-        let mask_tensor = Tensor::<B, 1>::from_data(TensorData::from(mask.as_slice()), &self.device);
+        let feature_tensor =
+            Tensor::<B, 1>::from_data(TensorData::from(features.as_slice()), &self.device);
+        let mask_tensor =
+            Tensor::<B, 1>::from_data(TensorData::from(mask.as_slice()), &self.device);
 
         // Apply binary masking to zero-out inactive features
         let masked_features = feature_tensor.mul(mask_tensor.clone());
@@ -150,9 +180,9 @@ pub struct ActiveDenialToggles {
 }
 
 pub fn apply_active_denial_toggle(
-    signal: &mut [f32],
+    _signal: &mut [f32],
     flags: &FeatureFlags,
-    anc_lut: &FullRangeCalibration,
+    _anc_lut: &FullRangeCalibration,
     // harmonics_synth: &HarmonicSynthesizer, // Add back when synthesizer exists
 ) {
     if flags.use_anc_phase {

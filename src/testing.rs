@@ -24,7 +24,7 @@
 //       }
 //   }
 
-use crate::bispectrum::{BispectrumEngine, BISPEC_BINS, BISPEC_FFT_SIZE, FFT_BUFFER_SIZE};
+use crate::bispectrum::{BISPEC_BINS, BISPEC_FFT_SIZE, BispectrumEngine, FFT_BUFFER_SIZE};
 use crate::detection::{DetectionEvent, HardwareLayer, ProductType};
 use std::collections::HashMap;
 use std::f32::consts::TAU;

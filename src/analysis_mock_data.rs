@@ -322,7 +322,7 @@ pub fn heat_map_color(importance: f32) -> String {
             (b * 255.0) as u8
         )
     } else {
-        let r = 1.0;
+        let _r = 1.0;
         let gb = (clamped - 0.5) * 2.0;
         format!(
             "#{:02x}{:02x}{:02x}",

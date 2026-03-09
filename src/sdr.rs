@@ -6,9 +6,9 @@
 // "device not found" and this thread parks itself gracefully.
 
 use crossbeam_channel::bounded;
-use rustfft::{num_complex::Complex, FftPlanner};
-use std::sync::atomic::Ordering;
+use rustfft::{FftPlanner, num_complex::Complex};
 use std::sync::Arc;
+use std::sync::atomic::Ordering;
 use std::time::Duration;
 
 use crate::rtlsdr::RtlSdrEngine;

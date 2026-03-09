@@ -1,5 +1,5 @@
 use burn::prelude::Module;
-use burn::tensor::{Distribution, Tensor, backend::Backend};
+use burn::tensor::{Tensor, backend::Backend};
 use std::error::Error;
 
 /// Point Decoder: Mamba Features (N, 128) → 3D Offsets (N, 3)

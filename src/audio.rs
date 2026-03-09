@@ -9,16 +9,16 @@
 // Transition width = 0.1 * min(in_rate, out_rate) — adequate for TDOA.
 // Filter length L = 2*half_taps+1, computed from transition width requirement.
 
-use crate::state::{AppState, AGC_MAX_GAIN_DB, AGC_MIN_GAIN_DB, AGC_TARGET_DBFS};
+use crate::state::{AGC_MAX_GAIN_DB, AGC_MIN_GAIN_DB, AGC_TARGET_DBFS, AppState};
 use cpal::{
-    traits::{DeviceTrait, HostTrait, StreamTrait},
     SampleFormat,
+    traits::{DeviceTrait, HostTrait, StreamTrait},
 };
-use crossbeam_channel::{bounded, Receiver, Sender};
-use rustfft::{num_complex::Complex, FftPlanner};
+use crossbeam_channel::{Receiver, Sender, bounded};
+use rustfft::{FftPlanner, num_complex::Complex};
 use std::f32::consts::PI;
-use std::sync::atomic::Ordering;
 use std::sync::Arc;
+use std::sync::atomic::Ordering;
 
 pub const BASEBAND_FFT_SIZE: usize = 2048;
 pub const TDOA_FFT_SIZE: usize = 4096;
