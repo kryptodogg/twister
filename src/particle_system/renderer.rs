@@ -1,7 +1,7 @@
-use std::sync::Arc;
-use wgpu::util::DeviceExt;
 use crate::gpu_shared::GpuShared;
 use crate::particle_system::frustum_culler::FrustumCuller;
+use std::sync::Arc;
+use wgpu::util::DeviceExt;
 
 pub struct ParticleRenderer {
     shared: Arc<GpuShared>,
@@ -11,7 +11,11 @@ pub struct ParticleRenderer {
 }
 
 impl ParticleRenderer {
-    pub fn new(shared: Arc<GpuShared>, max_particles: u32, target_format: wgpu::TextureFormat) -> Self {
+    pub fn new(
+        shared: Arc<GpuShared>,
+        max_particles: u32,
+        target_format: wgpu::TextureFormat,
+    ) -> Self {
         let device = &shared.device;
 
         let particle_buffer = device.create_buffer(&wgpu::BufferDescriptor {
@@ -110,11 +114,7 @@ impl ParticleRenderer {
         }
     }
 
-    pub fn render<'a>(
-        &'a self,
-        render_pass: &mut wgpu::RenderPass<'a>,
-        culler: &'a FrustumCuller,
-    ) {
+    pub fn render<'a>(&'a self, render_pass: &mut wgpu::RenderPass<'a>, culler: &'a FrustumCuller) {
         let device = &self.shared.device;
 
         let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {

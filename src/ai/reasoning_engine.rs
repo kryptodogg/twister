@@ -1,6 +1,6 @@
-use crate::knowledge_graph::KnowledgeGraphClient;
-use crate::ai::query_tools::{Tool, FindEventsByLocationTool, FindPatternForFrequencyTool};
 use crate::ai::evidence_chain::{EvidenceChain, ReasoningStep};
+use crate::ai::query_tools::{FindEventsByLocationTool, FindPatternForFrequencyTool, Tool};
+use crate::knowledge_graph::KnowledgeGraphClient;
 use std::sync::Arc;
 use std::time::Instant;
 
@@ -56,7 +56,10 @@ impl ReasoningEngine {
             };
             chain.add_step(step2);
 
-            let res = tool.execute("{\"azimuth\": 45.0}", &self.graph).await.unwrap_or_else(|e| (format!("Error: {}", e), vec![]));
+            let res = tool
+                .execute("{\"azimuth\": 45.0}", &self.graph)
+                .await
+                .unwrap_or_else(|e| (format!("Error: {}", e), vec![]));
             let result_str = res.0;
             source_ids = res.1;
             final_confidence = 0.97;
@@ -69,11 +72,16 @@ impl ReasoningEngine {
                 evidence: source_ids.iter().map(|s| s.to_string()).collect(),
             };
             chain.add_step(step3);
-            response = format!("Based on the forensic knowledge graph, here are the findings for azimuth 45 degrees: {}", result_str);
-
+            response = format!(
+                "Based on the forensic knowledge graph, here are the findings for azimuth 45 degrees: {}",
+                result_str
+            );
         } else if q_lower.contains("heterodyning") {
             let tool = &self.tools[1];
-            let res = tool.execute("{\"frequency\": 2400000000}", &self.graph).await.unwrap();
+            let res = tool
+                .execute("{\"frequency\": 2400000000}", &self.graph)
+                .await
+                .unwrap();
             let result_str = res.0;
             source_ids = res.1;
             final_confidence = 0.85;
@@ -83,11 +91,13 @@ impl ReasoningEngine {
                 tool_called: Some(tool.name().to_string()),
                 result: result_str.clone(),
                 confidence: 0.85,
-                evidence: vec!["pattern-1", "freq-2400000000"].iter().map(|s| s.to_string()).collect(),
+                evidence: vec!["pattern-1", "freq-2400000000"]
+                    .iter()
+                    .map(|s| s.to_string())
+                    .collect(),
             };
             chain.add_step(step2);
             response = format!("The pattern analysis indicates: {}", result_str);
-
         } else {
             response = "I'm sorry, I couldn't find any relevant data for that query in the knowledge graph.".to_string();
         }
@@ -98,7 +108,10 @@ impl ReasoningEngine {
 
         // Track E.3 latency check (<2 seconds response time)
         if elapsed.as_secs_f32() > 2.0 {
-            eprintln!("WARNING: Copilot response time exceeded 2 seconds: {:?}", elapsed);
+            eprintln!(
+                "WARNING: Copilot response time exceeded 2 seconds: {:?}",
+                elapsed
+            );
         }
 
         (response, chain)

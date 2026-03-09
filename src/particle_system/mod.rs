@@ -1,16 +1,16 @@
-pub mod renderer;
 pub mod frustum_culler;
+pub mod renderer;
 pub mod streaming;
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct ParticleGPU {
-    pub position: [f32; 3],  // 12 bytes
-    pub color: [f32; 4],     // 16 bytes
-    pub intensity: f32,      // 4 bytes
-    pub hardness: f32,       // 4 bytes
-    pub roughness: f32,      // 4 bytes
-    pub wetness: f32,        // 4 bytes
+    pub position: [f32; 3], // 12 bytes
+    pub color: [f32; 4],    // 16 bytes
+    pub intensity: f32,     // 4 bytes
+    pub hardness: f32,      // 4 bytes
+    pub roughness: f32,     // 4 bytes
+    pub wetness: f32,       // 4 bytes
 } // 44 bytes total
 
 // Assert size is exactly 44 bytes at compile time

@@ -1,7 +1,7 @@
-use std::sync::Arc;
 use rand::Rng;
-use tokio::sync::Mutex;
+use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
+use tokio::sync::Mutex;
 
 use crate::particle_system::ParticleGPU;
 

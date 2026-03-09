@@ -1,4 +1,6 @@
-use crate::knowledge_graph::cognee_schema::{EventNode, PatternNode, SpatialLocationNode, FrequencyNode};
+use crate::knowledge_graph::cognee_schema::{
+    EventNode, FrequencyNode, PatternNode, SpatialLocationNode,
+};
 use neo4rs::*;
 use std::sync::Arc;
 
@@ -40,7 +42,8 @@ impl KnowledgeGraphClient {
 
     /// Mode 2: Real-time event ingestion. Adds an Event node and links to a Device node.
     pub async fn create_event_node(&self, event: &EventNode) -> anyhow::Result<()> {
-        let q = query("
+        let q = query(
+            "
             MERGE (d:Device {device_name: $device_source})
             CREATE (e:Event {
                 event_id: $id,
@@ -52,7 +55,8 @@ impl KnowledgeGraphClient {
                 anomaly_score: $score
             })
             CREATE (e)-[:DetectedBy]->(d)
-        ")
+        ",
+        )
         .param("device_source", event.device_source.clone())
         .param("id", event.event_id as i64)
         .param("ts", event.timestamp_iso.clone())
@@ -67,12 +71,18 @@ impl KnowledgeGraphClient {
     }
 
     /// Link an event to a specific pattern in the graph
-    pub async fn link_event_to_pattern(&self, event_id: u64, pattern_id: usize) -> anyhow::Result<()> {
-        let q = query("
+    pub async fn link_event_to_pattern(
+        &self,
+        event_id: u64,
+        pattern_id: usize,
+    ) -> anyhow::Result<()> {
+        let q = query(
+            "
             MATCH (e:Event {event_id: $event_id})
             MATCH (p:Pattern {pattern_id: $pattern_id})
             MERGE (e)-[:HasPattern]->(p)
-        ")
+        ",
+        )
         .param("event_id", event_id as i64)
         .param("pattern_id", pattern_id as i64);
 
@@ -81,8 +91,13 @@ impl KnowledgeGraphClient {
     }
 
     /// Link an event to a spatial location (Track D integration)
-    pub async fn link_event_to_location(&self, event_id: u64, loc: &SpatialLocationNode) -> anyhow::Result<()> {
-        let q = query("
+    pub async fn link_event_to_location(
+        &self,
+        event_id: u64,
+        loc: &SpatialLocationNode,
+    ) -> anyhow::Result<()> {
+        let q = query(
+            "
             MATCH (e:Event {event_id: $event_id})
             MERGE (l:SpatialLocation {location_id: $loc_id})
             ON CREATE SET
@@ -90,7 +105,8 @@ impl KnowledgeGraphClient {
                 l.elevation_rad = $el,
                 l.physical_interpretation = $interp
             MERGE (e)-[:OccurredAt]->(l)
-        ")
+        ",
+        )
         .param("event_id", event_id as i64)
         .param("loc_id", loc.location_id as i64)
         .param("az", loc.azimuth_rad as f64)
@@ -102,15 +118,21 @@ impl KnowledgeGraphClient {
     }
 
     /// Link an event to a frequency (Track C integration)
-    pub async fn link_event_to_frequency(&self, event_id: u64, freq: &FrequencyNode) -> anyhow::Result<()> {
-        let q = query("
+    pub async fn link_event_to_frequency(
+        &self,
+        event_id: u64,
+        freq: &FrequencyNode,
+    ) -> anyhow::Result<()> {
+        let q = query(
+            "
             MATCH (e:Event {event_id: $event_id})
             MERGE (f:Frequency {frequency_hz: $freq_hz})
             ON CREATE SET
                 f.band_name = $band,
                 f.typical_confidence = $conf
             MERGE (e)-[:AtFrequency]->(f)
-        ")
+        ",
+        )
         .param("event_id", event_id as i64)
         .param("freq_hz", freq.frequency_hz as f64)
         .param("band", freq.band_name.clone())
@@ -122,7 +144,8 @@ impl KnowledgeGraphClient {
 
     /// Mode 1: Create a Pattern Node
     pub async fn create_pattern_node(&self, pattern: &PatternNode) -> anyhow::Result<()> {
-        let q = query("
+        let q = query(
+            "
             MERGE (p:Pattern {pattern_id: $id})
             ON CREATE SET
                 p.name = $name,
@@ -134,7 +157,8 @@ impl KnowledgeGraphClient {
                 p.frequency_hz = $freq,
                 p.confidence = $conf,
                 p.temporal_signature = $tsig
-        ")
+        ",
+        )
         .param("id", pattern.pattern_id as i64)
         .param("name", pattern.name.clone())
         .param("freq", pattern.frequency_hz as f64)
@@ -148,11 +172,13 @@ impl KnowledgeGraphClient {
     /// Find patterns that match an event's attributes (e.g. frequency match)
     pub async fn find_matching_patterns(&self, event: &EventNode) -> anyhow::Result<Vec<usize>> {
         // Simplified heuristic: Find patterns where frequency matches within 1%
-        let q = query("
+        let q = query(
+            "
             MATCH (p:Pattern)
             WHERE abs(p.frequency_hz - $freq) / $freq < 0.01
             RETURN p.pattern_id as pattern_id
-        ")
+        ",
+        )
         .param("freq", event.rf_frequency_hz as f64);
 
         let mut txn = self.driver.start_txn().await?;
@@ -168,12 +194,14 @@ impl KnowledgeGraphClient {
     /// Backfill links between a newly discovered pattern and all past events
     pub async fn backfill_pattern_links(&self, pattern: &PatternNode) -> anyhow::Result<()> {
         // Find events that match this pattern's frequency and link them
-        let q = query("
+        let q = query(
+            "
             MATCH (p:Pattern {pattern_id: $pid})
             MATCH (e:Event)
             WHERE abs(e.rf_frequency_hz - p.frequency_hz) / p.frequency_hz < 0.01
             MERGE (e)-[:HasPattern]->(p)
-        ")
+        ",
+        )
         .param("pid", pattern.pattern_id as i64);
 
         self.driver.run(q).await?;
@@ -181,7 +209,10 @@ impl KnowledgeGraphClient {
     }
 
     /// Execute an arbitrary read-only Cypher query (used by Copilot tools)
-    pub async fn execute_query(&self, q: neo4rs::Query) -> anyhow::Result<(neo4rs::Txn, neo4rs::RowStream)> {
+    pub async fn execute_query(
+        &self,
+        q: neo4rs::Query,
+    ) -> anyhow::Result<(neo4rs::Txn, neo4rs::RowStream)> {
         let mut txn = self.driver.start_txn().await?;
         let stream = txn.execute(q).await?;
         Ok((txn, stream))
