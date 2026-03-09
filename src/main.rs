@@ -27,6 +27,7 @@ mod anc_calibration;
 mod anc_recording;
 mod audio;
 mod bispectrum;
+mod computer_vision;
 mod detection;
 mod embeddings;
 mod evidence_export;
@@ -43,6 +44,7 @@ mod ui;
 mod mamba;
 mod ml;
 mod parametric;
+mod particle_system;
 mod pdm;
 mod reconstruct;
 mod resample;
@@ -687,14 +689,15 @@ async fn main() -> anyhow::Result<()> {
                         }
                         let frame = crate::ml::spectral_frame::SpectralFrame {
                             timestamp_micros: chrono::Utc::now().timestamp_micros() as u64,
-                            fft_magnitude: fft_mag,
-                            bispectrum: [0.0; 64], // Populated later if needed
+                            fft_magnitude: fft_mag.to_vec(),
+                            bispectrum: vec![0.0; 64], // Populated later if needed
                             itd_ild: [0.0; 4],
                             beamformer_outputs: [0.0; 3],
                             mamba_anomaly_score: anomaly,
                             confidence: 1.0,
                         };
-                        let gate = crate::ml::anomaly_gate::evaluate_gate(&frame, anomaly, 2.0);
+                        let config = crate::ml::anomaly_gate::AnomalyGateConfig::default();
+                        let gate = crate::ml::anomaly_gate::evaluate_anomaly_gate(&frame, &config);
 
                         // Sync to UI
                         if let Ok(mut gs) = state_disp.gate_status.lock() {
@@ -741,9 +744,7 @@ async fn main() -> anyhow::Result<()> {
                         let fdc2 = forensic_disp.clone();
                         let reason = gate.reason.clone();
                         tokio::spawn(async move {
-                            if let Ok(mut f) = fdc2.lock() {
-                                let _ = f.log_gate_decision(anomaly, gate.confidence, 2.0, gate.forward_to_trainer, &reason);
-                            }
+                            let _ = fdc2.log_gate_decision(anomaly, gate.confidence, 2.0, gate.forward_to_trainer, &reason);
                         });
                         state_disp.set_latent_embedding(latent.clone());
 
@@ -1830,4 +1831,3 @@ fn _start_trainer_loop(
         }
     });
 }
-pub mod particle_system;

@@ -4,18 +4,23 @@ version = "0.5.0"
 edition = "2024"
 
 [[bin]]
-name = "twister"
-path = "src/main.rs"
+name = "convert_mediapipe"
+path = "tools/convert_mediapipe.rs"
+
+[[example]]
+name = "run_pose_estimation"
+path = "examples/run_pose_estimation.rs"
 
 [dependencies]
-half = "*"
 # ── Error handling ─────────────────────────────────────────────────────────────
 anyhow = "*"
-bytemuck = { version = "*", features = ["derive"] }
+async-trait = "*"
 # ── ML: Burn framework (GPU-accelerated neural networks via wgpu/Vulkan) ────────
-burn = { version = "0.21.0-pre.2", features = ["std", "wgpu", "ndarray"] }
-burn-wgpu = "0.21.0-pre.2"
+burn = { version = "0.21.0-pre.2", features = ["ndarray", "std", "wgpu"] }
+burn-import = "0.21.0-pre.1"
 burn-ndarray = { version = "0.21.0-pre.2", features = ["std"] }
+burn-wgpu = "0.21.0-pre.2"
+bytemuck = { version = "*", features = ["derive"] }
 # ── ML: Candle (CPU tensor engine — Mamba SSM autoencoder) ────────────────────
 candle-core = "*"
 candle-nn = "*"
@@ -26,6 +31,11 @@ cpal = "*"
 # ── Concurrency ────────────────────────────────────────────────────────────────
 crossbeam-channel = "*"
 csv = "*"
+half = "*"
+hdf5 = { version = "*", optional = true }
+# ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
+hf-hub = "*"
+image = "*"
 # ── Forensic databases ─────────────────────────────────────────────────────────
 neo4rs = "*"
 # ── Numerics / DSP ─────────────────────────────────────────────────────────────
@@ -33,29 +43,27 @@ num-complex = "*"
 parking_lot = "*"
 pollster = "*"
 qdrant-client = "*"
+rand = "*"
 rustfft = "*"
+safetensors = "*"
 # ── Serialisation ──────────────────────────────────────────────────────────────
 serde = { version = "*", features = ["derive"] }
 serde_json = "*"
 # ── UI ─────────────────────────────────────────────────────────────────────────
-slint = { version ="1.15.1", default-features = false, features = [
-    "backend-winit",           # Required windowing backend
-    "renderer-femtovg-wgpu",    # Enables FemtoVG via WGPU (supports Vulkan)
-    "unstable-wgpu-28",         # Specifically enables WGPU v28 features
-    "compat-1-2"                # Forward compatibility with future versions
+slint = { version = "1.15.1", default-features = false, features = [
+  "backend-winit",  # Required windowing backend
+  "compat-1-2",  # Forward compatibility with future versions
+  "renderer-femtovg-wgpu",  # Enables FemtoVG via WGPU (supports Vulkan)
+  "unstable-wgpu-28",  # Specifically enables WGPU v28 features
 ] }
 tempfile = "*"
-async-trait = "*"
+tokio = { version = "*", features = ["full"] }
 # ── GPU compute ────────────────────────────────────────────────────────────────
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
 wgpu = { version = "*", features = ["vulkan"] }
-# ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
-hf-hub = "*"
-safetensors = "*"
-tokio = { version = "1.43", features = ["full"] }
-rand = "0.8"
-# Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
+# Note: HDF5 requires native library installation (libhdf5).
+# Using JSON fallback by default if hdf5 feature is disabled.
 
 [build-dependencies]
 slint-build = "*"
@@ -65,9 +73,9 @@ slint-build = "*"
 # Gracefully detects if device is not plugged in (device_not_found error).
 # To disable: cargo build --no-default-features
 default = ["rtlsdr"]
-rtlsdr = []
+all-rf = ["pluto-plus", "rtlsdr"]
 pluto-plus = []
-all-rf = ["rtlsdr", "pluto-plus"]
+rtlsdr = []
 
 [profile.dev]
 # Keep DSP hot paths fast even in debug builds.
@@ -77,5 +85,3 @@ opt-level = 2
 opt-level = 3
 lto = "thin"
 codegen-units = 1
-tokio = { version = "*", features = ["full"] }
-rand = "0.8"
