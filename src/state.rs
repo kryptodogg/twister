@@ -1,4 +1,5 @@
 use crate::ml::modular_features::FeatureFlags;
+
 // src/state.rs — Shared Atomic State  (v0.4)
 //
 // Changes from v0.3:
@@ -588,7 +589,7 @@ impl AppState {
 
             output_frames: Mutex::new(vec![
                 0.0f32;
-                crate::gpu::SYNTH_FRAMES * crate::gpu::MAX_CHANNELS
+                1024 * 2
             ]),
             output_cursor: AtomicU32::new(0),
 

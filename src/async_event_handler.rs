@@ -159,15 +159,6 @@ impl GpuEventHandler {
                 while !shutdown.load(Ordering::Relaxed) {
                     // GPU processes rolling v-buffer autonomously
                     kernel.dispatch_autonomous_batch();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-                    if false {
-                        eprintln!("[GPU-Dispatch] Dispatch failed.");
-                    }
-=======
->>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
->>>>>>> origin/jules-8892975898136315360-28246266
 
                     // Wait before next dispatch (2ms = 500 Hz)
                     sleep(Duration::from_millis(2)).await;
@@ -201,30 +192,14 @@ impl GpuEventHandler {
 
                     if !processed_frames.is_empty() {
                         // GPU has work for us - process it
-<<<<<<< HEAD
                         let results = kernel.read_results();
                         for (idx, _frame_idx) in processed_frames.iter().enumerate() {
-                            if idx >= results.len() {
-                                break;
-                            }
-                            let result = &results[idx];
-                            frame_count += 1;
-=======
-<<<<<<< HEAD
-                        let results_slice: &[crate::dispatch_kernel::DispatchResultVBuffer] = &[];
-                        match Ok::<_, ()>(results_slice) {
-                            Ok(results) => {
-=======
-                        let results = kernel.read_results();
-                        if true {
->>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
-                                for (idx, _frame_idx) in processed_frames.iter().enumerate() {
                                     if idx >= results.len() {
                                         break;
                                     }
                                     let result = &results[idx];
                                     frame_count += 1;
->>>>>>> origin/jules-8892975898136315360-28246266
+
 
                             {
                                 let st = app_state.lock().await;
@@ -253,21 +228,8 @@ impl GpuEventHandler {
                                     );
                                 }
                             }
-<<<<<<< HEAD
-
-                            if result.anomaly_score_db > 1.0 {
-                                let st = app_state.lock().await;
-                                st.replay_buf_len.fetch_add(1, Ordering::Relaxed);
-=======
-<<<<<<< HEAD
-                            Err(_) => {
-                                eprintln!("[CPU-EventHandler] Read results failed.");
-                                error_count += 1;
->>>>>>> origin/jules-8892975898136315360-28246266
-                            }
                         }
-=======
->>>>>>> 8cd9d0c (ML-FORENSIC-INTEGRATION-V2: Unified feature dispatch)
+
                     } else {
                         sleep(Duration::from_millis(5)).await;
                     }

@@ -12,7 +12,7 @@
 
 use burn::tensor::{backend::Backend, Tensor};
 use std::collections::VecDeque;
-use std::error::Error;
+
 
 /// Training configuration
 #[derive(Clone, Debug)]

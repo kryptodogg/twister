@@ -144,10 +144,10 @@ impl<B: Backend> PointMamba<B> {
 
     fn create_block(device: &B::Device) -> MambaBlock<B> {
         MambaBlock::new(
-            Tensor::random([128, 128], Distribution::Default, device),
-            Tensor::random([128], Distribution::Default, device),
-            Tensor::random([128], Distribution::Default, device),
-            Tensor::random([128], Distribution::Default, device),
+            Tensor::random([128, 128], burn::tensor::Distribution::Default, device),
+            Tensor::random([128], burn::tensor::Distribution::Default, device),
+            Tensor::random([128], burn::tensor::Distribution::Default, device),
+            Tensor::random([128], burn::tensor::Distribution::Default, device),
         )
     }
 }
