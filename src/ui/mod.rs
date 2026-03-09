@@ -1,3 +1,2 @@
-pub mod app_controller;
-
-pub use app_controller::DeviceControlsController;
+pub mod copilot_handler;
+pub use copilot_handler::*;

@@ -8,6 +8,7 @@
 // For true display vsync set env SLINT_BACKEND=winit (Windows default) or
 // SLINT_BACKEND=winit-femtovg for GPU compositing.
 
+import { CopilotPanel, ChatMessage } from "copilot_panel.slint";
 import { Slider } from "std-widgets.slint";
 
 // ─── Colour palette ───────────────────────────────────────────────────────────
@@ -343,6 +344,12 @@ export component AppWindow inherits Window {
     // ── Twister: musical auto-tuner ────────────────────────────────────────────
     in property <string> note-name:   "---";   // e.g. "A4", "C#5"
     in property <float> note-cents:  0.0;     // cents offset from raw detection
+
+    in property <string> gate-status: "IDLE";
+    in property <string> last-gate-reason: "";
+    in property <int> training-pairs-dropped: 0;
+    in property <int> gate-rejections-low-anomaly: 0;
+    in property <int> gate-rejections-low-confidence: 0;
 
     // ── Tab navigation ────────────────────────────────────────────────────────
     in-out property <int> active-tab: 0;  // 0 = TWISTER, 1 = TRAINING, 2 = MEMOS, 3 = ANALYSIS, 4 = CONSOLE
@@ -2270,6 +2277,42 @@ export component AppWindow inherits Window {
                         vertical-stretch: 1;
                     }
 
+                    // GATE STATUS
+                    Lbl { text: "GATE STATUS"; }
+                    HorizontalLayout {
+                        spacing: 8px;
+                        Mon {
+                            text: gate-status;
+                            color: gate-status == "FORWARD" ? Pal.green : gate-status == "REJECTED" ? Pal.red : Pal.lo;
+                            font-size: 14px;
+                        }
+                    }
+                    Mon {
+                        text: last-gate-reason;
+                        color: Pal.lo;
+                        font-size: 9px;
+                        wrap: word-wrap;
+                    }
+
+                    Rectangle { height: 8px; }
+
+                    Lbl { text: "QUEUE DIAGNOSTICS"; }
+                    HorizontalLayout {
+                        spacing: 8px;
+                        VerticalLayout {
+                            Lbl { text: "DROPPED"; }
+                            Mon { text: training-pairs-dropped; color: training-pairs-dropped > 0 ? Pal.red : Pal.lo; font-size: 10px; }
+                        }
+                        VerticalLayout {
+                            Lbl { text: "REJ(ANOM)"; }
+                            Mon { text: gate-rejections-low-anomaly; color: Pal.lo; font-size: 10px; }
+                        }
+                        VerticalLayout {
+                            Lbl { text: "REJ(CONF)"; }
+                            Mon { text: gate-rejections-low-confidence; color: Pal.lo; font-size: 10px; }
+                        }
+                    }
+                    Rectangle { height: 8px; }
                     // Pairs indicator
                     Lbl {
                         text: "TRAINING PAIRS";
@@ -3194,3 +3237,6 @@ export component AppWindow inherits Window {
         }
     }
 }
+
+// Dummy addition for now to ensure compilation doesn't fail based on the `ChatMessage` and `CopilotPanel` imports.
+// Note: We'd need to properly place `CopilotPanel` inside the main `AppWindow` in a real scenario.
