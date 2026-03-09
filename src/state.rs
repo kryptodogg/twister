@@ -434,6 +434,7 @@ pub struct AppState {
     pub anc_ok: AtomicBool, // Indicates if the Active Defense is armed and aligned
 
     // ── Audio output ──────────────────────────────────────────────────────────
+    pub wavefield_image: Mutex<Vec<u8>>,
     pub output_frames: Mutex<Vec<f32>>,
     pub output_cursor: AtomicU32,
 
@@ -594,6 +595,7 @@ impl AppState {
             running: AtomicBool::new(false),
             anc_ok: AtomicBool::new(false),
 
+            wavefield_image: Mutex::new(vec![0; 1024 * 1024 * 4]),
             output_frames: Mutex::new(vec![0.0f32; 1024 * 2]),
             output_cursor: AtomicU32::new(0),
 

@@ -15,7 +15,6 @@ pub mod timegnn;
 pub mod timegnn_trainer;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
-pub mod data_contracts;
 
 pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
 pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
@@ -35,4 +34,12 @@ pub use timegnn_trainer::{
     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
     compute_nt_xent_loss, cosine_similarity, train_timegnn,
 };
-pub use wav2vec2_loader::Wav2Vec2Model;
+pub use wav2vec2_loader::{Wav2Vec2Model, infer_wav2vec2_embedding, load_wav2vec2};
+pub use spectral_frame::SpectralFrame;
+
+pub mod data_contracts;
+
+pub mod body_region_classifier;
+pub mod pose_materials;
+
+pub mod pose_mamba_trainer;
