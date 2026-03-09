@@ -53,3 +53,5 @@ pub mod app_state;
 pub mod hardware_io;
 
 pub mod particle_system;
+
+pub mod computer_vision;
