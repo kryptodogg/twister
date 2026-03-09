@@ -50,3 +50,5 @@ pub mod waterfall;
 pub use forensic_queries::{AttackPatternReport, CorrelationEvidence, DetectionWithContext};
 pub mod app_state;
 pub mod hardware_io;
+
+pub mod particle_system;

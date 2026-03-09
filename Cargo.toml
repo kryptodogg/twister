@@ -33,7 +33,6 @@ num-complex = "*"
 parking_lot = "*"
 pollster = "*"
 qdrant-client = "*"
-rand = "0.8"
 rustfft = "*"
 # ── Serialisation ──────────────────────────────────────────────────────────────
 serde = { version = "*", features = ["derive"] }
@@ -46,7 +45,6 @@ slint = { version ="1.15.1", default-features = false, features = [
     "compat-1-2"                # Forward compatibility with future versions
 ] }
 tempfile = "*"
-tokio = { version = "*", features = ["full"] }
 async-trait = "*"
 # ── GPU compute ────────────────────────────────────────────────────────────────
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
@@ -55,6 +53,8 @@ wgpu = { version = "*", features = ["vulkan"] }
 # ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
 hf-hub = "*"
 safetensors = "*"
+tokio = { version = "1.43", features = ["full"] }
+rand = "0.8"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]
@@ -77,3 +77,5 @@ opt-level = 2
 opt-level = 3
 lto = "thin"
 codegen-units = 1
+tokio = { version = "*", features = ["full"] }
+rand = "0.8"

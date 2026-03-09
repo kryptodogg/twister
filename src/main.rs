@@ -101,7 +101,8 @@ async fn main() -> anyhow::Result<()> {
         "System",
         &format!("[Twister v0.5] Session: {}", session_identity),
     );
-    let ui = AppWindow::new().context("Slint window creation failed")?;
+    use crate::particle_system::{renderer::ParticleRenderer, frustum_culler::FrustumCuller, streaming::ParticleStreamLoader};
+                let ui = AppWindow::new().context("Slint window creation failed")?;
 
     let gpu_shared = GpuShared::new().context("GPU init failed")?;
     state.log(
@@ -1397,7 +1398,22 @@ async fn main() -> anyhow::Result<()> {
         });
     }
 
-    state.running.store(true, Ordering::Relaxed);
+        // ── Initialize Particle System (Addendum AA) ────────────────────────────
+    let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
+        gpu_shared.clone(),
+        10_000_000,
+        wgpu::TextureFormat::Rgba8Unorm,
+    );
+    let frustum_culler = crate::particle_system::frustum_culler::FrustumCuller::new(gpu_shared.clone(), 10_000_000);
+    let particle_streamer = std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
+
+    let now_ms = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis() as u64;
+    let _ = tokio::spawn({
+        let s = particle_streamer.clone();
+        async move { s.load_window(now_ms - 8_380_800_000, now_ms, 1_000_000).await; }
+    });
+
+    state.running.store(true, std::sync::atomic::Ordering::Relaxed);
     ui.run().context("Slint run failed")?;
 
     // ── Clean shutdown ────────────────────────────────────────────────────────
@@ -1754,3 +1770,4 @@ fn _start_trainer_loop(
         }
     });
 }
+pub mod particle_system;
