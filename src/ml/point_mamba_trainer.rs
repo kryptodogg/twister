@@ -10,9 +10,7 @@
 //! **Gradient clipping**: L2 norm <= 1.0
 //! **Convergence**: 2.5-3.0 → 1.2 → 0.7 → 0.35-0.45
 
-use burn::tensor::{Tensor, backend::Backend};
 use std::collections::VecDeque;
-use std::error::Error;
 
 /// Training configuration
 #[derive(Clone, Debug)]
@@ -98,7 +96,12 @@ impl PointMambaTrainer {
         });
     }
 
-    pub fn record_gradients(&mut self, grad_norm_encoder: f32, grad_norm_mamba: f32, grad_norm_decoder: f32) {
+    pub fn record_gradients(
+        &mut self,
+        grad_norm_encoder: f32,
+        grad_norm_mamba: f32,
+        grad_norm_decoder: f32,
+    ) {
         let was_clipped = grad_norm_decoder > self.config.grad_clip_threshold;
         self.gradient_history.push(GradientTelemetry {
             grad_norm_after_encoder: grad_norm_encoder,
@@ -110,8 +113,8 @@ impl PointMambaTrainer {
 
     pub fn update_checkpoint_decision(&mut self, validation_loss: f32, epoch: usize) -> bool {
         let old_ema = self.validation_loss_ema;
-        self.validation_loss_ema = self.config.ema_decay * old_ema
-            + (1.0 - self.config.ema_decay) * validation_loss;
+        self.validation_loss_ema =
+            self.config.ema_decay * old_ema + (1.0 - self.config.ema_decay) * validation_loss;
 
         let improvement = old_ema - self.validation_loss_ema;
         if improvement < 0.001 {
@@ -147,7 +150,10 @@ impl PointMambaTrainer {
         let final_loss = self.loss_history.last().unwrap().total_loss;
 
         if final_loss > first_loss * 0.9 {
-            return Err(format!("Loss not decreasing: {} → {}", first_loss, final_loss));
+            return Err(format!(
+                "Loss not decreasing: {} → {}",
+                first_loss, final_loss
+            ));
         }
 
         if final_loss > 0.5 {

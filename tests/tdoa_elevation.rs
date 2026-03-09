@@ -204,23 +204,23 @@ fn test_elevation_confidence_weighting() {
 #[test]
 fn test_multiple_pair_fusion() {
     // Pair 0-1 (horizontal): azimuth measurement
-    let az_from_pair_01 = 0.3; // 0.3 radians (~17°)
-    let az_conf_01 = 0.8;
+    let az_from_pair_01 = 0.3_f32; // 0.3 radians (~17°)
+    let az_conf_01 = 0.8_f32;
 
     // Pair 0-2 (vertical): elevation measurement
-    let el_from_pair_02 = 0.1; // 0.1 radians (~5.7°)
-    let el_conf_02 = 0.7;
+    let el_from_pair_02 = 0.1_f32; // 0.1 radians (~5.7°)
+    let el_conf_02 = 0.7_f32;
 
     // Weighted average
     let final_az = (az_from_pair_01 * az_conf_01) / az_conf_01; // Weighted
     let final_el = (el_from_pair_02 * el_conf_02) / el_conf_02;
 
     assert!(
-        (final_az - az_from_pair_01).abs() < 0.01,
+        (final_az - az_from_pair_01).abs() < 0.01_f32,
         "Azimuth should be weighted from horizontal pair"
     );
     assert!(
-        (final_el - el_from_pair_02).abs() < 0.01,
+        (final_el - el_from_pair_02).abs() < 0.01_f32,
         "Elevation should be weighted from vertical pair"
     );
 }

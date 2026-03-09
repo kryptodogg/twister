@@ -1,1 +1,1600 @@
-error: expected a table, but found a array for `target.x86_64-pc-windows-msvc.rustc-link-search` in C:\Users\pixel\Downloads\twister\.cargo\config.toml
+warning: variable does not need to be mutable
+   --> src\async_event_handler.rs:181:21
+    |
+181 |                 let mut error_count = 0u64;
+    |                     ----^^^^^^^^^^^
+    |                     |
+    |                     help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `r`
+   --> src\analysis_mock_data.rs:321:13
+    |
+321 |         let r = 1.0;
+    |             ^ help: if this is intentional, prefix it with an underscore: `_r`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sample_rate`
+   --> src\features\audio.rs:330:47
+    |
+330 | fn extract_bispectrum_anomaly(buffer: &[f32], sample_rate: f32) -> Vec<f32> {
+    |                                               ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sample_rate`
+
+warning: unused variable: `block_idx`
+   --> src\ml\point_mamba.rs:102:14
+    |
+102 |         for (block_idx, block) in self.mamba_blocks.iter().enumerate() {
+    |              ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_block_idx`
+
+warning: unused variable: `model`
+   --> src\ml\wav2vec2_loader.rs:111:5
+    |
+111 |     model: &Wav2Vec2Model<Wgpu>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_model`
+
+warning: unused variable: `device`
+   --> src\ml\wav2vec2_loader.rs:114:5
+    |
+114 |     device: &<Wgpu as Backend>::Device,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_device`
+
+warning: variable does not need to be mutable
+   --> src\visualization\ray_tracer.rs:271:9
+    |
+271 |     let mut delays_ms: Vec<f32> = all_rays.iter().map(|(_, _, d, _)| *d).collect();
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> src\visualization\ray_tracer.rs:276:9
+    |
+276 |     let mut reflection_delays_32 = histogram_delays(&delays_ms, DELAY_BIN_COUNT);
+    |         ----^^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src\visualization\radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: `twister` (lib) generated 14 warnings (run `cargo fix --lib -p twister` to apply 8 suggestions)
+warning: unused import: `std::fs`
+ --> tests\checkpoint_persistence.rs:1:5
+  |
+1 | use std::fs;
+  |     ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `train_timegnn`
+  --> tests\timegnn_training.rs:15:9
+   |
+15 |         train_timegnn, discover_patterns, cosine_similarity, compute_nt_xent_loss,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::HashMap`
+  --> tests\timegnn_training.rs:20:9
+   |
+20 |     use std::collections::HashMap;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `loss_similar`
+  --> tests\timegnn_training.rs:50:13
+   |
+50 |         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
+   |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_loss_similar`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `config`
+  --> tests\timegnn_training.rs:81:13
+   |
+81 |         let config = TimeGnnTrainingConfig {
+   |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+warning: unused variable: `grad_norm_encoder`
+  --> tests\phase_3e_trainer_integration.rs:41:13
+   |
+41 |         let grad_norm_encoder = 0.5f32;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_encoder`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `grad_norm_mamba`
+  --> tests\phase_3e_trainer_integration.rs:42:13
+   |
+42 |         let grad_norm_mamba = 0.8f32;
+   |             ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_mamba`
+
+warning: unused variable: `small_loss`
+   --> tests\phase_3e_trainer_integration.rs:137:13
+    |
+137 |         let small_loss = 0.5 * small_error * small_error;
+    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_small_loss`
+
+warning: unused import: `MeshLodLevel`
+ --> tests\mesh_shaders_integration.rs:6:68
+  |
+6 |     use twister::visualization::mesh_shaders::{MeshShaderPipeline, MeshLodLevel};
+  |                                                                    ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `last_block_end`
+   --> tests\phase_3d_blelloch_scan.rs:179:13
+    |
+179 |         let last_block_end = last_block_start + BLOCK_SIZE;
+    |             ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_last_block_end`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `PAYLOAD_SIZE` is never used
+   --> tests\phase_3d_blelloch_scan.rs:130:15
+    |
+130 |         const PAYLOAD_SIZE: usize = 8;
+    |               ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `KEY_SIZE` is never used
+   --> tests\phase_3d_blelloch_scan.rs:133:15
+    |
+133 |         const KEY_SIZE: usize = 4;
+    |               ^^^^^^^^
+
+warning: function `verify_sorted_order` is never used
+   --> tests\phase_3d_blelloch_scan.rs:278:8
+    |
+278 |     fn verify_sorted_order(keys: &[u32]) -> bool {
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `audio`
+  --> tests\wav2vec2_integration.rs:71:13
+   |
+71 |         let audio: Vec<f32> = (0..16000)
+   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `c_freq`
+   --> tests\chord_dominance.rs:151:9
+    |
+151 |     let c_freq = 261.63;
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_c_freq`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `e_freq`
+   --> tests\chord_dominance.rs:152:9
+    |
+152 |     let e_freq = 329.63;  // Major 3rd (5:4 ratio)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_e_freq`
+
+warning: unused variable: `g_freq`
+   --> tests\chord_dominance.rs:153:9
+    |
+153 |     let g_freq = 392.00;  // Perfect 5th (3:2 ratio from C)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_g_freq`
+
+warning: `twister` (test "checkpoint_persistence") generated 1 warning (run `cargo fix --test "checkpoint_persistence" -p twister` to apply 1 suggestion)
+warning: `twister` (test "timegnn_training") generated 4 warnings (run `cargo fix --test "timegnn_training" -p twister` to apply 4 suggestions)
+warning: `twister` (test "phase_3e_trainer_integration") generated 3 warnings (run `cargo fix --test "phase_3e_trainer_integration" -p twister` to apply 3 suggestions)
+warning: `twister` (test "mesh_shaders_integration") generated 1 warning (run `cargo fix --test "mesh_shaders_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "phase_3d_blelloch_scan") generated 4 warnings (run `cargo fix --test "phase_3d_blelloch_scan" -p twister` to apply 1 suggestion)
+warning: `twister` (test "wav2vec2_integration") generated 1 warning (run `cargo fix --test "wav2vec2_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "chord_dominance") generated 3 warnings (run `cargo fix --test "chord_dominance" -p twister` to apply 3 suggestions)
+warning: unused variable: `output`
+  --> tests\pdm_spike_rejection.rs:61:10
+   |
+61 |     let (output, spike_count) = twister::audio::reject_pdm_spikes(&input);
+   |          ^^^^^^ help: if this is intentional, prefix it with an underscore: `_output`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `detected_azimuth`
+   --> tests\tdoa_elevation.rs:164:9
+    |
+164 |     let detected_azimuth = 20.0_f32.to_radians();
+    |         ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_azimuth`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `detected_elevation`
+   --> tests\tdoa_elevation.rs:165:9
+    |
+165 |     let detected_elevation = (-30.0_f32).to_radians();
+    |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_elevation`
+
+warning: unused import: `std::sync::Arc`
+  --> tests\phase3_async_event_handler.rs:12:9
+   |
+12 |     use std::sync::Arc;
+   |         ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::time::Instant`
+  --> tests\phase3_async_event_handler.rs:13:9
+   |
+13 |     use std::time::Instant;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+  --> tests\phase3_async_event_handler.rs:14:9
+   |
+14 |     use tokio::sync::Mutex;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: value assigned to `active_tab` is never read
+   --> tests\analysis_ui_integration.rs:494:35
+    |
+494 |         let mut active_tab: i32 = 0;
+    |                                   ^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `frequency_hz` is never read
+  --> tests\analysis_ui_integration.rs:20:9
+   |
+16 |     struct MockEvent {
+   |            --------- field in this struct
+...
+20 |         frequency_hz: f32,
+   |         ^^^^^^^^^^^^
+   |
+   = note: `MockEvent` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `name` and `frequency_hz` are never read
+  --> tests\analysis_ui_integration.rs:25:9
+   |
+24 |     struct MockSignature {
+   |            ------------- fields in this struct
+25 |         name: String,
+   |         ^^^^
+26 |         frequency_hz: f32,
+   |         ^^^^^^^^^^^^
+   |
+   = note: `MockSignature` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `name`, `x_position`, and `y_position` are never read
+  --> tests\analysis_ui_integration.rs:33:9
+   |
+32 |     struct MockCluster {
+   |            ----------- fields in this struct
+33 |         name: String,
+   |         ^^^^
+...
+36 |         x_position: f32,
+   |         ^^^^^^^^^^
+37 |         y_position: f32,
+   |         ^^^^^^^^^^
+   |
+   = note: `MockCluster` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `event_a_idx`, `event_b_idx`, and `strength` are never read
+  --> tests\analysis_ui_integration.rs:42:9
+   |
+41 |     struct MockCorrelation {
+   |            --------------- fields in this struct
+42 |         event_a_idx: usize,
+   |         ^^^^^^^^^^^
+43 |         event_b_idx: usize,
+   |         ^^^^^^^^^^^
+44 |         correlation_type: u32, // 0=temporal, 1=spectral, 2=spatial
+45 |         strength: f32, // 0.0-1.0
+   |         ^^^^^^^^
+   |
+   = note: `MockCorrelation` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: `twister` (test "pdm_spike_rejection") generated 1 warning (run `cargo fix --test "pdm_spike_rejection" -p twister` to apply 1 suggestion)
+warning: `twister` (test "tdoa_elevation") generated 2 warnings (run `cargo fix --test "tdoa_elevation" -p twister` to apply 2 suggestions)
+warning: `twister` (test "phase3_async_event_handler") generated 3 warnings (run `cargo fix --test "phase3_async_event_handler" -p twister` to apply 3 suggestions)
+warning: `twister` (test "analysis_ui_integration") generated 5 warnings
+warning: unused import: `std::marker::PhantomData`
+ --> tests\timegnn_integration.rs:7:9
+  |
+7 |     use std::marker::PhantomData;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `beam_confidence`
+  --> tests\mamba_control_capture.rs:10:9
+   |
+10 |     let beam_confidence = 0.85;
+   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_beam_confidence`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_beams`
+  --> tests\mamba_control_capture.rs:98:9
+   |
+98 |     let num_beams = 4;
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_beams`
+
+warning: unused variable: `memo_uuid`
+   --> tests\mamba_control_capture.rs:307:9
+    |
+307 |     let memo_uuid = "abc-def-123";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_memo_uuid`
+
+warning: unused variable: `timestamp`
+   --> tests\mamba_control_capture.rs:308:9
+    |
+308 |     let timestamp = "2026-03-07T14:25:30Z";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
+
+warning: variable does not need to be mutable
+   --> src\main.rs:681:33
+    |
+681 | ...                   let mut rx_cur = if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
+    |                           ----^^^^^^
+    |                           |
+    |                           help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sdr_last_center_hz`
+   --> src\main.rs:348:33
+    |
+348 |             while let Ok((mags, sdr_last_center_hz, sdr_last_rate)) = sdr_rx.try_recv() {
+    |                                 ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sdr_last_center_hz`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `pdm_chunk_snr`
+   --> src\main.rs:465:21
+    |
+465 |                 let pdm_chunk_snr = snr_db(&chunk, &decoded);
+    |                     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pdm_chunk_snr`
+
+warning: unused variable: `current_gain`
+   --> src\main.rs:857:17
+    |
+857 |             let current_gain = state_disp.get_master_gain();
+    |                 ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_current_gain`
+
+warning: unused variable: `mamba_ctrl`
+   --> src\main.rs:862:17
+    |
+862 |             let mamba_ctrl = crate::state::MambaControlState {
+    |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_mamba_ctrl`
+
+warning: unused variable: `parametric_manager`
+   --> src\main.rs:143:9
+    |
+143 |     let parametric_manager = ParametricManager::new(PARAMETRIC_CARRIER_HZ);
+    |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parametric_manager`
+
+warning: unused variable: `sdr_thread_handle`
+   --> src\main.rs:184:9
+    |
+184 |     let sdr_thread_handle = sdr::spawn_sdr_thread(state.clone(), sdr_tx);
+    |         ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sdr_thread_handle`
+
+warning: unused variable: `mamba_trainer_handle`
+   --> src\main.rs:232:9
+    |
+232 |     let mamba_trainer_handle = training::spawn_background_training(
+    |         ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_mamba_trainer_handle`
+
+warning: methods `power` and `weight_rms` are never used
+   --> src\anc.rs:478:12
+    |
+359 | impl LmsFilter {
+    | -------------- methods in this implementation
+...
+478 |     pub fn power(&self) -> f32 {
+    |            ^^^^^
+...
+483 |     pub fn weight_rms(&self) -> f32 {
+    |            ^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `phase_for`, `update`, and `status` are never used
+   --> src\anc.rs:551:12
+    |
+518 | impl AncEngine {
+    | -------------- methods in this implementation
+...
+551 |     pub fn phase_for(&self, freq_hz: f32) -> f32 {
+    |            ^^^^^^^^^
+...
+557 |     pub fn update(&mut self, reference: &[f32], error: &[f32]) -> Vec<f32> {
+    |            ^^^^^^
+...
+611 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+
+warning: method `last_calibration` is never used
+   --> src\anc_calibration.rs:223:12
+    |
+ 40 | impl FullRangeCalibration {
+    | ------------------------- method in this implementation
+...
+223 |     pub fn last_calibration(&self) -> Option<&str> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: variant `Complete` is never constructed
+  --> src\anc_recording.rs:18:5
+   |
+14 | pub enum CalibrationState {
+   |          ---------------- variant in this enum
+...
+18 |     Complete,
+   |     ^^^^^^^^
+   |
+   = note: `CalibrationState` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `ref_sr` is never read
+  --> src\anc_recording.rs:29:9
+   |
+23 | pub struct RecordingBuffer {
+   |            --------------- field in this struct
+...
+29 |     pub ref_sr: f32,
+   |         ^^^^^^
+   |
+   = note: `RecordingBuffer` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: method `status` is never used
+   --> src\anc_recording.rs:115:12
+    |
+ 34 | impl RecordingBuffer {
+    | -------------------- method in this implementation
+...
+115 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+
+warning: function `device_name` is never used
+   --> src\anc_recording.rs:157:8
+    |
+157 | pub fn device_name(idx: usize) -> &'static str {
+    |        ^^^^^^^^^^^
+
+warning: constant `BASEBAND_FFT_SIZE` is never used
+  --> src\audio.rs:23:11
+   |
+23 | pub const BASEBAND_FFT_SIZE: usize = 2048;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `MAX_INPUT_DEVICES` is never used
+  --> src\audio.rs:26:11
+   |
+26 | pub const MAX_INPUT_DEVICES: usize = 8;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: struct `SparsePdmSignature` is never constructed
+  --> src\audio.rs:43:12
+   |
+43 | pub struct SparsePdmSignature {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: function `linear_resample` is never used
+   --> src\audio.rs:161:8
+    |
+161 | pub fn linear_resample(input: &[f32], in_rate: f32, out_rate: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^^^
+
+warning: field `is_mouth_region` is never read
+   --> src\audio.rs:561:9
+    |
+554 | pub struct SpatialResult {
+    |            ------------- field in this struct
+...
+561 |     pub is_mouth_region: bool,
+    |         ^^^^^^^^^^^^^^^
+    |
+    = note: `SpatialResult` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `analyze_sparse_pdm` is never used
+   --> src\audio.rs:760:8
+    |
+760 | pub fn analyze_sparse_pdm(buffer: &[f32], sample_rate: f32) -> SparsePdmSignature {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: method `as_str` is never used
+  --> src\bispectrum.rs:59:12
+   |
+41 | impl FrequencyBand {
+   | ------------------ method in this implementation
+...
+59 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: method `as_str` is never used
+  --> src\detection.rs:15:12
+   |
+14 | impl ProductType {
+   | ---------------- method in this implementation
+15 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: function `export_correlation_json` is never used
+  --> src\evidence_export.rs:90:8
+   |
+90 | pub fn export_correlation_json(evidence: &CorrelationEvidence) -> String {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variants `Carrier`, `Modulated`, `Burst`, `Harmonic`, and `Intermodulation` are never constructed
+  --> src\forensic.rs:20:5
+   |
+18 | pub enum ForensicEventType {
+   |          ----------------- variants in this enum
+19 |     /// Continuous narrowband carrier (potential surveillance transmitter)
+20 |     Carrier {
+   |     ^^^^^^^
+...
+26 |     Modulated {
+   |     ^^^^^^^^^
+...
+32 |     Burst {
+   |     ^^^^^
+...
+38 |     Harmonic {
+   |     ^^^^^^^^
+...
+44 |     Intermodulation {
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `ForensicEventType` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: methods `to_enhanced_jsonl` and `with_metadata` are never used
+   --> src\forensic.rs:179:12
+    |
+141 | impl ForensicEvent {
+    | ------------------ methods in this implementation
+...
+179 |     pub fn to_enhanced_jsonl(&self, logger: &ForensicLogger, event: &DetectionEvent) -> anyhow::Result<String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+215 |     pub fn with_metadata(mut self, key: &str, value: &str) -> Self {
+    |            ^^^^^^^^^^^^^
+
+warning: methods `compute_confidence`, `classify_attack_vector`, and `event_count` are never used
+   --> src\forensic.rs:310:12
+    |
+229 | impl ForensicLogger {
+    | ------------------- methods in this implementation
+...
+310 |     pub fn compute_confidence(&self, anomaly_db: f32) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+323 |     pub fn classify_attack_vector(
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+624 |     pub fn event_count(&self) -> u64      { self.event_count }
+    |            ^^^^^^^^^^^
+
+warning: field `bispectrum_method` is never read
+  --> src\forensic_queries.rs:27:9
+   |
+17 | pub struct DetectionWithContext {
+   |            -------------------- field in this struct
+...
+27 |     pub bispectrum_method: String,
+   |         ^^^^^^^^^^^^^^^^^
+   |
+   = note: `DetectionWithContext` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: multiple fields are never read
+  --> src\forensic_queries.rs:64:9
+   |
+62 | pub struct CorrelationEvidence {
+   |            ------------------- fields in this struct
+63 |     /// Event ID
+64 |     pub event_id: String,
+   |         ^^^^^^^^
+65 |     /// UTC timestamp
+66 |     pub timestamp_utc: DateTime<Utc>,
+   |         ^^^^^^^^^^^^^
+67 |     /// RF frequency detected
+68 |     pub rf_frequency_hz: f32,
+   |         ^^^^^^^^^^^^^^^
+69 |     /// RF confidence score
+70 |     pub rf_confidence: f32,
+   |         ^^^^^^^^^^^^^
+71 |     /// RF signal start time (ms since epoch)
+72 |     pub rf_start_timestamp_ms: i64,
+   |         ^^^^^^^^^^^^^^^^^^^^^
+73 |     /// Audio DC spike timestamp (ms since epoch)
+74 |     pub audio_dc_spike_timestamp_ms: Option<i64>,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+78 |     pub audio_dc_bias_v: Option<f32>,
+   |         ^^^^^^^^^^^^^^^
+79 |     /// SDR DC bias voltage
+80 |     pub sdr_dc_bias_v: f32,
+   |         ^^^^^^^^^^^^^
+81 |     /// Mamba anomaly score in dB
+82 |     pub mamba_anomaly_db: f32,
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: `CorrelationEvidence` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `events_in_timerange` is never used
+   --> src\forensic_queries.rs:106:14
+    |
+106 | pub async fn events_in_timerange(
+    |              ^^^^^^^^^^^^^^^^^^^
+
+warning: function `synchronized_attacks` is never used
+   --> src\forensic_queries.rs:145:14
+    |
+145 | pub async fn synchronized_attacks(
+    |              ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `attack_pattern_summary` is never used
+   --> src\forensic_queries.rs:181:14
+    |
+181 | pub async fn attack_pattern_summary(
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `correlation_evidence` is never used
+   --> src\forensic_queries.rs:235:14
+    |
+235 | pub async fn correlation_evidence(
+    |              ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `synthesize_heterodyned_chord` is never used
+  --> src\harmony.rs:89:8
+   |
+89 | pub fn synthesize_heterodyned_chord(chord_freqs: &[f32], carrier_hz: f32) -> Vec<f32> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `predict_next_attack_key` is never used
+  --> src\harmony.rs:98:8
+   |
+98 | pub fn predict_next_attack_key(attack_history: &[MusicalKey]) -> MusicalKey {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `extract_window_from_vbuf_snapshot` is never used
+   --> src\mamba.rs:531:8
+    |
+531 | pub fn extract_window_from_vbuf_snapshot(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `TargetConfig` is never constructed
+ --> src\parametric.rs:7:17
+  |
+7 |      pub struct TargetConfig {
+  |                 ^^^^^^^^^^^^
+
+warning: field `base_carrier_hz` is never read
+  --> src\parametric.rs:43:14
+   |
+42 |      pub struct ParametricManager {
+   |                 ----------------- field in this struct
+43 |          pub base_carrier_hz: f32,
+   |              ^^^^^^^^^^^^^^^
+
+warning: methods `generate_targets` and `beam_half_angle_deg` are never used
+  --> src\parametric.rs:51:17
+   |
+46 |      impl ParametricManager {
+   |      ---------------------- methods in this implementation
+...
+51 |          pub fn generate_targets(&self, base_freqs: &[f32], _pdm_active: bool) -> Vec<TargetConfig> {
+   |                 ^^^^^^^^^^^^^^^^
+...
+73 |          pub fn beam_half_angle_deg(&self, diameter_m: f32) -> f32 {
+   |                 ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `CIC_ORDER` is never used
+  --> src\pdm.rs:26:11
+   |
+26 | pub const CIC_ORDER: usize = 5;
+   |           ^^^^^^^^^
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: associated function `cic_decimate_cpu` is never used
+   --> src\pdm.rs:374:12
+    |
+166 | impl PdmEngine {
+    | -------------- associated function in this implementation
+...
+374 |     pub fn cic_decimate_cpu(pcm_1st_order: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `rms` is never used
+   --> src\pdm.rs:444:4
+    |
+444 | fn rms(samples: &[f32]) -> f32 {
+    |    ^^^
+
+warning: field `confidence` is never read
+ --> src\reconstruct.rs:9:9
+  |
+6 | pub struct TrueSignal {
+  |            ---------- field in this struct
+...
+9 |     pub confidence: f32,
+  |         ^^^^^^^^^^
+
+warning: field `baseband_rate` is never read
+  --> src\reconstruct.rs:13:5
+   |
+12 | pub struct CrystalBall {
+   |            ----------- field in this struct
+13 |     baseband_rate: f32,
+   |     ^^^^^^^^^^^^^
+
+warning: method `reset` is never used
+   --> src\resample.rs:215:12
+    |
+119 | impl SincResampler {
+    | ------------------ method in this implementation
+...
+215 |     pub fn reset(&mut self) {
+    |            ^^^^^
+
+warning: constant `RIDGE_ROWS` is never used
+  --> src\ridge_plot.rs:16:11
+   |
+16 | pub const RIDGE_ROWS: usize = 48;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_BINS` is never used
+  --> src\ridge_plot.rs:19:11
+   |
+19 | pub const RIDGE_BINS: usize = 256;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_W` is never used
+  --> src\ridge_plot.rs:22:11
+   |
+22 | pub const RIDGE_W: u32 = 640;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_H` is never used
+  --> src\ridge_plot.rs:23:11
+   |
+23 | pub const RIDGE_H: u32 = 420;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_PIXELS` is never used
+  --> src\ridge_plot.rs:25:7
+   |
+25 | const RIDGE_PIXELS: usize = (RIDGE_W * RIDGE_H) as usize;
+   |       ^^^^^^^^^^^^
+
+warning: constant `HISTORY_FLOATS` is never used
+  --> src\ridge_plot.rs:26:7
+   |
+26 | const HISTORY_FLOATS: usize = RIDGE_ROWS * RIDGE_BINS;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `RIDGE_SHADER` is never used
+  --> src\ridge_plot.rs:46:7
+   |
+46 | const RIDGE_SHADER: &str = r#"
+   |       ^^^^^^^^^^^^
+
+warning: struct `RidgePlotGpu` is never constructed
+   --> src\ridge_plot.rs:177:12
+    |
+177 | pub struct RidgePlotGpu {
+    |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `render`, `width`, and `height` are never used
+   --> src\ridge_plot.rs:190:12
+    |
+189 | impl RidgePlotGpu {
+    | ----------------- associated items in this implementation
+190 |     pub fn new(device: wgpu::Device, queue: wgpu::Queue) -> anyhow::Result<Self> {
+    |            ^^^
+...
+330 |     pub fn render(&mut self, history_flat: &[f32], n_rows: usize) -> Vec<u32> {
+    |            ^^^^^^
+...
+385 |     pub fn width(&self) -> u32 {
+    |            ^^^^^
+...
+388 |     pub fn height(&self) -> u32 {
+    |            ^^^^^^
+
+warning: methods `center_freq`, `sample_rate`, `gain`, `agc_enabled`, and `device_info` are never used
+   --> src\rtlsdr.rs:123:12
+    |
+ 39 | impl RtlSdrDevice {
+    | ----------------- methods in this implementation
+...
+123 |     pub fn center_freq(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+152 |     pub fn sample_rate(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+176 |     pub fn gain(&self) -> f32 {
+    |            ^^^^
+...
+200 |     pub fn agc_enabled(&self) -> bool {
+    |            ^^^^^^^^^^^
+...
+284 |     pub fn device_info(&self) -> DeviceInfo {
+    |            ^^^^^^^^^^^
+
+warning: fields `index` and `name` are never read
+   --> src\rtlsdr.rs:319:9
+    |
+318 | pub struct DeviceInfo {
+    |            ---------- fields in this struct
+319 |     pub index: u32,
+    |         ^^^^^
+320 |     pub name: String,
+    |         ^^^^
+    |
+    = note: `DeviceInfo` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `running` is never read
+   --> src\rtlsdr.rs:327:5
+    |
+324 | pub struct RtlSdrEngine {
+    |            ------------ field in this struct
+...
+327 |     running: AtomicBool,
+    |     ^^^^^^^
+
+warning: methods `device`, `set_running`, and `is_running` are never used
+   --> src\rtlsdr.rs:395:12
+    |
+330 | impl RtlSdrEngine {
+    | ----------------- methods in this implementation
+...
+395 |     pub fn device(&self) -> &RtlSdrDevice {
+    |            ^^^^^^
+...
+400 |     pub fn set_running(&self, running: bool) {
+    |            ^^^^^^^^^^^
+...
+404 |     pub fn is_running(&self) -> bool {
+    |            ^^^^^^^^^^
+
+warning: type alias `rtlsdr_read_async_cb_t` is never used
+  --> src\rtlsdr_ffi.rs:38:10
+   |
+38 | pub type rtlsdr_read_async_cb_t =
+   |          ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_center_freq` is never used
+  --> src\rtlsdr_ffi.rs:51:12
+   |
+51 |     pub fn rtlsdr_get_center_freq(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_sample_rate` is never used
+  --> src\rtlsdr_ffi.rs:53:12
+   |
+53 |     pub fn rtlsdr_get_sample_rate(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_set_tuner_gain_mode` is never used
+  --> src\rtlsdr_ffi.rs:54:12
+   |
+54 |     pub fn rtlsdr_set_tuner_gain_mode(dev: *mut rtlsdr_dev_t, manual: c_int) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_read_async` is never used
+  --> src\rtlsdr_ffi.rs:64:12
+   |
+64 |     pub fn rtlsdr_read_async(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_cancel_async` is never used
+  --> src\rtlsdr_ffi.rs:71:12
+   |
+71 |     pub fn rtlsdr_cancel_async(dev: *mut rtlsdr_dev_t) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_BLOCK_SAMPLES` is never used
+  --> src\sdr.rs:19:11
+   |
+19 | pub const SDR_BLOCK_SAMPLES: usize = 16384;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_RATE` is never used
+  --> src\sdr.rs:20:11
+   |
+20 | pub const SDR_DEFAULT_RATE: u32 = 2_048_000;
+   |           ^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_GAIN` is never used
+  --> src\sdr.rs:21:11
+   |
+21 | pub const SDR_DEFAULT_GAIN: f32 = 20.0; // dB; 0.0 = auto AGC
+   |           ^^^^^^^^^^^^^^^^
+
+warning: function `soundcard_harmonic_candidates` is never used
+  --> src\sdr.rs:24:8
+   |
+24 | pub fn soundcard_harmonic_candidates(audio_rate: f32) -> Vec<f32> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `IqBlock` is never constructed
+  --> src\sdr.rs:40:12
+   |
+40 | pub struct IqBlock {
+   |            ^^^^^^^
+
+warning: function `list_devices` is never used
+   --> src\sdr.rs:248:8
+    |
+248 | pub fn list_devices() -> Vec<String> {
+    |        ^^^^^^^^^^^^
+
+warning: fields `total_iterations` and `loss_min` are never read
+  --> src\state.rs:25:9
+   |
+23 |     TrainingProgress {
+   |     ---------------- fields in this variant
+24 |         iteration: u32,
+25 |         total_iterations: u32,
+   |         ^^^^^^^^^^^^^^^^
+26 |         loss: f32,
+27 |         loss_min: f32,
+   |         ^^^^^^^^
+   |
+   = note: `UiEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `ClusteringStatus`, `SdrStatus`, `NeuralReconstruction`, and `GnnAnalysis` are never constructed
+  --> src\state.rs:30:5
+   |
+21 | pub enum UiEvent {
+   |          ------- variants in this enum
+...
+30 |     ClusteringStatus {
+   |     ^^^^^^^^^^^^^^^^
+...
+37 |     SdrStatus {
+   |     ^^^^^^^^^
+...
+43 |     NeuralReconstruction {
+   |     ^^^^^^^^^^^^^^^^^^^^
+...
+49 |     GnnAnalysis {
+   |     ^^^^^^^^^^^
+   |
+   = note: `UiEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: methods `update_timer_ms`, `add_samples`, `is_idle`, `is_saving`, `get_sample_count`, and `is_expired` are never used
+   --> src\state.rs:200:12
+    |
+176 | impl RecordingState {
+    | ------------------- methods in this implementation
+...
+200 |     pub fn update_timer_ms(&mut self, elapsed_ms: u32) {
+    |            ^^^^^^^^^^^^^^^
+...
+209 |     pub fn add_samples(&mut self, count: usize) {
+    |            ^^^^^^^^^^^
+...
+214 |     pub fn is_idle(&self) -> bool {
+    |            ^^^^^^^
+...
+224 |     pub fn is_saving(&self) -> bool {
+    |            ^^^^^^^^^
+...
+234 |     pub fn get_sample_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^^^^
+...
+239 |     pub fn is_expired(&self) -> bool {
+    |            ^^^^^^^^^^
+
+warning: enum `WaveshapeMode` is never used
+   --> src\state.rs:365:10
+    |
+365 | pub enum WaveshapeMode {
+    |          ^^^^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+   --> src\state.rs:374:12
+    |
+373 | impl WaveshapeMode {
+    | ------------------ associated function in this implementation
+374 |     pub fn from_u32(v: u32) -> Self {
+    |            ^^^^^^^^
+
+warning: enum `DenialMode` is never used
+   --> src\state.rs:387:10
+    |
+387 | pub enum DenialMode {
+    |          ^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+   --> src\state.rs:396:12
+    |
+395 | impl DenialMode {
+    | --------------- associated function in this implementation
+396 |     pub fn from_u32(v: u32) -> Self {
+    |            ^^^^^^^^
+
+warning: fields `pending_anc_calibration`, `memo_input_text`, and `memo_input_tag` are never read
+   --> src\state.rs:484:9
+    |
+420 | pub struct AppState {
+    |            -------- fields in this struct
+...
+484 |     pub pending_anc_calibration: AtomicBool,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^
+...
+558 |     pub memo_input_text: Mutex<String>,
+    |         ^^^^^^^^^^^^^^^
+559 |     /// Current selected tag for new memos
+560 |     pub memo_input_tag: Mutex<String>,
+    |         ^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+    --> src\state.rs:702:12
+     |
+ 569 | impl AppState {
+     | ------------- associated items in this implementation
+...
+ 702 |     pub fn get_mode(&self) -> DenialMode {
+     |            ^^^^^^^^
+...
+ 706 |     pub fn set_mode(&self, m: DenialMode) {
+     |            ^^^^^^^^
+...
+ 711 |     pub fn get_pdm_clock_mhz(&self) -> f32 {
+     |            ^^^^^^^^^^^^^^^^^
+...
+ 715 |     pub fn set_pdm_clock_mhz(&self, v: f32) {
+     |            ^^^^^^^^^^^^^^^^^
+...
+ 747 |     pub fn get_waveshape_mode(&self) -> WaveshapeMode {
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 751 |     pub fn set_waveshape_mode(&self, m: WaveshapeMode) {
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 789 |     pub fn set_polarization_angle(&self, v: f32) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+1007 |     pub fn set_training_recording_enabled(&self, v: bool) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+1068 |     pub fn get_anc_ok(&self) -> bool {
+     |            ^^^^^^^^^^
+...
+1094 |     pub fn snap_to_nearest_note(freq_hz: f32) -> f32 {
+     |            ^^^^^^^^^^^^^^^^^^^^
+...
+1133 |     pub fn set_twister_active(&self, v: bool) {
+     |            ^^^^^^^^^^^^^^^^^^
+...
+1138 |     pub fn get_sdr_active(&self) -> bool {
+     |            ^^^^^^^^^^^^^^
+...
+1153 |     pub fn set_mamba_emergency_off(&self, v: bool) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1169 |     pub fn get_rtl_connected(&self) -> bool {
+     |            ^^^^^^^^^^^^^^^^^
+...
+1219 |     pub fn get_memo_count(&self) -> usize {
+     |            ^^^^^^^^^^^^^^
+...
+1224 |     pub fn get_max_memo_capacity(&self) -> usize {
+     |            ^^^^^^^^^^^^^^^^^^^^^
+...
+1229 |     pub fn add_memo(&self, tag: String, content: &str) -> anyhow::Result<()> {
+     |            ^^^^^^^^
+...
+1296 |     pub fn delete_memo(&self, index: usize) -> anyhow::Result<()> {
+     |            ^^^^^^^^^^^
+...
+1318 |     pub fn get_memos_all(&self) -> anyhow::Result<Vec<MemoEntry>> {
+     |            ^^^^^^^^^^^^^
+
+warning: associated functions `new_harmonic`, `new_difference`, and `new_intermod` are never used
+  --> src\testing.rs:52:12
+   |
+48 | impl KnownSignal {
+   | ---------------- associated functions in this implementation
+...
+52 |     pub fn new_harmonic(f1: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+...
+55 |     pub fn new_difference(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^^^
+...
+58 |     pub fn new_intermod(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+
+warning: field `detection_latency` is never read
+   --> src\testing.rs:227:9
+    |
+217 | pub struct DetectionValidator {
+    |            ------------------ field in this struct
+...
+227 |     pub detection_latency:   Vec<u32>,
+    |         ^^^^^^^^^^^^^^^^^
+    |
+    = note: `DetectionValidator` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: methods `f1_score`, `false_positive_rate`, `mean_freq_error_hz`, and `report` are never used
+   --> src\testing.rs:301:12
+    |
+234 | impl DetectionValidator {
+    | ----------------------- methods in this implementation
+...
+301 |     pub fn f1_score(&self) -> f32 {
+    |            ^^^^^^^^
+...
+308 |     pub fn false_positive_rate(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+315 |     pub fn mean_freq_error_hz(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+320 |     pub fn report(&self) -> String {
+    |            ^^^^^^
+
+warning: function `benchmark_bispectrum` is never used
+   --> src\testing.rs:341:8
+    |
+341 | pub fn benchmark_bispectrum(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run_self_test` is never used
+   --> src\testing.rs:372:8
+    |
+372 | pub fn run_self_test(
+    |        ^^^^^^^^^^^^^
+
+warning: struct `ValidationReport` is never constructed
+   --> src\testing.rs:464:12
+    |
+464 | pub struct ValidationReport {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: methods `passed` and `summary_line` are never used
+   --> src\testing.rs:474:12
+    |
+473 | impl ValidationReport {
+    | --------------------- methods in this implementation
+474 |     pub fn passed(&self) -> bool {
+    |            ^^^^^^
+...
+478 |     pub fn summary_line(&self) -> String {
+    |            ^^^^^^^^^^^^
+
+warning: constant `REPLAY_CAP` is never used
+  --> src\trainer.rs:27:11
+   |
+27 | pub const REPLAY_CAP: usize = 4096;
+   |           ^^^^^^^^^^
+
+warning: constant `MIN_WINDOWS` is never used
+  --> src\trainer.rs:28:11
+   |
+28 | pub const MIN_WINDOWS: usize = 32;
+   |           ^^^^^^^^^^^
+
+warning: constant `BATCH_SIZE` is never used
+  --> src\trainer.rs:29:11
+   |
+29 | pub const BATCH_SIZE: usize = 8;
+   |           ^^^^^^^^^^
+
+warning: constant `STEPS_PER_BATCH` is never used
+  --> src\trainer.rs:30:11
+   |
+30 | pub const STEPS_PER_BATCH: usize = 1;
+   |           ^^^^^^^^^^^^^^^
+
+warning: constant `TRAIN_SLEEP_MS` is never used
+  --> src\trainer.rs:31:11
+   |
+31 | pub const TRAIN_SLEEP_MS: u64 = 20;
+   |           ^^^^^^^^^^^^^^
+
+warning: constant `SAVE_INTERVAL_EPOCHS` is never used
+  --> src\trainer.rs:32:11
+   |
+32 | pub const SAVE_INTERVAL_EPOCHS: u32 = 50;
+   |           ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `Window` is never used
+  --> src\trainer.rs:35:10
+   |
+35 | pub type Window = Vec<f32>;
+   |          ^^^^^^
+
+warning: enum `TrainerCmd` is never used
+  --> src\trainer.rs:38:10
+   |
+38 | pub enum TrainerCmd {
+   |          ^^^^^^^^^^
+
+warning: struct `TrainerThread` is never constructed
+  --> src\trainer.rs:51:12
+   |
+51 | pub struct TrainerThread {
+   |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `run`, and `ingest` are never used
+   --> src\trainer.rs:60:12
+    |
+ 59 | impl TrainerThread {
+    | ------------------ associated items in this implementation
+ 60 |     pub fn new(state: Arc<AppState>) -> anyhow::Result<Self> {
+    |            ^^^
+...
+ 72 |     pub fn run(&mut self, rx: Receiver<TrainerCmd>) {
+    |            ^^^
+...
+179 |     fn ingest(&mut self, w: Window) {
+    |        ^^^^^^
+
+warning: function `extract_window_from_vbuf_snapshot` is never used
+   --> src\trainer.rs:204:8
+    |
+204 | pub fn extract_window_from_vbuf_snapshot(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `try_enqueue` and `get_metrics` are never used
+  --> src\training.rs:65:12
+   |
+41 | impl TrainingSession {
+   | -------------------- methods in this implementation
+...
+65 |     pub fn try_enqueue(&self, pair: TrainingPair) -> bool {
+   |            ^^^^^^^^^^^
+...
+93 |     pub async fn get_metrics(&self) -> TrainingMetrics {
+   |                  ^^^^^^^^^^^
+
+warning: constant `TX_DELTA_RMS_WARNING_DB` is never used
+   --> src\training.rs:421:11
+    |
+421 | pub const TX_DELTA_RMS_WARNING_DB: f32 = 10.0;
+    |           ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `RtlSdrTrainingScan` is never constructed
+   --> src\training.rs:525:12
+    |
+525 | pub struct RtlSdrTrainingScan {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `advance` are never used
+   --> src\training.rs:533:12
+    |
+532 | impl RtlSdrTrainingScan {
+    | ----------------------- associated items in this implementation
+533 |     pub fn new(start_hz: u32, stop_hz: u32, step_hz: u32) -> Self {
+    |            ^^^
+...
+542 |     pub fn advance(&mut self) -> bool {
+    |            ^^^^^^^
+
+warning: variants `Minor` and `Unison` are never constructed
+  --> src\twister.rs:30:5
+   |
+26 | pub enum ChordMode {
+   |          --------- variants in this enum
+...
+30 |     Minor,
+   |     ^^^^^
+31 |     /// Root only ΓÇö pure tone, most aggressive anti-phase
+32 |     Unison,
+   |     ^^^^^^
+   |
+   = note: `ChordMode` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `midi` is never read
+  --> src\twister.rs:51:9
+   |
+47 | pub struct NoteResult {
+   |            ---------- field in this struct
+...
+51 |     pub midi: i32,
+   |         ^^^^
+   |
+   = note: `NoteResult` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `snap_freq` is never used
+   --> src\twister.rs:153:8
+    |
+153 | pub fn snap_freq(freq_hz: f32) -> f32 {
+    |        ^^^^^^^^^
+
+warning: field `staging` is never read
+  --> src\vbuffer.rs:62:9
+   |
+58 | pub struct GpuVBuffer {
+   |            ---------- field in this struct
+...
+62 |     pub staging: wgpu::Buffer,
+   |         ^^^^^^^
+
+warning: methods `push_const` and `ready` are never used
+   --> src\vbuffer.rs:104:12
+    |
+ 66 | impl GpuVBuffer {
+    | --------------- methods in this implementation
+...
+104 |     pub fn push_const(&self, context_len: u32) -> VBufferPushConst {
+    |            ^^^^^^^^^^
+...
+119 |     pub fn ready(&self, context_len: u32) -> bool {
+    |            ^^^^^
+
+warning: constant `VBUF_WGSL_HELPERS` is never used
+   --> src\vbuffer.rs:151:11
+    |
+151 | pub const VBUF_WGSL_HELPERS: &str = r#"
+    |           ^^^^^^^^^^^^^^^^^
+
+warning: `twister` (test "timegnn_integration") generated 1 warning (run `cargo fix --test "timegnn_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+warning: `twister` (bin "twister" test) generated 108 warnings (run `cargo fix --bin "twister" -p twister --tests` to apply 8 suggestions)
+error[E0282]: type annotations needed for `Vec<_>`
+  --> examples\alignment_comparison.rs:87:25
+   |
+87 |                     let mut times = Vec::new();
+   |                         ^^^^^^^^^   ---------- type must be known at this point
+   |
+help: consider giving `times` an explicit type, where the type for type parameter `T` is specified
+   |
+87 |                     let mut times: Vec<T> = Vec::new();
+   |                                  ++++++++
+
+For more information about this error, try `rustc --explain E0282`.
+error: could not compile `twister` (example "alignment_comparison") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:307:45
+    |
+307 |         println!("  Num epochs: {}", config.num_epochs);
+    |                                             ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `weight_decay` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:308:47
+    |
+308 |         println!("  Weight decay: {}", config.weight_decay);
+    |                                               ^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `max_displacement` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:309:51
+    |
+309 |         println!("  Max displacement: {}", config.max_displacement);
+    |                                                   ^^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:312:27
+    |
+312 |         assert_eq!(config.num_epochs, 100);
+    |                           ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:321:16
+    |
+321 |         config.num_epochs = 50;
+    |                ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+error[E0609]: no field `num_epochs` on type `PointMambaTrainingConfig`
+   --> tests\point_mamba_integration.rs:325:27
+    |
+325 |         assert_eq!(config.num_epochs, 50);
+    |                           ^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `batch_size`, `gradient_accumulation_steps`, `learning_rate`, `grad_clip_threshold`, `ema_decay` ... and 2 others
+
+warning: unused variable: `r`
+   --> tests\point_mamba_integration.rs:257:14
+    |
+257 |         let (r, g, b) = intensity_to_rgb(0.0);
+    |              ^ help: if this is intentional, prefix it with an underscore: `_r`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `g`
+   --> tests\point_mamba_integration.rs:257:17
+    |
+257 |         let (r, g, b) = intensity_to_rgb(0.0);
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `g`
+   --> tests\point_mamba_integration.rs:261:17
+    |
+261 |         let (r, g, b) = intensity_to_rgb(1.0);
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `b`
+   --> tests\point_mamba_integration.rs:261:20
+    |
+261 |         let (r, g, b) = intensity_to_rgb(1.0);
+    |                    ^ help: if this is intentional, prefix it with an underscore: `_b`
+
+For more information about this error, try `rustc --explain E0609`.
+warning: `twister` (test "point_mamba_integration") generated 4 warnings
+error: could not compile `twister` (test "point_mamba_integration") due to 6 previous errors; 4 warnings emitted
+warning: unused import: `burn::tensor::TensorData`
+  --> src\ml\mamba_block.rs:80:9
+   |
+80 |     use burn::tensor::TensorData;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::VecDeque`
+  --> src\ml\pointnet_encoder.rs:83:9
+   |
+83 |     use std::collections::VecDeque; // Added this import
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0790]: cannot call associated function on trait without specifying the corresponding `impl` type
+  --> src\ml\mamba_block.rs:86:22
+   |
+86 |         let device = Default::default();
+   |                      ^^^^^^^^^^^^^^^^^^ cannot call associated function of trait
+   |
+help: use a fully-qualified path to a specific available implementation
+   |
+86 |         let device = </* self type */ as Default>::default();
+   |                      +++++++++++++++++++        +
+
+error[E0790]: cannot call associated function on trait without specifying the corresponding `impl` type
+   --> src\ml\mamba_block.rs:105:22
+    |
+105 |         let device = Default::default();
+    |                      ^^^^^^^^^^^^^^^^^^ cannot call associated function of trait
+    |
+help: use a fully-qualified path to a specific available implementation
+    |
+105 |         let device = </* self type */ as Default>::default();
+    |                      +++++++++++++++++++        +
+
+error[E0790]: cannot call associated function on trait without specifying the corresponding `impl` type
+   --> src\ml\mamba_block.rs:127:22
+    |
+127 |         let device = Default::default();
+    |                      ^^^^^^^^^^^^^^^^^^ cannot call associated function of trait
+    |
+help: use a fully-qualified path to a specific available implementation
+    |
+127 |         let device = </* self type */ as Default>::default();
+    |                      +++++++++++++++++++        +
+
+error[E0790]: cannot call associated function on trait without specifying the corresponding `impl` type
+   --> src\ml\mamba_block.rs:147:22
+    |
+147 |         let device = Default::default();
+    |                      ^^^^^^^^^^^^^^^^^^ cannot call associated function of trait
+    |
+help: use a fully-qualified path to a specific available implementation
+    |
+147 |         let device = </* self type */ as Default>::default();
+    |                      +++++++++++++++++++        +
+
+warning: unused variable: `g`
+   --> src\visualization\gaussian_splatting.rs:498:17
+    |
+498 |         let (r, g, b) = intensity_to_rgb(0.0);
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+For more information about this error, try `rustc --explain E0790`.
+warning: `twister` (lib test) generated 11 warnings (8 duplicates)
+error: could not compile `twister` (lib test) due to 4 previous errors; 11 warnings emitted

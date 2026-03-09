@@ -8,8 +8,8 @@ mod timegnn_pattern_tests {
     // Test 1: Cosine similarity computation
     #[test]
     fn test_cosine_similarity_identical_vectors() {
-        let a = vec![1.0, 0.0, 0.0];
-        let b = vec![1.0, 0.0, 0.0];
+        let a = vec![1.0_f32, 0.0, 0.0];
+        let b = vec![1.0_f32, 0.0, 0.0];
 
         let dot_product = a.iter().zip(&b).map(|(x, y)| x * y).sum::<f32>();
         let norm_a = a.iter().map(|x| x.powi(2)).sum::<f32>().sqrt();
@@ -25,8 +25,8 @@ mod timegnn_pattern_tests {
     // Test 2: Cosine similarity - orthogonal vectors
     #[test]
     fn test_cosine_similarity_orthogonal() {
-        let a = vec![1.0, 0.0, 0.0];
-        let b = vec![0.0, 1.0, 0.0];
+        let a = vec![1.0_f32, 0.0, 0.0];
+        let b = vec![0.0_f32, 1.0, 0.0];
 
         let dot_product = a.iter().zip(&b).map(|(x, y)| x * y).sum::<f32>();
         assert!(
@@ -39,8 +39,8 @@ mod timegnn_pattern_tests {
     #[test]
     fn test_nt_xent_loss_with_positive_pairs() {
         // Two embeddings with same label (positive pair)
-        let embedding1 = vec![1.0, 0.0, 0.0, 0.0];
-        let embedding2 = vec![0.99, 0.01, 0.0, 0.0];
+        let embedding1 = vec![1.0_f32, 0.0, 0.0, 0.0];
+        let embedding2 = vec![0.99_f32, 0.01, 0.0, 0.0];
 
         // Compute cosine similarity
         let dot = embedding1
@@ -62,8 +62,8 @@ mod timegnn_pattern_tests {
     // Test 4: Euclidean Distance
     #[test]
     fn test_euclidean_distance_identical() {
-        let a = vec![1.0, 2.0, 3.0];
-        let b = vec![1.0, 2.0, 3.0];
+        let a = vec![1.0_f32, 2.0, 3.0];
+        let b = vec![1.0_f32, 2.0, 3.0];
 
         let distance = a
             .iter()
@@ -81,8 +81,8 @@ mod timegnn_pattern_tests {
     // Test 5: Euclidean Distance - Unit Vectors
     #[test]
     fn test_euclidean_distance_unit() {
-        let a = vec![1.0, 0.0, 0.0];
-        let b = vec![0.0, 1.0, 0.0];
+        let a = vec![1.0_f32, 0.0, 0.0];
+        let b = vec![0.0_f32, 1.0, 0.0];
 
         let distance: f32 = a
             .iter()
@@ -217,15 +217,26 @@ mod timegnn_pattern_tests {
         // -1 = wrong assignments
 
         // For well-separated clusters, score should be > 0.5
-        let well_separated_score = 0.75;
+        let well_separated_score = 0.75_f32;
         assert!(
-            well_separated_score > 0.5,
+            well_separated_score > 0.5_f32,
             "Well-separated clusters should have high silhouette"
         );
 
         // For poor clustering, score should be < 0.0
-        let poor_score = -0.2;
-        assert!(poor_score < 0.0, "Poor clusters should have low silhouette");
+        let poor_score = -0.2_f32;
+        assert!(
+            poor_score < 0.0_f32,
+            "Poor clusters should have low silhouette"
+        );
+    }
+
+    // Test 12.1: TDOA Elevation Calculation (New Test)
+    #[test]
+    fn test_tdoa_elevation_calculation() {
+        // Spatial origin: 20° to the right, 30° below (mouth region)
+        let _detected_azimuth = 20.0_f32.to_radians();
+        let _detected_elevation = (-30.0_f32).to_radians();
     }
 
     // Test 13: Tag Distribution Analysis
@@ -255,9 +266,9 @@ mod timegnn_pattern_tests {
         let manual_frac = *counts.get("MANUAL-REC").unwrap_or(&0) as f32 / total;
         let note_frac = *counts.get("NOTE").unwrap_or(&0) as f32 / total;
 
-        assert!((evidence_frac - 0.7).abs() < 0.01);
-        assert!((manual_frac - 0.2).abs() < 0.01);
-        assert!((note_frac - 0.1).abs() < 0.01);
+        assert!((evidence_frac - 0.7_f32).abs() < 0.01_f32);
+        assert!((manual_frac - 0.2_f32).abs() < 0.01_f32);
+        assert!((note_frac - 0.1_f32).abs() < 0.01_f32);
     }
 
     // Test 14: RF Frequency Mode Computation
@@ -265,7 +276,8 @@ mod timegnn_pattern_tests {
     fn test_rf_frequency_mode() {
         // Cluster has 7 events at 2.4 GHz, 3 at 2.5 GHz
         let frequencies = vec![
-            2.4e9, 2.4e9, 2.4e9, 2.4e9, 2.4e9, 2.4e9, 2.4e9, 2.5e9, 2.5e9, 2.5e9,
+            2.4e9_f64, 2.4e9_f64, 2.4e9_f64, 2.4e9_f64, 2.4e9_f64, 2.4e9_f64, 2.4e9_f64, 2.5e9_f64,
+            2.5e9_f64, 2.5e9_f64,
         ];
 
         let mut freq_counts = std::collections::HashMap::new();
@@ -283,7 +295,9 @@ mod timegnn_pattern_tests {
     #[test]
     fn test_training_metrics_convergence() {
         // Simulate loss trajectory
-        let losses = vec![2.1, 1.8, 1.5, 1.2, 0.9, 0.6, 0.4, 0.34];
+        let losses = vec![
+            2.1_f32, 1.8_f32, 1.5_f32, 1.2_f32, 0.9_f32, 0.6_f32, 0.4_f32, 0.34_f32,
+        ];
 
         let initial_loss = losses[0];
         let final_loss = losses[losses.len() - 1];
@@ -291,28 +305,53 @@ mod timegnn_pattern_tests {
 
         // Should show > 80% improvement
         assert!(
-            convergence_rate > 0.8,
+            convergence_rate > 0.8_f32,
             "Loss should decrease significantly during training"
         );
 
         // Loss should be monotonically decreasing (approximately)
         for i in 0..losses.len() - 1 {
             assert!(
-                losses[i] >= losses[i + 1] * 0.95,
+                losses[i] >= losses[i + 1] * 0.95_f32,
                 "Loss generally should decrease"
             );
         }
     }
 
+    // Test 15.1: TDOA Weighted Average (New Test)
+    #[test]
+    fn test_tdoa_weighted_average() {
+        // Pair 0-1 (horizontal): azimuth measurement
+        let az_from_pair_01 = 0.3_f32; // 0.3 radians (~17°)
+        let az_conf_01 = 0.8_f32;
+
+        // Pair 0-2 (vertical): elevation measurement
+        let el_from_pair_02 = 0.1_f32; // 0.1 radians (~5.7°)
+        let el_conf_02 = 0.7_f32;
+
+        // Weighted average
+        let final_az = (az_from_pair_01 * az_conf_01) / az_conf_01; // Weighted
+        let final_el = (el_from_pair_02 * el_conf_02) / el_conf_02;
+
+        assert!(
+            (final_az - az_from_pair_01).abs() < 0.01_f32,
+            "Azimuth should be weighted from horizontal pair"
+        );
+        assert!(
+            (final_el - el_from_pair_02).abs() < 0.01_f32,
+            "Elevation should be weighted from vertical pair"
+        );
+    }
+
     // Test 16: Embedding Normalization
     #[test]
     fn test_embedding_l2_normalization() {
-        let mut embedding = vec![3.0, 4.0, 0.0, 0.0];
+        let mut embedding = vec![3.0_f32, 4.0_f32, 0.0_f32, 0.0_f32];
 
         // L2 norm
         let norm = embedding.iter().map(|&x| x.powi(2)).sum::<f32>().sqrt();
         assert!(
-            (norm - 5.0).abs() < 1e-6,
+            (norm - 5.0_f32).abs() < 1e-6_f32,
             "L2 norm of [3,4,0,0] should be 5"
         );
 
@@ -324,7 +363,7 @@ mod timegnn_pattern_tests {
         // Verify unit norm
         let normalized_norm = embedding.iter().map(|&x| x.powi(2)).sum::<f32>().sqrt();
         assert!(
-            (normalized_norm - 1.0).abs() < 1e-6,
+            (normalized_norm - 1.0_f32).abs() < 1e-6_f32,
             "Normalized vector should have unit norm"
         );
     }

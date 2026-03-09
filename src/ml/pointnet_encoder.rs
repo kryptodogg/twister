@@ -40,7 +40,7 @@ impl<B: Backend> PointNetEncoder<B> {
     /// No dead padding. Each intermediate tensor is tightly-scoped and freed immediately.
     /// VGPRs minimized via vec4 packing in GPU execution.
     pub fn forward(&self, points: &Tensor<B, 2>) -> Result<Tensor<B, 2>, Box<dyn Error>> {
-        let [n_points, _n_features] = points.dims();
+        let [_n_points, _n_features] = points.dims();
 
         // MLP1: (N, 6) → (N, 64) with ReLU, function-packed
         let h1 = {
@@ -66,7 +66,7 @@ impl<B: Backend> PointNetEncoder<B> {
             .matmul(self.mlp3_w.clone())
             .add(self.mlp3_b.clone().unsqueeze_dim(0));
 
-        let [n_out, d_out] = features.dims();
+        let [_n_out, d_out] = features.dims();
         if d_out != 256 {
             return Err(format!("Expected 256 output features, got {}", d_out).into());
         }
@@ -79,7 +79,7 @@ impl<B: Backend> PointNetEncoder<B> {
 mod tests {
     use super::*;
     use burn::backend::ndarray::NdArray;
-    use burn::tensor::TensorData;
+    use burn::tensor::Distribution;
 
     type Backend = NdArray<f32>;
 
@@ -95,10 +95,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([1024, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([1024, 6], Distribution::Default, &device);
         let out = encoder.forward(&points).expect("Forward failed");
         let [n, d] = out.dims();
 
@@ -112,10 +109,7 @@ mod tests {
         let encoder = create_test_encoder(&device);
 
         for size in [1, 32, 256, 1024] {
-            let points = Tensor::from_data(
-                TensorData::random([size, 6], burn::tensor::Distribution::Default, &device),
-                &device,
-            );
+            let points = Tensor::<Backend, 2>::random([size, 6], Distribution::Default, &device);
             let out = encoder.forward(&points).expect("Forward failed");
             let [n, d] = out.dims();
             assert_eq!(n, size);
@@ -128,10 +122,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([512, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([512, 6], Distribution::Default, &device);
         let out = encoder.forward(&points).expect("Forward failed");
         let data = out.to_data().as_slice::<f32>().unwrap().to_vec();
 
@@ -146,10 +137,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([256, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([256, 6], Distribution::Default, &device);
         let _out = encoder.forward(&points).expect("Forward failed");
     }
 
@@ -158,10 +146,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([256, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([256, 6], Distribution::Default, &device);
         let out1 = encoder.forward(&points).expect("Forward 1 failed");
         let out2 = encoder.forward(&points).expect("Forward 2 failed");
 
@@ -177,10 +162,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([512, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([512, 6], Distribution::Default, &device);
         let out = encoder.forward(&points).expect("Forward failed");
         let data = out.to_data().as_slice::<f32>().unwrap().to_vec();
 
@@ -197,10 +179,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([10000, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([10000, 6], Distribution::Default, &device);
         let out = encoder.forward(&points).expect("Forward failed");
         let [n, d] = out.dims();
         assert_eq!(n, 10000);
@@ -212,10 +191,7 @@ mod tests {
         let device = Default::default();
         let encoder = create_test_encoder(&device);
 
-        let points = Tensor::from_data(
-            TensorData::random([1, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([1, 6], Distribution::Default, &device);
         let out = encoder.forward(&points).expect("Forward failed");
         let [n, d] = out.dims();
         assert_eq!(n, 1);
@@ -228,10 +204,7 @@ mod tests {
         // Zero weights test requires a specialized new or manual tensor setting
         // For simplicity using create_test_encoder and checking it doesn't panic
         let encoder = create_test_encoder(&device);
-        let points = Tensor::from_data(
-            TensorData::random([512, 6], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let points = Tensor::<Backend, 2>::random([512, 6], Distribution::Default, &device);
         let _out = encoder.forward(&points).expect("Forward failed");
     }
 }

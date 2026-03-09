@@ -16,8 +16,8 @@
 
 #[cfg(test)]
 mod point_mamba_tests {
-    use twister::ml::{PointNetEncoder, PointMamba, PointDecoder, PointMambaModel, PointMambaTrainingConfig};
-    use twister::visualization::GaussianSplatRenderer;
+    use twister::ml::PointMambaTrainingConfig;
+    use twister::visualization::{intensity_to_rgb, GaussianSplatRenderer};
 
     // ============================================================================
     // PHASE 3A: PointNet Encoder Tests
@@ -34,22 +34,34 @@ mod point_mamba_tests {
     fn test_phase3a_encoder_expected_architecture() {
         // Verify expected layer dimensions
         let encoder_layers = vec![
-            ("Input", 6, "Spatial coordinates: azimuth, elevation, frequency, intensity, time, confidence"),
+            (
+                "Input",
+                6,
+                "Spatial coordinates: azimuth, elevation, frequency, intensity, time, confidence",
+            ),
             ("Linear1", 64, "First MLP reduces dimensionality"),
             ("BatchNorm1", 64, "Normalizes first hidden layer"),
             ("Linear2", 128, "Second MLP expands expressivity"),
             ("BatchNorm2", 128, "Normalizes second hidden layer"),
             ("Linear3", 256, "Third MLP produces final embeddings"),
             ("BatchNorm3", 256, "Normalizes output"),
-            ("GlobalMaxPool", 256, "Aggregates across points via max pooling"),
+            (
+                "GlobalMaxPool",
+                256,
+                "Aggregates across points via max pooling",
+            ),
         ];
 
         println!("Phase 3A: PointNet Encoder Architecture");
-        for (name, dim, desc) in encoder_layers {
+        for (name, dim, desc) in &encoder_layers {
             println!("  {} (dim={}): {}", name, dim, desc);
         }
 
-        assert_eq!(encoder_layers.len(), 8, "Should have 8 architectural components");
+        assert_eq!(
+            encoder_layers.len(),
+            8,
+            "Should have 8 architectural components"
+        );
     }
 
     #[test]
@@ -62,7 +74,8 @@ mod point_mamba_tests {
         let linear3_params = 128 * 256 + 256;
         let bn3_params = 256 * 2;
 
-        let total = linear1_params + bn1_params + linear2_params + bn2_params + linear3_params + bn3_params;
+        let total =
+            linear1_params + bn1_params + linear2_params + bn2_params + linear3_params + bn3_params;
 
         println!("Phase 3A: PointNet Encoder Parameter Count");
         println!("  Linear1: {}", linear1_params);
@@ -158,7 +171,7 @@ mod point_mamba_tests {
             ("Channel 2", "Δz", "Frequency offset (Hz)"),
         ];
 
-        for (idx, symbol, desc) in channels {
+        for (idx, symbol, desc) in &channels {
             println!("  {}: {} - {}", idx, symbol, desc);
         }
 
@@ -180,7 +193,8 @@ mod point_mamba_tests {
 
     #[test]
     fn test_phase3d_gaussian_splatting_creation() {
-        let renderer = GaussianSplatRenderer::new(1024, 1024, 10000);
+        let shared = twister::gpu_shared::GpuShared::new().unwrap();
+        let renderer = GaussianSplatRenderer::new(shared, 1024, 1024, 10000);
         assert_eq!(renderer.viewport_size(), (1024, 1024));
         println!("Phase 3D: Gaussian Splatting Renderer - Creation ✓");
     }
@@ -193,9 +207,10 @@ mod point_mamba_tests {
             (2048, 2048, "4K preview"),
         ];
 
+        let shared = twister::gpu_shared::GpuShared::new().unwrap();
         println!("Phase 3D: Viewport Dimension Support");
         for (w, h, desc) in test_cases {
-            let renderer = GaussianSplatRenderer::new(w, h, 5000);
+            let renderer = GaussianSplatRenderer::new(shared.clone(), w, h, 5000);
             assert_eq!(renderer.viewport_size(), (w, h));
             println!("  {}×{} ({}) ✓", w, h, desc);
         }
@@ -203,7 +218,8 @@ mod point_mamba_tests {
 
     #[test]
     fn test_phase3d_gaussian_sigma_parameter() {
-        let mut renderer = GaussianSplatRenderer::new(512, 512, 1000);
+        let shared = twister::gpu_shared::GpuShared::new().unwrap();
+        let mut renderer = GaussianSplatRenderer::new(shared, 512, 512, 1000);
 
         let sigma_values = vec![0.05, 0.1, 0.15, 0.2];
 
@@ -217,7 +233,7 @@ mod point_mamba_tests {
 
     #[test]
     fn test_phase3d_colormap_heat_gradient() {
-        use twister::visualization::intensity_to_rgb;
+        // use twister::visualization::intensity_to_rgb; // Already imported above
 
         println!("Phase 3D: Heat Map Color Gradient");
 
@@ -231,31 +247,39 @@ mod point_mamba_tests {
 
         for (intensity, name, _expected_rgb) in test_intensities {
             let (r, g, b) = intensity_to_rgb(intensity);
-            println!("  {}: intensity={} → RGB({}, {}, {})", name, intensity, r, g, b);
+            println!(
+                "  {}: intensity={} → RGB({}, {}, {})",
+                name, intensity, r, g, b
+            );
         }
 
         // Test blue region (intensity ≈ 0)
-        let (r, g, b) = intensity_to_rgb(0.0);
+        let (_r, _g, b) = intensity_to_rgb(0.0);
         assert_eq!(b, 255, "Low intensity should be blue");
 
         // Test red region (intensity ≈ 1.0)
-        let (r, g, b) = intensity_to_rgb(1.0);
+        let (r, _g, _b) = intensity_to_rgb(1.0);
         assert_eq!(r, 255, "High intensity should be red");
 
         // Test white region (intensity > 1.0)
         let (r, g, b) = intensity_to_rgb(2.0);
-        assert_eq!((r, g, b), (255, 255, 255), "Very high intensity should be white");
+        assert_eq!(
+            (r, g, b),
+            (255, 255, 255),
+            "Very high intensity should be white"
+        );
     }
 
     #[test]
     fn test_phase3d_render_point_cloud() {
-        let mut renderer = GaussianSplatRenderer::new(256, 256, 100);
+        let shared = twister::gpu_shared::GpuShared::new().unwrap();
+        let mut renderer = GaussianSplatRenderer::new(shared, 256, 256, 100);
 
-        // Create test point cloud
-        let points: Vec<(f32, f32, f32, f32)> = vec![
-            (0.0, 0.0, 0.0, 0.5),   // Center, medium intensity
-            (0.5, 0.5, 0.0, 0.8),   // Corner, high intensity
-            (-0.5, -0.5, 0.0, 0.2), // Opposite corner, low intensity
+        // Create test point cloud (6-tuple: az, el, freq, intensity, ts, conf)
+        let points: Vec<(f32, f32, f32, f32, f32, f32)> = vec![
+            (0.0, 0.0, 0.0, 0.5, 0.0, 0.8),   // Center, medium intensity
+            (0.5, 0.5, 0.0, 0.8, 0.1, 0.9),   // Corner, high intensity
+            (-0.5, -0.5, 0.0, 0.2, 0.2, 0.7), // Opposite corner, low intensity
         ];
 
         let image = renderer.render(&points);
@@ -383,7 +407,9 @@ mod point_mamba_tests {
         println!("  • Status: ✓ Trainer framework implemented, training loop stubbed");
 
         println!("\n📈 ARCHITECTURE SUMMARY");
-        println!("  6-D Input → [Encoder: 256-D] → [Mamba: 8 blocks] → [Decoder: 3-D] → Displacement");
+        println!(
+            "  6-D Input → [Encoder: 256-D] → [Mamba: 8 blocks] → [Decoder: 3-D] → Displacement"
+        );
         println!("  Total Parameters: ~1M (reasonable for point cloud networks)");
         println!("  GPU Memory: ~100-200 MB (point buffers + textures)");
 

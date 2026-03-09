@@ -164,7 +164,7 @@ impl GaussianSplatRenderer {
         max_point_count: usize,
     ) -> Self {
         let device = &shared.device;
-        
+
         let point_buffer_size = max_point_count * std::mem::size_of::<[f32; 6]>();
         let point_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("gaussian_splat_points"),
@@ -195,10 +195,10 @@ impl GaussianSplatRenderer {
             view_formats: &[],
         });
 
-        let output_buffer_size = (viewport_width as u64
+        let output_buffer_size = viewport_width as u64
             * viewport_height as u64
             * 4u64
-            * std::mem::size_of::<f32>() as u64);
+            * std::mem::size_of::<f32>() as u64;
         let output_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("gaussian_splat_readback"),
             size: output_buffer_size,
@@ -301,8 +301,7 @@ impl GaussianSplatRenderer {
             point_data[i * 6 + 5] = p.5; // confidence
         }
 
-        queue
-            .write_buffer(&self.point_buffer, 0, bytemuck::cast_slice(&point_data));
+        queue.write_buffer(&self.point_buffer, 0, bytemuck::cast_slice(&point_data));
 
         let uniforms = SplatUniforms {
             width: self.viewport_width,
@@ -311,13 +310,11 @@ impl GaussianSplatRenderer {
             sigma: self.gaussian_sigma,
             time: 0.0,
         };
-        queue
-            .write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&uniforms));
+        queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&uniforms));
 
-        let mut encoder = device
-            .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-                label: Some("gaussian_splat_encoder"),
-            });
+        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+            label: Some("gaussian_splat_encoder"),
+        });
 
         {
             let mut compute_pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
@@ -360,7 +357,7 @@ impl GaussianSplatRenderer {
 
         let buffer_slice = self.output_buffer.slice(..);
         buffer_slice.map_async(wgpu::MapMode::Read, |_| {});
-        device.poll(wgpu::PollType::wait_indefinitely());
+        let _ = device.poll(wgpu::PollType::wait_indefinitely());
 
         let mapped = buffer_slice.get_mapped_range();
         let float_data: &[f32] = bytemuck::cast_slice(&mapped);
@@ -383,13 +380,13 @@ impl GaussianSplatRenderer {
         }
 
         let device = &self.shared.device;
-        
+
         self.viewport_width = new_width;
         self.viewport_height = new_height;
 
         // Recreate output texture and buffer with new dimensions
         let output_buffer_size =
-            (new_width as u64 * new_height as u64 * 4 * std::mem::size_of::<f32>() as u64);
+            new_width as u64 * new_height as u64 * 4 * std::mem::size_of::<f32>() as u64;
 
         self.output_texture = device.create_texture(&wgpu::TextureDescriptor {
             label: Some("gaussian_splat_output"),
@@ -498,7 +495,7 @@ mod tests {
 
     #[test]
     fn test_colormap_blue_region() {
-        let (r, g, b) = intensity_to_rgb(0.0);
+        let (r, _g, b) = intensity_to_rgb(0.0);
         assert_eq!((r, b), (0, 255));
     }
 

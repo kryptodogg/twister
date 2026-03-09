@@ -1,4 +1,5 @@
-use burn::prelude::*;
+use burn::prelude::Module;
+use burn::tensor::{backend::Backend, Tensor};
 use std::error::Error;
 
 /// Point Decoder: Mamba Features (N, 128) → 3D Offsets (N, 3)
@@ -48,7 +49,7 @@ impl<B: Backend> PointDecoder<B> {
     /// No dead padding. Each intermediate tensor is tightly-scoped and freed immediately.
     /// VGPRs minimized via vec4 packing in GPU execution.
     pub fn forward(&self, features: &Tensor<B, 2>) -> Result<Tensor<B, 2>, Box<dyn Error>> {
-        let [n_points, _n_features] = features.dims();
+        let [_n_points, _d] = features.dims();
 
         // MLP1: (N, 128) → (N, 256) with ReLU, function-packed
         let h1 = {
@@ -74,7 +75,7 @@ impl<B: Backend> PointDecoder<B> {
             .matmul(self.mlp3_w.clone())
             .add(self.mlp3_b.clone().unsqueeze_dim(0));
 
-        let [n_out, d_out] = offsets.dims();
+        let [_n_out, d_out] = offsets.dims();
         if d_out != 3 {
             return Err(format!("Expected 3 output dimensions, got {}", d_out).into());
         }
@@ -87,7 +88,7 @@ impl<B: Backend> PointDecoder<B> {
 mod tests {
     use super::*;
     use burn::backend::ndarray::NdArray;
-    use burn::tensor::TensorData;
+    use burn::tensor::Distribution;
 
     type Backend = NdArray<f32>;
 
@@ -96,20 +97,11 @@ mod tests {
         device: &<Backend as burn::tensor::backend::Backend>::Device,
     ) -> PointDecoder<Backend> {
         PointDecoder::new(
-            Tensor::from_data(
-                TensorData::random([128, 256], Distribution::Default, device),
-                device,
-            ),
+            Tensor::<Backend, 2>::random([128, 256], Distribution::Default, device),
             Tensor::zeros([256], device),
-            Tensor::from_data(
-                TensorData::random([256, 128], Distribution::Default, device),
-                device,
-            ),
+            Tensor::<Backend, 2>::random([256, 128], Distribution::Default, device),
             Tensor::zeros([128], device),
-            Tensor::from_data(
-                TensorData::random([128, 3], Distribution::Default, device),
-                device,
-            ),
+            Tensor::<Backend, 2>::random([128, 3], Distribution::Default, device),
             Tensor::zeros([3], device),
         )
     }
@@ -133,10 +125,7 @@ mod tests {
         let device = Default::default();
         let decoder = create_test_decoder(&device);
 
-        let features = Tensor::from_data(
-            TensorData::random([1024, 128], Distribution::Default, &device),
-            &device,
-        );
+        let features = Tensor::<Backend, 2>::random([1024, 128], Distribution::Default, &device);
         let out = decoder.forward(&features).expect("Forward failed");
         let [n, d] = out.dims();
 
@@ -150,10 +139,8 @@ mod tests {
         let decoder = create_test_decoder(&device);
 
         for size in [1, 32, 256, 1024] {
-            let features = Tensor::from_data(
-                TensorData::random([size, 128], Distribution::Default, &device),
-                &device,
-            );
+            let features =
+                Tensor::<Backend, 2>::random([size, 128], Distribution::Default, &device);
             let out = decoder.forward(&features).expect("Forward failed");
             let [n, d] = out.dims();
 
@@ -167,10 +154,7 @@ mod tests {
         let device = Default::default();
         let decoder = create_test_decoder(&device);
 
-        let features = Tensor::from_data(
-            TensorData::random([512, 128], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let features = Tensor::<Backend, 2>::random([512, 128], Distribution::Default, &device);
         let out = decoder.forward(&features).expect("Forward failed");
         let data = out.to_data().as_slice::<f32>().unwrap().to_vec();
 
@@ -185,10 +169,7 @@ mod tests {
         let device = Default::default();
         let decoder = create_test_decoder(&device);
 
-        let features = Tensor::from_data(
-            TensorData::random([512, 128], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let features = Tensor::<Backend, 2>::random([512, 128], Distribution::Default, &device);
         let out = decoder.forward(&features).expect("Forward failed");
         let data = out.to_data().as_slice::<f32>().unwrap().to_vec();
 
@@ -205,10 +186,7 @@ mod tests {
         let device = Default::default();
         let decoder = create_test_decoder(&device);
 
-        let features = Tensor::from_data(
-            TensorData::random([256, 128], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let features = Tensor::<Backend, 2>::random([256, 128], Distribution::Default, &device);
         let _out = decoder.forward(&features).expect("Forward failed");
     }
 
@@ -217,10 +195,7 @@ mod tests {
         let device = Default::default();
         let decoder = create_test_decoder(&device);
 
-        let features = Tensor::from_data(
-            TensorData::random([256, 128], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let features = Tensor::<Backend, 2>::random([256, 128], Distribution::Default, &device);
         let out1 = decoder.forward(&features).expect("Forward 1 failed");
         let out2 = decoder.forward(&features).expect("Forward 2 failed");
 
@@ -236,10 +211,7 @@ mod tests {
         let device = Default::default();
         let decoder = create_zero_decoder(&device);
 
-        let features = Tensor::from_data(
-            TensorData::random([512, 128], burn::tensor::Distribution::Default, &device),
-            &device,
-        );
+        let features = Tensor::<Backend, 2>::random([512, 128], Distribution::Default, &device);
         let out = decoder.forward(&features).expect("Forward failed");
         let data = out.to_data().as_slice::<f32>().unwrap().to_vec();
 

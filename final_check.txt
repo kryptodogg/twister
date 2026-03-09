@@ -150,6 +150,48 @@ warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` a
 
     Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
 warning: `twister` (lib) generated 14 warnings (run `cargo fix --lib -p twister` to apply 8 suggestions)
+warning: unused import: `std::sync::Arc`
+  --> tests\phase3_async_event_handler.rs:12:9
+   |
+12 |     use std::sync::Arc;
+   |         ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::time::Instant`
+  --> tests\phase3_async_event_handler.rs:13:9
+   |
+13 |     use std::time::Instant;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+  --> tests\phase3_async_event_handler.rs:14:9
+   |
+14 |     use tokio::sync::Mutex;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::marker::PhantomData`
+ --> tests\timegnn_integration.rs:7:9
+  |
+7 |     use std::marker::PhantomData;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `detected_azimuth`
+   --> tests\tdoa_elevation.rs:164:9
+    |
+164 |     let detected_azimuth = 20.0_f32.to_radians();
+    |         ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_azimuth`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `detected_elevation`
+   --> tests\tdoa_elevation.rs:165:9
+    |
+165 |     let detected_elevation = (-30.0_f32).to_radians();
+    |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_elevation`
+
 warning: variable does not need to be mutable
    --> src\main.rs:681:33
     |
@@ -1167,25 +1209,87 @@ warning: constant `VBUF_WGSL_HELPERS` is never used
 151 | pub const VBUF_WGSL_HELPERS: &str = r#"
     |           ^^^^^^^^^^^^^^^^^
 
-warning: unused variable: `c_freq`
-   --> tests\chord_dominance.rs:151:9
-    |
-151 |     let c_freq = 261.63;
-    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_c_freq`
-    |
-    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+warning: unused variable: `grad_norm_encoder`
+  --> tests\phase_3e_trainer_integration.rs:41:13
+   |
+41 |         let grad_norm_encoder = 0.5f32;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_encoder`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
 
-warning: unused variable: `e_freq`
-   --> tests\chord_dominance.rs:152:9
-    |
-152 |     let e_freq = 329.63;  // Major 3rd (5:4 ratio)
-    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_e_freq`
+warning: unused variable: `grad_norm_mamba`
+  --> tests\phase_3e_trainer_integration.rs:42:13
+   |
+42 |         let grad_norm_mamba = 0.8f32;
+   |             ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_mamba`
 
-warning: unused variable: `g_freq`
-   --> tests\chord_dominance.rs:153:9
+warning: unused variable: `small_loss`
+   --> tests\phase_3e_trainer_integration.rs:137:13
     |
-153 |     let g_freq = 392.00;  // Perfect 5th (3:2 ratio from C)
-    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_g_freq`
+137 |         let small_loss = 0.5 * small_error * small_error;
+    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_small_loss`
+
+warning: unused import: `train_timegnn`
+  --> tests\timegnn_training.rs:15:9
+   |
+15 |         train_timegnn, discover_patterns, cosine_similarity, compute_nt_xent_loss,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::collections::HashMap`
+  --> tests\timegnn_training.rs:20:9
+   |
+20 |     use std::collections::HashMap;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `loss_similar`
+  --> tests\timegnn_training.rs:50:13
+   |
+50 |         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
+   |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_loss_similar`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `config`
+  --> tests\timegnn_training.rs:81:13
+   |
+81 |         let config = TimeGnnTrainingConfig {
+   |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+warning: unused variable: `audio`
+  --> tests\wav2vec2_integration.rs:71:13
+   |
+71 |         let audio: Vec<f32> = (0..16000)
+   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `beam_confidence`
+  --> tests\mamba_control_capture.rs:10:9
+   |
+10 |     let beam_confidence = 0.85;
+   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_beam_confidence`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_beams`
+  --> tests\mamba_control_capture.rs:98:9
+   |
+98 |     let num_beams = 4;
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_beams`
+
+warning: unused variable: `memo_uuid`
+   --> tests\mamba_control_capture.rs:307:9
+    |
+307 |     let memo_uuid = "abc-def-123";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_memo_uuid`
+
+warning: unused variable: `timestamp`
+   --> tests\mamba_control_capture.rs:308:9
+    |
+308 |     let timestamp = "2026-03-07T14:25:30Z";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
 
 warning: unused import: `MeshLodLevel`
  --> tests\mesh_shaders_integration.rs:6:68
@@ -1195,6 +1299,15 @@ warning: unused import: `MeshLodLevel`
   |
   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
 
+warning: `twister` (test "phase3_async_event_handler") generated 3 warnings (run `cargo fix --test "phase3_async_event_handler" -p twister` to apply 3 suggestions)
+warning: `twister` (test "timegnn_integration") generated 1 warning (run `cargo fix --test "timegnn_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "tdoa_elevation") generated 2 warnings (run `cargo fix --test "tdoa_elevation" -p twister` to apply 2 suggestions)
+warning: `twister` (bin "twister" test) generated 108 warnings (run `cargo fix --bin "twister" -p twister --tests` to apply 8 suggestions)
+warning: `twister` (test "phase_3e_trainer_integration") generated 3 warnings (run `cargo fix --test "phase_3e_trainer_integration" -p twister` to apply 3 suggestions)
+warning: `twister` (test "timegnn_training") generated 4 warnings (run `cargo fix --test "timegnn_training" -p twister` to apply 4 suggestions)
+warning: `twister` (test "wav2vec2_integration") generated 1 warning (run `cargo fix --test "wav2vec2_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+warning: `twister` (test "mesh_shaders_integration") generated 1 warning (run `cargo fix --test "mesh_shaders_integration" -p twister` to apply 1 suggestion)
 warning: unused variable: `last_block_end`
    --> tests\phase_3d_blelloch_scan.rs:179:13
     |
@@ -1223,28 +1336,37 @@ warning: function `verify_sorted_order` is never used
 278 |     fn verify_sorted_order(keys: &[u32]) -> bool {
     |        ^^^^^^^^^^^^^^^^^^^
 
-warning: unused import: `std::marker::PhantomData`
- --> tests\timegnn_integration.rs:7:9
-  |
-7 |     use std::marker::PhantomData;
-  |         ^^^^^^^^^^^^^^^^^^^^^^^^
-  |
-  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused variable: `detected_azimuth`
-   --> tests\tdoa_elevation.rs:164:9
+warning: unused variable: `c_freq`
+   --> tests\chord_dominance.rs:151:9
     |
-164 |     let detected_azimuth = 20.0_f32.to_radians();
-    |         ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_azimuth`
+151 |     let c_freq = 261.63;
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_c_freq`
     |
     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
 
-warning: unused variable: `detected_elevation`
-   --> tests\tdoa_elevation.rs:165:9
+warning: unused variable: `e_freq`
+   --> tests\chord_dominance.rs:152:9
     |
-165 |     let detected_elevation = (-30.0_f32).to_radians();
-    |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_detected_elevation`
+152 |     let e_freq = 329.63;  // Major 3rd (5:4 ratio)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_e_freq`
 
+warning: unused variable: `g_freq`
+   --> tests\chord_dominance.rs:153:9
+    |
+153 |     let g_freq = 392.00;  // Perfect 5th (3:2 ratio from C)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_g_freq`
+
+warning: unused import: `std::fs`
+ --> tests\checkpoint_persistence.rs:1:5
+  |
+1 | use std::fs;
+  |     ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (test "phase_3d_blelloch_scan") generated 4 warnings (run `cargo fix --test "phase_3d_blelloch_scan" -p twister` to apply 1 suggestion)
+warning: `twister` (test "chord_dominance") generated 3 warnings (run `cargo fix --test "chord_dominance" -p twister` to apply 3 suggestions)
+warning: `twister` (test "checkpoint_persistence") generated 1 warning (run `cargo fix --test "checkpoint_persistence" -p twister` to apply 1 suggestion)
 warning: value assigned to `active_tab` is never read
    --> tests\analysis_ui_integration.rs:494:35
     |
@@ -1308,75 +1430,6 @@ warning: fields `event_a_idx`, `event_b_idx`, and `strength` are never read
    |
    = note: `MockCorrelation` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
 
-warning: `twister` (bin "twister" test) generated 108 warnings (run `cargo fix --bin "twister" -p twister --tests` to apply 8 suggestions)
-warning: `twister` (test "chord_dominance") generated 3 warnings (run `cargo fix --test "chord_dominance" -p twister` to apply 3 suggestions)
-warning: `twister` (test "mesh_shaders_integration") generated 1 warning (run `cargo fix --test "mesh_shaders_integration" -p twister` to apply 1 suggestion)
-warning: `twister` (test "phase_3d_blelloch_scan") generated 4 warnings (run `cargo fix --test "phase_3d_blelloch_scan" -p twister` to apply 1 suggestion)
-warning: `twister` (test "timegnn_integration") generated 1 warning (run `cargo fix --test "timegnn_integration" -p twister` to apply 1 suggestion)
-warning: `twister` (test "tdoa_elevation") generated 2 warnings (run `cargo fix --test "tdoa_elevation" -p twister` to apply 2 suggestions)
-warning: `twister` (test "analysis_ui_integration") generated 5 warnings
-warning: unused import: `train_timegnn`
-  --> tests\timegnn_training.rs:15:9
-   |
-15 |         train_timegnn, discover_patterns, cosine_similarity, compute_nt_xent_loss,
-   |         ^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused import: `std::collections::HashMap`
-  --> tests\timegnn_training.rs:20:9
-   |
-20 |     use std::collections::HashMap;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-warning: unused variable: `loss_similar`
-  --> tests\timegnn_training.rs:50:13
-   |
-50 |         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
-   |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_loss_similar`
-   |
-   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused variable: `config`
-  --> tests\timegnn_training.rs:81:13
-   |
-81 |         let config = TimeGnnTrainingConfig {
-   |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
-
-warning: unused import: `std::fs`
- --> tests\checkpoint_persistence.rs:1:5
-  |
-1 | use std::fs;
-  |     ^^^^^^^
-  |
-  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused variable: `beam_confidence`
-  --> tests\mamba_control_capture.rs:10:9
-   |
-10 |     let beam_confidence = 0.85;
-   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_beam_confidence`
-   |
-   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused variable: `num_beams`
-  --> tests\mamba_control_capture.rs:98:9
-   |
-98 |     let num_beams = 4;
-   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_beams`
-
-warning: unused variable: `memo_uuid`
-   --> tests\mamba_control_capture.rs:307:9
-    |
-307 |     let memo_uuid = "abc-def-123";
-    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_memo_uuid`
-
-warning: unused variable: `timestamp`
-   --> tests\mamba_control_capture.rs:308:9
-    |
-308 |     let timestamp = "2026-03-07T14:25:30Z";
-    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
-
 warning: unused variable: `output`
   --> tests\pdm_spike_rejection.rs:61:10
    |
@@ -1385,61 +1438,8 @@ warning: unused variable: `output`
    |
    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
 
-warning: unused import: `std::sync::Arc`
-  --> tests\phase3_async_event_handler.rs:12:9
-   |
-12 |     use std::sync::Arc;
-   |         ^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused import: `std::time::Instant`
-  --> tests\phase3_async_event_handler.rs:13:9
-   |
-13 |     use std::time::Instant;
-   |         ^^^^^^^^^^^^^^^^^^
-
-warning: unused import: `tokio::sync::Mutex`
-  --> tests\phase3_async_event_handler.rs:14:9
-   |
-14 |     use tokio::sync::Mutex;
-   |         ^^^^^^^^^^^^^^^^^^
-
-warning: unused variable: `audio`
-  --> tests\wav2vec2_integration.rs:71:13
-   |
-71 |         let audio: Vec<f32> = (0..16000)
-   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
-   |
-   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
-
-warning: `twister` (test "timegnn_training") generated 4 warnings (run `cargo fix --test "timegnn_training" -p twister` to apply 4 suggestions)
-warning: `twister` (test "checkpoint_persistence") generated 1 warning (run `cargo fix --test "checkpoint_persistence" -p twister` to apply 1 suggestion)
-warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+warning: `twister` (test "analysis_ui_integration") generated 5 warnings
 warning: `twister` (test "pdm_spike_rejection") generated 1 warning (run `cargo fix --test "pdm_spike_rejection" -p twister` to apply 1 suggestion)
-warning: `twister` (test "phase3_async_event_handler") generated 3 warnings (run `cargo fix --test "phase3_async_event_handler" -p twister` to apply 3 suggestions)
-warning: `twister` (test "wav2vec2_integration") generated 1 warning (run `cargo fix --test "wav2vec2_integration" -p twister` to apply 1 suggestion)
-warning: unused variable: `grad_norm_encoder`
-  --> tests\phase_3e_trainer_integration.rs:41:13
-   |
-41 |         let grad_norm_encoder = 0.5f32;
-   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_encoder`
-   |
-   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused variable: `grad_norm_mamba`
-  --> tests\phase_3e_trainer_integration.rs:42:13
-   |
-42 |         let grad_norm_mamba = 0.8f32;
-   |             ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_mamba`
-
-warning: unused variable: `small_loss`
-   --> tests\phase_3e_trainer_integration.rs:137:13
-    |
-137 |         let small_loss = 0.5 * small_error * small_error;
-    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_small_loss`
-
-warning: `twister` (test "phase_3e_trainer_integration") generated 3 warnings (run `cargo fix --test "phase_3e_trainer_integration" -p twister` to apply 3 suggestions)
 error[E0282]: type annotations needed for `Vec<_>`
   --> examples\alignment_comparison.rs:87:25
    |
@@ -1531,121 +1531,190 @@ warning: unused variable: `b`
 For more information about this error, try `rustc --explain E0609`.
 warning: `twister` (test "point_mamba_integration") generated 4 warnings
 error: could not compile `twister` (test "point_mamba_integration") due to 6 previous errors; 4 warnings emitted
-warning: unused import: `std::collections::VecDeque`
-  --> src\ml\pointnet_encoder.rs:83:9
+error[E0283]: type annotations needed
+  --> src\ml\mamba_block.rs:87:13
    |
-83 |     use std::collections::VecDeque; // Added this import
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+86 |         let block = MambaBlock::new(
+   |                     --------------- type must be known at this point
+87 |             Tensor::random([128, 128], burn::tensor::Distribution::Default, &device),
+   |             ^^^^^^^^^^^^^^ cannot infer type of the type parameter `B` declared on the struct `Tensor`
    |
-   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+   = note: cannot satisfy `_: burn::prelude::Backend`
+help: the following types implement trait `burn::prelude::Backend`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-ndarray-0.21.0-pre.2\src\backend.rs:60:1
+   |
+60 | / impl<E: FloatNdArrayElement, I: IntNdArrayElement, Q: QuantElement> Backend for NdArray<E, I, Q>
+61 | | where
+62 | |     NdArrayTensor: From<SharedArray<E>>,
+63 | |     NdArrayTensor: From<SharedArray<I>>,
+   | |________________________________________^ `burn_ndarray::NdArray<E, I, Q>`
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-fusion-0.21.0-pre.2\src\backend.rs:25:1
+   |
+25 |   impl<B: FusionBackend> Backend for Fusion<B> {
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn_fusion::backend::Fusion<B>`
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-cubecl-0.21.0-pre.2\src\backend.rs:24:1
+   |
+24 | / impl<R, F, I, BT> Backend for CubeBackend<R, F, I, BT>
+25 | | where
+26 | |     R: CubeRuntime,
+27 | |     R::Server: ComputeServer,
+...  |
+30 | |     I: IntElement,
+31 | |     BT: BoolElement,
+   | |____________________^ `CubeBackend<R, F, I, BT>`
+note: required by a bound in `mamba_block::MambaBlock::<B>::new`
+  --> src\ml\mamba_block.rs:14:9
+   |
+14 | impl<B: Backend> MambaBlock<B> {
+   |         ^^^^^^^ required by this bound in `MambaBlock::<B>::new`
+15 |     /// Initialize with function-packed matrices
+16 |     pub fn new(
+   |            --- required by a bound in this associated function
+help: consider specifying the generic arguments
+   |
+87 |             Tensor::<B, 2>::random([128, 128], burn::tensor::Distribution::Default, &device),
+   |                   ++++++++
 
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:89:85
+error[E0283]: type annotations needed
+   --> src\ml\mamba_block.rs:106:13
     |
- 89 |                 TensorData::random([128, 128], burn::tensor::Distribution::Default, &device),
-    |                 ------------------ arguments to this function are incorrect         ^^^^^^^ types differ in mutability
+105 |         let block = MambaBlock::new(
+    |                     --------------- type must be known at this point
+106 |             Tensor::zeros([128, 128], &device),
+    |             ^^^^^^^^^^^^^ cannot infer type of the type parameter `B` declared on the struct `Tensor`
     |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
+    = note: cannot satisfy `_: burn::prelude::Backend`
+help: the following types implement trait `burn::prelude::Backend`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-ndarray-0.21.0-pre.2\src\backend.rs:60:1
     |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
+ 60 | / impl<E: FloatNdArrayElement, I: IntNdArrayElement, Q: QuantElement> Backend for NdArray<E, I, Q>
+ 61 | | where
+ 62 | |     NdArrayTensor: From<SharedArray<E>>,
+ 63 | |     NdArrayTensor: From<SharedArray<I>>,
+    | |________________________________________^ `burn_ndarray::NdArray<E, I, Q>`
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-fusion-0.21.0-pre.2\src\backend.rs:25:1
+    |
+ 25 |   impl<B: FusionBackend> Backend for Fusion<B> {
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn_fusion::backend::Fusion<B>`
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-cubecl-0.21.0-pre.2\src\backend.rs:24:1
+    |
+ 24 | / impl<R, F, I, BT> Backend for CubeBackend<R, F, I, BT>
+ 25 | | where
+ 26 | |     R: CubeRuntime,
+ 27 | |     R::Server: ComputeServer,
+...   |
+ 30 | |     I: IntElement,
+ 31 | |     BT: BoolElement,
+    | |____________________^ `CubeBackend<R, F, I, BT>`
+note: required by a bound in `mamba_block::MambaBlock::<B>::new`
+   --> src\ml\mamba_block.rs:14:9
+    |
+ 14 | impl<B: Backend> MambaBlock<B> {
+    |         ^^^^^^^ required by this bound in `MambaBlock::<B>::new`
+ 15 |     /// Initialize with function-packed matrices
+ 16 |     pub fn new(
+    |            --- required by a bound in this associated function
+help: consider specifying the generic arguments
+    |
+106 |             Tensor::<B, 2>::zeros([128, 128], &device),
+    |                   ++++++++
 
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:98:85
+error[E0283]: type annotations needed
+   --> src\ml\mamba_block.rs:128:13
     |
- 98 |             TensorData::random([4, 1024, 128], burn::tensor::Distribution::Default, &device),
-    |             ------------------ arguments to this function are incorrect             ^^^^^^^ types differ in mutability
+127 |         let block = MambaBlock::new(
+    |                     --------------- type must be known at this point
+128 |             Tensor::random([128, 128], burn::tensor::Distribution::Default, &device),
+    |             ^^^^^^^^^^^^^^ cannot infer type of the type parameter `B` declared on the struct `Tensor`
     |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
+    = note: cannot satisfy `_: burn::prelude::Backend`
+help: the following types implement trait `burn::prelude::Backend`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-ndarray-0.21.0-pre.2\src\backend.rs:60:1
     |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
+ 60 | / impl<E: FloatNdArrayElement, I: IntNdArrayElement, Q: QuantElement> Backend for NdArray<E, I, Q>
+ 61 | | where
+ 62 | |     NdArrayTensor: From<SharedArray<E>>,
+ 63 | |     NdArrayTensor: From<SharedArray<I>>,
+    | |________________________________________^ `burn_ndarray::NdArray<E, I, Q>`
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-fusion-0.21.0-pre.2\src\backend.rs:25:1
+    |
+ 25 |   impl<B: FusionBackend> Backend for Fusion<B> {
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn_fusion::backend::Fusion<B>`
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-cubecl-0.21.0-pre.2\src\backend.rs:24:1
+    |
+ 24 | / impl<R, F, I, BT> Backend for CubeBackend<R, F, I, BT>
+ 25 | | where
+ 26 | |     R: CubeRuntime,
+ 27 | |     R::Server: ComputeServer,
+...   |
+ 30 | |     I: IntElement,
+ 31 | |     BT: BoolElement,
+    | |____________________^ `CubeBackend<R, F, I, BT>`
+note: required by a bound in `mamba_block::MambaBlock::<B>::new`
+   --> src\ml\mamba_block.rs:14:9
+    |
+ 14 | impl<B: Backend> MambaBlock<B> {
+    |         ^^^^^^^ required by this bound in `MambaBlock::<B>::new`
+ 15 |     /// Initialize with function-packed matrices
+ 16 |     pub fn new(
+    |            --- required by a bound in this associated function
+help: consider specifying the generic arguments
+    |
+128 |             Tensor::<B, 2>::random([128, 128], burn::tensor::Distribution::Default, &device),
+    |                   ++++++++
 
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:120:84
+error[E0283]: type annotations needed
+   --> src\ml\mamba_block.rs:148:13
     |
-120 |             TensorData::random([2, 512, 128], burn::tensor::Distribution::Default, &device),
-    |             ------------------ arguments to this function are incorrect            ^^^^^^^ types differ in mutability
+147 |         let block = MambaBlock::new(
+    |                     --------------- type must be known at this point
+148 |             Tensor::random([128, 128], burn::tensor::Distribution::Default, &device),
+    |             ^^^^^^^^^^^^^^ cannot infer type of the type parameter `B` declared on the struct `Tensor`
     |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
+    = note: cannot satisfy `_: burn::prelude::Backend`
+help: the following types implement trait `burn::prelude::Backend`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-ndarray-0.21.0-pre.2\src\backend.rs:60:1
     |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
+ 60 | / impl<E: FloatNdArrayElement, I: IntNdArrayElement, Q: QuantElement> Backend for NdArray<E, I, Q>
+ 61 | | where
+ 62 | |     NdArrayTensor: From<SharedArray<E>>,
+ 63 | |     NdArrayTensor: From<SharedArray<I>>,
+    | |________________________________________^ `burn_ndarray::NdArray<E, I, Q>`
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-fusion-0.21.0-pre.2\src\backend.rs:25:1
+    |
+ 25 |   impl<B: FusionBackend> Backend for Fusion<B> {
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn_fusion::backend::Fusion<B>`
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-cubecl-0.21.0-pre.2\src\backend.rs:24:1
+    |
+ 24 | / impl<R, F, I, BT> Backend for CubeBackend<R, F, I, BT>
+ 25 | | where
+ 26 | |     R: CubeRuntime,
+ 27 | |     R::Server: ComputeServer,
+...   |
+ 30 | |     I: IntElement,
+ 31 | |     BT: BoolElement,
+    | |____________________^ `CubeBackend<R, F, I, BT>`
+note: required by a bound in `mamba_block::MambaBlock::<B>::new`
+   --> src\ml\mamba_block.rs:14:9
+    |
+ 14 | impl<B: Backend> MambaBlock<B> {
+    |         ^^^^^^^ required by this bound in `MambaBlock::<B>::new`
+ 15 |     /// Initialize with function-packed matrices
+ 16 |     pub fn new(
+    |            --- required by a bound in this associated function
+help: consider specifying the generic arguments
+    |
+148 |             Tensor::<B, 2>::random([128, 128], burn::tensor::Distribution::Default, &device),
+    |                   ++++++++
 
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:139:85
-    |
-139 |                 TensorData::random([128, 128], burn::tensor::Distribution::Default, &device),
-    |                 ------------------ arguments to this function are incorrect         ^^^^^^^ types differ in mutability
-    |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
-    |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
-
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:148:84
-    |
-148 |             TensorData::random([8, 256, 128], burn::tensor::Distribution::Default, &device),
-    |             ------------------ arguments to this function are incorrect            ^^^^^^^ types differ in mutability
-    |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
-    |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
-
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:165:85
-    |
-165 |                 TensorData::random([128, 128], burn::tensor::Distribution::Default, &device),
-    |                 ------------------ arguments to this function are incorrect         ^^^^^^^ types differ in mutability
-    |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
-    |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
-
-error[E0308]: mismatched types
-   --> src\ml\mamba_block.rs:178:21
-    |
-175 |                 TensorData::random(
-    |                 ------------------ arguments to this function are incorrect
-...
-178 |                     &device,
-    |                     ^^^^^^^ types differ in mutability
-    |
-    = note: expected mutable reference `&mut _`
-                       found reference `&_`
-note: associated function defined here
-   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\data\tensor.rs:310:12
-    |
-310 |     pub fn random<E: Element, R: Rng, S: Into<Vec<usize>>>(
-    |            ^^^^^^
-
-warning: unused variable: `g`
-   --> src\visualization\gaussian_splatting.rs:498:17
-    |
-498 |         let (r, g, b) = intensity_to_rgb(0.0);
-    |                 ^ help: if this is intentional, prefix it with an underscore: `_g`
-
-For more information about this error, try `rustc --explain E0308`.
-warning: `twister` (lib test) generated 10 warnings (8 duplicates)
-error: could not compile `twister` (lib test) due to 7 previous errors; 10 warnings emitted
+For more information about this error, try `rustc --explain E0283`.
+warning: `twister` (lib test) generated 8 warnings (8 duplicates)
+error: could not compile `twister` (lib test) due to 4 previous errors; 8 warnings emitted
