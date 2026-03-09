@@ -16,6 +16,8 @@ pub mod timegnn_trainer;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
 
+pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+
 /// src/ml/mod.rs
 /// ML module: burn-wgpu graph neural network for event embedding
 /// Orchestrates TimeGNN model for GPU-accelerated inference

@@ -24,6 +24,10 @@ const MIN_NORM_EPSILON: f32 = 1e-7;
 pub struct MultimodalFeatures {
     /// 196-D audio features from Phase 2 D.2 extraction
     pub audio: [f32; 196],
+    /// 138-D harmonics features
+    pub harmonics: [f32; 138],
+    /// 67-D modulation features
+    pub modulation: [f32; 67],
     /// 128-D ray tracing features from Phase 2 D.1
     pub ray: [f32; 128],
     /// 768-D speech embeddings from wav2vec2-base-960h
