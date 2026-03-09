@@ -1,5 +1,4 @@
 use crate::anc_calibration::FullRangeCalibration;
-use crate::forensic::ForensicEvent;
 use burn::module::Module;
 use burn::nn::{Linear, LinearConfig};
 use burn::tensor::backend::Backend;

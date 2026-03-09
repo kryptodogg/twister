@@ -161,3 +161,5 @@ impl Default for FusionEngine {
         Self::new()
     }
 }
+
+pub mod imu_pose_fusion;
