@@ -1,0 +1,106 @@
+import { Button, LineEdit, ScrollView, TextEdit } from "std-widgets.slint";
+
+export struct ChatMessage {
+    role: string,
+    content: string,
+    citations: string,
+}
+
+export component CopilotPanel inherits Rectangle {
+    in-out property <[ChatMessage]> messages: [
+        { role: "system", content: "I am Dorothy, your forensic analysis AI. Ask me about the data.", citations: "" }
+    ];
+    in-out property <string> current_input;
+    in property <bool> is_processing: false;
+    callback send_query(string);
+
+    background: #1a1a2e; // Deep dark blue for agentic UI
+
+    VerticalLayout {
+        padding: 10px;
+        spacing: 10px;
+
+        // Header
+        Text {
+            text: "Dorothy Copilot (Knowledge Graph)";
+            font-size: 16px;
+            font-weight: 700;
+            color: #00f0ff; // Cyberpunk cyan
+            horizontal-alignment: center;
+        }
+
+        // Graph Visualization Placeholder
+        Rectangle {
+            height: 150px;
+            background: #0f0f1a;
+            border-color: #00f0ff;
+            border-width: 1px;
+
+            Text {
+                text: "Knowledge Graph View\n(3D Node-Link rendering via wgpu)";
+                color: #555577;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+
+        // Chat History
+        ScrollView {
+            VerticalLayout {
+                spacing: 8px;
+                padding-right: 5px;
+                for msg in root.messages : Rectangle {
+                    background: msg.role == "user" ? #2a2a4a : #1a3a3a;
+                    border-radius: 5px;
+                    padding: 8px;
+
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text {
+                            text: msg.role == "user" ? "You" : "Dorothy";
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: msg.role == "user" ? #aaccff : #00f0ff;
+                        }
+                        Text {
+                            text: msg.content;
+                            wrap: word-wrap;
+                            color: #e0e0e0;
+                            font-size: 14px;
+                        }
+                        if (msg.citations != "") : Text {
+                            text: "Evidence: " + msg.citations;
+                            font-size: 10px;
+                            color: #778899;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Input Area
+        HorizontalLayout {
+            spacing: 5px;
+
+            input := LineEdit {
+                text <=> root.current_input;
+                placeholder-text: "Ask a question (e.g., 'Show me Friday attacks at azimuth 45')...";
+                accepted => {
+                    if (root.current_input != "" && !root.is_processing) {
+                        root.send_query(root.current_input);
+                        root.current_input = "";
+                    }
+                }
+            }
+
+            Button {
+                text: root.is_processing ? "Thinking..." : "Send";
+                enabled: root.current_input != "" && !root.is_processing;
+                clicked => {
+                    root.send_query(root.current_input);
+                    root.current_input = "";
+                }
+            }
+        }
+    }
+}

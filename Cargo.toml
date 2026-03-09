@@ -33,7 +33,7 @@ num-complex = "*"
 parking_lot = "*"
 pollster = "*"
 qdrant-client = "*"
-rand = { version = "*", features = ["std", "std_rng"] }
+rand = "0.8"
 rustfft = "*"
 # ── Serialisation ──────────────────────────────────────────────────────────────
 serde = { version = "*", features = ["derive"] }
@@ -47,6 +47,7 @@ slint = { version ="1.15.1", default-features = false, features = [
 ] }
 tempfile = "*"
 tokio = { version = "*", features = ["full"] }
+async-trait = "*"
 # ── GPU compute ────────────────────────────────────────────────────────────────
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
