@@ -505,17 +505,6 @@ impl ForensicLogger {
         Ok(())
     }
 
-    pub fn log_detection(&mut self, event: &DetectionEvent) -> anyhow::Result<()> {
-        self.event_count += 1;
-
-        // Create forensic event with full metadata
-        let forensic_event =
-            ForensicEvent::from_detection(event, &self.session_id, self.equipment.clone());
-
-        // Log as forensic event
-        let record = serde_json::to_string(&forensic_event)?;
-        writeln!(self.writer, "{}", record)?;
-
     pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
         // Map old DetectionEvent to ForensicEvent V2
         let confidence = (event.magnitude * event.coherence_frames as f32).min(1.0);
