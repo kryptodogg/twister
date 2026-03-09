@@ -1,5 +1,5 @@
-use twister::spatial::elevation_estimator::ElevationEstimator; // Check path
 use std::f32::consts::FRAC_PI_2;
+use twister::spatial::elevation_estimator::ElevationEstimator; // Check path
 
 #[test]
 fn test_elevation_computation_synthetic() {
