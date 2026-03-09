@@ -400,6 +400,10 @@ async fn main() -> anyhow::Result<()> {
                 vbuffer_coherence: None,
                 anc_phase: None,
                 harmonic_energy: None,
+                impulse_detection: None,
+                video_frame: None,
+                video_frame_timestamp_us: 0,
+                visual_features: None,
             };
             let device = burn::backend::ndarray::NdArrayDevice::Cpu;
             let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
