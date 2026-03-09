@@ -55,6 +55,7 @@ hf-hub = "*"
 safetensors = "*"
 tokio = { version = "1.43", features = ["full"] }
 rand = "0.8"
+hdf5 = "0.8.1"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]
