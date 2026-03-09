@@ -183,13 +183,19 @@ async fn main() -> anyhow::Result<()> {
         },
     ));
 
-    let forensic = Arc::new(std::sync::Mutex::new(
-        ForensicLogger::new(session_identity.as_str()).context("Forensic log init")?,
-    ));
+    let forensic = ForensicLogger::new(session_identity.as_str()).await.map_err(|e| anyhow::anyhow!("{:?}", e)).context("Forensic log init")?;
+
+    // Log SessionStart
+    let start_ev = crate::forensic::ForensicEvent::SessionStart {
+        timestamp_micros: crate::forensic::get_current_micros(),
+        app_version: env!("CARGO_PKG_VERSION").to_string(),
+        total_events_prior: 0,
+    };
+    let _ = forensic.log(start_ev);
     state.log(
         "INFO",
         "Forensic",
-        &format!("Log: {}", forensic.lock().unwrap().log_path().display()),
+        &format!("Log: {}", forensic.log_path().display()),
     );
 
     let (sdr_tx, sdr_rx) = sdr_channel();
@@ -408,10 +414,6 @@ async fn main() -> anyhow::Result<()> {
                 visual_features: None,
                 anc_phase: None,
                 harmonic_energy: None,
-                impulse_detection: None,
-                video_frame: None,
-                video_frame_timestamp_us: 0,
-                visual_features: None,
             };
             let device = burn::backend::ndarray::NdArrayDevice::Cpu;
             let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
@@ -595,9 +597,7 @@ async fn main() -> anyhow::Result<()> {
                 {
                     let mut enriched_event = event.clone();
                     state_disp.enrich_event_forensics(&mut enriched_event);
-                    if let Ok(mut f) = forensic_disp.lock() {
-                        let _ = f.log_detection(&enriched_event);
-                    }
+                    let _ = forensic_disp.log_detection(&enriched_event);
                 }
 
                 // 2. Qdrant + Neo4j persistence
@@ -652,9 +652,7 @@ async fn main() -> anyhow::Result<()> {
                                             "[Forensic] RECURRENCE score={:.2} freq={:.1}Hz prior_ts={}ms",
                                             top.score, top.event.f1_hz, ts
                                         );
-                                        if let Ok(mut f) = fdc.lock() {
-                                            let _ = f.log_detection(&top.event);
-                                        }
+                                        let _ = fdc.log_detection(&top.event);
                                     }
                                 }
                                 Err(e) => eprintln!("[Qdrant] find_similar: {e}"),
@@ -724,16 +722,14 @@ async fn main() -> anyhow::Result<()> {
                             let ecl = last_bispec_event.clone();
                             let eid2 = eid.clone();
                             tokio::spawn(async move {
-                                if let Ok(mut f) = fdc.lock() {
-                                    println!(
-                                        "[DEFENSE] EVT:{} DC:{:.2}v RF:{:.1}MHz",
-                                        eid2,
-                                        audio_bias,
-                                        rf_hz / 1e6
-                                    );
-                                    if let Some(ev) = ecl {
-                                        let _ = f.log_detection(&ev);
-                                    }
+                                println!(
+                                    "[DEFENSE] EVT:{} DC:{:.2}v RF:{:.1}MHz",
+                                    eid2,
+                                    audio_bias,
+                                    rf_hz / 1e6
+                                );
+                                if let Some(ev) = ecl {
+                                    let _ = fdc.log_detection(&ev);
                                 }
                             });
                         }
@@ -1381,18 +1377,16 @@ async fn main() -> anyhow::Result<()> {
                 let ts = chrono::Utc::now().format("%Y%m%d_%H%M%S");
                 let path = format!("evidence/report_{ts}.html");
                 let case = format!("TWISTER_{}", s.train_epoch.load(Ordering::Relaxed));
-                if let Ok(f) = f.lock() {
-                    match f.export_evidence_report(
-                        &path,
-                        &case,
-                        "Operator",
-                        "Galveston TX",
-                        None,
-                        None,
-                    ) {
-                        Ok(_) => println!("[Forensic] Exported: {}", path),
-                        Err(e) => eprintln!("[Forensic] Export failed: {e}"),
-                    }
+                match f.export_evidence_report(
+                    &path,
+                    &case,
+                    "Operator",
+                    "Galveston TX",
+                    None,
+                    None,
+                ) {
+                    Ok(_) => println!("[Forensic] Exported: {}", path),
+                    Err(e) => eprintln!("[Forensic] Export failed: {e}"),
                 }
             });
         });
@@ -1437,19 +1431,20 @@ async fn main() -> anyhow::Result<()> {
         std::fs::create_dir_all("evidence").ok();
         let ts = chrono::Utc::now().format("%Y%m%d_%H%M%S");
         let path = format!("evidence/final_{ts}.html");
-        if let Ok(f) = forensic.lock() {
-            match f.export_evidence_report(
-                &path,
-                "TWISTER_FINAL",
-                "Operator",
-                "Galveston TX",
-                None,
-                None,
-            ) {
-                Ok(_) => println!("[Forensic] Final report: {}", path),
-                Err(e) => eprintln!("[Forensic] Final export failed: {e}"),
-            }
+
+        match forensic.export_evidence_report(
+            &path,
+            "TWISTER_FINAL",
+            "Operator",
+            "Galveston TX",
+            None,
+            None,
+        ) {
+            Ok(_) => println!("[Forensic] Final report: {}", path),
+            Err(e) => eprintln!("[Forensic] Final export failed: {e}"),
         }
+
+        let _ = forensic.shutdown().await;
     }
 
     println!("[Twister] Shutdown complete.");

@@ -1,3 +1,4 @@
+cat << 'INNER_EOF' > src/forensic.rs.new
 // src/forensic.rs — Forensic Event Logger  (v0.5)
 //
 // Evidence collection for harassment defense and investigation.
@@ -216,7 +217,7 @@ pub enum ForensicEvent {
     },
 
     // Legacy mapping (to be removed in Phase 2)
-    Bispectrum {
+    LegacyBispectrum {
         timestamp_micros: u64,
         f1_hz: f32,
         f2_hz: f32,
@@ -295,7 +296,7 @@ impl EventValidator {
                 Ok(())
             }
 
-            ForensicEvent::Bispectrum {
+            ForensicEvent::LegacyBispectrum {
                 f1_hz,
                 f2_hz,
                 product_hz,
@@ -385,7 +386,6 @@ impl LogRecoveryStrategy {
     }
 }
 
-#[derive(Clone)]
 pub struct ForensicLogger {
     sender: mpsc::UnboundedSender<ForensicEvent>,
     log_path: PathBuf,
@@ -477,7 +477,7 @@ impl ForensicLogger {
     pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
         // Map old DetectionEvent to ForensicEvent V2
         let confidence = (event.magnitude * event.coherence_frames as f32).min(1.0);
-        let fe = ForensicEvent::Bispectrum {
+        let fe = ForensicEvent::LegacyBispectrum {
             timestamp_micros: get_current_micros(),
             f1_hz: event.f1_hz,
             f2_hz: event.f2_hz,
@@ -515,7 +515,7 @@ impl ForensicLogger {
         .to_string()
     }
 
-    pub async fn shutdown(&self) -> Result<(), LogError> {
+    pub async fn shutdown(self) -> Result<(), LogError> {
         let session_end = ForensicEvent::SessionEnd {
             timestamp_micros: get_current_micros(),
             events_logged_this_session: 0, // Simplified for now since counting requires shared state
@@ -523,8 +523,7 @@ impl ForensicLogger {
         };
 
         let _ = self.sender.send(session_end);
-        // Note: we can't drop self.sender here because we only have a reference.
-        // The channel will close when all clones of ForensicLogger are dropped.
+        drop(self.sender); // Drop sender to close channel and stop task
 
         tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
         Ok(())
@@ -591,13 +590,13 @@ impl ForensicLogger {
             <tr><th>Total Events</th><td><strong>{}</strong></td></tr>
         </table>
     </div>
-    
+
     <div class="warning">
-        <strong>⚠️ Chain of Custody Notice:</strong> This report contains forensic evidence. 
+        <strong>⚠️ Chain of Custody Notice:</strong> This report contains forensic evidence.
         Do not alter, modify, or delete. Maintain proper chain of custody documentation.
         Original log file: <code>{}</code>
     </div>
-"#, 
+"#,
             case_number,
             case_number,
             chrono::Utc::now().to_rfc3339(),
@@ -695,7 +694,7 @@ pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
                     ForensicEvent::AudioFrameProcessed { timestamp_micros, .. } => *timestamp_micros,
                     ForensicEvent::RFDetection { timestamp_micros, .. } => *timestamp_micros,
                     ForensicEvent::MambaInference { timestamp_micros, .. } => *timestamp_micros,
-                    ForensicEvent::Bispectrum { timestamp_micros, .. } => *timestamp_micros,
+                    ForensicEvent::LegacyBispectrum { timestamp_micros, .. } => *timestamp_micros,
                     ForensicEvent::SessionEnd { timestamp_micros, .. } => *timestamp_micros,
                     _ => 0,
                 };
@@ -729,3 +728,6 @@ pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
         Err(format!("{} errors found", invalid_count + out_of_order_count))
     }
 }
+INNER_EOF
+mv src/forensic.rs.new src/forensic.rs
+cargo check

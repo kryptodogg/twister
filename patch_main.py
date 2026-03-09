@@ -1,39 +1,167 @@
 import re
 
-with open("src/main.rs", "r") as f:
-    code = f.read()
+with open('src/main.rs', 'r') as f:
+    content = f.read()
 
-# remove redundant imports
-code = re.sub(r'use crate::particle_system::renderer::ParticleRenderer;\n', '', code)
-code = re.sub(r'use crate::particle_system::frustum_culler::FrustumCuller;\n', '', code)
-code = re.sub(r'use crate::particle_system::streaming::ParticleStreamLoader;\n', '', code)
+# Replace initialization
+old_init = '''    let forensic = Arc::new(tokio::sync::Mutex::new(
+        ForensicLogger::new(session_identity.as_str()).await.map_err(|e| anyhow::anyhow!("{:?}", e)).context("Forensic log init")?,
+    ));
 
-# Fix duplicate instantiation
-# We see two definitions.
-# Let's completely replace the block between "let particle_renderer = " and "state.running.store("
-block_start = "    let particle_renderer ="
-block_end = "    state.running.store(true, Ordering::Relaxed);"
+    // Log SessionStart
+    if let Ok(f) = forensic.try_lock() {
+        let start_ev = crate::forensic::ForensicEvent::SessionStart {
+            timestamp_micros: crate::forensic::get_current_micros(),
+            app_version: env!("CARGO_PKG_VERSION").to_string(),
+            total_events_prior: 0,
+        };
+        let _ = f.log(start_ev);
+        state.log(
+            "INFO",
+            "Forensic",
+            &format!("Log: {}", f.log_path().display()),
+        );
+    }'''
 
-replacement = """    let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
-        gpu_shared.clone(),
-        10_000_000,
-        wgpu::TextureFormat::Rgba8Unorm,
-    );
-    let frustum_culler = crate::particle_system::frustum_culler::FrustumCuller::new(gpu_shared.clone(), 10_000_000);
-    let particle_streamer = std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
+new_init = '''    let forensic = ForensicLogger::new(session_identity.as_str()).await.map_err(|e| anyhow::anyhow!("{:?}", e)).context("Forensic log init")?;
 
-    let now_ms = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis() as u64;
-    let _ = tokio::spawn({
-        let s = particle_streamer.clone();
-        async move { s.load_window(now_ms - 8_380_800_000, now_ms, 1_000_000).await; }
-    });
+    // Log SessionStart
+    let start_ev = crate::forensic::ForensicEvent::SessionStart {
+        timestamp_micros: crate::forensic::get_current_micros(),
+        app_version: env!("CARGO_PKG_VERSION").to_string(),
+        total_events_prior: 0,
+    };
+    let _ = forensic.log(start_ev);
+    state.log(
+        "INFO",
+        "Forensic",
+        &format!("Log: {}", forensic.log_path().display()),
+    );'''
+content = content.replace(old_init, new_init)
 
-    state.running.store(true, std::sync::atomic::Ordering::Relaxed);"""
+# Fix logs inside dispatch loop
+old_log_1 = '''                    let f_disp = forensic_disp.clone();
+                    let ev_copy = enriched_event.clone();
+                    tokio::spawn(async move {
+                        if let Ok(f) = f_disp.try_lock() {
+                            let _ = f.log_detection(&ev_copy);
+                        }
+                    });'''
+new_log_1 = '''                    let _ = forensic_disp.log_detection(&enriched_event);'''
+content = content.replace(old_log_1, new_log_1)
 
-# I'll just use regex to replace anything that looks like ParticleSystem init block
-pattern = r"\s*let particle_renderer = .*?state\.running\.store\(true, (?:std::sync::atomic::)?Ordering::Relaxed\);"
 
-code = re.sub(pattern, "\n" + replacement, code, flags=re.DOTALL)
+old_log_2 = '''                                        let fdc_copy = fdc.clone();
+                                        let ev_copy = top.event.clone();
+                                        tokio::spawn(async move {
+                                            if let Ok(f) = fdc_copy.try_lock() {
+                                                let _ = f.log_detection(&ev_copy);
+                                            }
+                                        });'''
+new_log_2 = '''                                        let _ = fdc.log_detection(&top.event);'''
+content = content.replace(old_log_2, new_log_2)
 
-with open("src/main.rs", "w") as f:
-    f.write(code)
+
+old_log_3 = '''                                let fdc_copy = fdc.clone();
+                                tokio::spawn(async move {
+                                    if let Ok(f) = fdc_copy.try_lock() {
+                                        println!(
+                                            "[DEFENSE] EVT:{} DC:{:.2}v RF:{:.1}MHz",
+                                            eid2,
+                                            audio_bias,
+                                            rf_hz / 1e6
+                                        );
+                                        if let Some(ev) = ecl {
+                                            let _ = f.log_detection(&ev);
+                                        }
+                                    }
+                                });'''
+new_log_3 = '''                                println!(
+                                    "[DEFENSE] EVT:{} DC:{:.2}v RF:{:.1}MHz",
+                                    eid2,
+                                    audio_bias,
+                                    rf_hz / 1e6
+                                );
+                                if let Some(ev) = ecl {
+                                    let _ = fdc.log_detection(&ev);
+                                }'''
+content = content.replace(old_log_3, new_log_3)
+
+# Fix export button hook
+old_export = '''                if let Ok(f) = f.try_lock() {
+                    match f.export_evidence_report(
+                        &path,
+                        &case,
+                        "Operator",
+                        "Galveston TX",
+                        None,
+                        None,
+                    ) {
+                        Ok(_) => println!("[Forensic] Exported: {}", path),
+                        Err(e) => eprintln!("[Forensic] Export failed: {e}"),
+                    }
+                }'''
+new_export = '''                match f.export_evidence_report(
+                    &path,
+                    &case,
+                    "Operator",
+                    "Galveston TX",
+                    None,
+                    None,
+                ) {
+                    Ok(_) => println!("[Forensic] Exported: {}", path),
+                    Err(e) => eprintln!("[Forensic] Export failed: {e}"),
+                }'''
+content = content.replace(old_export, new_export)
+
+# Fix shutdown
+old_shutdown = '''    // Final evidence report
+    {
+        std::fs::create_dir_all("evidence").ok();
+        let ts = chrono::Utc::now().format("%Y%m%d_%H%M%S");
+        let path = format!("evidence/final_{ts}.html");
+
+        let f = Arc::into_inner(forensic).unwrap().into_inner();
+
+        match f.export_evidence_report(
+            &path,
+            "TWISTER_FINAL",
+            "Operator",
+            "Galveston TX",
+            None,
+            None,
+        ) {
+            Ok(_) => println!("[Forensic] Final report: {}", path),
+            Err(e) => eprintln!("[Forensic] Final export failed: {e}"),
+        }
+
+        let _ = f.shutdown().await;
+    }
+
+    println!("[Twister] Shutdown complete.");'''
+new_shutdown = '''    // Final evidence report
+    {
+        std::fs::create_dir_all("evidence").ok();
+        let ts = chrono::Utc::now().format("%Y%m%d_%H%M%S");
+        let path = format!("evidence/final_{ts}.html");
+
+        match forensic.export_evidence_report(
+            &path,
+            "TWISTER_FINAL",
+            "Operator",
+            "Galveston TX",
+            None,
+            None,
+        ) {
+            Ok(_) => println!("[Forensic] Final report: {}", path),
+            Err(e) => eprintln!("[Forensic] Final export failed: {e}"),
+        }
+
+        let _ = forensic.shutdown().await;
+    }
+
+    println!("[Twister] Shutdown complete.");'''
+content = content.replace(old_shutdown, new_shutdown)
+
+with open('src/main.rs', 'w') as f:
+    f.write(content)
