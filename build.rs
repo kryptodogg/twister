@@ -9,4 +9,5 @@ fn main() {
     slint_build::compile("ui/applets/spectral_ingester.slint").expect("Slint build failed");
     slint_build::compile("ui/applets/ps5_deck.slint").expect("Slint build failed");
     slint_build::compile("ui/applets/joycon_wand.slint").expect("Slint build failed");
+    slint_build::compile("ui/applets/toto_hud.slint").expect("Slint build failed");
 }

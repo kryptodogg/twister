@@ -68,7 +68,7 @@ rand = "*"
 hdf5 = "*"
 tray-icon = "*"
 noise = { version = "*", features = ["std"] }
-dualsense-rs = "*"
+# dualsense-rs = "*"
 raw-window-handle = "*"
 hidapi = "*"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
@@ -96,3 +96,11 @@ codegen-units = 1
 
 [target."cfg(windows)".dependencies]
 windows = { version = "*", features = ["Win32_Graphics_Dwm", "Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_Graphics_Gdi"] }
+
+[[example]]
+name = "applet_toto_core"
+path = "examples/applet_toto_core.rs"
+
+[[example]]
+name = "toto"
+path = "examples/toto.rs"
