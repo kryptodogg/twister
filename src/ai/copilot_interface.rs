@@ -1,4 +1,3 @@
-use crate::gpu_shared::GpuShared;
 use crate::knowledge_graph::KnowledgeGraphClient;
 use std::sync::Arc;
 

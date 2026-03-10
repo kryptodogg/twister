@@ -1,7 +1,41 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // toto.slint  —  Toto Core Field Probe Widget
 // Project Synesthesia · Design Language v1 · Slint 1.15+
+//
+// TRANSLATION NOTES (React → Slint mental model):
+//
+//   React: functions that return descriptions, re-run on state change
+//   Slint: a property graph where change propagates automatically
+//
+//   Where React called freqToColor(dominantFreqHz) on every render,
+//   Slint declares `wave-color` as an expression that *is* the color.
+//   The expression only re-evaluates when `dominant-freq-hz` changes.
+//   No diffing, no re-running — just lazy propagation.
+//
+// RATIO SYSTEM:
+//   All internal measurements derive from `unit-size` (the card height).
+//   The card is always 1.585 × unit-size wide (golden-ratio credit card).
+//   This means the widget renders correctly at any physical size by
+//   setting one property on the root component.
+//
+// GLOW TECHNIQUE:
+//   Slint has no SVG filter primitives (feGaussianBlur etc.).
+//   Glow is achieved by layering two Path elements:
+//     Layer 1: wide stroke, low opacity  → halo
+//     Layer 2: crisp stroke, full opacity → sharp line
+//   This is visually equivalent to a Gaussian glow at small sizes.
+//
+// WAVEFORM PATH:
+//   The TSX used a static SVG path. In production, this string is
+//   computed in Rust from live FieldParticle data and pushed via
+//   `window.set_wave_path(computed_svg_string)`.
+//   For the mock/prototype, a static Lissajous-style path is hardcoded.
+//   The path coordinate space is 0–320 × 0–100 (matches TSX viewBox).
 // ═══════════════════════════════════════════════════════════════════════════
+
+// ── Shared design tokens ────────────────────────────────────────────────────
+// In the full project these live in ui/tokens.slint and are imported.
+// Inlined here so this file is self-contained for prototyping.
 
 global Colors {
     // Surfaces
@@ -19,70 +53,85 @@ global Colors {
     out property <color> muted:      #9CA3AF;
     out property <color> dim:        #4B5563;
 
-    // Harmonic palette
-    out property <color> harm-red:    #FF1A1A;
-    out property <color> harm-teal:   #00E5CC;
-    out property <color> harm-violet: #9910FF;
+    // Harmonic palette (material_id 0–11, used for wave color only)
+    // freq_to_material_id logic lives in Rust; these are the render colors.
+    out property <color> harm-red:    #FF1A1A;   // C  — 60 Hz mains
+    out property <color> harm-teal:   #00E5CC;   // G# — 85 kHz target
+    out property <color> harm-violet: #9910FF;   // F  — 2.4 GHz WiFi (anchor)
 }
 
 // ── Telemetry tile ──────────────────────────────────────────────────────────
-component TelemetryTile inherits Rectangle {
+// One of the three bottom tiles (Drive / Fold / Asym).
+// `progress` is a float in [0, 1]. `accent` drives label + bar color.
+component TelemetryTile {
     in property <string> label;
     in property <string> value;
     in property <float> progress;    // 0.0 – 1.0
     in property <color> accent;
 
-    background: Colors.panel;
-    border-color: Colors.border;
-    border-width: 1px;
-    border-radius: self.height * 0.065;
+    // Height and width are set by the parent layout.
+    // Internal proportions are all relative to self.height.
 
-    VerticalLayout {
-        padding-top: parent.height * 0.13;
-        padding-left: parent.height * 0.1;
-        padding-right: parent.height * 0.1;
-        padding-bottom: 0px;
-        spacing: parent.height * 0.05;
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: Colors.panel;
+        border-color: Colors.border;
+        border-width: 1px;
+        border-radius: parent.height * 0.065;   // ~4px when height=62px
 
-        // Label row
-        Text {
-            text: root.label;
-            color: root.accent;
-            font-size: root.height * 0.115;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-        }
+        VerticalLayout {
+            padding-top: parent.height * 0.13;
+            padding-left: parent.height * 0.1;
+            padding-right: parent.height * 0.1;
+            padding-bottom: 0px;
+            spacing: parent.height * 0.05;
 
-        // Value
-        Text {
-            text: root.value;
-            color: Colors.on-surface;
-            font-size: root.height * 0.19;
-            font-family: "JetBrains Mono";
-            font-weight: 300;
-        }
+            // Label row
+            Text {
+                text: root.label;
+                color: root.accent;
+                font-size: root.height * 0.115;   // ~7px at 62px height
+                font-weight: 700;
+                letter-spacing: 1.2px;
+            }
 
-        // Spacer
-        Rectangle {
-            vertical-stretch: 1;
-        }
+            // Value — monospaced, weight 300, large
+            Text {
+                text: root.value;
+                color: Colors.on-surface;
+                font-size: root.height * 0.19;       // ~12px at 62px height
+                font-family: "JetBrains Mono"
+                , "Cascadia Code", "Courier New", monospace;
+                font-weight: 300;
+            }
 
-        // Progress bar
-        Rectangle {
-            height: 3px;
-            background: root.accent.transparentize(0.7);
-            border-radius: 1.5px;
-
+            // Spacer pushes progress bar to bottom
             Rectangle {
-                x: 0px;
-                y: 0px;
+                vertical-stretch: 1;
+            }
+
+            // Progress bar — 3px tall, flush to bottom
+            Rectangle {
                 height: 3px;
-                width: parent.width * root.progress;
-                background: root.accent;
+                width: parent.width;
+                background: root.accent.transparentize(0.7);
                 border-radius: 1.5px;
-                animate width {
-                    duration: 300ms;
-                    easing: ease-out;
+
+                // Filled portion — width is the progress ratio
+                Rectangle {
+                    x: 0px;
+                    y: 0px;
+                    height: 3px;
+                    width: parent.width * root.progress;
+                    background: root.accent;
+                    border-radius: 1.5px;
+
+                    // Smooth transition when progress value changes from Rust
+                    animate width {
+                        duration: 300ms;
+                        easing: ease-out;
+                    }
                 }
             }
         }
@@ -90,13 +139,17 @@ component TelemetryTile inherits Rectangle {
 }
 
 // ── Toggle switch ───────────────────────────────────────────────────────────
+// Minimal MD3-style toggle. Matches the TSX version's visual language.
 component TotoToggle {
     in-out property <bool> checked: true;
     callback toggled(bool);
 
+    // Physical size expressed as ratios of a 12px height baseline
+    // so it scales if the header height changes.
     width: 24px;
     height: 12px;
 
+    // Track
     Rectangle {
         width: parent.width;
         height: parent.height;
@@ -104,19 +157,31 @@ component TotoToggle {
         background: root.checked ? Colors.primary.transparentize(0.6) : Colors.dim.transparentize(0.5);
         border-color: root.checked ? Colors.primary : Colors.dim;
         border-width: 1px;
+        drop-shadow-color: root.checked ? Colors.primary.transparentize(0.5) : transparent;
+        drop-shadow-blur: root.checked ? 4px : 0px;
+        drop-shadow-offset-x: 0px;
+        drop-shadow-offset-y: 0px;
+
         animate background {
             duration: 150ms;
             easing: ease-in-out;
         }
     }
 
+    // Thumb
     Rectangle {
+        // Slides right when checked. x animates automatically.
         x: root.checked ? parent.width - self.width - 1px : 1px;
         y: (parent.height - self.height) / 2;
         width: 8px;
         height: 8px;
         border-radius: 4px;
         background: root.checked ? Colors.primary : Colors.muted;
+        drop-shadow-color: root.checked ? Colors.primary : transparent;
+        drop-shadow-blur: root.checked ? 4px : 0px;
+        drop-shadow-offset-x: 0px;
+        drop-shadow-offset-y: 0px;
+
         animate x {
             duration: 150ms;
             easing: ease-in-out;
@@ -137,42 +202,84 @@ component TotoToggle {
 
 // ═══════════════════════════════════════════════════════════════════════════
 // TotoCard — the root component
+//
+// Rust-side usage:
+//
+//   let window = TotoCard::new()?;
+//   window.set_unit_size(212.0);       // Physical height in logical pixels
+//   window.set_anomaly_score(0.150);
+//   window.set_dominant_freq_hz(2_400_000_000.0);
+//   window.set_wave_path("M 0 50 C ...".into());  // Updated each frame
+//   // etc.
+//   window.run()?;
 // ═══════════════════════════════════════════════════════════════════════════
 export component TotoCard inherits Window {
     title: "Toto · Core Field Probe";
-    background: transparent;
+    background: transparent;   // Compositor provides blur behind
 
+    // ── Ratio anchor ───────────────────────────────────────────────
+    // Everything derives from this one value.
+    // 212px = credit card at ~96 DPI.  54px = phone corner widget.
     in property <length> unit-size: 212px;
 
+    // Derived dimensions (all ratios, computed once here)
+    // Rust never needs to know these — it only sets unit-size.
     property <length> card-width:    root.unit-size * 1.585;
     property <length> card-height:   root.unit-size;
-    property <length> pad:           root.unit-size * 0.028;
-    property <length> gap:           root.unit-size * 0.019;
-    property <length> h-header:      root.unit-size * 0.19;
-    property <length> h-canvas:      root.unit-size * 0.52;
-    property <length> h-telemetry:   root.unit-size * 0.29;
+    property <length> pad:           root.unit-size * 0.028;   // 6px at 212px
+    property <length> gap:           root.unit-size * 0.019;   // 4px at 212px
+    property <length> h-header:      root.unit-size * 0.19;    // 40px
+    property <length> h-canvas:      root.unit-size * 0.52;    // 110px
+    property <length> h-telemetry:   root.unit-size * 0.29;    // 62px
 
     min-width: root.card-width;
     min-height: root.card-height;
     max-width: root.card-width;
     max-height: root.card-height;
 
+    // ── Data inputs from Rust ──────────────────────────────────────
     in property <float> anomaly-score:      0.150;
-    in-out property <bool> auto-steer:         true;
-    in property <float> dominant-freq-hz:   2400000000.0;
-    in property <string> wave-path: "M 0 50 C 20 20, 40 80, 60 50 C 80 20, 90 90, 110 50 C 130 10, 150 10, 170 50 C 190 90, 210 90, 230 50 C 250 10, 270 10, 290 50 C 310 90, 320 50, 320 50";
+    in property <bool> auto-steer:         true;
+    in property <float> dominant-freq-hz:   2
+    _400_000_000.0;
+    in property <string> wave-path:
+        // Default static path matching the TSX oscilloscope.
+        // Coordinate space: 0–320 wide, 0–100 tall (normalized viewBox).
+        // Rust replaces this each frame with live FieldParticle data.
+        "M 0 50 C 20 20, 40 80, 60 50 C 80 20, 90 90, 110 50 C 130 10, 150 10, 170 50 C 190 90, 210 90, 230 50 C 250 10, 270 10, 290 50 C 310 90, 320 50, 320 50";
 
     in property <float> drive:  0.250;
     in property <float> fold:   0.700;
     in property <float> asym:   0.150;
+
+    // Animation tick — incremented by Rust timer at 60 Hz.
+    // Used to drive the pulse effect on the status dot.
     in property <float> animation-tick: 0.0;
 
+    // ── Derived visual state ───────────────────────────────────────
+    // This is the Slint equivalent of React's freqToColor().
+    // It is a property expression, not a function call.
+    // It re-evaluates automatically whenever dominant-freq-hz changes.
+    //
+    // Mapping mirrors field_particle::freq_to_material_id() in Rust:
+    //   < 1 kHz   → Red    (mains, ELF)
+    //   < 1 MHz   → Teal   (audio, ultrasound)
+    //   ≥ 1 MHz   → Violet (RF, WiFi, ISM band)
+    //
+    // When Dorothy or Lion changes the dominant frequency, this color
+    // transitions smoothly without any additional Rust code.
     property <color> wave-color:
-        root.dominant-freq-hz < 1000.0 ? Colors.harm-red : root.dominant-freq-hz < 1000000.0 ? Colors.harm-teal : Colors.harm-violet;
+        root.dominant-freq-hz < 1
+    _000.0   ? Colors.harm-red: root.dominant-freq-hz < 1
+    _000_000.0 ? Colors.harm-teal: Colors.harm-violet;
 
+    // Threat tier for anomaly score coloring
     property <color> anomaly-color:
-        root.anomaly-score < 1.0 ? Colors.muted : root.anomaly-score < 3.0 ? Colors.muted : Colors.success;
+        root.anomaly-score < 1.0 ? Colors.muted : root.anomaly-score < 3.0 ? Colors.muted     // Obsidian: lighter grey
+      : Colors.success;                              // Gold: would be amber
 
+    // Smooth color transitions — 400ms matches the design language spec
+    // for "semantic state changes" (vs 150ms for interactive changes).
     animate wave-color {
         duration: 400ms;
         easing: ease-in-out;
@@ -182,25 +289,41 @@ export component TotoCard inherits Window {
         easing: ease-in-out;
     }
 
+    // ── Root surface ───────────────────────────────────────────────
+    // The Window itself is transparent; this Rectangle is the visible card.
+    // Keeping them separate enables platform compositor blur without
+    // changing any component logic.
     Rectangle {
         width: root.card-width;
         height: root.card-height;
-        background: Colors.bg;
-        border-radius: root.unit-size * 0.047;
+        background: Colors.bg;    // rgba(15,17,26,0.88) when blur confirmed
+        border-radius: root.unit-size * 0.047;   // ~10px at 212px
         border-color: Colors.border;
         border-width: 1px;
+
+        // Subtle inner highlight on top edge — matches TSX box-shadow inset
+        Rectangle {
+            x: 1px;
+            y: 1px;
+            width: parent.width - 2px;
+            height: 1px;
+            background: #ffffff08;
+            border-radius: parent.border-radius - 1px;
+        }
 
         VerticalLayout {
             padding: root.pad;
             spacing: root.gap;
 
-            // ZONE 1: HEADER
+            // ════════════════════════════════════════════════════
+            // ZONE 1: HEADER  (19% of height)
+            // ════════════════════════════════════════════════════
             Rectangle {
                 height: root.h-header;
                 background: Colors.panel;
                 border-color: Colors.border;
                 border-width: 1px;
-                border-radius: root.unit-size * 0.024;
+                border-radius: root.unit-size * 0.024;   // ~5px
 
                 HorizontalLayout {
                     padding-left: root.unit-size * 0.038;
@@ -209,6 +332,7 @@ export component TotoCard inherits Window {
                     padding-bottom: root.unit-size * 0.028;
                     spacing: root.unit-size * 0.038;
 
+                    // Left: identity and anomaly score
                     VerticalLayout {
                         spacing: root.unit-size * 0.014;
                         alignment: center;
@@ -216,25 +340,29 @@ export component TotoCard inherits Window {
                         Text {
                             text: "TOTO";
                             color: Colors.primary;
-                            font-family: "JetBrains Mono";
-                            font-size: root.unit-size * 0.038;
+                            font-family: "JetBrains Mono"
+                            , "Cascadia Code", monospace;
+                            font-size: root.unit-size * 0.038;   // ~8px
                             font-weight: 700;
                             letter-spacing: 1.5px;
                         }
 
+                        // "Anomaly Score: 0.150" — value colored by threat tier
                         HorizontalLayout {
                             spacing: root.unit-size * 0.014;
                             Text {
                                 text: "Anomaly Score: ";
                                 color: Colors.muted;
-                                font-family: "JetBrains Mono";
+                                font-family: "JetBrains Mono"
+                                , monospace;
                                 font-size: root.unit-size * 0.033;
                             }
 
                             Text {
                                 text: round(root.anomaly-score * 1000) / 1000;
-                                color: root.wave-color;
-                                font-family: "JetBrains Mono";
+                                color: root.wave-color;   // mirrors dominant freq color
+                                font-family: "JetBrains Mono"
+                                , monospace;
                                 font-size: root.unit-size * 0.033;
                                 font-weight: 700;
                                 animate color {
@@ -245,10 +373,12 @@ export component TotoCard inherits Window {
                         }
                     }
 
+                    // Spacer — pushes auto-steer to the right
                     Rectangle {
                         horizontal-stretch: 1;
                     }
 
+                    // Right: Neural Auto-Steer toggle
                     HorizontalLayout {
                         spacing: root.unit-size * 0.028;
                         alignment: center;
@@ -256,7 +386,8 @@ export component TotoCard inherits Window {
                         Text {
                             text: "Neural Auto-Steer: Active";
                             color: Colors.primary;
-                            font-family: "JetBrains Mono";
+                            font-family: "JetBrains Mono"
+                            , monospace;
                             font-size: root.unit-size * 0.033;
                             opacity: 0.85;
                         }
@@ -271,23 +402,32 @@ export component TotoCard inherits Window {
                 }
             }
 
-            // ZONE 2: OSCILLOSCOPE CANVAS
+            // ════════════════════════════════════════════════════
+            // ZONE 2: OSCILLOSCOPE CANVAS  (52% of height)
+            // ════════════════════════════════════════════════════
             Rectangle {
                 height: root.h-canvas;
                 background: Colors.panel;
                 border-color: Colors.border;
                 border-width: 1px;
                 border-radius: root.unit-size * 0.024;
-                clip: true;
+                clip: true;   // Clips waveform to canvas bounds
 
+                // ── Grid ──────────────────────────────────────
+                // 10 vertical lines + 6 horizontal lines.
+                // Expressed as ratios so they scale with the canvas.
+
+                // Horizontal grid lines (6 rows → 5 interior lines)
                 for i in [1, 2, 3, 4, 5]: Rectangle {
                     x: 0px;
                     y: parent.height * (i * 1.0 / 6.0);
                     width: parent.width;
                     height: 1px;
                     background: i == 3 ? Colors.border : Colors.grid-line;
+                    // The middle line (i=3) is the baseline — slightly brighter
                 }
 
+                // Vertical grid lines (10 columns → 9 interior lines)
                 for j in [1, 2, 3, 4, 5, 6, 7, 8, 9]: Rectangle {
                     x: parent.width * (j * 1.0 / 10.0);
                     y: 0px;
@@ -296,46 +436,74 @@ export component TotoCard inherits Window {
                     background: Colors.grid-line;
                 }
 
+                // ── Waveform glow (halo layer) ─────────────────
+                // Wider stroke, lower opacity — simulates feGaussianBlur.
+                // Uses the same path as the crisp layer above it.
                 Path {
+                    x: 0px;
+                    y: 0px;
                     width: parent.width;
                     height: parent.height;
+
+                    // viewBox is implicit: path coordinates are 0–320 × 0–100
+                    // Slint Path stretches to fill width/height automatically
+                    // when no explicit viewbox is set — same as TSX's
+                    // preserveAspectRatio="none".
                     commands: root.wave-path;
+
                     stroke: root.wave-color.transparentize(0.65);
-                    stroke-width: root.unit-size * 0.033;
+                    stroke-width: root.unit-size * 0.033;   // ~7px — wide for glow
                     fill: transparent;
+
                     animate stroke {
                         duration: 400ms;
                         easing: ease-in-out;
                     }
                 }
 
+                // ── Waveform crisp line (top layer) ───────────
                 Path {
+                    x: 0px;
+                    y: 0px;
                     width: parent.width;
                     height: parent.height;
+
                     commands: root.wave-path;
                     stroke: root.wave-color;
-                    stroke-width: root.unit-size * 0.012;
+                    stroke-width: root.unit-size * 0.012;   // ~2.5px
                     fill: transparent;
+
                     animate stroke {
                         duration: 400ms;
                         easing: ease-in-out;
                     }
                 }
 
+                // ── Canvas labels ──────────────────────────────
+                // Top-left: "Oscilloscope"
                 Text {
                     x: root.unit-size * 0.033;
                     y: root.unit-size * 0.028;
                     text: "Oscilloscope";
                     color: Colors.primary;
-                    font-family: "JetBrains Mono";
+                    font-family: "JetBrains Mono"
+                    , monospace;
                     font-size: root.unit-size * 0.033;
                 }
 
+                // Top-right: dominant cluster label
+                // In production this derives from freq_to_material_id().
+                // For now, a simple conditional expression.
                 Text {
-                    text: root.dominant-freq-hz < 1000.0 ? "60Hz Cluster" : root.dominant-freq-hz < 1000000.0 ? "85kHz Cluster" : "2.4GHz Cluster";
+                    text: root.dominant-freq-hz < 1
+                    _000.0     ? "60Hz Cluster"
+                        : root.dominant-freq-hz < 1_000_000.0 ? "85kHz Cluster"
+                        : "2.4GHz Cluster";
                     color: root.wave-color;
-                    font-family: "JetBrains Mono";
+                    font-family: "JetBrains Mono"
+                    , monospace;
                     font-size: root.unit-size * 0.033;
+                    // Right-align: position from right edge
                     x: parent.width - self.width - root.unit-size * 0.033;
                     y: root.unit-size * 0.028;
                     animate color {
@@ -344,15 +512,20 @@ export component TotoCard inherits Window {
                     }
                 }
 
+                // Bottom-center: time axis label
                 Text {
                     text: "Time (10ms)";
                     color: Colors.dim;
-                    font-family: "JetBrains Mono";
+                    font-family: "JetBrains Mono"
+                    , monospace;
                     font-size: root.unit-size * 0.028;
                     x: (parent.width - self.width) / 2;
                     y: parent.height - self.height - root.unit-size * 0.019;
                 }
 
+                // ── Pulsing status dot ─────────────────────────
+                // Opacity driven by animation-tick from Rust timer.
+                // abs(sin(t * π * 0.5)) pulses once every ~2 seconds.
                 Rectangle {
                     width: root.unit-size * 0.033;
                     height: root.unit-size * 0.033;
@@ -360,11 +533,20 @@ export component TotoCard inherits Window {
                     background: root.wave-color;
                     x: root.unit-size * 0.033 + root.unit-size * 0.05;
                     y: root.unit-size * 0.028 - (self.height - root.unit-size * 0.033 * 0.5) / 2;
+                    // Pulse: abs(sin(tick * π * 0.5))
+                    // Slint doesn't have a built-in sin(); drive opacity from
+                    // a pre-computed property set by the Rust timer instead.
+                    // For the prototype, opacity is static at 0.8.
                     opacity: 0.8;
                 }
             }
 
-            // ZONE 3: TELEMETRY STRIP
+            // ════════════════════════════════════════════════════
+            // ZONE 3: TELEMETRY STRIP  (29% of height)
+            // Three permanent tiles: Drive / Fold / Asym
+            // These are always visible — no fold-out.
+            // They prove the inference loop is doing real work.
+            // ════════════════════════════════════════════════════
             HorizontalLayout {
                 height: root.h-telemetry;
                 spacing: root.gap;
@@ -373,21 +555,21 @@ export component TotoCard inherits Window {
                     label: "DRIVE";
                     value: round(root.drive * 1000) / 1000;
                     progress: root.drive;
-                    accent: Colors.primary;
+                    accent: Colors.primary;   // Teal
                 }
 
                 TelemetryTile {
                     label: "FOLD";
                     value: round(root.fold * 1000) / 1000;
                     progress: root.fold;
-                    accent: Colors.success;
+                    accent: Colors.success;   // Green
                 }
 
                 TelemetryTile {
                     label: "ASYM";
                     value: round(root.asym * 1000) / 1000;
                     progress: root.asym;
-                    accent: Colors.secondary;
+                    accent: Colors.secondary; // Violet
                 }
             }
         }
