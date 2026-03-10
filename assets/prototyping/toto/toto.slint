@@ -1,0 +1,395 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// toto.slint  —  Toto Core Field Probe Widget
+// Project Synesthesia · Design Language v1 · Slint 1.15+
+// ═══════════════════════════════════════════════════════════════════════════
+
+global Colors {
+    // Surfaces
+    out property <color> bg:         #0F111A;
+    out property <color> panel:      #0A0C14;
+    out property <color> elevated:   #14161F;
+    out property <color> border:     #2A2E3D;
+    out property <color> grid-line:  #1F2233;
+
+    // MD3 roles
+    out property <color> primary:    #00E5C8;   // Teal  — live hardware
+    out property <color> secondary:  #A855F7;   // Violet — inference / Mamba
+    out property <color> success:    #22C55E;   // Green  — healthy / converging
+    out property <color> on-surface: #FFFFFF;
+    out property <color> muted:      #9CA3AF;
+    out property <color> dim:        #4B5563;
+
+    // Harmonic palette
+    out property <color> harm-red:    #FF1A1A;
+    out property <color> harm-teal:   #00E5CC;
+    out property <color> harm-violet: #9910FF;
+}
+
+// ── Telemetry tile ──────────────────────────────────────────────────────────
+component TelemetryTile inherits Rectangle {
+    in property <string> label;
+    in property <string> value;
+    in property <float> progress;    // 0.0 – 1.0
+    in property <color> accent;
+
+    background: Colors.panel;
+    border-color: Colors.border;
+    border-width: 1px;
+    border-radius: self.height * 0.065;
+
+    VerticalLayout {
+        padding-top: parent.height * 0.13;
+        padding-left: parent.height * 0.1;
+        padding-right: parent.height * 0.1;
+        padding-bottom: 0px;
+        spacing: parent.height * 0.05;
+
+        // Label row
+        Text {
+            text: root.label;
+            color: root.accent;
+            font-size: root.height * 0.115;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+        }
+
+        // Value
+        Text {
+            text: root.value;
+            color: Colors.on-surface;
+            font-size: root.height * 0.19;
+            font-family: "JetBrains Mono";
+            font-weight: 300;
+        }
+
+        // Spacer
+        Rectangle {
+            vertical-stretch: 1;
+        }
+
+        // Progress bar
+        Rectangle {
+            height: 3px;
+            background: root.accent.transparentize(0.7);
+            border-radius: 1.5px;
+
+            Rectangle {
+                x: 0px;
+                y: 0px;
+                height: 3px;
+                width: parent.width * root.progress;
+                background: root.accent;
+                border-radius: 1.5px;
+                animate width {
+                    duration: 300ms;
+                    easing: ease-out;
+                }
+            }
+        }
+    }
+}
+
+// ── Toggle switch ───────────────────────────────────────────────────────────
+component TotoToggle {
+    in-out property <bool> checked: true;
+    callback toggled(bool);
+
+    width: 24px;
+    height: 12px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        border-radius: parent.height / 2;
+        background: root.checked ? Colors.primary.transparentize(0.6) : Colors.dim.transparentize(0.5);
+        border-color: root.checked ? Colors.primary : Colors.dim;
+        border-width: 1px;
+        animate background {
+            duration: 150ms;
+            easing: ease-in-out;
+        }
+    }
+
+    Rectangle {
+        x: root.checked ? parent.width - self.width - 1px : 1px;
+        y: (parent.height - self.height) / 2;
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        background: root.checked ? Colors.primary : Colors.muted;
+        animate x {
+            duration: 150ms;
+            easing: ease-in-out;
+        }
+        animate background {
+            duration: 150ms;
+            easing: ease-in-out;
+        }
+    }
+
+    TouchArea {
+        clicked => {
+            root.checked = !root.checked;
+            root.toggled(root.checked);
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TotoCard — the root component
+// ═══════════════════════════════════════════════════════════════════════════
+export component TotoCard inherits Window {
+    title: "Toto · Core Field Probe";
+    background: transparent;
+
+    in property <length> unit-size: 212px;
+
+    property <length> card-width:    root.unit-size * 1.585;
+    property <length> card-height:   root.unit-size;
+    property <length> pad:           root.unit-size * 0.028;
+    property <length> gap:           root.unit-size * 0.019;
+    property <length> h-header:      root.unit-size * 0.19;
+    property <length> h-canvas:      root.unit-size * 0.52;
+    property <length> h-telemetry:   root.unit-size * 0.29;
+
+    min-width: root.card-width;
+    min-height: root.card-height;
+    max-width: root.card-width;
+    max-height: root.card-height;
+
+    in property <float> anomaly-score:      0.150;
+    in-out property <bool> auto-steer:         true;
+    in property <float> dominant-freq-hz:   2400000000.0;
+    in property <string> wave-path: "M 0 50 C 20 20, 40 80, 60 50 C 80 20, 90 90, 110 50 C 130 10, 150 10, 170 50 C 190 90, 210 90, 230 50 C 250 10, 270 10, 290 50 C 310 90, 320 50, 320 50";
+
+    in property <float> drive:  0.250;
+    in property <float> fold:   0.700;
+    in property <float> asym:   0.150;
+    in property <float> animation-tick: 0.0;
+
+    property <color> wave-color:
+        root.dominant-freq-hz < 1000.0 ? Colors.harm-red : root.dominant-freq-hz < 1000000.0 ? Colors.harm-teal : Colors.harm-violet;
+
+    property <color> anomaly-color:
+        root.anomaly-score < 1.0 ? Colors.muted : root.anomaly-score < 3.0 ? Colors.muted : Colors.success;
+
+    animate wave-color {
+        duration: 400ms;
+        easing: ease-in-out;
+    }
+    animate anomaly-color {
+        duration: 400ms;
+        easing: ease-in-out;
+    }
+
+    Rectangle {
+        width: root.card-width;
+        height: root.card-height;
+        background: Colors.bg;
+        border-radius: root.unit-size * 0.047;
+        border-color: Colors.border;
+        border-width: 1px;
+
+        VerticalLayout {
+            padding: root.pad;
+            spacing: root.gap;
+
+            // ZONE 1: HEADER
+            Rectangle {
+                height: root.h-header;
+                background: Colors.panel;
+                border-color: Colors.border;
+                border-width: 1px;
+                border-radius: root.unit-size * 0.024;
+
+                HorizontalLayout {
+                    padding-left: root.unit-size * 0.038;
+                    padding-right: root.unit-size * 0.038;
+                    padding-top: root.unit-size * 0.028;
+                    padding-bottom: root.unit-size * 0.028;
+                    spacing: root.unit-size * 0.038;
+
+                    VerticalLayout {
+                        spacing: root.unit-size * 0.014;
+                        alignment: center;
+
+                        Text {
+                            text: "TOTO";
+                            color: Colors.primary;
+                            font-family: "JetBrains Mono";
+                            font-size: root.unit-size * 0.038;
+                            font-weight: 700;
+                            letter-spacing: 1.5px;
+                        }
+
+                        HorizontalLayout {
+                            spacing: root.unit-size * 0.014;
+                            Text {
+                                text: "Anomaly Score: ";
+                                color: Colors.muted;
+                                font-family: "JetBrains Mono";
+                                font-size: root.unit-size * 0.033;
+                            }
+
+                            Text {
+                                text: round(root.anomaly-score * 1000) / 1000;
+                                color: root.wave-color;
+                                font-family: "JetBrains Mono";
+                                font-size: root.unit-size * 0.033;
+                                font-weight: 700;
+                                animate color {
+                                    duration: 400ms;
+                                    easing: ease-in-out;
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        horizontal-stretch: 1;
+                    }
+
+                    HorizontalLayout {
+                        spacing: root.unit-size * 0.028;
+                        alignment: center;
+
+                        Text {
+                            text: "Neural Auto-Steer: Active";
+                            color: Colors.primary;
+                            font-family: "JetBrains Mono";
+                            font-size: root.unit-size * 0.033;
+                            opacity: 0.85;
+                        }
+
+                        TotoToggle {
+                            checked: root.auto-steer;
+                            toggled(v) => {
+                                root.auto-steer = v;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ZONE 2: OSCILLOSCOPE CANVAS
+            Rectangle {
+                height: root.h-canvas;
+                background: Colors.panel;
+                border-color: Colors.border;
+                border-width: 1px;
+                border-radius: root.unit-size * 0.024;
+                clip: true;
+
+                for i in [1, 2, 3, 4, 5]: Rectangle {
+                    x: 0px;
+                    y: parent.height * (i * 1.0 / 6.0);
+                    width: parent.width;
+                    height: 1px;
+                    background: i == 3 ? Colors.border : Colors.grid-line;
+                }
+
+                for j in [1, 2, 3, 4, 5, 6, 7, 8, 9]: Rectangle {
+                    x: parent.width * (j * 1.0 / 10.0);
+                    y: 0px;
+                    width: 1px;
+                    height: parent.height;
+                    background: Colors.grid-line;
+                }
+
+                Path {
+                    width: parent.width;
+                    height: parent.height;
+                    commands: root.wave-path;
+                    stroke: root.wave-color.transparentize(0.65);
+                    stroke-width: root.unit-size * 0.033;
+                    fill: transparent;
+                    animate stroke {
+                        duration: 400ms;
+                        easing: ease-in-out;
+                    }
+                }
+
+                Path {
+                    width: parent.width;
+                    height: parent.height;
+                    commands: root.wave-path;
+                    stroke: root.wave-color;
+                    stroke-width: root.unit-size * 0.012;
+                    fill: transparent;
+                    animate stroke {
+                        duration: 400ms;
+                        easing: ease-in-out;
+                    }
+                }
+
+                Text {
+                    x: root.unit-size * 0.033;
+                    y: root.unit-size * 0.028;
+                    text: "Oscilloscope";
+                    color: Colors.primary;
+                    font-family: "JetBrains Mono";
+                    font-size: root.unit-size * 0.033;
+                }
+
+                Text {
+                    text: root.dominant-freq-hz < 1000.0 ? "60Hz Cluster" : root.dominant-freq-hz < 1000000.0 ? "85kHz Cluster" : "2.4GHz Cluster";
+                    color: root.wave-color;
+                    font-family: "JetBrains Mono";
+                    font-size: root.unit-size * 0.033;
+                    x: parent.width - self.width - root.unit-size * 0.033;
+                    y: root.unit-size * 0.028;
+                    animate color {
+                        duration: 400ms;
+                        easing: ease-in-out;
+                    }
+                }
+
+                Text {
+                    text: "Time (10ms)";
+                    color: Colors.dim;
+                    font-family: "JetBrains Mono";
+                    font-size: root.unit-size * 0.028;
+                    x: (parent.width - self.width) / 2;
+                    y: parent.height - self.height - root.unit-size * 0.019;
+                }
+
+                Rectangle {
+                    width: root.unit-size * 0.033;
+                    height: root.unit-size * 0.033;
+                    border-radius: root.unit-size * 0.017;
+                    background: root.wave-color;
+                    x: root.unit-size * 0.033 + root.unit-size * 0.05;
+                    y: root.unit-size * 0.028 - (self.height - root.unit-size * 0.033 * 0.5) / 2;
+                    opacity: 0.8;
+                }
+            }
+
+            // ZONE 3: TELEMETRY STRIP
+            HorizontalLayout {
+                height: root.h-telemetry;
+                spacing: root.gap;
+
+                TelemetryTile {
+                    label: "DRIVE";
+                    value: round(root.drive * 1000) / 1000;
+                    progress: root.drive;
+                    accent: Colors.primary;
+                }
+
+                TelemetryTile {
+                    label: "FOLD";
+                    value: round(root.fold * 1000) / 1000;
+                    progress: root.fold;
+                    accent: Colors.success;
+                }
+
+                TelemetryTile {
+                    label: "ASYM";
+                    value: round(root.asym * 1000) / 1000;
+                    progress: root.asym;
+                    accent: Colors.secondary;
+                }
+            }
+        }
+    }
+}

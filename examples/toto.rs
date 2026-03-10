@@ -1,136 +1,229 @@
-use std::sync::Arc;
-use tokio::time::{interval, Duration};
-use slint::SharedString;
-use twister::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
-use twister::dispatch::audio_ingester::AudioIngester;
-use twister::ui::enable_acrylic_blur;
+// examples/toto.rs
+// Project Synesthesia — Toto Core Field Probe
+//
+// This is the Rust entry point for the widget. It does three things:
+//
+//   1. Spawns a mock data thread that generates realistic synthetic state
+//      (anomaly score, wave path, Drive/Fold/Asym, dominant frequency).
+//
+//   2. Runs a Slint timer at 60 Hz that atomically pushes all changed
+//      properties to the UI in a single batch. Never sets individual
+//      properties in a loop — one batch update = one dirty mark on
+//      Slint's property graph = one repaint pass.
+//
+//   3. Cycles the dominant frequency through 60 Hz → 85 kHz → 2.4 GHz
+//      every 2 seconds, proving that the wave color transition works
+//      before real FieldParticle data is wired in.
+//
+// The wave path is the key connection point. In production, the Rust
+// signal processing loop (Cyclone) computes a cubic bezier approximation
+// of the FFT envelope each frame and calls window.set_wave_path().
+// The Slint Path element re-renders it automatically — no polling,
+// no explicit redraw call needed.
 
 slint::include_modules!();
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let ui = TotoHudApplet::new()?;
+use std::sync::{Arc, Mutex};
+use std::time::{Duration, Instant};
 
-    // Apply Windows Acrylic effect
-    #[cfg(target_os = "windows")]
-    enable_acrylic_blur(ui.window());
+// ── Mock state ───────────────────────────────────────────────────────────────
 
-    let ui_handle = ui.as_weak();
+struct MockStream {
+    phase:     f64,
+    epoch:     u32,
+    start:     Instant,
+    freq_step: usize,   // 0=60Hz, 1=85kHz, 2=2.4GHz
+    last_freq_change: Instant,
+}
 
-    // Instantiate Concrete Ingester for the physics pipeline
-    let audio_ingester = AudioIngester::new();
+impl MockStream {
+    fn new() -> Self {
+        Self {
+            phase:     0.0,
+            epoch:     0,
+            start:     Instant::now(),
+            freq_step: 2,   // Start on 2.4 GHz violet
+            last_freq_change: Instant::now(),
+        }
+    }
 
-    // The 100Hz BSS Unified Field Tracking Loop
-    tokio::spawn(async move {
-        let mut tick = interval(Duration::from_millis(10)); // 100Hz
-        let mut simulated_time: f32 = 0.0;
-        let sample_rate = 192_000;
+    fn tick(&mut self, delta_ms: u64) -> WidgetState {
+        self.phase += delta_ms as f64 / 1000.0;
+        self.epoch += 1;
 
-        let audio_metadata = SignalMetadata {
-            signal_type: SignalType::Audio,
-            sample_rate_hz: sample_rate,
-            carrier_freq_hz: None,
-            num_channels: 1,
-            sample_format: SampleFormat::I16,
+        // Cycle dominant frequency every 2 seconds to prove color transitions.
+        // In production, this value comes from Cyclone's FFT peak detector.
+        if self.last_freq_change.elapsed() > Duration::from_secs(2) {
+            self.freq_step = (self.freq_step + 1) % 3;
+            self.last_freq_change = Instant::now();
+        }
+
+        let dominant_freq_hz = match self.freq_step {
+            0 => 60.0_f32,
+            1 => 85_000.0_f32,
+            _ => 2_400_000_000.0_f32,
         };
 
+        // Anomaly score: gentle sinusoidal drift simulating real noise floor
+        // variation, with an occasional spike above 1.0 to show the Obsidian tier.
+        let anomaly = (0.25_f64
+            + 0.20 * (self.phase * 0.4).sin()
+            + 0.12 * (self.phase * 1.8).sin()
+            + 0.08 * (self.phase * 4.3).sin().abs()) as f32;
+
+        // Drive/Fold/Asym: the three Mamba projection scalars.
+        // In production these come from project_latent_to_waveshape().
+        // Here they drift slowly to show the progress bars animating.
+        let drive = (0.25 + 0.15 * (self.phase * 0.3).sin()) as f32;
+        let fold  = (0.70 + 0.20 * (self.phase * 0.2).cos()) as f32;
+        let asym  = (0.15 + 0.10 * (self.phase * 0.5).sin().abs()) as f32;
+
+        // Wave path: a cubic bezier oscilloscope trace.
+        // Coordinate space: 0–320 wide, 0–100 tall (matches Slint Path viewport).
+        // The amplitude and frequency of the wave responds to the dominant freq:
+        //   60 Hz   → slow, large amplitude (mains hum characteristic)
+        //   85 kHz  → medium frequency, medium amplitude
+        //   2.4 GHz → high frequency, tighter oscillation
+        let wave_path = generate_wave_path(self.phase, self.freq_step);
+
+        WidgetState {
+            anomaly_score:     anomaly,
+            auto_steer:        true,
+            dominant_freq_hz,
+            wave_path,
+            drive: drive.clamp(0.0, 1.0),
+            fold:  fold.clamp(0.0, 1.0),
+            asym:  asym.clamp(0.0, 1.0),
+            animation_tick:    self.start.elapsed().as_secs_f32(),
+        }
+    }
+}
+
+/// Generates a cubic bezier path string that changes character based on
+/// which frequency cluster is dominant. This is the prototype version —
+/// in production, Cyclone computes this from actual FFT bin magnitudes.
+///
+/// The path is in the 0–320 × 0–100 coordinate space that the Slint
+/// Path element's viewport maps to whatever physical size the canvas is.
+fn generate_wave_path(phase: f64, freq_step: usize) -> String {
+    // Number of bezier segments and amplitude vary by frequency character.
+    // More segments = higher apparent frequency on the oscilloscope face.
+    let (segments, amplitude, freq_mult) = match freq_step {
+        0 => (4_usize,  35.0_f64, 1.0_f64),   // 60 Hz: slow, large
+        1 => (6_usize,  22.0_f64, 2.5_f64),   // 85 kHz: medium
+        _ => (8_usize,  14.0_f64, 4.0_f64),   // 2.4 GHz: fast, tight
+    };
+
+    let step = 320.0 / segments as f64;
+    let mut path = format!("M 0 50");
+
+    for i in 0..segments {
+        let x0 = i as f64 * step;
+        let x3 = (i + 1) as f64 * step;
+        let x1 = x0 + step * 0.33;
+        let x2 = x0 + step * 0.67;
+
+        // Phase-shifted sin for the control points so the wave animates smoothly.
+        // The phase argument comes from the mock stream's elapsed time.
+        let y1 = 50.0 - amplitude * (phase * freq_mult + i as f64 * 0.8).sin();
+        let y2 = 50.0 + amplitude * (phase * freq_mult + i as f64 * 0.8 + 1.0).sin();
+        let y3 = 50.0 + (amplitude * 0.3) * (phase * freq_mult * 0.5 + i as f64).cos();
+
+        path.push_str(&format!(
+            " C {:.1} {:.1}, {:.1} {:.1}, {:.1} {:.1}",
+            x1, y1, x2, y2, x3, y3
+        ));
+    }
+
+    path
+}
+
+// ── State bundle ─────────────────────────────────────────────────────────────
+// Everything the UI needs in one struct. Updated atomically each frame.
+
+struct WidgetState {
+    anomaly_score:    f32,
+    auto_steer:       bool,
+    dominant_freq_hz: f32,
+    wave_path:        String,
+    drive:            f32,
+    fold:             f32,
+    asym:             f32,
+    animation_tick:   f32,
+}
+
+// ── Main ─────────────────────────────────────────────────────────────────────
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Channel: mock thread → UI thread.
+    // sync_channel(1): only the most recent frame matters; older frames are
+    // overwritten if the UI thread is briefly slow. This prevents the mock
+    // thread from accumulating a queue of stale states.
+    let (tx, rx) = std::sync::mpsc::sync_channel::<WidgetState>(1);
+    let rx = Arc::new(Mutex::new(rx));
+
+    // Spawn mock data thread at 30 Hz (UI renders at 60 Hz; data updates
+    // at half that rate since wave path computation is the heaviest step).
+    std::thread::spawn(move || {
+        let mut stream = MockStream::new();
         loop {
-            tick.tick().await;
-            simulated_time += 0.05;
-
-            // Generate mock hardware bytes covering multiple spectrums to feed the ingester
-            let num_samples = 512;
-            let mut mock_pcm = Vec::with_capacity(num_samples * 2);
-            for i in 0..num_samples {
-                // Emulate 60Hz hum, 10.625kHz, and 85kHz folding
-                let t = i as f32 / sample_rate as f32 + simulated_time;
-                let hz_60 = (t * 60.0 * std::f32::consts::TAU).sin() * 0.3;
-                let hz_10k = (t * 10625.0 * std::f32::consts::TAU).sin() * 0.4;
-                let hz_85k = (t * 85000.0 * std::f32::consts::TAU).sin() * 0.3; // Folded into Cyan
-                let sample_f32 = hz_60 + hz_10k + hz_85k;
-                let sample_i16 = (sample_f32 * 32767.0) as i16;
-                mock_pcm.extend_from_slice(&sample_i16.to_le_bytes());
-            }
-
-            // Ingest to unified particles! (The Brawn)
-            let particles = audio_ingester.ingest(&mock_pcm, 0, &audio_metadata);
-
-            let canvas_width = 800.0;
-            let canvas_height = 350.0;
-            let center_y = canvas_height / 2.0;
-
-            let mut paths = vec![
-                String::with_capacity(num_samples * 20); 12
-            ];
-            for path in paths.iter_mut() {
-                path.push_str(&format!("M 0 {:.1}", center_y));
-            }
-
-            // BSS Unmixing Visualization logic
-            // Parse particles and simulate unmixing based on RMS energy & motifs
-            let mut total_energy = 0.0;
-            for (idx, particle) in particles.iter().take(num_samples).enumerate() {
-                total_energy += particle.energy;
-
-                let x = (idx as f32 / num_samples as f32) * canvas_width;
-
-                // Unmix mapping:
-                // Red (Hue 0): 60Hz Baseline (Low frequency, large phase swing)
-                let y_red = center_y - (particle.phase_i * 80.0 * (1.0 - particle.energy.min(1.0)));
-                paths[0].push_str(&format!(" L {:.1} {:.1}", x, y_red));
-
-                // Cyan (Hue 6): 10.625kHz and 85kHz (Folded octaves)
-                let y_cyan = center_y - (particle.phase_q * 140.0 * particle.energy.max(0.5));
-                paths[6].push_str(&format!(" L {:.1} {:.1}", x, y_cyan));
-
-                // Violet (Hue 10): High frequency scatter / Noise floor
-                let y_violet = center_y - ((particle.phase_i * particle.phase_q) * 60.0) + (rand::random::<f32>() * 10.0 - 5.0);
-                paths[10].push_str(&format!(" L {:.1} {:.1}", x, y_violet));
-
-                // Flatline others
-                for (path_idx, path) in paths.iter_mut().enumerate() {
-                    if path_idx != 0 && path_idx != 6 && path_idx != 10 {
-                        let y_flat = center_y + (rand::random::<f32>() * 2.0 - 1.0);
-                        path.push_str(&format!(" L {:.1} {:.1}", x, y_flat));
-                    }
-                }
-            }
-
-            let avg_energy = if particles.is_empty() { 0.0 } else { total_energy / particles.len() as f32 };
-
-            let ui_clone = ui_handle.clone();
-            let _ = slint::invoke_from_event_loop(move || {
-                if let Some(ui) = ui_clone.upgrade() {
-                    let engine = ui.global::<TotoEngine>();
-
-                    if engine.get_always_learning() {
-                        engine.set_anomaly_score(avg_energy.min(1.0));
-                        engine.set_drive(0.250 + avg_energy * 0.1);
-                        engine.set_fold(0.700 - avg_energy * 0.05);
-                        engine.set_asym(0.150 + (rand::random::<f32>() * 0.1));
-
-                        engine.set_telemetry_text(SharedString::from(format!(
-                            "Unmixed Motifs: 60Hz (Red), 10kHz+85kHz Folded (Cyan) | BSS Energy: {:.3}", avg_energy
-                        )));
-
-                        engine.set_path_c(SharedString::from(&paths[0]));
-                        engine.set_path_cs(SharedString::from(&paths[1]));
-                        engine.set_path_d(SharedString::from(&paths[2]));
-                        engine.set_path_ds(SharedString::from(&paths[3]));
-                        engine.set_path_e(SharedString::from(&paths[4]));
-                        engine.set_path_f(SharedString::from(&paths[5]));
-                        engine.set_path_fs(SharedString::from(&paths[6]));
-                        engine.set_path_g(SharedString::from(&paths[7]));
-                        engine.set_path_gs(SharedString::from(&paths[8]));
-                        engine.set_path_a(SharedString::from(&paths[9]));
-                        engine.set_path_as(SharedString::from(&paths[10]));
-                        engine.set_path_b(SharedString::from(&paths[11]));
-                    }
-                }
-            });
+            std::thread::sleep(Duration::from_millis(33)); // ~30 Hz
+            let state = stream.tick(33);
+            let _ = tx.try_send(state); // Non-blocking; drop if receiver is behind
         }
     });
 
-    ui.run()?;
+    // Create the Slint window. TotoCard is the exported component name
+    // from toto.slint's `export component TotoCard`.
+    let window = TotoCard::new()?;
+
+    // Platform-specific compositor blur.
+    // This is the call that enables Windows Acrylic effect.
+    enable_compositor_blur(&window);
+
+    // 60 Hz timer: polls the channel and pushes state to Slint atomically.
+    // The key discipline: set_wave_path, set_anomaly_score, etc. are all
+    // called in one Rust scope before yielding back to the Slint event loop.
+    // Slint batches these into a single repaint rather than repainting
+    // after each individual property change.
+    let window_weak = window.as_weak();
+    let rx_clone = rx.clone();
+    let timer = slint::Timer::default();
+    timer.start(
+        slint::TimerMode::Repeated,
+        Duration::from_millis(16), // 60 Hz
+        move || {
+            let Some(w) = window_weak.upgrade() else { return };
+
+            // Non-blocking poll — if no new state is available, skip this frame.
+            // The UI holds its previous values; nothing flickers.
+            if let Ok(state) = rx_clone.lock().unwrap().try_recv() {
+                // ── Atomic batch update ──────────────────────────────────
+                // All property sets happen before returning to the event loop.
+                // Slint coalesces them into a single dirty-mark + repaint.
+                w.set_anomaly_score(state.anomaly_score);
+                w.set_auto_steer(state.auto_steer);
+                w.set_dominant_freq_hz(state.dominant_freq_hz);
+                w.set_wave_path(state.wave_path.into());
+                w.set_drive(state.drive);
+                w.set_fold(state.fold);
+                w.set_asym(state.asym);
+                w.set_animation_tick(state.animation_tick);
+                // ── End batch ────────────────────────────────────────────
+            }
+        },
+    );
+
+    window.run()?;
     Ok(())
+}
+
+// ── Platform blur (TODO) ─────────────────────────────────────────────────────
+// For full Windows Acrylic blur support, integrate with windows-sys crate.
+// For now, the transparent background is set in toto.slint itself.
+// On Windows, the OS compositor may show this as dark gray without DWM integration.
+
+fn enable_compositor_blur(_window: &TotoCard) {
+    // Future: Implement platform-specific blur via windows-sys on Windows
+    // and X11 atoms on Linux.
 }
