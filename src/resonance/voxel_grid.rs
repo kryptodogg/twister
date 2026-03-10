@@ -1,5 +1,5 @@
-use std::fmt::Debug;
 use num_complex::Complex;
+use std::fmt::Debug;
 
 #[derive(Clone, Debug)]
 #[repr(C)] // Ensures memory alignment for future GPU mapping
@@ -20,7 +20,13 @@ impl<T: Clone + Default> VoxelGrid<T> {
         }
     }
 
-    pub fn with_dimensions_and_size(dim_x: usize, dim_y: usize, dim_z: usize, voxel_size_m: f32, origin: (f32, f32, f32)) -> Self {
+    pub fn with_dimensions_and_size(
+        dim_x: usize,
+        dim_y: usize,
+        dim_z: usize,
+        voxel_size_m: f32,
+        origin: (f32, f32, f32),
+    ) -> Self {
         Self {
             data: vec![T::default(); dim_x * dim_y * dim_z],
             dimensions: (dim_x, dim_y, dim_z),
@@ -96,9 +102,13 @@ impl VoxelGrid<Complex<f32>> {
 
         // Trilinear interpolation for Complex<f32>
         let get_val = |x: isize, y: isize, z: isize| -> Complex<f32> {
-            if x >= 0 && x < self.dimensions.0 as isize &&
-               y >= 0 && y < self.dimensions.1 as isize &&
-               z >= 0 && z < self.dimensions.2 as isize {
+            if x >= 0
+                && x < self.dimensions.0 as isize
+                && y >= 0
+                && y < self.dimensions.1 as isize
+                && z >= 0
+                && z < self.dimensions.2 as isize
+            {
                 self.get(x as usize, y as usize, z as usize)
             } else {
                 Complex::new(0.0, 0.0)
@@ -143,9 +153,13 @@ impl VoxelGrid<f32> {
         let zd = gz - z0 as f32;
 
         let get_val = |x: isize, y: isize, z: isize| -> f32 {
-            if x >= 0 && x < self.dimensions.0 as isize &&
-               y >= 0 && y < self.dimensions.1 as isize &&
-               z >= 0 && z < self.dimensions.2 as isize {
+            if x >= 0
+                && x < self.dimensions.0 as isize
+                && y >= 0
+                && y < self.dimensions.1 as isize
+                && z >= 0
+                && z < self.dimensions.2 as isize
+            {
                 self.get(x as usize, y as usize, z as usize)
             } else {
                 0.0
@@ -172,7 +186,7 @@ impl VoxelGrid<f32> {
         c0 * (1.0 - zd) + c1 * zd
     }
 
-    pub fn average_along_path(&self, distance: f32) -> f32 {
+    pub fn average_along_path(&self, _distance: f32) -> f32 {
         // Average occupancy
         1.0
     }

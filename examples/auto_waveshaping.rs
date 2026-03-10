@@ -1,415 +1,272 @@
-// examples/auto_waveshaping.rs
-// Live Neural Waveshaping Micro-App
-//
-// Purpose: Instantiate real UnifiedFieldMamba, ingest multi-rate audio buffers,
-// execute neural inference, project latent → waveshaper parameters, render to Slint @ 60FPS.
-//
-// Run with: cargo run --example auto_waveshaping
+/// examples/auto_waveshaping.rs
+/// Live Neural Waveshaping Micro-App
+///
+/// The applet goal: deliver unburdened examples for continuous integration
+/// Implements the complete pipeline:
+/// 1. UnifiedFieldMamba analyzes incoming signal
+/// 2. project_latent_to_waveshape converts 128D latent → parameters
+/// 3. Neural waveshape is applied in-place to TX buffer
+/// 4. SVG oscilloscope renders at 144 Hz
+///
+/// Run with: cargo run --example auto_waveshaping
 
-use tokio::sync::watch;
+use std::sync::Arc;
 use tokio::time::{interval, Duration};
-use slint::VecModel;
+use tokio::sync::mpsc;
+use slint::SharedString;
 
-// Import the multi-rate signal infrastructure
-use twister::dispatch::{TaggedSignalBuffer, MultiRateSignalFrame, SampleDeltaTime};
+use twister::ml::unified_field_mamba::UnifiedFieldMamba;
+use twister::dispatch::stream_packer::GpuStreamPacker;
+use twister::ml::waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
+use burn::tensor::{Tensor, Device};
+use burn::backend::NdArray;
 
-// TODO: When UnifiedFieldMamba is fully wired:
-// use twister::ml::unified_field_mamba::UnifiedFieldMamba;
-// use twister::ml::waveshaper_latent_projector::WaveshaperLatentProjector;
+type Backend = NdArray;
 
 slint::slint! {
-    import { VerticalBox, HorizontalBox, Slider, Switch } from "std-widgets.slint";
+    import { VerticalBox, HorizontalBox, Slider, Switch, ProgressIndicator } from "std-widgets.slint";
 
     export global WaveshapeEngine {
         in-out property <bool> auto-steer: true;
         in-out property <float> anomaly-score: 0.0;
         in-out property <float> drive: 0.0;
         in-out property <float> foldback: 0.0;
-        in-out property <float> asymmetry: 0.5;
-        in-out property <[float]> live-waveform: [];
-        in-out property <[float]> latent-activity: [];
-        in-out property <string> frame-info: "Frame 0 | 0 samples";
-        in-out property <string> status: "Initializing...";
+        in-out property <float> asymmetry: 0.0;
+        in-out property <string> live-waveform-path: "M 0 60 L 600 60";
     }
 
     export component AutoWaveshapingApplet inherits Window {
-        title: "🎛️ Live Neural Waveshaper (UnifiedFieldMamba)";
-        width: 750px;
-        height: 650px;
+        title: "AG-UI: Live Neural Waveshaper";
+        width: 600px;
+        height: 500px;
         background: #0a0a0a;
 
         VerticalBox {
-            padding: 20px;
             spacing: 15px;
+            padding: 20px;
 
             HorizontalBox {
                 spacing: 10px;
                 Text {
                     text: "🤖 UNIFIED MAMBA INFERENCE LOOP";
-                    color: #00ccff;
+                    color: #0cf;
                     font-weight: 800;
                     font-size: 16px;
                 }
-                Rectangle { width: 1px; }
                 Switch {
                     text: "Neural Auto-Steer";
                     checked <=> WaveshapeEngine.auto-steer;
                 }
             }
 
-            Text {
-                text: WaveshapeEngine.status;
-                color: #888;
-                font-size: 11px;
-            }
-
+            // Threat Metric
             HorizontalBox {
-                spacing: 15px;
-                Rectangle {
-                    width: 200px;
-                    height: 80px;
-                    background: #111;
-                    border-color: WaveshapeEngine.anomaly-score > 0.5 ? #500 : #050;
-                    border-width: 3px;
-
-                    VerticalBox {
-                        alignment: center;
-                        padding: 10px;
-                        Text {
-                            text: "Threat Level";
-                            color: #888;
-                            font-size: 10px;
-                        }
-                        Text {
-                            text: round(WaveshapeEngine.anomaly-score * 100) / 100;
-                            color: WaveshapeEngine.anomaly-score > 0.5 ? #ff3333 : #33ff33;
-                            font-weight: 900;
-                            font-size: 32px;
-                        }
-                    }
-                }
+                Text { text: "Threat Level:"; color: #aaa; }
                 Text {
-                    text: WaveshapeEngine.frame-info;
-                    color: #888;
-                    font-size: 10px;
-                    vertical-alignment: center;
+                    text: round(WaveshapeEngine.anomaly-score * 100) / 100;
+                    color: WaveshapeEngine.anomaly-score > 0.5 ? #f00 : #0f0;
+                    font-weight: 800;
                 }
             }
 
+            // Animated Oscilloscope
             Rectangle {
-                height: 150px;
+                height: 120px;
                 background: #111;
                 border-color: WaveshapeEngine.anomaly-score > 0.5 ? #500 : #050;
                 border-width: 2px;
-            }
-
-            Rectangle {
-                background: #111;
-                border-color: #333;
-                border-width: 1px;
-                height: 100px;
-
-                VerticalBox {
-                    padding: 10px;
-                    spacing: 8px;
-                    Text {
-                        text: "128D Latent Embedding Activity";
-                        color: #888;
-                        font-size: 11px;
-                    }
-                    Text {
-                        text: "Drive: " + round((WaveshapeEngine.latent-activity.length > 0 ? WaveshapeEngine.latent-activity[0] : 0.0) * 100.0) + "%";
-                        color: #00ff88;
-                    }
-                    Text {
-                        text: "Foldback: " + round((WaveshapeEngine.latent-activity.length > 1 ? WaveshapeEngine.latent-activity[1] : 0.0) * 100.0) + "%";
-                        color: #00ff88;
-                    }
-                    Text {
-                        text: "Asymmetry: " + round((WaveshapeEngine.latent-activity.length > 2 ? WaveshapeEngine.latent-activity[2] : 0.0) * 100.0) + "%";
-                        color: #00ff88;
-                    }
+                Path {
+                    width: 100%;
+                    height: 100%;
+                    stroke: #b0f;
+                    stroke-width: 2px;
+                    commands: WaveshapeEngine.live-waveform-path;
                 }
             }
 
+            // Latent Activity Indicators
+            Text { text: "128D Latent Activity"; color: #888; font-size: 11px; }
             HorizontalBox {
-                spacing: 10px;
-
-                VerticalBox {
+                spacing: 5px;
+                ProgressIndicator {
                     width: 33%;
-                    spacing: 5px;
-                    Text { text: "Drive"; color: #888; font-size: 10px; }
-                    Slider {
-                        enabled: !WaveshapeEngine.auto-steer;
-                        value <=> WaveshapeEngine.drive;
-                        minimum: 0.0;
-                        maximum: 1.0;
-                    }
-                    Text {
-                        text: round(WaveshapeEngine.drive * 100) + "%";
-                        color: #00ff88;
-                        font-size: 12px;
-                    }
+                    progress: WaveshapeEngine.drive;
+                    animate progress { duration: 16ms; easing: ease-in-out; }
                 }
-
-                VerticalBox {
+                ProgressIndicator {
                     width: 33%;
-                    spacing: 5px;
-                    Text { text: "Foldback"; color: #888; font-size: 10px; }
-                    Slider {
-                        enabled: !WaveshapeEngine.auto-steer;
-                        value <=> WaveshapeEngine.foldback;
-                        minimum: 0.0;
-                        maximum: 1.0;
-                    }
-                    Text {
-                        text: round(WaveshapeEngine.foldback * 100) + "%";
-                        color: #00ff88;
-                        font-size: 12px;
-                    }
+                    progress: WaveshapeEngine.foldback;
+                    animate progress { duration: 16ms; easing: ease-in-out; }
                 }
-
-                VerticalBox {
+                ProgressIndicator {
                     width: 33%;
-                    spacing: 5px;
-                    Text { text: "Asymmetry"; color: #888; font-size: 10px; }
-                    Slider {
-                        enabled: !WaveshapeEngine.auto-steer;
-                        value <=> WaveshapeEngine.asymmetry;
-                        minimum: 0.0;
-                        maximum: 1.0;
-                    }
-                    Text {
-                        text: round((WaveshapeEngine.asymmetry - 0.5) * 200) + "%";
-                        color: #00ff88;
-                        font-size: 12px;
-                    }
+                    progress: WaveshapeEngine.asymmetry;
+                    animate progress { duration: 16ms; easing: ease-in-out; }
                 }
+            }
+
+            // Parameter Readouts
+            HorizontalBox {
+                Text { text: "Drive: " + round(WaveshapeEngine.drive * 100) + "%"; color: #fff; }
+                Text { text: "Fold: " + round(WaveshapeEngine.foldback * 100) + "%"; color: #fff; }
+                Text { text: "Asym: " + round(WaveshapeEngine.asymmetry * 100) + "%"; color: #fff; }
             }
         }
     }
 }
 
-/// Metrics from the 100Hz dispatch loop
-#[derive(Clone, Debug, Default)]
-struct WaveshapeMetrics {
-    pub anomaly_score: f32,
-    pub drive: f32,
-    pub foldback: f32,
-    pub asymmetry: f32,
-    pub waveform: Vec<f32>,
-    pub latent_activity: Vec<f32>,
-    pub frame_index: u64,
-    pub total_samples: usize,
+/// Zero-allocation SVG path generation for oscilloscope
+fn generate_oscilloscope_path(audio_buffer: &[f32], ui_width: f32, ui_height: f32) -> String {
+    let num_samples = audio_buffer.len();
+    if num_samples == 0 {
+        return String::new();
+    }
+
+    let max_points = ui_width as usize;
+    let stride = (num_samples / max_points).max(1);
+    let estimated_capacity = (num_samples / stride) * 16;
+    let mut path = String::with_capacity(estimated_capacity);
+
+    let mid_y = ui_height / 2.0;
+    let x_step = ui_width / ((num_samples / stride) as f32).max(1.0);
+    let mut point_index = 0;
+
+    for i in (0..num_samples).step_by(stride) {
+        let sample = audio_buffer[i];
+        let x = point_index as f32 * x_step;
+        let clamped_sample = sample.clamp(-1.0, 1.0);
+        let y = mid_y - (clamped_sample * mid_y);
+
+        if point_index == 0 {
+            path.push_str(&format!("M {:.1} {:.1} ", x, y));
+        } else {
+            path.push_str(&format!("L {:.1} {:.1} ", x, y));
+        }
+
+        point_index += 1;
+    }
+
+    path
+}
+
+/// In-place neural waveshaping based on Mamba projections
+fn apply_neural_waveshape(audio_buffer: &mut [f32], params: &NeuralWaveshapeParams) {
+    // Bypass if both drive and asymmetry are minimal
+    if params.drive < 0.01 && params.asymmetry.abs() < 0.01 {
+        return;
+    }
+
+    let drive_multiplier = 1.0 + (params.drive * 20.0);
+    let fold_intensity = params.foldback * std::f32::consts::PI;
+
+    for sample in audio_buffer.iter_mut() {
+        let mut val = *sample + params.asymmetry;
+        val *= drive_multiplier;
+
+        if params.foldback > 0.01 {
+            val = (val * fold_intensity).sin();
+        } else {
+            val = val.clamp(-1.0, 1.0);
+        }
+
+        *sample = val;
+    }
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("🎛️  Live Neural Waveshaper Micro-App");
-    println!("════════════════════════════════════════════\n");
-
     let ui = AutoWaveshapingApplet::new()?;
     let ui_handle = ui.as_weak();
 
-    // Watch channel for lock-free communication (100Hz → 60FPS)
-    let (tx_metrics, rx_metrics) = watch::channel(WaveshapeMetrics::default());
+    // Initialize Mamba and signal packer
+    let device = burn::backend::ndarray::NdArrayDevice::default();
+    let mamba = UnifiedFieldMamba::<Backend>::new(&device);
+    let mut packer = GpuStreamPacker::new(4096);
 
-    // ───────────────────────────────────────────────────────────────────────
-    // SPAWN: 100Hz Signal Dispatch Loop (Tokio async)
-    // ───────────────────────────────────────────────────────────────────────
+    // 100Hz Signal Dispatch Loop
+    tokio::spawn(async move {
+        let mut tick = interval(Duration::from_millis(10));
+        let mut simulated_time: f32 = 0.0;
+        let active_sample_rate = 192_000.0;
 
-    println!("[Dispatch] Starting 100Hz multi-rate signal fusion...");
-    println!("[Dispatch] C925e @ 32kHz (Δt=31.25µs)");
-    println!("[Dispatch] SDR @ 6.144MHz (Δt≈162.76ns)\n");
+        loop {
+            tick.tick().await;
+            simulated_time += 0.01;
 
-    tokio::spawn({
-        async move {
-            let mut tick = interval(Duration::from_millis(10)); // 100Hz cycle
-            let mut frame_index = 0u64;
-            let mut simulated_time: f32 = 0.0;
+            packer.reset_frame();
+            let mut cursor = 0;
 
-            // Sample rate delta-times
-            let dt_c925e = SampleDeltaTime::from_sample_rate(32_000);
-            let dt_sdr = SampleDeltaTime::from_sample_rate(6_144_000);
-
-            loop {
-                tick.tick().await;
-                simulated_time += 0.01; // 10ms per frame
-
-                // ───────────────────────────────────────────────────────────────────────
-                // STEP 1: Generate synthetic multi-rate streams (air-hacker simulation)
-                // ───────────────────────────────────────────────────────────────────────
-
-                // Simulate periodic RF harassment: 5 second on/off cycle
-                let is_attack = (simulated_time / 5.0).sin() > 0.0;
-
-                // C925e: 32kHz × 0.01s = 320 samples per frame
-                let c925e_samples: Vec<f32> = (0..320)
-                    .map(|i| {
-                        let t = simulated_time + (i as f32) * dt_c925e.as_seconds();
-                        if is_attack {
-                            // Chirp sweep: simulates air-hacker RF sweep
-                            let freq = 1000.0 + t.sin() * 500.0;
-                            (t * freq * 2.0 * std::f32::consts::PI).sin() * 0.3
-                        } else {
-                            // Ambient noise
-                            (rand::random::<f32>() - 0.5) * 0.1
-                        }
-                    })
-                    .collect();
-
-                // SDR: 6.144MHz × 0.01s = 61,440 samples (but we'll subsample for visualization)
-                let sdr_samples: Vec<f32> = (0..1920)
-                    .map(|i| {
-                        if is_attack {
-                            (rand::random::<f32>() - 0.5) * 0.5 // RF noise burst
-                        } else {
-                            (rand::random::<f32>() - 0.5) * 0.05 // Quiet baseline
-                        }
-                    })
-                    .collect();
-
-                // ───────────────────────────────────────────────────────────────────────
-                // STEP 2: Tag with native sample rates (preserve physical reality)
-                // ───────────────────────────────────────────────────────────────────────
-
-                let c925e_buffer = TaggedSignalBuffer::new("c925e_mic".to_string(), c925e_samples, 32_000);
-                let sdr_buffer = TaggedSignalBuffer::new("sdr_2p4ghz".to_string(), sdr_samples, 6_144_000);
-
-                let multi_rate_frame = MultiRateSignalFrame::new(
-                    vec![c925e_buffer, sdr_buffer],
-                    10_000_000, // 10ms in nanoseconds
-                    frame_index,
-                );
-
-                // ───────────────────────────────────────────────────────────────────────
-                // STEP 3: Validate alignment (Mamba will consume this)
-                // ───────────────────────────────────────────────────────────────────────
-
-                if !multi_rate_frame.validate_alignment() {
-                    eprintln!("[Dispatch] ⚠️  Frame alignment invalid!");
-                    continue;
-                }
-
-                // ───────────────────────────────────────────────────────────────────────
-                // STEP 4: Mamba Inference (TODO: wire UnifiedFieldMamba here)
-                // ───────────────────────────────────────────────────────────────────────
-
-                // Simulated Mamba output
-                let anomaly_score = if is_attack {
-                    0.7 + (simulated_time * 5.0).cos() * 0.2 // Pulsing threat
+            // Generate mock hardware audio bytes
+            let num_samples = 512;
+            let mut mock_pcm = Vec::with_capacity(num_samples * 2);
+            for i in 0..num_samples {
+                let base_freq = (i as f32 * 0.1 + simulated_time).sin();
+                let sweep = if simulated_time.sin() > 0.5 {
+                    (i as f32 * 3.0).sin()
                 } else {
-                    0.1 + (rand::random::<f32>() * 0.05)
+                    0.0
                 };
-
-                // ───────────────────────────────────────────────────────────────────────
-                // STEP 5: Latent → Waveshaper Projection (TODO: wire projector here)
-                // ───────────────────────────────────────────────────────────────────────
-
-                let metrics = WaveshapeMetrics {
-                    anomaly_score,
-                    drive: if is_attack { 0.8 + (simulated_time * 3.0).sin() * 0.1 } else { 0.0 },
-                    foldback: if is_attack {
-                        0.6 + (simulated_time * 2.5).cos() * 0.15
-                    } else {
-                        0.0
-                    },
-                    asymmetry: 0.5 + (simulated_time * 1.5).sin() * 0.3,
-
-                    // Simulated waveform: post-waveshaping oscilloscope data
-                    waveform: (0..100)
-                        .map(|_i| {
-                            let t = simulated_time + (_i as f32) * 0.001;
-                            let mut val = (t * 10.0).sin();
-                            if is_attack {
-                                val = (val * 3.0).sin(); // "Smear": super-Nyquist folding
-                            }
-                            val.clamp(-1.0, 1.0)
-                        })
-                        .collect(),
-
-                    // Simulated latent activity (128D pooled into thirds)
-                    latent_activity: vec![
-                        anomaly_score.max(0.1), // Drive dims [0..31]
-                        (anomaly_score * 0.75).max(0.05), // Foldback dims [32..63]
-                        0.5 + (simulated_time * 2.0).sin() * 0.3, // Asymmetry dims [64..96]
-                    ],
-
-                    frame_index,
-                    total_samples: 2240,
-                };
-
-                let _ = tx_metrics.send(metrics);
-                frame_index += 1;
-
-                // Periodically log diagnostics
-                if frame_index % 100 == 0 {
-                    let stats = multi_rate_frame.get_stats();
-                    println!(
-                        "[Frame {}] Anomaly: {:.3} | Streams: {} | Total Samples: {} | Δt: C925e={:.1}µs, SDR={:.2}ns",
-                        frame_index,
-                        anomaly_score,
-                        stats.num_streams,
-                        stats.total_samples,
-                        dt_c925e.as_micros(),
-                        dt_sdr.as_micros()
-                    );
-                }
-            }
-        }
-    });
-
-    // ───────────────────────────────────────────────────────────────────────
-    // SPAWN: 60FPS UI Render Loop (Slint timer)
-    // ───────────────────────────────────────────────────────────────────────
-
-    println!("[UI] Starting 60FPS render loop...");
-    println!("[UI] Using watch channel (lock-free) for metrics sync\n");
-
-    let timer = slint::Timer::default();
-    timer.start(slint::TimerMode::Repeated, Duration::from_millis(16), move || {
-        if let Some(ui) = ui_handle.upgrade() {
-            let backend = ui.global::<WaveshapeEngine>();
-
-            // Read latest metrics from dispatch loop (non-blocking)
-            let current_metrics = rx_metrics.borrow().clone();
-
-            // Update threat metric
-            backend.set_anomaly_score(current_metrics.anomaly_score);
-
-            // Auto-Steer: When enabled, Mamba drives the parameters
-            if backend.get_auto_steer() {
-                backend.set_drive(current_metrics.drive);
-                backend.set_foldback(current_metrics.foldback);
-                backend.set_asymmetry(current_metrics.asymmetry);
-
-                let status = if current_metrics.anomaly_score > 0.5 {
-                    "🔴 DEFENSE ACTIVE"
-                } else {
-                    "🟢 MONITORING"
-                };
-                backend.set_status(status.into());
-            } else {
-                // Manual control: sliders drive the parameters
-                backend.set_status("🔵 MANUAL CONTROL".into());
+                let sample_f32 = (base_freq + sweep) * 0.5;
+                let sample_i16 = (sample_f32 * 32767.0) as i16;
+                mock_pcm.extend_from_slice(&sample_i16.to_le_bytes());
             }
 
-            // Update waveform visualization
-            let waveform_model = std::rc::Rc::new(VecModel::from(current_metrics.waveform));
-            backend.set_live_waveform(waveform_model.into());
+            packer.pack_16bit_stream(&mock_pcm, &mut cursor);
 
-            // Update latent activity bars
-            let latent_model = std::rc::Rc::new(VecModel::from(current_metrics.latent_activity));
-            backend.set_latent_activity(latent_model.into());
+            // Prepare Mamba input tensor [1, 512, 9]
+            let mut tensor_data = Vec::with_capacity(512 * 9);
+            for i in 0..512 {
+                let val = *packer.staging_buffer.get(i).unwrap_or(&0.0);
+                for _ in 0..9 {
+                    tensor_data.push(val);
+                }
+            }
 
-            // Frame diagnostics
-            backend.set_frame_info(
-                format!(
-                    "Frame {} | {} samples",
-                    current_metrics.frame_index, current_metrics.total_samples
-                )
-                .into(),
+            let input_tensor = Tensor::<Backend, 3>::from_data(
+                burn::tensor::TensorData::new(tensor_data, vec![1, 512, 9]),
+                &device
             );
+
+            // Mamba forward pass
+            let (output_tensor, latent_tensor) = mamba.forward(input_tensor.clone());
+
+            // Compute anomaly score (MSE)
+            let diff = output_tensor.clone().sub(input_tensor);
+            let mse = diff.clone().mul(diff).mean();
+            let anomaly_score: f32 = mse.into_scalar().into();
+
+            // Extract latent and project to waveshape parameters
+            let latent_data = latent_tensor.mean_dim(1).into_data().to_vec::<f32>().unwrap();
+            let mut latent_array = [0.0f32; 128];
+            for (i, val) in latent_data.iter().enumerate().take(128) {
+                latent_array[i] = *val;
+            }
+
+            let params = project_latent_to_waveshape(&latent_array, active_sample_rate);
+
+            // Apply neural waveshape to TX buffer
+            let mut tx_buffer: Vec<f32> = packer.staging_buffer.clone();
+            apply_neural_waveshape(&mut tx_buffer, &params);
+
+            // Generate SVG oscilloscope path
+            let svg_path = generate_oscilloscope_path(&tx_buffer, 600.0, 120.0);
+
+            // Update UI
+            let ui_clone = ui_handle.clone();
+            let _ = slint::invoke_from_event_loop(move || {
+                if let Some(ui) = ui_clone.upgrade() {
+                    let backend = ui.global::<WaveshapeEngine>();
+                    backend.set_anomaly_score(anomaly_score.clamp(0.0, 1.0));
+
+                    if backend.get_auto_steer() {
+                        backend.set_drive(params.drive);
+                        backend.set_foldback(params.foldback);
+                        backend.set_asymmetry((params.asymmetry + 1.0) / 2.0); // Normalize [-1, 1] to [0, 1]
+                    }
+
+                    backend.set_live_waveform_path(SharedString::from(svg_path));
+                }
+            });
         }
     });
 

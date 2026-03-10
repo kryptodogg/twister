@@ -53,7 +53,7 @@ pub struct TrainerThread {
     replay: Vec<Window>,
     state: Arc<AppState>,
     epoch: u32,
-    last_save: Instant,
+    _last_save: Instant,
 }
 
 impl TrainerThread {
@@ -64,7 +64,7 @@ impl TrainerThread {
             replay: Vec::with_capacity(REPLAY_CAP),
             state,
             epoch: 0,
-            last_save: Instant::now(),
+            _last_save: Instant::now(),
         })
     }
 

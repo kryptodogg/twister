@@ -29,7 +29,7 @@ const KEY_SIZE_BYTES: u64 = 4;
 const BLOCK_SIZE: u32 = 128;
 
 /// Wave64 workgroup size (hardcoded in shader)
-const WAVE_SIZE: u32 = 64;
+const _WAVE_SIZE: u32 = 64;
 
 /// RadixSortPipeline: Encapsulates GPU radix sort compute pipeline
 pub struct RadixSortPipeline {

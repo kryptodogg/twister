@@ -206,7 +206,7 @@ pub struct RecordingState {
 impl RecordingState {
     /// Create a new RecordingState in IDLE state
     pub fn new() -> Self {
-        let material_library =
+        let _material_library =
             std::sync::Arc::new(tokio::sync::Mutex::new(MaterialLibrary::default()));
         RecordingState {
             state: RecordingStateEnum::Idle,

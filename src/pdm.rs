@@ -155,10 +155,10 @@ pub struct PdmEngine {
     wide_buf: wgpu::Buffer,
     carry_out_buf: wgpu::Buffer, // carry accumulators written by pass 1
     carry_in_buf: wgpu::Buffer,  // corrected carries for pass 2
-    readback_pcm: wgpu::Buffer,
-    readback_pdm: wgpu::Buffer,
-    readback_wide: wgpu::Buffer,
-    readback_carry: wgpu::Buffer,
+    _readback_pcm: wgpu::Buffer,
+    _readback_pdm: wgpu::Buffer,
+    _readback_wide: wgpu::Buffer,
+    _readback_carry: wgpu::Buffer,
     bind_group: wgpu::BindGroup,
     pub params: PdmParams,
 }
@@ -291,10 +291,10 @@ impl PdmEngine {
             wide_buf,
             carry_out_buf,
             carry_in_buf,
-            readback_pcm,
-            readback_pdm,
-            readback_wide,
-            readback_carry,
+            _readback_pcm: readback_pcm,
+            _readback_pdm: readback_pdm,
+            _readback_wide: readback_wide,
+            _readback_carry: readback_carry,
             bind_group,
             params: params_init,
         })

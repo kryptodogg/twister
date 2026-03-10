@@ -49,6 +49,7 @@ pub mod unified_field_mamba_trainer;
 pub mod vbuffer_render;
 pub mod visibility_culling;
 pub mod wav2vec2_loader;
+pub mod waveshape_projection;
 pub mod waveshaper_latent_projector;
 pub mod wideband_harmonic_analysis;
 
@@ -78,4 +79,5 @@ pub use timegnn_trainer::{
     compute_nt_xent_loss, cosine_similarity, train_timegnn,
 };
 pub use wav2vec2_loader::Wav2Vec2Model;
+pub use waveshape_projection::{NeuralWaveshapeParams, project_latent_to_waveshape};
 pub use waveshaper_latent_projector::{WaveshaperLatentProjector, WaveshaperParams};

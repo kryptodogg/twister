@@ -1,8 +1,8 @@
 pub struct WidebandHarmonicAnalyzer {
-    min_freq: f32,        // 1.0 Hz
-    max_freq: f32,        // 12_288_000.0 Hz
-    bins_per_octave: u32, // 8 (96 total bins = 12 octaves × 8)
-    num_bins: u32,        // 96
+    min_freq: f32,         // 1.0 Hz
+    max_freq: f32,         // 12_288_000.0 Hz
+    _bins_per_octave: u32, // 8 (96 total bins = 12 octaves × 8)
+    num_bins: u32,         // 96
 }
 
 #[derive(Debug, Clone)]
@@ -20,7 +20,7 @@ impl WidebandHarmonicAnalyzer {
         Self {
             min_freq: 1.0,
             max_freq: 12_288_000.0,
-            bins_per_octave: 8,
+            _bins_per_octave: 8,
             num_bins: 96, // 12 octaves × 8 bins
         }
     }
@@ -35,7 +35,7 @@ impl WidebandHarmonicAnalyzer {
     }
 
     /// Convert bin to frequency
-    fn bin_to_freq(&self, bin: f32) -> f32 {
+    fn _bin_to_freq(&self, bin: f32) -> f32 {
         let log_min = self.min_freq.log2();
         let log_max = self.max_freq.log2();
         let log_freq = log_min + (bin / self.num_bins as f32) * (log_max - log_min);

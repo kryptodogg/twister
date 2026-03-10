@@ -35,8 +35,8 @@ impl<B: Backend> PretrainedWav2Vec2<B> {
 
 
 pub struct Wav2Vec2Model<B: Backend> {
-    device: burn::tensor::Device<B>,
-    model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
+    _device: burn::tensor::Device<B>,
+    _model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
     cached_embeddings: Arc<Mutex<HashMap<u64, Vec<f32>>>>,  // timestamp → 768-D
 }
 
@@ -52,8 +52,8 @@ impl<B: Backend> Wav2Vec2Model<B> {
         let model = PretrainedWav2Vec2::new(device);
 
         Ok(Self {
-            device: device.clone(),
-            model,
+            _device: device.clone(),
+            _model: model,
             cached_embeddings: Arc::new(Mutex::new(HashMap::new())),
         })
     }

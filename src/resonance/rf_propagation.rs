@@ -1,10 +1,10 @@
-use std::error::Error;
-use num_complex::Complex;
-use crate::resonance::voxel_grid::VoxelGrid;
 use crate::resonance::material_absorption::Material;
+use crate::resonance::voxel_grid::VoxelGrid;
+use num_complex::Complex;
+use std::error::Error;
 
 pub struct RFWavePropagation {
-    pub grid: VoxelGrid<Complex<f32>>,  // Complex amplitude per voxel (phase-aware)
+    pub grid: VoxelGrid<Complex<f32>>, // Complex amplitude per voxel (phase-aware)
     pub frequency_hz: f32,
     pub wavelength_m: f32,
     pub speed_of_light: f32,
@@ -30,8 +30,8 @@ impl RFWavePropagation {
         source_amplitude: f32,
         material_grid: &VoxelGrid<Material>,
     ) -> Result<(), Box<dyn Error>> {
-        let k = 2.0 * std::f32::consts::PI / self.wavelength_m;  // Wave number
-        let k2 = k * k;
+        let k = 2.0 * std::f32::consts::PI / self.wavelength_m; // Wave number
+        let _k2 = k * k;
         let h = self.grid.voxel_size_m;
         let h2 = h * h;
 
@@ -46,7 +46,8 @@ impl RFWavePropagation {
         let sz = src_grid_pos.2.floor() as usize;
 
         if sx < dim_x && sy < dim_y && sz < dim_z {
-            self.grid.set(sx, sy, sz, Complex::new(source_amplitude, 0.0));
+            self.grid
+                .set(sx, sy, sz, Complex::new(source_amplitude, 0.0));
         }
 
         // Gauss-Seidel relaxation loop
@@ -54,9 +55,9 @@ impl RFWavePropagation {
         let omega = 1.6; // Successive over-relaxation factor
 
         for _ in 0..max_iterations {
-            for z in 1..dim_z-1 {
-                for y in 1..dim_y-1 {
-                    for x in 1..dim_x-1 {
+            for z in 1..dim_z - 1 {
+                for y in 1..dim_y - 1 {
+                    for x in 1..dim_x - 1 {
                         // Skip source node to maintain injection boundary
                         if x == sx && y == sy && z == sz {
                             continue;
@@ -66,7 +67,7 @@ impl RFWavePropagation {
 
                         // Local wave number taking material permittivity into account
                         let local_k = k * material.permittivity.sqrt();
-                        let local_k2 = local_k * local_k;
+                        let _local_k2 = local_k * local_k;
 
                         // Attenuation term (absorption)
                         let alpha = material.attenuation_coeff(self.frequency_hz);
@@ -82,9 +83,8 @@ impl RFWavePropagation {
                         let e_z_minus = self.grid.get(x, y, z - 1);
 
                         // Finite difference approximation of Laplacian
-                        let sum_neighbors = e_x_plus + e_x_minus +
-                                          e_y_plus + e_y_minus +
-                                          e_z_plus + e_z_minus;
+                        let sum_neighbors =
+                            e_x_plus + e_x_minus + e_y_plus + e_y_minus + e_z_plus + e_z_minus;
 
                         // ∇²E = (E_x+1 + E_x-1 + E_y+1 + E_y-1 + E_z+1 + E_z-1 - 6*E_xyz) / h²
                         // ∇²E + k²E = 0
@@ -92,14 +92,16 @@ impl RFWavePropagation {
                         // sum_neighbors / h² = E * (6/h² - k_c²)
                         // E = sum_neighbors / (6 - k_c² * h²)
 
-                        let denominator = Complex::new(6.0, 0.0) - k_complex2 * Complex::new(h2, 0.0);
+                        let denominator =
+                            Complex::new(6.0, 0.0) - k_complex2 * Complex::new(h2, 0.0);
 
                         if denominator.norm_sqr() > 1e-10 {
                             let new_e = sum_neighbors / denominator;
                             let current_e = self.grid.get(x, y, z);
 
                             // SOR update
-                            let updated_e = current_e * Complex::new(1.0 - omega, 0.0) + new_e * Complex::new(omega, 0.0);
+                            let updated_e = current_e * Complex::new(1.0 - omega, 0.0)
+                                + new_e * Complex::new(omega, 0.0);
                             self.grid.set(x, y, z, updated_e);
                         }
                     }

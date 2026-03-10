@@ -259,7 +259,7 @@ impl GpuVBuffer {
     /// # Note
     /// This is a CPU-side operation and should not be used in hot paths.
     /// For real-time access, use GPU shaders with vbuf_lookup().
-    fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    fn read_frame_cpu(&self, _slot: usize, _base_offset: usize) -> Vec<[half::f16; 4]> {
         // In production, this would use wgpu buffer mapping
         // For now, return zeros (placeholder for actual readback implementation)
         // Real implementation would:
@@ -314,9 +314,7 @@ impl VBufferContextWindow {
 
     /// Iterate over all frames in the window.
     pub fn frames(&self) -> impl Iterator<Item = (usize, &[[half::f16; 4]])> {
-        (0..self.n_frames).filter_map(move |i| {
-            self.get_frame(i).map(|frame| (i, frame))
-        })
+        (0..self.n_frames).filter_map(move |i| self.get_frame(i).map(|frame| (i, frame)))
     }
 }
 

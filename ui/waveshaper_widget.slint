@@ -1,0 +1,137 @@
+// ui/waveshaper_widget.slint
+//
+// Minimal Mamba inference widget
+// iOS weather widget size (~300x400px)
+// Just threat display + on/off button
+// No controls, no sliders, fully automatic
+
+import { Button } from "std-widgets.slint";
+
+export struct WidgetState {
+    anomaly_score: float,     // 0.0-1.0
+    is_running: bool,
+    frame_count: int,
+}
+
+export component WaveshaperWidget {
+    in-out property <WidgetState> state: {
+        anomaly_score: 0.0,
+        is_running: false,
+        frame_count: 0,
+    };
+
+    // Computed colors
+    property <bool> is_threat: state.anomaly_score > 0.5;
+    property <color> threat_color: is_threat ? #dc2626ff : #16a34aff;
+    property <color> bg_start: is_threat ? #7f1d1dff : #166534ff;
+    property <color> bg_end: is_threat ? #5e1a1aff : #143a1eff;
+    property <string> status_text: is_threat ? "🔴 THREAT" : "🟢 NORMAL";
+
+    width: 300px;
+    height: 400px;
+
+    background: LinearGradient {
+        angle: 135deg;
+        colors: [#0f172aff, #1e293bff];
+    };
+
+    border-radius: 16px;
+    border-width: 1px;
+    border-color: #334155ff;
+
+    VerticalBox {
+        padding: 20px;
+        spacing: 20px;
+
+        // TITLE
+        Text {
+            text: "🤖 MAMBA";
+            font-size: 16px;
+            font-weight: 700;
+            color: #06b6d4ff;
+        }
+
+        // THREAT DISPLAY - Large and centered
+        Rectangle {
+            background: LinearGradient {
+                angle: 135deg;
+                colors: [bg_start, bg_end];
+            };
+            border-color: threat_color;
+            border-width: 2px;
+            border-radius: 12px;
+            min-height: 160px;
+
+            VerticalBox {
+                alignment: center;
+                padding: 20px;
+                spacing: 12px;
+
+                Text {
+                    text: Math.round(state.anomaly_score * 1000.0) / 10.0 + "%";
+                    font-size: 56px;
+                    font-weight: 900;
+                    color: threat_color;
+                    animate color { duration: 200ms; }
+                }
+
+                Text {
+                    text: status_text;
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: threat_color;
+                }
+
+                Rectangle {
+                    width: 80%;
+                    height: 6px;
+                    background: #0f172aff;
+                    border-radius: 3px;
+                    clip: true;
+
+                    Rectangle {
+                        width: parent.width * state.anomaly_score;
+                        height: 100%;
+                        background: threat_color;
+                        animate width { duration: 150ms; }
+                        border-radius: 3px;
+                    }
+                }
+            }
+        }
+
+        // FRAME COUNTER
+        Rectangle {
+            background: #1e293bff;
+            border-color: #475569ff;
+            border-width: 1px;
+            border-radius: 8px;
+            height: 60px;
+
+            HorizontalBox {
+                padding: 16px;
+                alignment: center;
+
+                Text {
+                    text: "Frame " + state.frame_count;
+                    font-size: 12px;
+                    color: #64748bff;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        // Spacer
+        Rectangle { height: 1px; }
+
+        // ON/OFF BUTTON
+        Button {
+            text: state.is_running ? "● RUNNING" : "○ STOPPED";
+            enabled: true;
+
+            clicked => {
+                state.is_running = !state.is_running;
+            }
+        }
+    }
+}

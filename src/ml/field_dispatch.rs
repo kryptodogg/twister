@@ -85,7 +85,7 @@ impl FieldDispatchPipeline {
 
         // Step 2: Accumulate in CPU buffer
         for (particle_gpu, hilbert_idx, timestamp) in hit_particles {
-            let particle = FieldParticle {
+            let _particle = FieldParticle {
                 position: particle_gpu.position,
                 phase_amp: particle_gpu.phase_amp,
                 material: particle_gpu.material,

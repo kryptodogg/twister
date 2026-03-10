@@ -1,0 +1,517 @@
+warning: unused import: `serde_json::Value`
+ --> src\ai\query_tools.rs:3:5
+  |
+3 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary parentheses around method argument
+  --> src\ai\query_tools.rs:55:13
+   |
+55 |             (target_azimuth * std::f64::consts::PI / 180.0),
+   |             ^                                             ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+55 -             (target_azimuth * std::f64::consts::PI / 180.0),
+55 +             target_azimuth * std::f64::consts::PI / 180.0 ,
+   |
+
+warning: unused import: `std::collections::HashMap`
+ --> src\forensic.rs:9:5
+  |
+9 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenOptions` and `create_dir_all`
+  --> src\forensic.rs:10:21
+   |
+10 | use std::fs::{File, OpenOptions, create_dir_all};
+   |                     ^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `BufWriter`
+  --> src\forensic.rs:11:15
+   |
+11 | use std::io::{BufWriter, Write};
+   |               ^^^^^^^^^
+
+warning: unused import: `Path`
+  --> src\forensic.rs:12:17
+   |
+12 | use std::path::{Path, PathBuf};
+   |                 ^^^^
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src\knowledge_graph\cognee_schema.rs:1:14
+  |
+1 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `FieldParticleGPU`
+  --> src\ml\batch_accumulation.rs:15:50
+   |
+15 | use super::field_particle::{FieldParticleBuffer, FieldParticleGPU, HitListAccumulator};
+   |                                                  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::error::Error`
+ --> src\ml\event_corpus.rs:5:5
+  |
+5 | use std::error::Error;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AdamWConfig`, `AdamW`, and `Optimizer`
+ --> src\ml\material_learning.rs:2:19
+  |
+2 | use burn::optim::{AdamW, AdamWConfig, Optimizer};
+  |                   ^^^^^  ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `std::collections::HashMap`
+ --> src\ml\material_learning.rs:5:5
+  |
+5 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::data_contracts::FieldParticle`
+  --> src\ml\rt_blind_rays.rs:13:5
+   |
+13 | use super::data_contracts::FieldParticle;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HitListAccumulator`
+  --> src\ml\rt_blind_rays.rs:14:47
+   |
+14 | use super::field_particle::{FieldParticleGPU, HitListAccumulator};
+   |                                               ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::f32::consts::PI`
+  --> src\ml\rt_blind_rays.rs:18:5
+   |
+18 | use std::f32::consts::PI;
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Buffer` and `Queue`
+ --> src\ml\vbuffer_render.rs:8:12
+  |
+8 | use wgpu::{Buffer, Device, Queue, Texture, TextureView, RenderPipeline};
+  |            ^^^^^^          ^^^^^
+
+warning: unused imports: `Device` and `Queue`
+ --> src\ml\visibility_culling.rs:9:20
+  |
+9 | use wgpu::{Buffer, Device, Queue};
+  |                    ^^^^^^  ^^^^^
+
+warning: unused import: `std::mem`
+  --> src\ml\visibility_culling.rs:10:5
+   |
+10 | use std::mem;
+   |     ^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:3:5
+  |
+3 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:4:5
+  |
+4 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> src\ml\event_corpus.rs:42:13
+   |
+42 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |             ----^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+  --> src\forensic.rs:11:26
+   |
+11 | use std::io::{BufWriter, Write};
+   |                          ^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `args`
+  --> src\ai\query_tools.rs:34:9
+   |
+34 |         args: &str,
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `device_id` is never read
+  --> src\safe_sdr_wrapper.rs:15:5
+   |
+13 | pub struct RadioDevice {
+   |            ----------- field in this struct
+14 |     device_type: RadioDeviceType,
+15 |     device_id: u32,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> src\ml\field_particle.rs:138:23
+    |
+138 |     pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource {
+    |                       ^^^^^                   ^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                       |
+    |                       the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+138 |     pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource<'_> {
+    |                                                                    ++++
+
+warning: `twister` (lib) generated 29 warnings (run `cargo fix --lib -p twister` to apply 23 suggestions)
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+error[E0428]: the name `app_state` is defined multiple times
+  --> src\main.rs:30:1
+   |
+29 | mod app_state;
+   | -------------- previous definition of the module `app_state` here
+30 | mod app_state;
+   | ^^^^^^^^^^^^^^ `app_state` redefined here
+   |
+   = note: `app_state` must be defined only once in the type namespace of this module
+
+error[E0433]: cannot find `SignalDispatchLoop` in `dispatch`
+   --> src\main.rs:318:48
+    |
+318 |         let signal_dispatch = crate::dispatch::SignalDispatchLoop::new(
+    |                                                ^^^^^^^^^^^^^^^^^^ could not find `SignalDispatchLoop` in `dispatch`
+
+warning: unused attribute `allow`
+  --> src\main.rs:19:1
+   |
+19 | #[allow(clippy::too_many_arguments)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the built-in attribute `allow` will be ignored, since it's applied to the macro invocation `slint::include_modules`
+  --> src\main.rs:21:1
+   |
+21 | slint::include_modules!();
+   | ^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `evidence_chain::*`
+ --> src\ai\mod.rs:7:9
+  |
+7 | pub use evidence_chain::*;
+  |         ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `query_tools::*`
+ --> src\ai\mod.rs:8:9
+  |
+8 | pub use query_tools::*;
+  |         ^^^^^^^^^^^^^^
+
+warning: unused import: `reasoning_engine::*`
+ --> src\ai\mod.rs:9:9
+  |
+9 | pub use reasoning_engine::*;
+  |         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `atomics::DirtyFlags`
+ --> src\app_state\mod.rs:2:9
+  |
+2 | pub use atomics::DirtyFlags;
+  |         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `stream_packer::GpuStreamPacker`
+ --> src\dispatch\mod.rs:2:9
+  |
+2 | pub use stream_packer::GpuStreamPacker;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `device_manager::DeviceManager`
+ --> src\hardware_io\mod.rs:5:9
+  |
+5 | pub use device_manager::DeviceManager;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `DMA_CHUNK_SAMPLES` and `IqDmaGateway`
+ --> src\hardware_io\mod.rs:6:23
+  |
+6 | pub use dma_vbuffer::{IqDmaGateway, DMA_CHUNK_SAMPLES};
+  |                       ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `IqStagingBuffer`, `StagingBufferStats`, and `StagingBufferView`
+ --> src\hardware_io\mod.rs:7:29
+  |
+7 | pub use iq_staging_buffer::{IqStagingBuffer, StagingBufferStats, StagingBufferView};
+  |                             ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `JoyConAction`, `JoyConState`, and `JoyconHandler`
+ --> src\input\mod.rs:5:26
+  |
+5 | pub use joycon_handler::{JoyconHandler, JoyConState, GestureMapping, JoyConAction, spawn_joycon_task};
+  |                          ^^^^^^^^^^^^^  ^^^^^^^^^^^                  ^^^^^^^^^^^^
+
+warning: unused import: `cognee_schema::*`
+ --> src\knowledge_graph\mod.rs:5:9
+  |
+5 | pub use cognee_schema::*;
+  |         ^^^^^^^^^^^^^^^^
+
+warning: unused import: `event_ingestion::*`
+ --> src\knowledge_graph\mod.rs:6:9
+  |
+6 | pub use event_ingestion::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\losses\mod.rs:14:28
+   |
+14 | pub use chamfer_distance::{ChamferDistance, HuberLoss};
+   |                            ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\mod.rs:60:36
+   |
+60 | pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
+   |                                    ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `mamba_block::MambaBlock`
+  --> src\ml\mod.rs:61:9
+   |
+61 | pub use mamba_block::MambaBlock;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FeatureFlags`, `ModularFeatureEncoder`, `SignalFeaturePayload`, and `VideoFrame`
+  --> src\ml\mod.rs:62:28
+   |
+62 | pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+   |                            ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused imports: `ClusteringResult`, `Event`, `KMeansConfig`, `Pattern`, `compute_silhouette_score`, `compute_temporal_frequency`, `discover_patterns`, `generate_pattern_label`, and `kmeans`
+  --> src\ml\mod.rs:65:5
+   |
+65 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+66 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `CorpusStats`, `ForensicEventData`, `load_forensic_events`, and `prepare_event_corpus`
+  --> src\ml\mod.rs:69:24
+   |
+69 | pub use event_corpus::{CorpusStats, ForensicEventData, load_forensic_events, prepare_event_corpus};
+   |                        ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ModalityStats`, `compute_modality_stats`, and `fuse_multimodal`
+  --> src\ml\mod.rs:70:29
+   |
+70 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                             ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+
+warning: unused import: `point_decoder::PointDecoder`
+  --> src\ml\mod.rs:71:9
+   |
+71 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `point_mamba::PointMamba`
+  --> src\ml\mod.rs:72:9
+   |
+72 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
+  --> src\ml\mod.rs:73:31
+   |
+73 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pointnet_encoder::PointNetEncoder`
+  --> src\ml\mod.rs:74:9
+   |
+74 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `spectral_frame::SpectralFrame`
+  --> src\ml\mod.rs:75:9
+   |
+75 | pub use spectral_frame::SpectralFrame;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `timegnn::TimeGnnModel`
+  --> src\ml\mod.rs:76:9
+   |
+76 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
+  --> src\ml\mod.rs:78:5
+   |
+78 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+79 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `wav2vec2_loader::Wav2Vec2Model`
+  --> src\ml\mod.rs:81:9
+   |
+81 | pub use wav2vec2_loader::Wav2Vec2Model;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `NeuralWaveshapeParams` and `project_latent_to_waveshape`
+  --> src\ml\mod.rs:82:32
+   |
+82 | pub use waveshape_projection::{NeuralWaveshapeParams, project_latent_to_waveshape};
+   |                                ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `WaveshaperLatentProjector` and `WaveshaperParams`
+  --> src\ml\mod.rs:83:39
+   |
+83 | pub use waveshaper_latent_projector::{WaveshaperLatentProjector, WaveshaperParams};
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `copilot_handler::*`
+ --> src\ui\mod.rs:2:9
+  |
+2 | pub use copilot_handler::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `GaussianSplatRenderer` and `intensity_to_rgb`
+  --> src\visualization\mod.rs:12:30
+   |
+12 | pub use gaussian_splatting::{GaussianSplatRenderer, intensity_to_rgb};
+   |                              ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `gaussian_splatting_optimized::GaussianSplattingRenderer`
+  --> src\visualization\mod.rs:13:9
+   |
+13 | pub use gaussian_splatting_optimized::GaussianSplattingRenderer;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FFT_SIZE`, `FREQ_BINS`, `StftPipeline`, and `StftProcessor`
+  --> src\visualization\mod.rs:14:25
+   |
+14 | pub use stft_pipeline::{StftPipeline, StftProcessor, FFT_SIZE, FREQ_BINS};
+   |                         ^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `crossbeam_channel::bounded`
+  --> src\main.rs:81:5
+   |
+81 | use crossbeam_channel::bounded;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FftPlanner` and `num_complex::Complex`
+  --> src\main.rs:82:15
+   |
+82 | use rustfft::{FftPlanner, num_complex::Complex};
+   |               ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `BISPEC_FFT_SIZE`
+  --> src\main.rs:85:18
+   |
+85 | use bispectrum::{BISPEC_FFT_SIZE, BispectrumEngine};
+   |                  ^^^^^^^^^^^^^^^
+
+warning: unused import: `HardwareLayer`
+  --> src\main.rs:86:33
+   |
+86 | use detection::{DetectionEvent, HardwareLayer};
+   |                                 ^^^^^^^^^^^^^
+
+warning: unused imports: `V_DEPTH` and `V_FREQ_BINS`
+  --> src\main.rs:93:15
+   |
+93 | use vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
+   |               ^^^^^^^  ^^^^^^^^^^^
+
+warning: unused imports: `frustum_culler::FrustumCuller` and `renderer::ParticleRenderer`
+   --> src\main.rs:117:9
+    |
+117 |         frustum_culler::FrustumCuller,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+118 |         renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0428, E0433.
+For more information about an error, try `rustc --explain E0428`.
+warning: `twister` (bin "twister") generated 63 warnings (24 duplicates)
+error: could not compile `twister` (bin "twister") due to 2 previous errors; 63 warnings emitted

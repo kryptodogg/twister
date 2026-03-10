@@ -4,15 +4,19 @@
 // Logs detections with court-admissible timestamps and calibration data.
 
 use crate::detection::DetectionEvent;
+use crate::embeddings::EmbeddingStore;
+use crate::graph::ForensicGraph;
+use crate::state::AppState;
 use chrono;
 use csv;
 use std::collections::HashMap;
 use std::fs::{File, OpenOptions, create_dir_all};
 use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::io::AsyncWriteExt;
-use tokio::sync::mpsc;
+use tokio::sync::{Mutex, mpsc};
 
 pub fn get_current_micros() -> u64 {
     SystemTime::now()
@@ -414,12 +418,11 @@ impl ForensicLogger {
                 .await
                 .expect("Failed to open log file");
 
-            let mut event_count: u64 = 0;
-
+            let mut _event_count: u64 = 0;
             loop {
                 match receiver.recv().await {
                     Some(event) => {
-                        event_count += 1;
+                        _event_count += 1;
                         // Validate
                         if let Err(e) = EventValidator::validate(&event) {
                             eprintln!("[Forensic] Validation error: {}", e);
@@ -578,8 +581,8 @@ impl ForensicLogger {
         case_number: &str,
         operator_name: &str,
         location: &str,
-        start_date: Option<&str>,
-        end_date: Option<&str>,
+        _start_date: Option<&str>,
+        _end_date: Option<&str>,
     ) -> anyhow::Result<()> {
         use std::io::BufReader;
 
@@ -824,4 +827,34 @@ pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
             invalid_count + out_of_order_count
         ))
     }
+}
+
+pub fn rt_store_async(
+    qdrant: Arc<Option<EmbeddingStore>>,
+    neo4j: Arc<Mutex<Option<ForensicGraph>>>,
+    event: DetectionEvent,
+    state: Arc<AppState>,
+) {
+    state.memo_add(
+        "[EVIDENCE]".to_string(),
+        format!(
+            "Auto-capture: Detection at {:.1} Hz (Magnitude: {:.2})",
+            event.f1_hz, event.magnitude
+        ),
+    );
+
+    if let Some(store) = (*qdrant).clone() {
+        let ev = event.clone();
+        tokio::spawn(async move {
+            let _ = store.store_detection(&ev).await;
+        });
+    }
+
+    let n = neo4j.clone();
+    let ev = event.clone();
+    tokio::spawn(async move {
+        if let Some(g) = n.lock().await.as_ref() {
+            let _ = g.store_detection(&ev).await;
+        }
+    });
 }

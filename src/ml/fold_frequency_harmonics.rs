@@ -1,5 +1,5 @@
 pub struct FoldFrequencyAnalyzer {
-    sample_rate: u32,
+    _sample_rate: u32,
     nyquist: f32,
 }
 
@@ -16,7 +16,7 @@ impl FoldFrequencyAnalyzer {
     pub fn new(sample_rate: u32) -> Self {
         let nyquist = sample_rate as f32 / 2.0;
         Self {
-            sample_rate,
+            _sample_rate: sample_rate,
             nyquist,
         }
     }

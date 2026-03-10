@@ -10,7 +10,7 @@ use crate::detection::{DetectionEvent, HardwareLayer};
 use crate::forensic::ForensicLogger;
 use crate::gpu::GpuContext;
 use crate::gpu_shared::GpuShared;
-use crate::ml::modular_features::{ImpulseTrainEvent, SignalFeaturePayload};
+use crate::ml::modular_features::SignalFeaturePayload;
 use crate::pdm::PdmEngine;
 use crate::state::AppState;
 use crate::training::{MambaTrainer, TrainingSession};
@@ -28,7 +28,7 @@ use tokio::time::{Duration, interval};
 
 pub struct SignalDispatchLoop {
     state: Arc<AppState>,
-    gpu_shared: GpuShared,
+    gpu_shared: Arc<GpuShared>,
 
     // Ingest channels
     merge_rx: Receiver<Vec<f32>>,
@@ -37,7 +37,6 @@ pub struct SignalDispatchLoop {
 
     // Egress channels
     feature_tx: Sender<(SignalFeaturePayload, Tensor<NdArray, 1>)>,
-    impulse_tx: Sender<ImpulseTrainEvent>,
 
     // Engines
     waterfall: WaterfallEngine,
@@ -49,7 +48,6 @@ pub struct SignalDispatchLoop {
     crystal_ball: Arc<crate::reconstruct::CrystalBall>,
     qdrant: Arc<Option<crate::embeddings::EmbeddingStore>>,
     neo4j: Arc<tokio::sync::Mutex<Option<crate::graph::ForensicGraph>>>,
-    session_identity: String,
     vbuffer: Arc<Mutex<GpuVBuffer>>,
     sdr_vbuffer: Arc<Mutex<GpuVBuffer>>,
 
@@ -70,15 +68,13 @@ pub struct SignalDispatchLoop {
 }
 
 impl SignalDispatchLoop {
-    #[allow(clippy::too_many_arguments)]
     pub fn new(
         state: Arc<AppState>,
-        gpu_shared: GpuShared,
+        gpu_shared: Arc<GpuShared>,
         merge_rx: Receiver<Vec<f32>>,
         sdr_rx: Receiver<(Vec<f32>, f32, f32)>,
         record_rx: Receiver<TaggedSamples>,
         feature_tx: Sender<(SignalFeaturePayload, Tensor<NdArray, 1>)>,
-        impulse_tx: Sender<ImpulseTrainEvent>,
         waterfall: WaterfallEngine,
         sdr_waterfall: WaterfallEngine,
         pdm: PdmEngine,
@@ -88,7 +84,6 @@ impl SignalDispatchLoop {
         crystal_ball: Arc<crate::reconstruct::CrystalBall>,
         qdrant: Arc<Option<crate::embeddings::EmbeddingStore>>,
         neo4j: Arc<tokio::sync::Mutex<Option<crate::graph::ForensicGraph>>>,
-        session_identity: String,
         vbuffer: Arc<Mutex<GpuVBuffer>>,
         sdr_vbuffer: Arc<Mutex<GpuVBuffer>>,
         mamba_trainer: Arc<MambaTrainer>,
@@ -102,7 +97,6 @@ impl SignalDispatchLoop {
             sdr_rx,
             record_rx,
             feature_tx,
-            impulse_tx,
             waterfall,
             sdr_waterfall,
             pdm,
@@ -112,7 +106,6 @@ impl SignalDispatchLoop {
             crystal_ball,
             qdrant,
             neo4j,
-            session_identity,
             vbuffer,
             sdr_vbuffer,
             mamba_trainer,
@@ -326,7 +319,7 @@ impl SignalDispatchLoop {
                 // PDM Wideband & Forensic Reconstruction
                 let true_hz_for_neo4j = if pdm_enabled {
                     let words = self.pdm.encode(&chunk);
-                    let decoded = self.pdm.decode(&words);
+                    let _decoded = self.pdm.decode(&words);
                     let wide = self.pdm.decode_wideband(&words);
                     let n_w = BISPEC_FFT_SIZE.min(wide.len());
                     let mut cbuf_w: Vec<Complex<f32>> = wide
@@ -398,12 +391,9 @@ impl SignalDispatchLoop {
                     self.last_bispec_event = Some(event.clone());
                     let mut enriched = event.clone();
                     self.state.enrich_event_forensics(&mut enriched);
-                    // TODO: ForensicEvent::Detection variant doesn't exist - comment out pending fix
-                    // let _ = self
-                    //     .forensic
-                    //     .log(crate::forensic::ForensicEvent::Detection(enriched));
+                    let _ = self.forensic.log_detection(&enriched);
 
-                    crate::dispatch::rt_store_async(
+                    crate::forensic::rt_store_async(
                         self.qdrant.clone(),
                         self.neo4j.clone(),
                         event.clone(),
@@ -426,15 +416,12 @@ impl SignalDispatchLoop {
 
                     let qd = self.qdrant.clone();
                     let ev = event.clone();
-                    let fdc = self.forensic.clone();
+                    let forensic_logger = self.forensic.clone();
                     tokio::spawn(async move {
                         if let Some(store) = qd.as_ref() {
                             if let Ok(similar) = store.find_similar(&ev, 5).await {
                                 if !similar.is_empty() && similar[0].score > 0.85 {
-                                    // TODO: ForensicEvent::Detection variant doesn't exist - comment out pending fix
-                                    // let _ = fdc.log(crate::forensic::ForensicEvent::Detection(
-                                    //     similar[0].event.clone(),
-                                    // ));
+                                    let _ = forensic_logger.log_detection(&similar[0].event);
                                 }
                             }
                         }

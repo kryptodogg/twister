@@ -6,12 +6,14 @@ use crate::ai::CopilotInterface;
 use std::sync::{Arc, Mutex};
 
 pub struct CopilotUIHandler {
-    interface: Arc<Mutex<CopilotInterface>>,
+    _interface: Arc<Mutex<CopilotInterface>>,
 }
 
 impl CopilotUIHandler {
     pub fn new(interface: Arc<Mutex<CopilotInterface>>) -> Self {
-        Self { interface }
+        Self {
+            _interface: interface,
+        }
     }
 
     /// In a real app, this would take the Slint `AppWindow` handle
