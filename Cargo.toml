@@ -53,7 +53,7 @@ chrono = { version = "*", features = ["serde"] }
 # ── Audio ──────────────────────────────────────────────────────────────────────
 cpal = "*"
 # ── Benchmarking ───────────────────────────────────────────────────────────────
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "#", features = ["html_reports"] }
 # ── Concurrency ────────────────────────────────────────────────────────────────
 crossbeam-channel = "*"
 csv = "*"
@@ -92,6 +92,11 @@ tokio = { version = "*", features = ["full"] }
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
 wgpu = { version = "*", features = ["vulkan"] }
+# ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
+hf-hub = "*"
+safetensors = "*"
+tokio = { version = "*", features = ["full"] }
+rand = "*"
 # Note: HDF5 requires native library installation (libhdf5).
 # Using JSON fallback by default if hdf5 feature is disabled.
 
