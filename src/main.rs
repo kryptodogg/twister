@@ -741,7 +741,8 @@ async fn main() -> anyhow::Result<()> {
                         let fdc2 = forensic_disp.clone();
                         let reason = gate.reason.clone();
                         tokio::spawn(async move {
-                            if let Ok(mut f) = fdc2.lock() {
+                            if true { // fdc2.lock() removed since it's not a Mutex
+                            let mut f = fdc2.clone();
                                 let _ = f.log_gate_decision(anomaly, gate.confidence, 2.0, gate.forward_to_trainer, &reason);
                             }
                         });
