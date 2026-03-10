@@ -15,7 +15,7 @@ export global PS5Status {
     callback test_toggled(bool);
 }
 
-export component HapticTestButton {
+export component HapticTestButton inherits Rectangle {
     in property <string> label: "TEST RESONANCE";
 
     Rectangle {
@@ -44,7 +44,7 @@ export component HapticTestButton {
     }
 }
 
-export component ValueBar {
+export component ValueBar inherits Rectangle {
     in property <float> value: 0.0; // 0.0 to 1.0
     in property <string> label;
 
@@ -78,7 +78,7 @@ export component ValueBar {
     }
 }
 
-export component RingMeter {
+export component RingMeter inherits Rectangle {
     in property <float> value: 0.0; // 0.0 to 1.0
     in property <string> label;
     in property <color> ring_color: #0cf;

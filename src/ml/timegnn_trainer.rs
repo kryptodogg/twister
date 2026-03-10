@@ -353,7 +353,7 @@ pub fn compute_nt_xent_loss(
 ///    - Compute NT-Xent loss (τ=0.07) on embeddings
 ///    - Backward pass + optimizer.step() to update model weights
 ///    - Save checkpoint every 5 epochs
-/// 4. Expected loss trajectory: 2.1 dB → < 0.34 dB
+/// 4. Expected loss trajectory: 2.1 → < 0.34 (NT-Xent)
 ///
 /// # Production TODO: TimeGnnModel Integration
 /// Current implementation uses synthetic embeddings from feature[0..128] as a placeholder.
@@ -400,8 +400,10 @@ pub async fn train_timegnn(
 
     // Create checkpoint directory
     let checkpoint_dir = "checkpoints/timegnn";
-    fs::create_dir_all(checkpoint_dir).ok();
-    eprintln!("[Track K] Checkpoints will be saved to: {}", checkpoint_dir);
+    match fs::create_dir_all(checkpoint_dir) {
+        Ok(_) => eprintln!("[Track K] Checkpoints will be saved to: {}", checkpoint_dir),
+        Err(err) => eprintln!("[Track K] Warning: Failed to create checkpoint directory {}: {}", checkpoint_dir, err),
+    }
 
     // STUB: Initialize TimeGnnModel here
     // let device = Wgpu::new(Default::default());
@@ -491,7 +493,7 @@ pub async fn train_timegnn(
 
         // Log progress
         if epoch % 10 == 0 || epoch == 0 {
-            eprintln!("  Epoch {}/{}: loss = {:.6} dB", epoch, epochs, epoch_loss);
+            eprintln!("  Epoch {}/{}: loss = {:.6} (NT-Xent)", epoch, epochs, epoch_loss);
         }
 
         // Checkpoint every N epochs
@@ -509,10 +511,14 @@ pub async fn train_timegnn(
                 // TODO: model.save_to_buffer() would go here
             });
 
-            if let Ok(json_str) = serde_json::to_string_pretty(&checkpoint_data) {
-                if fs::write(&checkpoint_path, json_str).is_ok() {
-                    eprintln!("[Track K] Checkpoint saved: {}", checkpoint_path);
+            match serde_json::to_string_pretty(&checkpoint_data) {
+                Ok(json_str) => {
+                    match fs::write(&checkpoint_path, json_str) {
+                        Ok(_) => eprintln!("[Track K] Checkpoint saved: {}", checkpoint_path),
+                        Err(err) => eprintln!("[Track K] Error: Failed to write checkpoint {}: {}", checkpoint_path, err),
+                    }
                 }
+                Err(err) => eprintln!("[Track K] Error: Failed to serialize checkpoint data: {}", err),
             }
         }
     }
@@ -527,17 +533,21 @@ pub async fn train_timegnn(
         "epoch_losses": metrics.epoch_losses,
     });
 
-    if let Ok(json_str) = serde_json::to_string_pretty(&final_checkpoint_data) {
-        if fs::write(&final_checkpoint_path, json_str).is_ok() {
-            eprintln!("[Track K] Final checkpoint saved: {}", final_checkpoint_path);
+    match serde_json::to_string_pretty(&final_checkpoint_data) {
+        Ok(json_str) => {
+            match fs::write(&final_checkpoint_path, json_str) {
+                Ok(_) => eprintln!("[Track K] Final checkpoint saved: {}", final_checkpoint_path),
+                Err(err) => eprintln!("[Track K] Error: Failed to write final checkpoint {}: {}", final_checkpoint_path, err),
+            }
         }
+        Err(err) => eprintln!("[Track K] Error: Failed to serialize final checkpoint data: {}", err),
     }
 
     metrics.is_complete = true;
     let final_loss = metrics.epoch_losses.last().copied().unwrap_or(0.0);
 
     eprintln!(
-        "[Track K] Training complete. Final loss: {:.6} dB",
+        "[Track K] Training complete. Final loss: {:.6} (NT-Xent)",
         final_loss
     );
 

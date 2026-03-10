@@ -16,7 +16,8 @@
 //   sdr_loop      — tokio::spawn: RTL-SDR IQ capture + Twister auto-tune
 
 #[allow(clippy::too_many_arguments)]
-use twister::AppWindow;
+slint::include_modules!();
+use slint_generated::AppWindow;
 
 // Twister library imports
 use anyhow::Context;
@@ -36,7 +37,7 @@ use twister::forensic::{ForensicEvent, ForensicLogger};
 use twister::fusion::FusionEngine;
 use twister::gpu::GpuContext;
 use twister::gpu_shared::GpuShared;
-use twister::graph::ForensicGraph;
+use twister::knowledge_graph::KnowledgeGraphClient;
 use twister::mamba::TrainingPair;
 use twister::ml::anomaly_gate::{AnomalyGateConfig, evaluate_anomaly_gate};
 use twister::ml::spectral_frame::SpectralFrame;

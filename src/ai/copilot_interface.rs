@@ -1,6 +1,6 @@
+use crate::gpu_shared::GpuShared;
+use crate::knowledge_graph::KnowledgeGraphClient;
 use std::sync::Arc;
-use twister::gpu_shared::GpuShared;
-use twister::knowledge_graph::KnowledgeGraphClient;
 
 /// Represents a message in the multi-turn CopilotKit conversation
 #[derive(Debug, Clone)]

@@ -1,6 +1,6 @@
+use crate::knowledge_graph::KnowledgeGraphClient;
 use neo4rs::*;
 use std::sync::Arc;
-use twister::knowledge_graph::KnowledgeGraphClient;
 
 /// Represents a query tool that the LLM can invoke to fetch data from Neo4j.
 #[async_trait::async_trait]
