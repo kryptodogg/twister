@@ -11,8 +11,9 @@ use std::sync::Arc;
 use std::sync::atomic::Ordering;
 use std::time::Duration;
 
-use crate::rtlsdr::RtlSdrEngine;
 use crate::state::AppState;
+#[cfg(feature = "rtlsdr")]
+use crate::rtlsdr::RtlSdrEngine;
 use crate::vbuffer::V_FREQ_BINS;
 
 pub const SDR_FFT_SIZE: usize = 2048;
@@ -94,6 +95,7 @@ pub fn sdr_channel() -> (SdrMagSender, SdrMagReceiver) {
     bounded(32)
 }
 
+#[cfg(feature = "rtlsdr")]
 struct SdrEngine {
     state: Arc<AppState>,
     device: RtlSdrEngine,
@@ -101,6 +103,7 @@ struct SdrEngine {
     last_center_hz: f32,
 }
 
+#[cfg(feature = "rtlsdr")]
 impl SdrEngine {
     fn update_status(&mut self) {
         self.state.set_rtl_connected(self.device.is_open());
@@ -116,6 +119,7 @@ impl SdrEngine {
 
 // ── Background SDR capture thread ─────────────────────────────────────────────
 
+#[cfg(feature = "rtlsdr")]
 pub fn spawn_sdr_thread(state: Arc<AppState>, mag_tx: SdrMagSender) -> std::thread::JoinHandle<()> {
     std::thread::spawn(move || {
         let mut planner = FftPlanner::new();
@@ -245,6 +249,7 @@ pub fn spawn_sdr_thread(state: Arc<AppState>, mag_tx: SdrMagSender) -> std::thre
 }
 
 /// List connected RTL-SDR devices via our own FFI.
+#[cfg(feature = "rtlsdr")]
 pub fn list_devices() -> Vec<String> {
     let count = unsafe { crate::rtlsdr_ffi::rtlsdr_get_device_count() };
     (0..count)

@@ -34,8 +34,11 @@ pub mod pdm;
 pub mod reconstruct;
 pub mod resample;
 pub mod ridge_plot;
+#[cfg(feature = "rtlsdr")]
 pub mod rtlsdr;
+#[cfg(feature = "rtlsdr")]
 pub mod rtlsdr_ffi;
+#[cfg(feature = "rtlsdr")]
 pub mod safe_sdr_wrapper;
 pub mod sdr;
 pub mod state;
@@ -58,6 +61,9 @@ pub mod ai;
 pub mod computer_vision;
 pub mod forensic_queries;
 pub mod ml;
+pub mod hardware;
+pub mod utils;
+pub mod dsp;
 
 pub mod knowledge_graph;
 

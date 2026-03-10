@@ -94,6 +94,42 @@ pub struct TrainingEvent {
     pub rf_frequency_hz: f32,
 }
 
+/// Real-time parameter update for active training
+#[derive(Debug, Clone)]
+pub struct ParameterUpdate {
+    /// Update learning rate
+    pub learning_rate: Option<f32>,
+    /// Update weight decay
+    pub weight_decay: Option<f32>,
+    /// Update batch size
+    pub batch_size: Option<usize>,
+    /// Update temperature
+    pub temperature: Option<f32>,
+    /// Attention window in ms
+    pub attention_window_ms: Option<u64>,
+    /// Update timestamp
+    pub timestamp: i64,
+}
+
+impl ParameterUpdate {
+    /// Create a new parameter update
+    pub fn new(
+        temperature: Option<f32>,
+        learning_rate: Option<f32>,
+        attention_window_ms: Option<u64>,
+        timestamp: i64,
+    ) -> Self {
+        Self {
+            temperature,
+            learning_rate,
+            attention_window_ms,
+            weight_decay: None,
+            batch_size: None,
+            timestamp,
+        }
+    }
+}
+
 /// Training state tracker
 #[derive(Debug, Clone)]
 pub struct TrainingMetrics {
@@ -859,129 +895,6 @@ mod tests {
         // Test graceful handling of missing corpus
         let result = load_corpus("nonexistent_corpus.json");
         assert!(result.is_ok(), "Should return empty corpus for missing file");
-        assert_eq!(
-            result.unwrap().len(),
-            0,
-            "Missing file should return empty corpus"
-        );
-    }
-
-    #[test]
-    fn test_training_event_feature_validation() {
-        // Create event with correct dimensions
-        let event = TrainingEvent {
-            id: "test".to_string(),
-            features: vec![0.5; 1297],
-            timestamp_micros: 0,
-            tag: "TEST".to_string(),
-            confidence: 0.8,
-            rf_frequency_hz: 2.4e9,
-        };
-
-        assert_eq!(event.features.len(), 1297);
-        assert_eq!(event.tag, "TEST");
-        assert!((event.confidence - 0.8).abs() < 1e-6);
-    }
-
-    #[test]
-    fn test_nt_xent_temperature_effect() {
-        // Verify that temperature parameter affects loss scaling
-        let embeddings = vec![
-            vec![1.0, 0.0, 0.0, 0.0],
-            vec![0.99, 0.01, 0.0, 0.0],
-            vec![0.0, 1.0, 0.0, 0.0],
-        ];
-        let labels = vec![0, 0, 1];
-
-        let loss_low_temp = compute_nt_xent_loss(&embeddings, &labels, 0.01);
-        let loss_high_temp = compute_nt_xent_loss(&embeddings, &labels, 1.0);
-
-        // Lower temperature should produce sharper discrimination (different loss)
-        assert_ne!(
-            (loss_low_temp - loss_high_temp).abs() < 1e-6,
-            true,
-            "Different temperatures should produce different losses"
-        );
-    }
-
-    #[test]
-    fn test_contrastive_loss_config_generation_critical() {
-        // Verify that τ=0.07 is enforced (generation-critical constraint)
-        let config = ContrastiveLossConfig::default();
-        assert!(
-            (config.temperature - 0.07).abs() < 1e-6,
-            "Temperature MUST be 0.07 for generation correctness"
-        );
-    }
-}
-        for _epoch in 0..config.epochs {
-            let mut epoch_loss = 0.0;
-            let mut batch_count = 0;
-
-            for batch_start in (0..corpus.len()).step_by(batch_size) {
-                let batch_end = (batch_start + batch_size).min(corpus.len());
-                let batch_embeddings: Vec<Vec<f32>> = embeddings[batch_start..batch_end].to_vec();
-                let batch_labels: Vec<usize> = labels[batch_start..batch_end].to_vec();
-
-                let batch_loss = compute_nt_xent_loss(
-                    &batch_embeddings,
-                    &batch_labels,
-                    config.loss_config.temperature,
-                );
-                epoch_loss += batch_loss;
-                batch_count += 1;
-            }
-
-            if batch_count > 0 {
-                epoch_loss /= batch_count as f32;
-            }
-            losses.push(epoch_loss);
-        }
-
-        // Verify training metrics
-        assert_eq!(
-            losses.len(),
-            config.epochs,
-            "Should have loss for each epoch"
-        );
-
-        // All losses should be non-negative
-        for loss in &losses {
-            assert!(*loss >= 0.0, "Loss should be non-negative");
-            assert!(loss.is_finite(), "Loss should be finite");
-        }
-
-        // Verify training initialization
-        let mut metrics = TrainingMetrics::default();
-        metrics.total_events = corpus.len();
-        metrics.avg_confidence =
-            corpus.iter().map(|e| e.confidence).sum::<f32>() / corpus.len() as f32;
-
-        assert_eq!(metrics.total_events, 100, "Should have 100 events");
-        assert!(
-            (metrics.avg_confidence - 0.795).abs() < 0.01,
-            "Average confidence should be ~0.795"
-        );
-    }
-
-    #[test]
-    fn test_training_config_defaults() {
-        let config = TimeGnnTrainingConfig::default();
-        assert_eq!(config.epochs, 50);
-        assert_eq!(config.batch_size, 32);
-        assert!(config.learning_rate > 0.0);
-        assert_eq!(config.checkpoint_freq, 5);
-        assert!((config.loss_config.temperature - 0.07).abs() < 1e-6);
-    }
-
-    #[test]
-    fn test_load_corpus_empty_file() {
-        // Test graceful handling of missing corpus
-        let result = load_corpus("nonexistent_corpus.json");
-        assert!(
-            result.is_ok(),
-            "Should return empty corpus for missing file"
-        );
         assert_eq!(
             result.unwrap().len(),
             0,

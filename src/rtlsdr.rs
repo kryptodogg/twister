@@ -3,6 +3,7 @@
 // Provides memory-safe abstractions over the rtlsdr_ffi FFI bindings.
 // Supports I/Q capture from 10 kHz to 300 MHz at up to 2.4 MS/s.
 
+#[cfg(feature = "rtlsdr")]
 use crate::rtlsdr_ffi;
 use num_complex::Complex;
 use std::ptr;
@@ -24,6 +25,7 @@ pub const MIN_FREQ_HZ: u32 = 1;
 pub const MAX_FREQ_HZ: u32 = 300_000_000;
 
 /// RTL-SDR device handle with safe abstractions
+#[cfg(feature = "rtlsdr")]
 pub struct RtlSdrDevice {
     raw: *mut rtlsdr_ffi::rtlsdr_dev_t,
     sample_rate: u32,
@@ -36,6 +38,7 @@ pub struct RtlSdrDevice {
 unsafe impl Send for RtlSdrDevice {}
 unsafe impl Sync for RtlSdrDevice {}
 
+#[cfg(feature = "rtlsdr")]
 impl RtlSdrDevice {
     /// Enumerate available RTL-SDR devices
     pub fn enumerate() -> Vec<DeviceInfo> {
@@ -314,6 +317,7 @@ impl Drop for RtlSdrDevice {
 }
 
 /// Device information structure
+#[cfg(feature = "rtlsdr")]
 #[derive(Debug, Clone)]
 pub struct DeviceInfo {
     pub index: u32,
@@ -321,12 +325,14 @@ pub struct DeviceInfo {
 }
 
 /// RTL-SDR capture engine for continuous streaming
+#[cfg(feature = "rtlsdr")]
 pub struct RtlSdrEngine {
     device: RtlSdrDevice,
     buffer: Vec<u8>,
     running: AtomicBool,
 }
 
+#[cfg(feature = "rtlsdr")]
 impl RtlSdrEngine {
     /// Create new RTL-SDR engine with default device
     pub fn new() -> anyhow::Result<Self> {

@@ -8,6 +8,7 @@
 // Zero allocation: Device list pre-allocated to MAX_DEVICES.
 
 use crate::app_state::DirtyFlags;
+#[cfg(feature = "rtlsdr")]
 use crate::safe_sdr_wrapper::{RadioDevice, RadioDeviceType};
 use parking_lot::Mutex;
 use std::sync::Arc;
@@ -22,6 +23,7 @@ pub enum DeviceStatus {
     Error,
 }
 
+#[cfg(feature = "rtlsdr")]
 #[derive(Debug, Clone)]
 pub struct DeviceHandle {
     pub id: u32,
@@ -37,6 +39,7 @@ pub struct DeviceHandle {
 /// - add_device() → device added, dirty flag set
 /// - remove_device() → device removed, dirty flag set
 /// - tune_device() → frequency changed, dirty flag set
+#[cfg(feature = "rtlsdr")]
 pub struct DeviceManager {
     // Active devices (Vec never reallocates; uses Option for empty slots)
     devices: Arc<Mutex<Vec<Option<RadioDevice>>>>,
@@ -51,6 +54,7 @@ pub struct DeviceManager {
     next_device_id: Arc<Mutex<u32>>,
 }
 
+#[cfg(feature = "rtlsdr")]
 impl DeviceManager {
     /// Create a new device manager with reference to AppState dirty flags.
     pub fn new(dirty_flags: Arc<DirtyFlags>) -> Self {
@@ -75,6 +79,7 @@ impl DeviceManager {
     ///
     /// # Returns
     /// Assigned device ID (for future tune/remove ops)
+    #[cfg(feature = "rtlsdr")]
     pub fn add_rtl_sdr(&self, device_index: u32) -> Result<u32, String> {
         let radio_dev = RadioDevice::open_rtl_sdr(device_index)?;
 
@@ -162,7 +167,7 @@ impl DeviceManager {
         let mut hdls = self.handles.lock();
 
         // Find index by device_id
-        let idx = hdls
+        let idx: usize = hdls
             .iter()
             .position(|h| h.id == device_id)
             .ok_or("Device not found")?;
@@ -191,7 +196,7 @@ impl DeviceManager {
         let mut hdls = self.handles.lock();
 
         // Find device
-        let idx = hdls
+        let idx: usize = hdls
             .iter()
             .position(|h| h.id == device_id)
             .ok_or("Device not found")?;
@@ -217,6 +222,7 @@ impl DeviceManager {
     /// Get snapshot of all active devices (for UI binding).
     ///
     /// Returns a clone of the handle list (cheap, Vec<DeviceHandle> is Copy).
+    #[cfg(feature = "rtlsdr")]
     pub fn get_devices(&self) -> Vec<DeviceHandle> {
         self.handles.lock().clone()
     }
@@ -224,13 +230,14 @@ impl DeviceManager {
     /// Get mutable reference to a specific device for reading samples.
     ///
     /// Used by the Tokio dispatch loop to call read_sync().
+    #[cfg(feature = "rtlsdr")]
     pub fn get_device_mut<F, R>(&self, device_id: u32, f: F) -> Result<R, String>
     where
         F: FnOnce(&RadioDevice) -> Result<R, String>,
     {
         let devs = self.devices.lock();
 
-        let idx = self
+        let idx: usize = self
             .handles
             .lock()
             .iter()
@@ -245,17 +252,20 @@ impl DeviceManager {
     }
 
     /// Check if any device is active.
+    #[cfg(feature = "rtlsdr")]
     pub fn has_devices(&self) -> bool {
         !self.handles.lock().is_empty()
     }
 
     /// Get device count.
+    #[cfg(feature = "rtlsdr")]
     pub fn device_count(&self) -> usize {
         self.handles.lock().len()
     }
 }
 
 #[cfg(test)]
+#[cfg(feature = "rtlsdr")]
 mod tests {
     use super::*;
 

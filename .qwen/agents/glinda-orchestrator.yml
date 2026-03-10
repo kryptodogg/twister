@@ -1,0 +1,159 @@
+# =============================================================================
+# Agent: glinda-orchestrator
+# Crate: glinda/
+# Domain: Async Orchestration & MCP Server Management
+# =============================================================================
+
+name: "Glinda Orchestrator"
+description: |
+  Specialized agent for the glinda/ crate responsible for tokio async
+  bridging, crossbeam channels, and MCP (Model Context Protocol) server
+  management for multi-agent coordination.
+
+version: "1.0.0"
+created: "2026-02-21"
+
+# =============================================================================
+# PATH RESTRICTIONS
+# =============================================================================
+
+restricted_paths:
+  - "crates/glinda/**/*"
+  - "docs/mcp_server_specification.md"
+  - "docs/tokio_async_patterns.md"
+
+forbidden_paths:
+  - "crates/oz/**/*"
+  - "crates/aether/**/*"
+  - "crates/resonance/**/*"
+  - "crates/shield/**/*"
+  - "crates/train/**/*"
+  - "crates/synesthesia/**/*"
+  - "crates/toto/**/*"
+  - "crates/cipher/**/*"
+  - "crates/siren/**/*"
+  - "Cargo.lock"
+  - "target/**/*"
+
+# =============================================================================
+# DOMAIN-SPECIFIC RULES
+# =============================================================================
+
+rules:
+  - id: "tokio_async"
+    description: "All async code must use tokio runtime"
+    severity: "error"
+    keywords: ["tokio::", "async fn", ".await", "spawn_local"]
+
+  - id: "crossbeam_channels"
+    description: "Use crossbeam for lock-free channel communication"
+    severity: "error"
+    keywords: ["crossbeam::", "channel", "mpsc", "spsc"]
+
+  - id: "mcp_server"
+    description: "MCP servers must follow JSON-RPC 2.0 over HTTP/SSE"
+    severity: "error"
+    keywords: ["mcp_", "json_rpc", "sse_", "jsonrpc"]
+
+  - id: "graceful_shutdown"
+    description: "All tasks must support graceful cancellation"
+    severity: "error"
+    keywords: ["CancellationToken", "shutdown", "abort", "graceful"]
+
+  - id: "backpressure"
+    description: "Implement backpressure for high-throughput streams"
+    severity: "warning"
+    keywords: ["backpressure", "bounded", "buffer_size", "try_send"]
+
+  - id: "structured_concurrency"
+    description: "Use structured concurrency patterns (tokio::select!, join!)"
+    severity: "warning"
+    keywords: ["tokio::select", "join!", "try_join", "race"]
+
+# =============================================================================
+# REFERENCE BUNDLES
+# =============================================================================
+
+reference_bundles:
+  - path: "docs/mcp_server_specification.md"
+    purpose: "MCP server protocol specification"
+    access: "read-only"
+
+  - path: "docs/tokio_async_patterns.md"
+    purpose: "Tokio async patterns and best practices"
+    access: "read-only"
+
+# =============================================================================
+# TRIGGER PATTERNS
+# =============================================================================
+
+triggers:
+  file_patterns:
+    - "crates/glinda/src/**/*.rs"
+    - "crates/glinda/src/mcp/**/*.rs"
+    - "crates/glinda/src/orchestrator/**/*.rs"
+    - "crates/glinda/src/channel/**/*.rs"
+    - "crates/glinda/Cargo.toml"
+
+  content_patterns:
+    - "tokio::"
+    - "async fn"
+    - ".await"
+    - "crossbeam"
+    - "channel"
+    - "mcp_"
+    - "json_rpc"
+    - "spawn"
+    - "select!"
+    - "join!"
+
+# =============================================================================
+# AVAILABLE SKILLS
+# =============================================================================
+
+skills:
+  - "rust-pro"
+  - "rust-async-patterns"
+  - "m07-concurrency"
+  - "langchain-architecture"
+  - "mcp-builder"
+
+# =============================================================================
+# VALIDATION HOOKS
+# =============================================================================
+
+validation_hooks:
+  pre_write:
+    - "hook-pre-write"
+  post_write:
+    - "hook-post-rs"
+
+# =============================================================================
+# METRICS
+# =============================================================================
+
+metrics:
+  - name: "message_latency_p99"
+    target: "< 1ms"
+  - name: "channel_throughput"
+    target: ">= 100K msg/sec"
+  - name: "mcp_request_latency"
+    target: "< 10ms"
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+communication:
+  upstream: []
+  downstream:
+    - "oz-render-architect"
+    - "aether-fluid-specialist"
+    - "resonance-kinematics"
+    - "shield-rf-scientist"
+    - "train-state-space-ml"
+    - "synesthesia-ui-designer"
+    - "toto-hardware-hal"
+    - "cipher-data-engineer"
+    - "siren-extreme-dsp"
+  peer: []

@@ -1,0 +1,200 @@
+   Compiling twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: failed to run custom build command for `twister v0.5.0 (C:\Users\pixel\Downloads\twister)`
+
+Caused by:
+  process didn't exit successfully: `C:\Users\pixel\Downloads\twister\target\debug\build\twister-1c8bac9cb34324e9\build-script-build` (exit code: 101)
+  --- stdout
+  cargo:rustc-link-search=native=.
+  cargo:rustc-link-lib=static=rtlsdr
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui\copilot_panel.slint
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/app.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\app.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/auto_waveshaping.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\auto_waveshaping.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/spectral_ingester.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\spectral_ingester.rs
+  cargo:warning=warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+  cargo:warning=  --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+  cargo:warning=   |
+  cargo:warning=18 | export component HapticTestButton inherits Rectangle {
+  cargo:warning=   |                  ^^^^^^^^^^^^^^^^
+  cargo:warning=   |
+  cargo:warning=warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+  cargo:warning=  --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+  cargo:warning=   |
+  cargo:warning=81 | export component RingMeter inherits Rectangle {
+  cargo:warning=   |                  ^^^^^^^^^
+  cargo:warning=warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+  cargo:warning=  --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+  cargo:warning=   |
+  cargo:warning=47 | export component ValueBar inherits Rectangle {
+  cargo:warning=   |                  ^^^^^^^^
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/ps5_deck.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\ps5_deck.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/joycon_wand.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\joycon_wand.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui\standards.slint
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/toto_hud.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\toto_hud.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui\tokens.slint
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/mamba_brain.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\mamba_brain.rs
+
+  --- stderr
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:105:17
+      |
+  105 |                 , "Cascadia Code", "Courier New", monospace;
+      |                 ^
+      |
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:105:17
+      |
+  105 |                 , "Cascadia Code", "Courier New", monospace;
+      |                 ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:341:29
+      |
+  341 | ...                   , "Cascadia Code", monospace;
+      |                       ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:341:29
+      |
+  341 | ...                   , "Cascadia Code", monospace;
+      |                       ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:354:33
+      |
+  354 | ...                   , monospace;
+      |                       ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:354:33
+      |
+  354 | ...                   , monospace;
+      |                       ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:362:33
+      |
+  362 | ...                   , monospace;
+      |                       ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:362:33
+      |
+  362 | ...                   , monospace;
+      |                       ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:387:29
+      |
+  387 | ...                   , monospace;
+      |                       ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:387:29
+      |
+  387 | ...                   , monospace;
+      |                       ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:487:21
+      |
+  487 |                     , monospace;
+      |                     ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:487:21
+      |
+  487 |                     , monospace;
+      |                     ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:498:21
+      |
+  498 |                     , monospace;
+      |                     ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:498:21
+      |
+  498 |                     , monospace;
+      |                     ^
+  error: Syntax error: expected ';'
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:514:21
+      |
+  514 |                     , monospace;
+      |                     ^
+  error: Parse error
+     --> C:\Users\pixel\Downloads\twister\assets\prototyping\toto\toto.slint:514:21
+      |
+  514 |                     , monospace;
+      |                     ^
+
+  thread 'main' (81924) panicked at build.rs:14:64:
+  Slint build failed: CompileError(["C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:105: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:105: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:341: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:341: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:354: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:354: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:362: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:362: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:387: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:387: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:487: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:487: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:498: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:498: Parse error", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:514: Syntax error: expected ';'", "C:\\Users\\pixel\\Downloads\\twister\\assets\\prototyping\\toto\\toto.slint:514: Parse error"])
+  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

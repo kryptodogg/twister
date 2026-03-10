@@ -162,7 +162,15 @@ mod training_tests {
         let tx_spectrum = vec![0.1f32; 512 * 64];
         let rx_spectrum = vec![0.2f32; 512 * 64];
 
-        let pair = TrainingPair::new(100_000_000, tx_spectrum.clone(), rx_spectrum.clone());
+        let pair = TrainingPair {
+            center_freq_hz: 100_000_000,
+            tx_spectrum: tx_spectrum.clone(),
+            rx_spectrum: rx_spectrum.clone(),
+            timestamp_ms: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_millis() as u64,
+        };
 
         assert_eq!(pair.center_freq_hz, 100_000_000);
         assert_eq!(pair.tx_spectrum.len(), 512 * 64);

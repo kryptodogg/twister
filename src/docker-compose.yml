@@ -1,0 +1,57 @@
+# SIREN v0.2 — Forensic Database Stack
+# Neo4j 5.x + Qdrant (AMD GPU)
+#
+# Windows 11 notes:
+#   - This compose file uses bind mounts in the `./databases` directory for persistence.
+#   - Qdrant GPU support on Windows/Docker typically requires WSL2 and native drivers.
+#   - If Docker-based GPU passthrough fails, use the native Windows binary as described in SETUP_DATABASES.md.
+#
+# Run:  docker compose up -d
+# Stop: docker compose down
+# Wipe: docker compose down -v (also manually clear ./databases)
+
+services:
+
+  # ── Neo4j ─────────────────────────────────────────────────────────────────
+  neo4j:
+    image: neo4j:latest
+    container_name: siren-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "neo4j/siren_forensic_2024"
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+      NEO4J_dbms_memory_heap_initial__size: "512m"
+      NEO4J_dbms_memory_heap_max__size: "4g"
+      NEO4J_dbms_memory_pagecache_size: "2g"
+    volumes:
+      - ./databases/neo4j/data:/data
+      - ./databases/neo4j/logs:/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ── Qdrant ─────────────────────────────────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:gpu-amd-latest
+    container_name: siren-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: "6334"
+      QDRANT__GPU__ENABLED: "true"
+      QDRANT__STORAGE__PERFORMANCE__MAX_SEARCH_THREADS: "8"
+    volumes:
+      - ./databases/qdrant/storage:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:6333/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

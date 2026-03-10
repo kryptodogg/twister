@@ -93,8 +93,8 @@ export component ChronosApplet inherits Window {
                 }
                 Switch {
                     checked <=> ChronosEngine.training-active;
-                    toggled(active) => {
-                        if (active) {
+                    toggled => {
+                        if (self.checked) {
                             ChronosEngine.start-training();
                         } else {
                             ChronosEngine.stop-training();
@@ -138,7 +138,7 @@ export component ChronosApplet inherits Window {
                             text: "2.1";
                             color: Standards.error;
                             font-size: 11px;
-                            alignment: center;
+                            horizontal-alignment: center;
                         }
                     }
 
@@ -148,16 +148,16 @@ export component ChronosApplet inherits Window {
                         border-color: Standards.primary;
                         border-width: 1px;
 
-                        HorizontalBox {
+                        HorizontalLayout {
                             padding: 5px;
-                            // Normalized progress: current loss mapped to visual width
-                            // Target is < 0.34, starting at 2.1
-                            // So we go from full width (2.1) to nearly empty (0.34)
                             Rectangle {
-                                width: (100% - 40px) * (1.0 - (ChronosEngine.current-loss - 0.34) / (2.1 - 0.34)).max(0.0).min(1.0);
+                                horizontal-stretch: max(0.01, min(1.0, 1.0 - (ChronosEngine.current-loss - 0.34) / (2.1 - 0.34)));
                                 background: ChronosEngine.current-loss > 1.0 ? Standards.error :
                                           ChronosEngine.current-loss > 0.5 ? Standards.secondary :
                                           Standards.primary;
+                            }
+                            Rectangle {
+                                horizontal-stretch: max(0.0, min(0.99, (ChronosEngine.current-loss - 0.34) / (2.1 - 0.34)));
                             }
                         }
                     }
@@ -171,7 +171,7 @@ export component ChronosApplet inherits Window {
                             text: "< 0.34";
                             color: Standards.primary;
                             font-size: 11px;
-                            alignment: center;
+                            horizontal-alignment: center;
                         }
                     }
                 }
@@ -186,7 +186,7 @@ export component ChronosApplet inherits Window {
                         vertical-alignment: center;
                     }
                     ProgressIndicator {
-                        value: ChronosEngine.epoch-progress;
+                        progress: ChronosEngine.epoch-progress;
                     }
                     Text {
                         text: round(ChronosEngine.epoch-progress * 1000) / 10 + "%";
@@ -377,7 +377,7 @@ export component ChronosApplet inherits Window {
                         minimum: 1;
                         maximum: 3600;
                         changed(new-value) => {
-                            ChronosEngine.prediction-horizon-secs = round(new-value) as <int>;
+                            ChronosEngine.prediction-horizon-secs = round(new-value);
                             ChronosEngine.prediction-horizon-changed(ChronosEngine.prediction-horizon-secs);
                         }
                     }
@@ -400,54 +400,52 @@ export component ChronosApplet inherits Window {
             }
         }
     }
-}
 
-// ============================================
-// Helper Functions
-// ============================================
+    // ============================================
+    // Helper Functions
+    // ============================================
 
-function pad-number(n: int) -> string {
-    if (n < 10) {
-        return "0" + n;
-    } else {
-        return n;
+    function pad-number(n: int) -> string {
+        if (n < 10) {
+            return "0" + n;
+        } else {
+            return n;
+        }
+    }
+
+    function format-learning-rate(lr: float) -> string {
+        if (lr >= 0.01) {
+            return round(lr * 10000) / 10000;
+        } else if (lr >= 0.0001) {
+            return round(lr * 1000000) / 1000000;
+        } else {
+            return "< 0.0001";
+        }
+    }
+
+    function log10-inverse(value: float) -> float {
+        // Returns log10 of the value
+        if (value <= 0.0) {
+            return -6.0;
+        }
+        if (value < 0.00001) { return -6.0; }
+        if (value < 0.0001) { return -5.0; }
+        if (value < 0.001) { return -4.0; }
+        if (value < 0.01) { return -3.0; }
+        if (value < 0.1) { return -2.0; }
+        return -1.0;
+    }
+
+    function pow(base: float, exp: float) -> float {
+        // Simplified power function for log scale
+        if (exp == -6.0) { return 0.000001; }
+        if (exp == -5.0) { return 0.00001; }
+        if (exp == -4.0) { return 0.0001; }
+        if (exp == -3.0) { return 0.001; }
+        if (exp == -2.0) { return 0.01; }
+        if (exp == -1.0) { return 0.1; }
+        return 1.0;
     }
 }
 
-function format-learning-rate(lr: float) -> string {
-    if (lr >= 1e-2) {
-        return round(lr * 10000) / 10000;
-    } else if (lr >= 1e-4) {
-        return round(lr * 1000000) / 1000000;
-    } else {
-        return "< 1e-4";
-    }
-}
 
-function log10-inverse(value: float) -> float {
-    // Returns log10 of the value
-    // This is a simplified version; Slint may not have native log10
-    // Approximation: treat as linear for now
-    if (value <= 0.0) {
-        return -6.0;
-    }
-    // Simplified: just return a value between -6 and -1
-    if (value < 1e-5) { return -6.0; }
-    if (value < 1e-4) { return -5.0; }
-    if (value < 1e-3) { return -4.0; }
-    if (value < 1e-2) { return -3.0; }
-    if (value < 1e-1) { return -2.0; }
-    return -1.0;
-}
-
-function pow(base: float, exp: float) -> float {
-    // Simplified power function for log scale
-    // Approximates 10^exp
-    if (exp == -6.0) { return 1e-6; }
-    if (exp == -5.0) { return 1e-5; }
-    if (exp == -4.0) { return 1e-4; }
-    if (exp == -3.0) { return 1e-3; }
-    if (exp == -2.0) { return 1e-2; }
-    if (exp == -1.0) { return 1e-1; }
-    return 1e-3; // default
-}

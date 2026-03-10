@@ -18,6 +18,7 @@ path = "examples/applet_toto_core.rs"
 [[example]]
 name = "toto"
 path = "examples/toto.rs"
+required-features = ["rtlsdr"]
 
 [dependencies]
 # ── Error handling ─────────────────────────────────────────────────────────────
@@ -54,9 +55,11 @@ joycon-rs = "*"
 nalgebra = "*"
 # ── Forensic databases ─────────────────────────────────────────────────────────
 neo4rs = "*"
+ndarray = "*"
 noise = { version = "*", features = ["std"] }
 # ── Numerics / DSP ─────────────────────────────────────────────────────────────
 num-complex = "*"
+log = "*"
 parking_lot = "*"
 pollster = "*"
 qdrant-client = "*"
@@ -65,6 +68,7 @@ rand = { version = "*", features = ["std", "std_rng"] }
 raw-window-handle = "*"
 rustfft = "*"
 safetensors = "*"
+rtlsdr = { version = "*", optional = true }
 # ── Serialisation ──────────────────────────────────────────────────────────────
 serde = { version = "*", features = ["derive"] }
 serde_json = "*"
@@ -78,13 +82,15 @@ slint = { version = "1.15.1", default-features = false, features = [
 tempfile = "*"
 thiserror = "*"
 tokio = { version = "*", features = ["full"] }
+tracing = "*"
+tracing-subscriber = { version = "*", features = ["env-filter"] }
 tray-icon = "*"
 uuid = { version = "*", features = ["v4"] }
 # ── GPU compute ────────────────────────────────────────────────────────────────
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
 wgpu = { version = "*", features = ["vulkan"] }
-windows-sys = { version = "0.48", features = [
+windows-sys = { version = "*", features = [
   "Win32_Foundation",
   "Win32_Graphics_Dwm"
 ], optional = true }
@@ -109,7 +115,7 @@ default = ["rtlsdr"]
 all-rf = ["pluto-plus", "rtlsdr"]
 hdf5 = ["dep:hdf5"]
 pluto-plus = []
-rtlsdr = []
+rtlsdr = ["dep:rtlsdr"]
 
 [profile.dev]
 # Keep DSP hot paths fast even in debug builds.

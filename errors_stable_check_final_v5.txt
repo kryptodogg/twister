@@ -1,0 +1,679 @@
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+    Checking twister v0.5.0 (S:\twister)
+error[E0432]: unresolved imports `crate::dsp::WelchPSD`, `crate::dsp::PSDConfig`, `crate::dsp::TDOAConfig`
+ --> src\dsp\features.rs:4:18
+  |
+4 | use crate::dsp::{WelchPSD, PSDConfig, TDOAEstimator, TDOAConfig};
+  |                  ^^^^^^^^  ^^^^^^^^^                 ^^^^^^^^^^ no `TDOAConfig` in `dsp`
+  |                  |         |
+  |                  |         no `PSDConfig` in `dsp`
+  |                  no `WelchPSD` in `dsp`
+  |
+  = help: consider importing this struct instead:
+          crate::dsp::psd::WelchPSD
+  = help: consider importing this struct instead:
+          crate::dsp::psd::PSDConfig
+
+error[E0433]: failed to resolve: could not find `hardware` in the crate root
+ --> src\dsp\features.rs:5:12
+  |
+5 | use crate::hardware::rtlsdr::IQSample;
+  |            ^^^^^^^^ could not find `hardware` in the crate root
+
+error[E0432]: unresolved import `crate::ml::timegnn_trainer::ParameterUpdate`
+  --> src\ml\timegnn_ui_bridge.rs:19:34
+   |
+19 | use crate::ml::timegnn_trainer::{ParameterUpdate, TimeGnnTrainingConfig};
+   |                                  ^^^^^^^^^^^^^^^ no `ParameterUpdate` in `ml::timegnn_trainer`
+
+error[E0433]: failed to resolve: could not find `CrossCorrelation` in `tdoa`
+   --> src\dsp\features.rs:229:42
+    |
+229 |             let corr = crate::dsp::tdoa::CrossCorrelation::compute(
+    |                                          ^^^^^^^^^^^^^^^^ could not find `CrossCorrelation` in `tdoa`
+
+warning: unused imports: `HardwareLayer` and `ProductType`
+ --> src\forensic.rs:1:40
+  |
+1 | use crate::detection::{DetectionEvent, HardwareLayer, ProductType};
+  |                                        ^^^^^^^^^^^^^  ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\forensic.rs:2:5
+  |
+2 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::prelude::*`
+ --> src\forensic.rs:3:5
+  |
+3 | use burn::prelude::*;
+  |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src\forensic.rs:6:17
+  |
+6 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused imports: `SSAMBAConfig` and `SSAMBA`
+ --> src\mamba\training.rs:3:27
+  |
+3 | use crate::mamba::model::{SSAMBA, SSAMBAConfig};
+  |                           ^^^^^^  ^^^^^^^^^^^^
+
+warning: unused import: `Tensor`
+ --> src\mamba\training.rs:6:40
+  |
+6 |     tensor::{backend::AutodiffBackend, Tensor},
+  |                                        ^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:2:17
+  |
+2 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\timegnn_trainer.rs:5:5
+  |
+5 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Optimizer`
+ --> src\ml\timegnn_trainer.rs:7:31
+  |
+7 | use burn::optim::{AdamConfig, Optimizer};
+  |                               ^^^^^^^^^
+
+warning: unused import: `TimeGnnTrainingConfig`
+  --> src\ml\timegnn_ui_bridge.rs:19:51
+   |
+19 | use crate::ml::timegnn_trainer::{ParameterUpdate, TimeGnnTrainingConfig};
+   |                                                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Array2`
+ --> src\dsp\features.rs:3:23
+  |
+3 | use ndarray::{Array1, Array2};
+  |                       ^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\audio_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\rf_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> src\particle_system\streaming.rs:47:21
+   |
+47 |                 let mut pos = [
+   |                     ----^^^
+   |                     |
+   |                     help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+error[E0599]: no method named `predict_tx_delta` found for struct `SSAMBA<B>` in the current scope
+   --> src\training.rs:263:44
+    |
+263 |                 let tx_delta = autoencoder.predict_tx_delta(&pair.tx_spectrum, &pair.rx_spectrum);
+    |                                            ^^^^^^^^^^^^^^^^ method not found in `SSAMBA<_>`
+    |
+   ::: src\mamba\model.rs:38:1
+    |
+ 38 | pub struct SSAMBA<B: Backend> {
+    | ----------------------------- method `predict_tx_delta` not found for this struct
+
+error[E0609]: no field `anomaly_score` on type `InferenceResult`
+   --> src\training.rs:291:32
+    |
+291 |             Ok(out) => Ok((out.anomaly_score, out.latent, out.reconstruction)),
+    |                                ^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `latent`, `mode`, `mode_probs`, `snr_target_db`, `inference_time_ms`
+
+error[E0308]: mismatched types
+   --> src\training.rs:291:47
+    |
+291 |             Ok(out) => Ok((out.anomaly_score, out.latent, out.reconstruction)),
+    |                                               ^^^^^^^^^^ expected `Vec<f32>`, found `ArrayBase<OwnedRepr<f32>, ..., f32>`
+    |
+    = note: expected struct `Vec<f32>`
+               found struct `ArrayBase<OwnedRepr<f32>, ndarray::Dim<[usize; 1]>, f32>`
+
+error[E0609]: no field `reconstruction` on type `InferenceResult`
+   --> src\training.rs:291:63
+    |
+291 |             Ok(out) => Ok((out.anomaly_score, out.latent, out.reconstruction)),
+    |                                                               ^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `latent`, `mode`, `mode_probs`, `snr_target_db`, `inference_time_ms`
+
+warning: variable does not need to be mutable
+   --> src\ml\chronos_bridge.rs:165:39
+    |
+165 |     pub async fn update_config(&self, mut new_config: ChronosConfig) -> Result<(), String> {
+    |                                       ----^^^^^^^^^^
+    |                                       |
+    |                                       help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> src\ml\timegnn_trainer.rs:458:9
+    |
+458 |     let mut model: TimeGnnModel<TrainingBackend> = TimeGnnModel::new(1297, &device);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> src\ml\timegnn_trainer.rs:511:9
+    |
+511 |     let mut embeddings = Vec::new();
+    |         ----^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+error[E0599]: no method named `sigmoid` found for struct `burn::Tensor<B, D, K>` in the current scope
+   --> src\mamba\model.rs:209:25
+    |
+209 |         let gate = gate.sigmoid();
+    |                         ^^^^^^^ method not found in `burn::Tensor<B, 2>`
+
+error[E0599]: no function or associated item named `init` found for struct `Param<_>` in the current scope
+   --> src\mamba\model.rs:268:23
+    |
+268 |             a: Param::init(a),
+    |                       ^^^^ function or associated item not found in `Param<_>`
+    |
+note: if you're trying to build a new `Param<_>` consider using one of the following associated functions:
+      Param::<T>::initialized
+      Param::<T>::uninitialized
+      Param::<T>::from_mapped_value
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_tensor
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_data
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\tensor.rs:69:5
+    |
+ 69 |       pub fn from_tensor(value: Tensor<B, D>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 98 | /     pub fn from_data<T>(data: T, device: &B::Device) -> Self
+ 99 | |     where
+100 | |         T: Into<TensorData>,
+    | |____________________________^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\base.rs:174:5
+    |
+174 |       pub fn initialized(id: ParamId, value: T) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+186 | /     pub fn uninitialized<F>(
+187 | |         id: ParamId,
+188 | |         init: F,
+189 | |         device: T::Device,
+...   |
+193 | |     where
+194 | |         F: FnOnce(&T::Device, bool) -> T + Send + 'static,
+    | |__________________________________________________________^
+...
+270 |       pub fn from_mapped_value(id: ParamId, value: T, param_mapper: ParamMapper<T>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Pointable` which provides `init` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use crossbeam_epoch::atomic::Pointable;
+    |
+
+error[E0599]: no function or associated item named `init` found for struct `Param<_>` in the current scope
+   --> src\mamba\model.rs:269:23
+    |
+269 |             d: Param::init(d),
+    |                       ^^^^ function or associated item not found in `Param<_>`
+    |
+note: if you're trying to build a new `Param<_>` consider using one of the following associated functions:
+      Param::<T>::initialized
+      Param::<T>::uninitialized
+      Param::<T>::from_mapped_value
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_tensor
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_data
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\tensor.rs:69:5
+    |
+ 69 |       pub fn from_tensor(value: Tensor<B, D>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 98 | /     pub fn from_data<T>(data: T, device: &B::Device) -> Self
+ 99 | |     where
+100 | |         T: Into<TensorData>,
+    | |____________________________^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\base.rs:174:5
+    |
+174 |       pub fn initialized(id: ParamId, value: T) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+186 | /     pub fn uninitialized<F>(
+187 | |         id: ParamId,
+188 | |         init: F,
+189 | |         device: T::Device,
+...   |
+193 | |     where
+194 | |         F: FnOnce(&T::Device, bool) -> T + Send + 'static,
+    | |__________________________________________________________^
+...
+270 |       pub fn from_mapped_value(id: ParamId, value: T, param_mapper: ParamMapper<T>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Pointable` which provides `init` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use crossbeam_epoch::atomic::Pointable;
+    |
+
+error[E0599]: no method named `softplus` found for struct `burn::Tensor<B, D, K>` in the current scope
+   --> src\mamba\model.rs:287:48
+    |
+287 |         let delta = self.delta_proj.forward(x).softplus();
+    |                                                ^^^^^^^^ method not found in `burn::Tensor<B, 2>`
+
+error[E0277]: the trait bound `burn::Tensor<B, 2>: ElementConversion` is not satisfied
+   --> src\mamba\model.rs:306:40
+    |
+306 |                 y_prev * a_exp.clone() + b_t
+    |                                        ^ the trait `ElementConversion` is not implemented for `burn::Tensor<B, 2>`
+    |
+    = help: the following other types implement trait `ElementConversion`:
+              bool
+              f32
+              f64
+              flex32
+              half::bf16
+              half::f16
+              i16
+              i32
+            and 6 others
+    = note: required for `burn::Tensor<B, 1>` to implement `std::ops::Add<burn::Tensor<B, 2>>`
+
+error[E0308]: `if` and `else` have incompatible types
+   --> src\mamba\model.rs:308:17
+    |
+304 |               let h_t = if t > 0 {
+    |  _______________________-
+305 | |                 let y_prev = y.slice([t-1..t, 0..self.hidden_dim]);
+306 | |                 y_prev * a_exp.clone() + b_t
+    | |                 ---------------------------- expected because of this
+307 | |             } else {
+308 | |                 b_t
+    | |                 ^^^ expected `1`, found `2`
+309 | |             };
+    | |_____________- `if` and `else` have incompatible types
+    |
+    = note: expected struct `burn::Tensor<_, 1>`
+               found struct `burn::Tensor<_, 2>`
+
+error[E0277]: the trait bound `burn::Tensor<B, 2>: ElementConversion` is not satisfied
+   --> src\mamba\model.rs:311:56
+    |
+311 |             let y_t = c_t * h_t + self.d.val().clone() * x_t;
+    |                                                        ^ the trait `ElementConversion` is not implemented for `burn::Tensor<B, 2>`
+    |
+    = help: the following other types implement trait `ElementConversion`:
+              bool
+              f32
+              f64
+              flex32
+              half::bf16
+              half::f16
+              i16
+              i32
+            and 6 others
+    = note: required for `burn::Tensor<B, 1>` to implement `std::ops::Mul<burn::Tensor<B, 2>>`
+
+error[E0277]: the trait bound `burn::Tensor<B, 1>: ElementConversion` is not satisfied
+   --> src\mamba\model.rs:311:33
+    |
+311 |             let y_t = c_t * h_t + self.d.val().clone() * x_t;
+    |                                 ^ the trait `ElementConversion` is not implemented for `burn::Tensor<B, 1>`
+    |
+    = help: the following other types implement trait `ElementConversion`:
+              bool
+              f32
+              f64
+              flex32
+              half::bf16
+              half::f16
+              i16
+              i32
+            and 6 others
+    = note: required for `burn::Tensor<B, 2>` to implement `std::ops::Add<burn::Tensor<B, 1>>`
+
+error[E0308]: mismatched types
+    --> src\mamba\model.rs:312:62
+     |
+ 305 |                 let y_prev = y.slice([t-1..t, 0..self.hidden_dim]);
+     |                              - here the type of `y` is inferred to be `burn::Tensor<B, 1>`
+...
+ 312 |             y = y.slice_assign([t..t+1, 0..self.hidden_dim], y_t * delta_t);
+     |                   ------------                               ^^^^^^^^^^^^^ expected `1`, found `2`
+     |                   |
+     |                   arguments to this method are incorrect
+     |
+     = note: expected struct `burn::Tensor<_, 1>`
+                found struct `burn::Tensor<_, 2>`
+note: method defined here
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-tensor-0.21.0-pre.2\src\tensor\api\base.rs:1429:12
+     |
+1429 |     pub fn slice_assign<S>(self, slices: S, values: Self) -> Self
+     |            ^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> src\mamba\model.rs:315:9
+    |
+279 |     pub fn forward(&self, x: Tensor<B, 2>) -> Tensor<B, 2> {
+    |                                               ------------ expected `burn::Tensor<B, 2>` because of return type
+...
+305 |                 let y_prev = y.slice([t-1..t, 0..self.hidden_dim]);
+    |                              - here the type of `y` is inferred to be `burn::Tensor<B, 1>`
+...
+315 |         y
+    |         ^ expected `2`, found `1`
+    |
+    = note: expected struct `burn::Tensor<_, 2>`
+               found struct `burn::Tensor<_, 1>`
+
+error[E0599]: no method named `softmax` found for struct `burn::Tensor<B, D, K>` in the current scope
+   --> src\mamba\model.rs:374:26
+    |
+374 |         self.mode_logits.softmax(1)
+    |                          ^^^^^^^ method not found in `burn::Tensor<B, 2>`
+
+error[E0061]: this function takes 1 argument but 0 arguments were supplied
+  --> src\trainer.rs:61:23
+   |
+61 |         let trainer = OnlineTrainer::new()?;
+   |                       ^^^^^^^^^^^^^^^^^^-- argument #1 of type `TrainingConfig` is missing
+   |
+note: associated function defined here
+  --> src\mamba\training.rs:42:12
+   |
+42 |     pub fn new(config: TrainingConfig) -> Self {
+   |            ^^^ ----------------------
+help: provide the argument
+   |
+61 |         let trainer = OnlineTrainer::new(/* TrainingConfig */)?;
+   |                                          ++++++++++++++++++++
+
+error[E0277]: the `?` operator can only be applied to values that implement `Try`
+  --> src\trainer.rs:61:23
+   |
+61 |         let trainer = OnlineTrainer::new()?;
+   |                       ^^^^^^^^^^^^^^^^^^^^^ the `?` operator cannot be applied to type `mamba::training::MambaTrainer`
+   |
+help: the nightly-only, unstable trait `Try` is not implemented for `mamba::training::MambaTrainer`
+  --> src\mamba\training.rs:36:1
+   |
+36 | pub struct MambaTrainer {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0609]: no field `anomaly_score` on type `InferenceResult`
+   --> src\trainer.rs:160:69
+    |
+160 | ...                   self.state.set_mamba_anomaly(output.anomaly_score);
+    |                                                           ^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `latent`, `mode`, `mode_probs`, `snr_target_db`, `inference_time_ms`
+
+error[E0609]: no field `anomaly_score` on type `InferenceResult`
+   --> src\trainer.rs:170:61
+    |
+170 |                         self.state.set_mamba_anomaly(output.anomaly_score);
+    |                                                             ^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `latent`, `mode`, `mode_probs`, `snr_target_db`, `inference_time_ms`
+
+error[E0061]: this function takes 1 argument but 0 arguments were supplied
+   --> src\training.rs:131:23
+    |
+131 |         let trainer = OnlineTrainer::new()?;
+    |                       ^^^^^^^^^^^^^^^^^^-- argument #1 of type `TrainingConfig` is missing
+    |
+note: associated function defined here
+   --> src\mamba\training.rs:42:12
+    |
+ 42 |     pub fn new(config: TrainingConfig) -> Self {
+    |            ^^^ ----------------------
+help: provide the argument
+    |
+131 |         let trainer = OnlineTrainer::new(/* TrainingConfig */)?;
+    |                                          ++++++++++++++++++++
+
+error[E0277]: the `?` operator can only be applied to values that implement `Try`
+   --> src\training.rs:131:23
+    |
+131 |         let trainer = OnlineTrainer::new()?;
+    |                       ^^^^^^^^^^^^^^^^^^^^^ the `?` operator cannot be applied to type `mamba::training::MambaTrainer`
+    |
+help: the nightly-only, unstable trait `Try` is not implemented for `mamba::training::MambaTrainer`
+   --> src\mamba\training.rs:36:1
+    |
+ 36 | pub struct MambaTrainer {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+  --> src\dsp\features.rs:65:36
+   |
+65 |         features.extend_from_slice(&self.rf_psd);
+   |                  ----------------- ^^^^^^^^^^^^ expected `&[_]`, found `&ArrayBase<OwnedRepr<f32>, ..., f32>`
+   |                  |
+   |                  arguments to this method are incorrect
+   |
+   = note: expected reference `&[_]`
+              found reference `&ArrayBase<OwnedRepr<f32>, ndarray::Dim<[usize; 1]>, f32>`
+note: method defined here
+  --> /rustc/4a4ef493e3a1488c6e321570238084b38948f6db/library\alloc\src\vec\mod.rs:3435:11
+
+error[E0308]: mismatched types
+  --> src\dsp\features.rs:66:36
+   |
+66 |         features.extend_from_slice(&self.audio_psd);
+   |                  ----------------- ^^^^^^^^^^^^^^^ expected `&[_]`, found `&ArrayBase<OwnedRepr<f32>, ..., f32>`
+   |                  |
+   |                  arguments to this method are incorrect
+   |
+   = note: expected reference `&[_]`
+              found reference `&ArrayBase<OwnedRepr<f32>, ndarray::Dim<[usize; 1]>, f32>`
+note: method defined here
+  --> /rustc/4a4ef493e3a1488c6e321570238084b38948f6db/library\alloc\src\vec\mod.rs:3435:11
+
+error[E0308]: mismatched types
+  --> src\dsp\features.rs:67:36
+   |
+67 |         features.extend_from_slice(&self.tdoa);
+   |                  ----------------- ^^^^^^^^^^ expected `&[_]`, found `&ArrayBase<OwnedRepr<f32>, ..., f32>`
+   |                  |
+   |                  arguments to this method are incorrect
+   |
+   = note: expected reference `&[_]`
+              found reference `&ArrayBase<OwnedRepr<f32>, ndarray::Dim<[usize; 1]>, f32>`
+note: method defined here
+  --> /rustc/4a4ef493e3a1488c6e321570238084b38948f6db/library\alloc\src\vec\mod.rs:3435:11
+
+error[E0308]: mismatched types
+  --> src\dsp\features.rs:68:36
+   |
+68 |         features.extend_from_slice(&self.anc_state);
+   |                  ----------------- ^^^^^^^^^^^^^^^ expected `&[_]`, found `&ArrayBase<OwnedRepr<f32>, ..., f32>`
+   |                  |
+   |                  arguments to this method are incorrect
+   |
+   = note: expected reference `&[_]`
+              found reference `&ArrayBase<OwnedRepr<f32>, ndarray::Dim<[usize; 1]>, f32>`
+note: method defined here
+  --> /rustc/4a4ef493e3a1488c6e321570238084b38948f6db/library\alloc\src\vec\mod.rs:3435:11
+
+error[E0061]: this function takes 2 arguments but 1 argument was supplied
+   --> src\dsp\features.rs:139:19
+    |
+139 |             tdoa: TDOAEstimator::new(tdoa_config),
+    |                   ^^^^^^^^^^^^^^^^^^------------- argument #2 of type `f32` is missing
+    |
+note: associated function defined here
+   --> src\dsp\tdoa.rs:15:12
+    |
+ 15 |     pub fn new(sample_rate: u32, mic_spacing_meters: f32) -> Self {
+    |            ^^^                   -----------------------
+help: provide the argument
+    |
+139 |             tdoa: TDOAEstimator::new(tdoa_config, /* f32 */),
+    |                                                 +++++++++++
+
+error[E0599]: no method named `get_features` found for struct `TDOAEstimator` in the current scope
+   --> src\dsp\features.rs:222:23
+    |
+222 |             self.tdoa.get_features(&channels[0], &channels[1], 14)
+    |                       ^^^^^^^^^^^^ method not found in `TDOAEstimator`
+    |
+   ::: src\dsp\tdoa.rs:8:1
+    |
+  8 | pub struct TDOAEstimator {
+    | ------------------------ method `get_features` not found for this struct
+
+warning: unused import: `backend::AutodiffBackend`
+ --> src\mamba\training.rs:6:14
+  |
+6 |     tensor::{backend::AutodiffBackend, Tensor},
+  |              ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::module::Module`
+ --> src\ml\timegnn_trainer.rs:6:5
+  |
+6 | use burn::module::Module;
+  |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: variable `event_count` is assigned to, but never used
+   --> src\forensic.rs:134:17
+    |
+134 |             let mut event_count: u64 = 0;
+    |                 ^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_event_count` instead
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `event_count` is never read
+   --> src\forensic.rs:139:25
+    |
+139 |                         event_count += 1;
+    |                         ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:260:9
+    |
+260 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:261:9
+    |
+261 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+warning: unused variable: `duration`
+  --> src\particle_system\streaming.rs:39:17
+   |
+39 |             let duration = end_ms.saturating_sub(start_ms) as f32;
+   |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_duration`
+
+warning: unused variable: `time_factor`
+  --> src\particle_system\streaming.rs:40:17
+   |
+40 |             let time_factor = (start_ms as f64 % 1000000.0) as f32 / 100000.0;
+   |                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_time_factor`
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+warning: unused variable: `model`
+   --> src\ml\timegnn_trainer.rs:458:9
+    |
+458 |     let mut model: TimeGnnModel<TrainingBackend> = TimeGnnModel::new(1297, &device);
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_model`
+
+warning: unused variable: `adam_config`
+   --> src\ml\timegnn_trainer.rs:462:9
+    |
+462 |     let adam_config = AdamConfig::new()
+    |         ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_adam_config`
+
+warning: unused variable: `actual_batch_size`
+   --> src\ml\timegnn_trainer.rs:520:17
+    |
+520 |             let actual_batch_size = batch_end - batch_start;
+    |                 ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_actual_batch_size`
+
+Some errors have detailed explanations: E0061, E0277, E0308, E0432, E0433, E0599, E0609.
+For more information about an error, try `rustc --explain E0061`.
+warning: `twister` (lib) generated 32 warnings
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: could not compile `twister` (lib) due to 31 previous errors; 32 warnings emitted

@@ -63,24 +63,19 @@ global Colors {
 // ── Telemetry tile ──────────────────────────────────────────────────────────
 // One of the three bottom tiles (Drive / Fold / Asym).
 // `progress` is a float in [0, 1]. `accent` drives label + bar color.
-component TelemetryTile {
+component TelemetryTile inherits Rectangle {
     in property <string> label;
     in property <string> value;
     in property <float> progress;    // 0.0 – 1.0
     in property <color> accent;
 
-    // Height and width are set by the parent layout.
-    // Internal proportions are all relative to self.height.
+    // Height and width are set by the parent layout and horizontal-stretch.
+    background: Colors.panel;
+    border-color: Colors.border;
+    border-width: 1px;
+    border-radius: self.height * 0.065;   // ~4px when height=62px
 
-    Rectangle {
-        width: parent.width;
-        height: parent.height;
-        background: Colors.panel;
-        border-color: Colors.border;
-        border-width: 1px;
-        border-radius: parent.height * 0.065;   // ~4px when height=62px
-
-        VerticalLayout {
+    VerticalLayout {
             padding-top: parent.height * 0.13;
             padding-left: parent.height * 0.1;
             padding-right: parent.height * 0.1;
@@ -101,8 +96,7 @@ component TelemetryTile {
                 text: root.value;
                 color: Colors.on-surface;
                 font-size: root.height * 0.19;       // ~12px at 62px height
-                font-family: "JetBrains Mono"
-                , "Cascadia Code", "Courier New", monospace;
+                font-family: "Inter";
                 font-weight: 300;
             }
 
@@ -114,7 +108,7 @@ component TelemetryTile {
             // Progress bar — 3px tall, flush to bottom
             Rectangle {
                 height: 3px;
-                width: parent.width;
+                width: 100%;
                 background: root.accent.transparentize(0.7);
                 border-radius: 1.5px;
 
@@ -135,7 +129,6 @@ component TelemetryTile {
                 }
             }
         }
-    }
 }
 
 // ── Toggle switch ───────────────────────────────────────────────────────────
@@ -161,7 +154,6 @@ component TotoToggle {
         drop-shadow-blur: root.checked ? 4px : 0px;
         drop-shadow-offset-x: 0px;
         drop-shadow-offset-y: 0px;
-
         animate background {
             duration: 150ms;
             easing: ease-in-out;
@@ -181,7 +173,6 @@ component TotoToggle {
         drop-shadow-blur: root.checked ? 4px : 0px;
         drop-shadow-offset-x: 0px;
         drop-shadow-offset-y: 0px;
-
         animate x {
             duration: 150ms;
             easing: ease-in-out;
@@ -239,15 +230,13 @@ export component TotoCard inherits Window {
 
     // ── Data inputs from Rust ──────────────────────────────────────
     in property <float> anomaly-score:      0.150;
-    in property <bool> auto-steer:         true;
-    in property <float> dominant-freq-hz:   2
-    _400_000_000.0;
+    in-out property <bool> auto-steer:         true;
+    in property <float> dominant-freq-hz: 2400000000.0;
     in property <string> wave-path:
         // Default static path matching the TSX oscilloscope.
         // Coordinate space: 0–320 wide, 0–100 tall (normalized viewBox).
         // Rust replaces this each frame with live FieldParticle data.
         "M 0 50 C 20 20, 40 80, 60 50 C 80 20, 90 90, 110 50 C 130 10, 150 10, 170 50 C 190 90, 210 90, 230 50 C 250 10, 270 10, 290 50 C 310 90, 320 50, 320 50";
-
     in property <float> drive:  0.250;
     in property <float> fold:   0.700;
     in property <float> asym:   0.150;
@@ -269,9 +258,7 @@ export component TotoCard inherits Window {
     // When Dorothy or Lion changes the dominant frequency, this color
     // transitions smoothly without any additional Rust code.
     property <color> wave-color:
-        root.dominant-freq-hz < 1
-    _000.0   ? Colors.harm-red: root.dominant-freq-hz < 1
-    _000_000.0 ? Colors.harm-teal: Colors.harm-violet;
+        root.dominant-freq-hz < 1000.0 ? Colors.harm-red: root.dominant-freq-hz < 1000000.0 ? Colors.harm-teal: Colors.harm-violet;
 
     // Threat tier for anomaly score coloring
     property <color> anomaly-color:
@@ -336,12 +323,10 @@ export component TotoCard inherits Window {
                     VerticalLayout {
                         spacing: root.unit-size * 0.014;
                         alignment: center;
-
                         Text {
                             text: "TOTO";
                             color: Colors.primary;
-                            font-family: "JetBrains Mono"
-                            , "Cascadia Code", monospace;
+                            font-family: "Inter";
                             font-size: root.unit-size * 0.038;   // ~8px
                             font-weight: 700;
                             letter-spacing: 1.5px;
@@ -353,16 +338,14 @@ export component TotoCard inherits Window {
                             Text {
                                 text: "Anomaly Score: ";
                                 color: Colors.muted;
-                                font-family: "JetBrains Mono"
-                                , monospace;
+                                font-family: "Inter";
                                 font-size: root.unit-size * 0.033;
                             }
 
                             Text {
                                 text: round(root.anomaly-score * 1000) / 1000;
                                 color: root.wave-color;   // mirrors dominant freq color
-                                font-family: "JetBrains Mono"
-                                , monospace;
+                                font-family: "Inter";
                                 font-size: root.unit-size * 0.033;
                                 font-weight: 700;
                                 animate color {
@@ -382,12 +365,10 @@ export component TotoCard inherits Window {
                     HorizontalLayout {
                         spacing: root.unit-size * 0.028;
                         alignment: center;
-
                         Text {
                             text: "Neural Auto-Steer: Active";
                             color: Colors.primary;
-                            font-family: "JetBrains Mono"
-                            , monospace;
+                            font-family: "Inter";
                             font-size: root.unit-size * 0.033;
                             opacity: 0.85;
                         }
@@ -450,11 +431,9 @@ export component TotoCard inherits Window {
                     // when no explicit viewbox is set — same as TSX's
                     // preserveAspectRatio="none".
                     commands: root.wave-path;
-
                     stroke: root.wave-color.transparentize(0.65);
                     stroke-width: root.unit-size * 0.033;   // ~7px — wide for glow
                     fill: transparent;
-
                     animate stroke {
                         duration: 400ms;
                         easing: ease-in-out;
@@ -467,12 +446,10 @@ export component TotoCard inherits Window {
                     y: 0px;
                     width: parent.width;
                     height: parent.height;
-
                     commands: root.wave-path;
                     stroke: root.wave-color;
                     stroke-width: root.unit-size * 0.012;   // ~2.5px
                     fill: transparent;
-
                     animate stroke {
                         duration: 400ms;
                         easing: ease-in-out;
@@ -486,8 +463,7 @@ export component TotoCard inherits Window {
                     y: root.unit-size * 0.028;
                     text: "Oscilloscope";
                     color: Colors.primary;
-                    font-family: "JetBrains Mono"
-                    , monospace;
+                    font-family: "Inter";
                     font-size: root.unit-size * 0.033;
                 }
 
@@ -495,13 +471,9 @@ export component TotoCard inherits Window {
                 // In production this derives from freq_to_material_id().
                 // For now, a simple conditional expression.
                 Text {
-                    text: root.dominant-freq-hz < 1
-                    _000.0     ? "60Hz Cluster"
-                        : root.dominant-freq-hz < 1_000_000.0 ? "85kHz Cluster"
-                        : "2.4GHz Cluster";
+                    text: root.dominant-freq-hz < 1000.0 ? "60Hz Cluster" : root.dominant-freq-hz < 1000000.0 ? "85kHz Cluster" : "2.4GHz Cluster";
                     color: root.wave-color;
-                    font-family: "JetBrains Mono"
-                    , monospace;
+                    font-family: "Inter";
                     font-size: root.unit-size * 0.033;
                     // Right-align: position from right edge
                     x: parent.width - self.width - root.unit-size * 0.033;
@@ -516,8 +488,7 @@ export component TotoCard inherits Window {
                 Text {
                     text: "Time (10ms)";
                     color: Colors.dim;
-                    font-family: "JetBrains Mono"
-                    , monospace;
+                    font-family: "Inter";
                     font-size: root.unit-size * 0.028;
                     x: (parent.width - self.width) / 2;
                     y: parent.height - self.height - root.unit-size * 0.019;
@@ -548,10 +519,11 @@ export component TotoCard inherits Window {
             // They prove the inference loop is doing real work.
             // ════════════════════════════════════════════════════
             HorizontalLayout {
+                width: 100%;  // Ensure layout has a defined width
                 height: root.h-telemetry;
                 spacing: root.gap;
-
                 TelemetryTile {
+                    horizontal-stretch: 1;
                     label: "DRIVE";
                     value: round(root.drive * 1000) / 1000;
                     progress: root.drive;
@@ -559,6 +531,7 @@ export component TotoCard inherits Window {
                 }
 
                 TelemetryTile {
+                    horizontal-stretch: 1;
                     label: "FOLD";
                     value: round(root.fold * 1000) / 1000;
                     progress: root.fold;
@@ -566,6 +539,7 @@ export component TotoCard inherits Window {
                 }
 
                 TelemetryTile {
+                    horizontal-stretch: 1;
                     label: "ASYM";
                     value: round(root.asym * 1000) / 1000;
                     progress: root.asym;

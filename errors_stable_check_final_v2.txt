@@ -1,0 +1,1292 @@
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+    Checking twister v0.5.0 (S:\twister)
+error[E0432]: unresolved imports `crate::mamba::MAMBA_CONTEXT_LEN`, `crate::mamba::MAMBA_INPUT_BINS`, `crate::mamba::OnlineTrainer`
+  --> src\trainer.rs:23:20
+   |
+23 | use crate::mamba::{MAMBA_CONTEXT_LEN, MAMBA_INPUT_BINS, OnlineTrainer};
+   |                    ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^ no `OnlineTrainer` in `mamba`
+   |                    |                  |
+   |                    |                  no `MAMBA_INPUT_BINS` in `mamba`
+   |                    no `MAMBA_CONTEXT_LEN` in `mamba`
+
+error[E0433]: failed to resolve: could not find `dsp` in the crate root
+ --> src\mamba\inference.rs:4:12
+  |
+4 | use crate::dsp::features::FeatureVector;
+  |            ^^^ could not find `dsp` in the crate root
+
+error[E0432]: unresolved imports `crate::mamba::MambaAutoencoder`, `crate::mamba::OnlineTrainer`, `crate::mamba::TrainingMetrics`, `crate::mamba::TrainingPair`, `crate::mamba::compute_rms_db`
+  --> src\training.rs:13:5
+   |
+13 |     MambaAutoencoder, OnlineTrainer, TrainingMetrics, TrainingPair, compute_rms_db,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^^ no `compute_rms_db` in `mamba`
+   |     |                 |              |                |
+   |     |                 |              |                no `TrainingPair` in `mamba`
+   |     |                 |              no `TrainingMetrics` in `mamba`
+   |     |                 no `OnlineTrainer` in `mamba`
+   |     no `MambaAutoencoder` in `mamba`
+   |
+   = help: consider importing this struct through its public re-export instead:
+           crate::ml::TrainingMetrics
+
+error[E0432]: unresolved import `ndarray`
+ --> src\mamba\inference.rs:5:5
+  |
+5 | use ndarray::Array1;
+  |     ^^^^^^^ use of unresolved module or unlinked crate `ndarray`
+  |
+  = help: if you wanted to use a crate named `ndarray`, use `cargo add ndarray` to add it to your `Cargo.toml`
+
+error[E0432]: unresolved import `crate::ml::timegnn_trainer::ParameterUpdate`
+  --> src\ml\timegnn_ui_bridge.rs:19:34
+   |
+19 | use crate::ml::timegnn_trainer::{ParameterUpdate, TimeGnnTrainingConfig};
+   |                                  ^^^^^^^^^^^^^^^ no `ParameterUpdate` in `ml::timegnn_trainer`
+
+warning: unused imports: `HardwareLayer` and `ProductType`
+ --> src\forensic.rs:1:40
+  |
+1 | use crate::detection::{DetectionEvent, HardwareLayer, ProductType};
+  |                                        ^^^^^^^^^^^^^  ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\forensic.rs:2:5
+  |
+2 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::prelude::*`
+ --> src\forensic.rs:3:5
+  |
+3 | use burn::prelude::*;
+  |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src\forensic.rs:6:17
+  |
+6 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `SSAMBAConfig`
+ --> src\mamba\training.rs:3:35
+  |
+3 | use crate::mamba::model::{SSAMBA, SSAMBAConfig};
+  |                                   ^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:2:17
+  |
+2 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\timegnn_trainer.rs:5:5
+  |
+5 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Optimizer`
+ --> src\ml\timegnn_trainer.rs:7:31
+  |
+7 | use burn::optim::{AdamConfig, Optimizer};
+  |                               ^^^^^^^^^
+
+warning: unused import: `TimeGnnTrainingConfig`
+  --> src\ml\timegnn_ui_bridge.rs:19:51
+   |
+19 | use crate::ml::timegnn_trainer::{ParameterUpdate, TimeGnnTrainingConfig};
+   |                                                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\audio_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\rf_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+error[E0119]: conflicting implementations of trait `std::clone::Clone` for type `SSAMBAConfig`
+  --> src\mamba\model.rs:11:24
+   |
+11 | #[derive(Debug, Clone, Config)]
+   |                 -----  ^^^^^^ conflicting implementation for `SSAMBAConfig`
+   |                 |
+   |                 first implementation here
+   |
+   = note: this error originates in the derive macro `Config` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0119]: conflicting implementations of trait `std::clone::Clone` for type `TrainingConfig`
+  --> src\mamba\training.rs:11:24
+   |
+11 | #[derive(Debug, Clone, Config)]
+   |                 -----  ^^^^^^ conflicting implementation for `TrainingConfig`
+   |                 |
+   |                 first implementation here
+   |
+   = note: this error originates in the derive macro `Config` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: required for `<SSAMBA<B> as burn::prelude::Module<B>>::Record` to implement `Record<B>`
+note: required by a bound in `burn::prelude::Module::Record`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\base.rs:86:18
+   |
+86 |     type Record: Record<B>;
+   |                  ^^^^^^^^^ required by this bound in `Module::Record`
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `burn::serde::Serialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `burn::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+note: required by an implicit `Sized` bound in `std::result::Result`
+  --> /rustc/4a4ef493e3a1488c6e321570238084b38948f6db/library\core\src\result.rs:557:0
+   = note: this error originates in the derive macro `burn::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecordItem<B, S>`
+    --> src\mamba\model.rs:38:12
+     |
+  38 | pub struct SSAMBA<B: Backend> {
+     |            ^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+     |
+help: within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+    --> src\mamba\model.rs:12:1
+     |
+  12 | pub struct SSAMBAConfig {
+     | ^^^^^^^^^^^^^^^^^^^^^^^
+     = help: the following other types implement trait `burn::prelude::Module<B>`:
+               (L0, L1)
+               (L0, L1, L2)
+               (L0, L1, L2, L3)
+               (L0, L1, L2, L3, L4)
+               (L0, L1, L2, L3, L4, L5)
+               (L0, L1, L2, L3, L4, L5, L6)
+               (L0, L1, L2, L3, L4, L5, L6, L7)
+               (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+             and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+    --> src\mamba\model.rs:38:12
+     |
+  38 | pub struct SSAMBA<B: Backend> {
+     |            ^^^^^^
+note: required by a bound in `bispectrum::_::_serde::de::Visitor::Value`
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\src\de\mod.rs:1319:5
+     |
+1319 |     type Value;
+     |     ^^^^^^^^^^^ required by this bound in `Visitor::Value`
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required for `__Visitor<'de, B, S>` to implement `Visitor<'de>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound introduced in this `derive` macro
+   = note: the full name for the type has been written to 'S:\twister\target\debug\deps\twister-6821efe0be53986a.long-type-6308484550036118782.txt'
+   = note: consider using `--verbose` to print the full type name to the console
+   = note: this error originates in the derive macro `burn::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required for `SSAMBARecordItem<B, S>` to implement `for<'de> bispectrum::_::_serde::Deserialize<'de>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound introduced in this `derive` macro
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^^^^^^^^^^^^^
+   = note: required for `<SSAMBARecord<B> as Record<B>>::Item<S>` to implement `DeserializeOwned`
+note: required by a bound in `burn::record::Record::Item`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\record\base.rs:10:50
+   |
+10 |     type Item<S: PrecisionSettings>: Serialize + DeserializeOwned + Clone;
+   |                                                  ^^^^^^^^^^^^^^^^ required by this bound in `Record::Item`
+   = note: this error originates in the derive macro `burn::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+note: required by a bound in `Record`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\record\base.rs:8:1
+   |
+ 8 | / pub trait Record<B: Backend>: Send {
+ 9 | |     /// Type of the item that can be serialized and deserialized.
+10 | |     type Item<S: PrecisionSettings>: Serialize + DeserializeOwned + Clone;
+...  |
+16 | |     fn from_item<S: PrecisionSettings>(item: Self::Item<S>, device: &B::Device) -> Self;
+17 | | }
+   | |_^ required by this bound in `Record`
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+note: required by a bound in `Record`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\record\base.rs:8:31
+   |
+ 8 | pub trait Record<B: Backend>: Send {
+   |                               ^^^^ required by this bound in `Record`
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: the return type of a function must have a statically known size
+   = note: this error originates in the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: the return type of a function must have a statically known size
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: the return type of a function must have a statically known size
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `usize: TensorKind<B>` is not satisfied
+   --> src\mamba\model.rs:364:37
+    |
+364 |     pub fn predicted_mode(&self) -> Tensor<B, 1, usize> {
+    |                                     ^^^^^^^^^^^^^^^^^^^ the trait `TensorKind<B>` is not implemented for `usize`
+    |
+help: the following other types implement trait `TensorKind<B>`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-backend-0.21.0-pre.2\src\tensor\kind.rs:25:1
+    |
+ 25 | impl<B: Backend> TensorKind<B> for Float {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn::prelude::Float`
+...
+ 32 | impl<B: Backend> TensorKind<B> for Int {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn::prelude::Int`
+...
+ 39 | impl<B: Backend> TensorKind<B> for Bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `burn::prelude::Bool`
+note: required by a bound in `burn::Tensor`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-tensor-0.21.0-pre.2\src\tensor\api\base.rs:79:8
+    |
+ 76 | pub struct Tensor<B, const D: usize, K = Float>
+    |            ------ required by a bound in this struct
+...
+ 79 |     K: TensorKind<B>,
+    |        ^^^^^^^^^^^^^ required by this bound in `Tensor`
+
+error[E0282]: type annotations needed
+  --> src\training.rs:57:13
+   |
+57 |         let result = self.tx.send(pair).await;
+   |             ^^^^^^
+58 |         if result.is_err() {
+   |            ------ type must be known at this point
+   |
+help: consider giving `result` an explicit type
+   |
+57 |         let result: /* Type */ = self.tx.send(pair).await;
+   |                   ++++++++++++
+
+error[E0282]: type annotations needed
+  --> src\training.rs:71:13
+   |
+71 |         let mut rx = self.rx.lock().await;
+   |             ^^^^^^
+...
+75 |         if let Some(first) = rx.recv().await {
+   |                              -- type must be known at this point
+   |
+help: consider giving `rx` an explicit type
+   |
+71 |         let mut rx: /* Type */ = self.rx.lock().await;
+   |                   ++++++++++++
+
+error[E0282]: type annotations needed
+  --> src\training.rs:94:9
+   |
+94 |         self.metrics.lock().await.clone()
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+   --> src\training.rs:230:17
+    |
+230 |             let mut trainer = self.trainer.lock().await;
+    |                 ^^^^^^^^^^^
+231 |             match trainer.step(&windows) {
+    |                   ------- type must be known at this point
+    |
+help: consider giving `trainer` an explicit type
+    |
+230 |             let mut trainer: /* Type */ = self.trainer.lock().await;
+    |                            ++++++++++++
+
+error[E0282]: type annotations needed
+   --> src\training.rs:289:13
+    |
+289 |         let trainer = self.trainer.lock().await;
+    |             ^^^^^^^
+290 |         match trainer.infer(magnitudes) {
+    |               ------- type must be known at this point
+    |
+help: consider giving `trainer` an explicit type
+    |
+289 |         let trainer: /* Type */ = self.trainer.lock().await;
+    |                    ++++++++++++
+
+error[E0282]: type annotations needed
+   --> src\training.rs:306:13
+    |
+306 |         let trainer = self.trainer.lock().await;
+    |             ^^^^^^^
+307 |         trainer.save(path)?;
+    |         ------- type must be known at this point
+    |
+help: consider giving `trainer` an explicit type
+    |
+306 |         let trainer: /* Type */ = self.trainer.lock().await;
+    |                    ++++++++++++
+
+error[E0282]: type annotations needed
+   --> src\training.rs:321:13
+    |
+321 |         let mut trainer = self.trainer.lock().await;
+    |             ^^^^^^^^^^^
+322 |         trainer.load(path)?;
+    |         ------- type must be known at this point
+    |
+help: consider giving `trainer` an explicit type
+    |
+321 |         let mut trainer: /* Type */ = self.trainer.lock().await;
+    |                        ++++++++++++
+
+warning: variable does not need to be mutable
+   --> src\ml\chronos_bridge.rs:165:39
+    |
+165 |     pub async fn update_config(&self, mut new_config: ChronosConfig) -> Result<(), String> {
+    |                                       ----^^^^^^^^^^
+    |                                       |
+    |                                       help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: this error originates in the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<_>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<_>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: AutodiffModule<B>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `AutodiffModule<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `AutodiffModule<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: AutodiffModule<B>` is not satisfied
+  --> src\mamba\model.rs:53:9
+   |
+53 |     pub config: SSAMBAConfig,
+   |         ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `AutodiffModule<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `AutodiffModule<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+
+error[E0277]: the trait bound `SSAMBAConfig: ModuleDisplay` is not satisfied
+   --> src\mamba\model.rs:37:10
+    |
+ 37 | #[derive(Module, Debug)]
+    |          ^^^^^^ unsatisfied trait bound
+    |
+help: the trait `ModuleDisplay` is not implemented for `SSAMBAConfig`
+   --> src\mamba\model.rs:12:1
+    |
+ 12 | pub struct SSAMBAConfig {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = help: the following other types implement trait `ModuleDisplay`:
+              (L0, L1)
+              (L0, L1, L2)
+              (L0, L1, L2, L3)
+              (L0, L1, L2, L3, L4)
+              (L0, L1, L2, L3, L4, L5)
+              (L0, L1, L2, L3, L4, L5, L6)
+              (L0, L1, L2, L3, L4, L5, L6, L7)
+              (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+            and 112 others
+note: required by a bound in `burn::module::Content::add`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\display.rs:420:19
+    |
+420 |     pub fn add<T: ModuleDisplay + ?Sized>(mut self, name: &str, value: &T) -> Self {
+    |                   ^^^^^^^^^^^^^ required by this bound in `Content::add`
+    = note: this error originates in the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<_>` is not satisfied
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<_>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+   = note: this error originates in the derive macro `burn::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `?` couldn't convert the error: `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:15
+   |
+37 | #[derive(Module, Debug)]
+   |          -----^
+   |          |    |
+   |          |    within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+   |          this can't be annotated with `?` because it has type `Result<_, <__A as SeqAccess<'_>>::Error>`
+   |
+note: `SSAMBAConfig` needs to implement `From<B>`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: this error originates in the derive macro `burn::record::Record` which comes from the expansion of the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:53:17
+   |
+53 |     pub config: SSAMBAConfig,
+   |                 ^^^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+
+error[E0277]: `?` couldn't convert the error: `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:15
+   |
+37 | #[derive(Module, Debug)]
+   |          -----^
+   |          |    |
+   |          |    within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+   |          this can't be annotated with `?` because it has type `Result<_, <__A as MapAccess<'_>>::Error>`
+   |
+note: `SSAMBAConfig` needs to implement `From<B>`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: this error originates in the derive macro `burn::serde::Deserialize` which comes from the expansion of the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: `?` couldn't convert the error: `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied
+  --> src\mamba\model.rs:37:15
+   |
+37 | #[derive(Module, Debug)]
+   |          -----^
+   |          |    |
+   |          |    within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+   |          this can't be annotated with `?` because it has type `Result<_, <__A as MapAccess<'_>>::Error>`
+   |
+note: `SSAMBAConfig` needs to implement `From<B>`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = note: the question mark operation (`?`) implicitly performs a conversion on the error value using the `From` trait
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: this error originates in the derive macro `burn::record::Record` which comes from the expansion of the derive macro `Module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0282]: type annotations needed
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ cannot infer type
+   |
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecord<B>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecord<B>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecord<B>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `SSAMBAConfig: burn::prelude::Module<B>` is not satisfied in `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:37:10
+   |
+37 | #[derive(Module, Debug)]
+   |          ^^^^^^ unsatisfied trait bound
+   |
+help: within `SSAMBARecordItem<B, S>`, the trait `burn::prelude::Module<B>` is not implemented for `SSAMBAConfig`
+  --> src\mamba\model.rs:12:1
+   |
+12 | pub struct SSAMBAConfig {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `burn::prelude::Module<B>`:
+             (L0, L1)
+             (L0, L1, L2)
+             (L0, L1, L2, L3)
+             (L0, L1, L2, L3, L4)
+             (L0, L1, L2, L3, L4, L5)
+             (L0, L1, L2, L3, L4, L5, L6)
+             (L0, L1, L2, L3, L4, L5, L6, L7)
+             (L0, L1, L2, L3, L4, L5, L6, L7, L8)
+           and 111 others
+note: required because it appears within the type `SSAMBARecordItem<B, S>`
+  --> src\mamba\model.rs:38:12
+   |
+38 | pub struct SSAMBA<B: Backend> {
+   |            ^^^^^^
+   = note: this error originates in the derive macro `burn::record::Record` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0308]: mismatched types
+   --> src\mamba\model.rs:202:44
+    |
+202 |         let gate = x_proj.slice([0..batch, self.hidden_dim..]);
+    |                                            ^^^^^^^^^^^^^^^^^ expected `Range<usize>`, found `RangeFrom<usize>`
+    |
+    = note: expected struct `std::ops::Range<usize>`
+               found struct `std::ops::RangeFrom<usize>`
+
+error[E0599]: no method named `sigmoid` found for struct `burn::Tensor<B, D, K>` in the current scope
+   --> src\mamba\model.rs:205:25
+    |
+205 |         let gate = gate.sigmoid();
+    |                         ^^^^^^^ method not found in `burn::Tensor<B, 2>`
+
+error[E0599]: no function or associated item named `init` found for struct `Param<_>` in the current scope
+   --> src\mamba\model.rs:264:23
+    |
+264 |             a: Param::init(a),
+    |                       ^^^^ function or associated item not found in `Param<_>`
+    |
+note: if you're trying to build a new `Param<_>` consider using one of the following associated functions:
+      Param::<T>::initialized
+      Param::<T>::uninitialized
+      Param::<T>::from_mapped_value
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_tensor
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_data
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\tensor.rs:69:5
+    |
+ 69 |       pub fn from_tensor(value: Tensor<B, D>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 98 | /     pub fn from_data<T>(data: T, device: &B::Device) -> Self
+ 99 | |     where
+100 | |         T: Into<TensorData>,
+    | |____________________________^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\base.rs:174:5
+    |
+174 |       pub fn initialized(id: ParamId, value: T) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+186 | /     pub fn uninitialized<F>(
+187 | |         id: ParamId,
+188 | |         init: F,
+189 | |         device: T::Device,
+...   |
+193 | |     where
+194 | |         F: FnOnce(&T::Device, bool) -> T + Send + 'static,
+    | |__________________________________________________________^
+...
+270 |       pub fn from_mapped_value(id: ParamId, value: T, param_mapper: ParamMapper<T>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Pointable` which provides `init` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use crossbeam_epoch::atomic::Pointable;
+    |
+
+error[E0599]: no function or associated item named `init` found for struct `Param<_>` in the current scope
+   --> src\mamba\model.rs:265:23
+    |
+265 |             d: Param::init(d),
+    |                       ^^^^ function or associated item not found in `Param<_>`
+    |
+note: if you're trying to build a new `Param<_>` consider using one of the following associated functions:
+      Param::<T>::initialized
+      Param::<T>::uninitialized
+      Param::<T>::from_mapped_value
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_tensor
+      burn::module::param::tensor::<impl Param<burn::Tensor<B, D>>>::from_data
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\tensor.rs:69:5
+    |
+ 69 |       pub fn from_tensor(value: Tensor<B, D>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 98 | /     pub fn from_data<T>(data: T, device: &B::Device) -> Self
+ 99 | |     where
+100 | |         T: Into<TensorData>,
+    | |____________________________^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-core-0.21.0-pre.2\src\module\param\base.rs:174:5
+    |
+174 |       pub fn initialized(id: ParamId, value: T) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+186 | /     pub fn uninitialized<F>(
+187 | |         id: ParamId,
+188 | |         init: F,
+189 | |         device: T::Device,
+...   |
+193 | |     where
+194 | |         F: FnOnce(&T::Device, bool) -> T + Send + 'static,
+    | |__________________________________________________________^
+...
+270 |       pub fn from_mapped_value(id: ParamId, value: T, param_mapper: ParamMapper<T>) -> Self {
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Pointable` which provides `init` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use crossbeam_epoch::atomic::Pointable;
+    |
+
+error[E0599]: no method named `softplus` found for struct `burn::Tensor<B, D, K>` in the current scope
+   --> src\mamba\model.rs:283:48
+    |
+283 |         let delta = self.delta_proj.forward(x).softplus();
+    |                                                ^^^^^^^^ method not found in `burn::Tensor<B, 2>`
+
+error[E0277]: the trait bound `burn::Tensor<B, 2>: ElementConversion` is not satisfied
+   --> src\mamba\model.rs:302:40
+    |
+302 |                 y_prev * a_exp.clone() + b_t
+    |                                        ^ the trait `ElementConversion` is not implemented for `burn::Tensor<B, 2>`
+    |
+    = help: the following other types implement trait `ElementConversion`:
+              bool
+              f32
+              f64
+              flex32
+              half::bf16
+              half::f16
+              i16
+              i32
+            and 6 others
+    = note: required for `burn::Tensor<B, 1>` to implement `std::ops::Add<burn::Tensor<B, 2>>`
+
+error[E0308]: `if` and `else` have incompatible types
+   --> src\mamba\model.rs:304:17
+    |
+300 |               let h_t = if t > 0 {
+    |  _______________________-
+301 | |                 let y_prev = y.slice([t-1..t, 0..self.hidden_dim]);
+302 | |                 y_prev * a_exp.clone() + b_t
+    | |                 ---------------------------- expected because of this
+303 | |             } else {
+304 | |                 b_t
+    | |                 ^^^ expected `1`, found `2`
+305 | |             };
+    | |_____________- `if` and `else` have incompatible types
+    |
+    = note: expected struct `burn::Tensor<_, 1>`
+               found struct `burn::Tensor<_, 2>`
+
+error[E0277]: the trait bound `burn::Tensor<B, 2>: ElementConversion` is not satisfied
+   --> src\mamba\model.rs:307:56
+    |
+307 |             let y_t = c_t * h_t + self.d.val().clone() * x_t;
+    |                                                        ^ the trait `ElementConversion` is not implemented for `burn::Tensor<B, 2>`
+    |
+    = help: the following other types implement trait `ElementConversion`:
+              bool
+              f32
+              f64
+              flex32
+              half::bf16
+              half::f16
+              i16
+              i32
+            and 6 others
+    = note: required for `burn::Tensor<B, 1>` to implement `std::ops::Mul<burn::Tensor<B, 2>>`
+
+error[E0277]: the trait bound `burn::Tensor<B, 1>: ElementConversion` is not satisfied
+   --> src\mamba\model.rs:307:33
+    |
+307 |             let y_t = c_t * h_t + self.d.val().clone() * x_t;
+    |                                 ^ the trait `ElementConversion` is not implemented for `burn::Tensor<B, 1>`
+    |
+    = help: the following other types implement trait `ElementConversion`:
+              bool
+              f32
+              f64
+              flex32
+              half::bf16
+              half::f16
+              i16
+              i32
+            and 6 others
+    = note: required for `burn::Tensor<B, 2>` to implement `std::ops::Add<burn::Tensor<B, 1>>`
+
+error[E0308]: mismatched types
+    --> src\mamba\model.rs:308:62
+     |
+ 301 |                 let y_prev = y.slice([t-1..t, 0..self.hidden_dim]);
+     |                              - here the type of `y` is inferred to be `burn::Tensor<B, 1>`
+...
+ 308 |             y = y.slice_assign([t..t+1, 0..self.hidden_dim], y_t * delta_t);
+     |                   ------------                               ^^^^^^^^^^^^^ expected `1`, found `2`
+     |                   |
+     |                   arguments to this method are incorrect
+     |
+     = note: expected struct `burn::Tensor<_, 1>`
+                found struct `burn::Tensor<_, 2>`
+note: method defined here
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-tensor-0.21.0-pre.2\src\tensor\api\base.rs:1429:12
+     |
+1429 |     pub fn slice_assign<S>(self, slices: S, values: Self) -> Self
+     |            ^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> src\mamba\model.rs:311:9
+    |
+275 |     pub fn forward(&self, x: Tensor<B, 2>) -> Tensor<B, 2> {
+    |                                               ------------ expected `burn::Tensor<B, 2>` because of return type
+...
+301 |                 let y_prev = y.slice([t-1..t, 0..self.hidden_dim]);
+    |                              - here the type of `y` is inferred to be `burn::Tensor<B, 1>`
+...
+311 |         y
+    |         ^ expected `2`, found `1`
+    |
+    = note: expected struct `burn::Tensor<_, 2>`
+               found struct `burn::Tensor<_, 1>`
+
+error[E0599]: no method named `softmax` found for struct `burn::Tensor<B, D, K>` in the current scope
+   --> src\mamba\model.rs:370:26
+    |
+370 |         self.mode_logits.softmax(1)
+    |                          ^^^^^^^ method not found in `burn::Tensor<B, 2>`
+
+warning: unused import: `backend::AutodiffBackend`
+ --> src\mamba\training.rs:6:14
+  |
+6 |     tensor::{backend::AutodiffBackend, Tensor},
+  |              ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::module::Module`
+ --> src\ml\timegnn_trainer.rs:6:5
+  |
+6 | use burn::module::Module;
+  |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:260:9
+    |
+260 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:261:9
+    |
+261 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+Some errors have detailed explanations: E0119, E0277, E0282, E0308, E0432, E0433, E0599.
+For more information about an error, try `rustc --explain E0119`.
+warning: `twister` (lib) generated 19 warnings
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> S:\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: could not compile `twister` (lib) due to 77 previous errors; 19 warnings emitted

@@ -1,0 +1,147 @@
+# =============================================================================
+# Agent: synesthesia-ui-designer
+# Crate: synesthesia/
+# Domain: Generative UI & Headless Slint Rendering
+# =============================================================================
+
+name: "Synesthesia UI Designer"
+description: |
+  Specialized agent for the synesthesia/ crate responsible for headless Slint
+  rendering, Generative A2UI parsing, and WGPU texture bridge integration for
+  holographic UI projection.
+
+version: "1.0.0"
+created: "2026-02-21"
+
+# =============================================================================
+# PATH RESTRICTIONS
+# =============================================================================
+
+restricted_paths:
+  - "crates/synesthesia/**/*"
+  - "crates/synesthesia-legacy/**/*"
+  - "docs/slint_wgpu_renderer_feature.md"
+  - "docs/a2ui_specification_v0.9.md"
+
+forbidden_paths:
+  - "crates/oz/**/*"
+  - "crates/aether/**/*"
+  - "crates/resonance/**/*"
+  - "crates/shield/**/*"
+  - "crates/train/**/*"
+  - "crates/toto/**/*"
+  - "crates/cipher/**/*"
+  - "crates/siren/**/*"
+  - "crates/glinda/**/*"
+  - "Cargo.lock"
+  - "target/**/*"
+
+# =============================================================================
+# DOMAIN-SPECIFIC RULES
+# =============================================================================
+
+rules:
+  - id: "headless_slint"
+    description: "Use headless Slint rendering for WGPU texture output"
+    severity: "error"
+    keywords: ["slint::", "WindowAdapter", "render_to_texture"]
+
+  - id: "a2ui_parsing"
+    description: "Parse A2UI v0.9 JSON adjacency lists for generative UI"
+    severity: "error"
+    keywords: ["a2ui", "A2UI", "adjacency_list", "DAG"]
+
+  - id: "texture_bridge"
+    description: "Use Arc<wgpu::Texture> for Slint-to-WGPU handoff"
+    severity: "error"
+    keywords: ["TextureBridge", "wgpu::Texture", "ExtractResource"]
+
+  - id: "holographic_projection"
+    description: "UI must support 3D holographic quad projection"
+    severity: "warning"
+    keywords: ["hologram", "quad", "billboard", "emissive"]
+
+  - id: "generative_layout"
+    description: "Layout must be generative from A2UI, not hardcoded"
+    severity: "error"
+    keywords: ["generative", "dynamic_layout", "a2ui_parse"]
+
+# =============================================================================
+# REFERENCE BUNDLES
+# =============================================================================
+
+reference_bundles:
+  - path: "docs/slint_wgpu_renderer_feature.md"
+    purpose: "Slint headless rendering with WGPU backend"
+    access: "read-only"
+
+  - path: "docs/a2ui_specification_v0.9.md"
+    purpose: "A2UI v0.9 specification for generative UI"
+    access: "read-only"
+
+# =============================================================================
+# TRIGGER PATTERNS
+# =============================================================================
+
+triggers:
+  file_patterns:
+    - "crates/synesthesia/**/*.rs"
+    - "crates/synesthesia/**/*.slint"
+    - "crates/synesthesia/src/ui/**/*.rs"
+    - "crates/synesthesia-legacy/**/*.rs"
+
+  content_patterns:
+    - "slint::"
+    - "a2ui"
+    - "A2UI"
+    - "WindowAdapter"
+    - "TextureBridge"
+    - "hologram"
+    - "generative"
+    - "DAG"
+    - "adjacency"
+
+# =============================================================================
+# AVAILABLE SKILLS
+# =============================================================================
+
+skills:
+  - "run_hitl_sandbox"
+  - "rust-pro"
+  - "ui-creator"
+  - "ui-design"
+  - "ui-implementer"
+
+# =============================================================================
+# VALIDATION HOOKS
+# =============================================================================
+
+validation_hooks:
+  pre_write:
+    - "hook-pre-write"
+  post_write:
+    - "hook-post-rs"
+
+# =============================================================================
+# METRICS
+# =============================================================================
+
+metrics:
+  - name: "ui_frame_time"
+    target: "< 16.67ms (60 FPS)"
+  - name: "a2ui_parse_time"
+    target: "< 10ms"
+  - name: "texture_bridge_latency"
+    target: "< 1 frame"
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+communication:
+  upstream:
+    - "glinda-orchestrator"
+  downstream: []
+  peer:
+    - "oz-render-architect"
+    - "siren-extreme-dsp"

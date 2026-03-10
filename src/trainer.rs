@@ -58,7 +58,8 @@ pub struct TrainerThread {
 
 impl TrainerThread {
     pub fn new(state: Arc<AppState>) -> anyhow::Result<Self> {
-        let trainer = OnlineTrainer::new()?;
+        let config = crate::mamba::training::TrainingConfig::new();
+        let trainer = OnlineTrainer::new(config)?;
         Ok(Self {
             trainer,
             replay: Vec::with_capacity(REPLAY_CAP),

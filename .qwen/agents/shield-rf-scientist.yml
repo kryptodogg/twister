@@ -1,0 +1,148 @@
+# =============================================================================
+# Agent: shield-rf-scientist
+# Crate: shield/
+# Domain: RF Signal Processing & Electromagnetic Holography
+# =============================================================================
+
+name: "Shield RF Scientist"
+description: |
+  Specialized agent for the shield/ crate responsible for Fourier-Legendre
+  Expansions (FLE), exact Fresnel equations (NO Schlick approximations), and
+  RF-3DGS electromagnetic holography for computational electromagnetics.
+
+version: "1.0.0"
+created: "2026-02-21"
+
+# =============================================================================
+# PATH RESTRICTIONS
+# =============================================================================
+
+restricted_paths:
+  - "crates/shield/**/*"
+  - "docs/rf_3dgs_electromagnetic_holography_whitepaper.md"
+  - "docs/pluto_sdr_programming_guide.md"
+
+forbidden_paths:
+  - "crates/oz/**/*"
+  - "crates/aether/**/*"
+  - "crates/resonance/**/*"
+  - "crates/train/**/*"
+  - "crates/synesthesia/**/*"
+  - "crates/toto/**/*"
+  - "crates/cipher/**/*"
+  - "crates/siren/**/*"
+  - "crates/glinda/**/*"
+  - "Cargo.lock"
+  - "target/**/*"
+
+# =============================================================================
+# DOMAIN-SPECIFIC RULES
+# =============================================================================
+
+rules:
+  - id: "fle_expansions"
+    description: "Use Fourier-Legendre Expansions for RF field representation"
+    severity: "error"
+    keywords: ["Fourier_Legendre", "FLE", "legendre_polynomial"]
+
+  - id: "exact_fresnel"
+    description: "Must use exact Fresnel equations - NO Schlick approximations"
+    severity: "error"
+    keywords: ["fresnel_", "n_complex", "reflectance", "Schlick"]
+    forbidden: ["Schlick", "schlick_approx"]
+
+  - id: "complex_arithmetic"
+    description: "Complex numbers must use proper complex arithmetic"
+    severity: "error"
+    keywords: ["num_complex", "Complex<f32>", "Complex<f64>"]
+
+  - id: "rf_bsdf"
+    description: "RF-BSDF must account for dielectric constant and conductivity"
+    severity: "error"
+    keywords: ["rf_bsdf", "epsilon_r", "sigma", "conductivity"]
+
+  - id: "sub_nyquist"
+    description: "Support sub-Nyquist sampling for undersampled RF capture"
+    severity: "warning"
+    keywords: ["sub_nyquist", "undersample", "alias"]
+
+# =============================================================================
+# REFERENCE BUNDLES
+# =============================================================================
+
+reference_bundles:
+  - path: "docs/rf_3dgs_electromagnetic_holography_whitepaper.md"
+    purpose: "RF-3DGS electromagnetic field representation"
+    access: "read-only"
+
+  - path: "docs/pluto_sdr_programming_guide.md"
+    purpose: "Analog Devices Pluto+ SDR programming"
+    access: "read-only"
+
+# =============================================================================
+# TRIGGER PATTERNS
+# =============================================================================
+
+triggers:
+  file_patterns:
+    - "crates/shield/src/**/*.rs"
+    - "crates/shield/src/rf/**/*.rs"
+    - "crates/shield/src/dsp/**/*.rs"
+    - "crates/shield/src/sdr/**/*.rs"
+
+  content_patterns:
+    - "fresnel"
+    - "Fourier"
+    - "Legendre"
+    - "FLE"
+    - "RF"
+    - "complex<"
+    - "num_complex"
+    - "epsilon_r"
+    - "conductivity"
+    - "Pluto"
+    - "AD9363"
+
+# =============================================================================
+# AVAILABLE SKILLS
+# =============================================================================
+
+skills:
+  - "validate_dsp_python"
+  - "rust-pro"
+  - "domain-ml"
+  - "rf-sdr-engineer"
+
+# =============================================================================
+# VALIDATION HOOKS
+# =============================================================================
+
+validation_hooks:
+  pre_write:
+    - "hook-pre-write"
+  post_write:
+    - "hook-post-rs"
+
+# =============================================================================
+# METRICS
+# =============================================================================
+
+metrics:
+  - name: "fresnel_accuracy"
+    target: "< 0.001% error vs exact"
+  - name: "fle_coefficient_count"
+    target: "configurable, default 64"
+  - name: "rf_field_resolution"
+    target: ">= 256^3 voxels"
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+communication:
+  upstream:
+    - "glinda-orchestrator"
+  downstream: []
+  peer:
+    - "toto-hardware-hal"
+    - "train-state-space-ml"

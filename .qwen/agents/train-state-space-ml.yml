@@ -1,0 +1,145 @@
+# =============================================================================
+# Agent: train-state-space-ml
+# Crate: train/
+# Domain: State-Space Machine Learning & Neural Inference
+# =============================================================================
+
+name: "Train State-Space ML"
+description: |
+  Specialized agent for the train/ crate responsible for Burn 0.21 IQUMamba-1D
+  complex-valued selective state-space models, zero-copy cubecl-wgpu backends,
+  and real-time RF signal classification.
+
+version: "1.0.0"
+created: "2026-02-21"
+
+# =============================================================================
+# PATH RESTRICTIONS
+# =============================================================================
+
+restricted_paths:
+  - "crates/train/**/*"
+  - "docs/burn_custom_wgpu_backend_guide.md"
+  - "docs/iqumamba_architecture.md"
+
+forbidden_paths:
+  - "crates/oz/**/*"
+  - "crates/aether/**/*"
+  - "crates/resonance/**/*"
+  - "crates/shield/**/*"
+  - "crates/synesthesia/**/*"
+  - "crates/toto/**/*"
+  - "crates/cipher/**/*"
+  - "crates/siren/**/*"
+  - "crates/glinda/**/*"
+  - "Cargo.lock"
+  - "target/**/*"
+
+# =============================================================================
+# DOMAIN-SPECIFIC RULES
+# =============================================================================
+
+rules:
+  - id: "burn_021_version"
+    description: "Must use Burn v0.21-pre1 for IQUMamba-1D compatibility"
+    severity: "error"
+    keywords: ["burn = \"0.21", "burn-wgpu", "cubecl-wgpu"]
+
+  - id: "iqumamba_1d"
+    description: "Use complex-valued IQUMamba-1D for baseband signal processing"
+    severity: "error"
+    keywords: ["IquMamba1D", "complex_ssm", "selective_state"]
+
+  - id: "zero_copy_backend"
+    description: "Use zero-copy cubecl-wgpu backend for GPU tensor operations"
+    severity: "error"
+    keywords: ["cubecl::wgpu", "zero_copy", "wgpu_buffer"]
+
+  - id: "iq_dtype"
+    description: "I/Q data must use Complex<f32> or Complex<f64> tensors"
+    severity: "error"
+    keywords: ["Complex<f32>", "Complex<f64>", "num_complex"]
+
+  - id: "gradient_checkpointing"
+    description: "Use gradient checkpointing for long sequence training"
+    severity: "warning"
+    keywords: ["checkpoint", "gradient_accumulation", "backward"]
+
+# =============================================================================
+# REFERENCE BUNDLES
+# =============================================================================
+
+reference_bundles:
+  - path: "docs/burn_custom_wgpu_backend_guide.md"
+    purpose: "Custom WGPU backend implementation for Burn"
+    access: "read-only"
+
+  - path: "docs/iqumamba_architecture.md"
+    purpose: "IQUMamba-1D architecture specification"
+    access: "read-only"
+
+# =============================================================================
+# TRIGGER PATTERNS
+# =============================================================================
+
+triggers:
+  file_patterns:
+    - "crates/train/src/**/*.rs"
+    - "crates/train/src/ml/**/*.rs"
+    - "crates/train/src/mamba/**/*.rs"
+    - "crates/train/Cargo.toml"
+
+  content_patterns:
+    - "burn::"
+    - "IquMamba"
+    - "state_space"
+    - "cubecl"
+    - "wgpu_backend"
+    - "Complex<"
+    - "tensor::"
+    - "autodiff"
+
+# =============================================================================
+# AVAILABLE SKILLS
+# =============================================================================
+
+skills:
+  - "validate_dsp_python"
+  - "rust-pro"
+  - "domain-ml"
+  - "ml-pipeline-workflow"
+  - "langchain-architecture"
+
+# =============================================================================
+# VALIDATION HOOKS
+# =============================================================================
+
+validation_hooks:
+  pre_write:
+    - "hook-pre-write"
+  post_write:
+    - "hook-post-rs"
+
+# =============================================================================
+# METRICS
+# =============================================================================
+
+metrics:
+  - name: "inference_latency"
+    target: "< 1ms"
+  - name: "sequence_length"
+    target: ">= 4096"
+  - name: "training_throughput"
+    target: ">= 1000 samples/sec"
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+communication:
+  upstream:
+    - "glinda-orchestrator"
+  downstream: []
+  peer:
+    - "shield-rf-scientist"
+    - "cipher-data-engineer"

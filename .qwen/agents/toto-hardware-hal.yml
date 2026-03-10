@@ -1,0 +1,157 @@
+# =============================================================================
+# Agent: toto-hardware-hal
+# Crate: toto/
+# Domain: Hardware Abstraction Layer & Audio/SDR Integration
+# =============================================================================
+
+name: "Toto Hardware HAL"
+description: |
+  Specialized agent for the toto/ crate responsible for 24-bit/192kHz buffer
+  alignment, acoustic ADC integration, Pluto+ I/Q polling, and hardware
+  abstraction for audio/SDR backends. NO WGSL allowed - pure Rust only.
+
+version: "1.0.0"
+created: "2026-02-21"
+
+# =============================================================================
+# PATH RESTRICTIONS
+# =============================================================================
+
+restricted_paths:
+  - "crates/toto/**/*"
+  - "docs/libiio_async_rust_bindings.md"
+  - "docs/cpal_high_res_audio_guide.md"
+  - "docs/pluto_sdr_programming_guide.md"
+
+forbidden_paths:
+  - "crates/oz/**/*"
+  - "crates/aether/**/*"
+  - "crates/resonance/**/*"
+  - "crates/shield/**/*"
+  - "crates/train/**/*"
+  - "crates/synesthesia/**/*"
+  - "crates/cipher/**/*"
+  - "crates/siren/**/*"
+  - "crates/glinda/**/*"
+  - "**/*.wgsl"  # NO WGSL ALLOWED
+
+# =============================================================================
+# DOMAIN-SPECIFIC RULES
+# =============================================================================
+
+rules:
+  - id: "no_wgsl"
+    description: "WGSL is FORBIDDEN in toto/ - pure Rust only"
+    severity: "error"
+    forbidden: [".wgsl", "wgpu::", "shader_module"]
+
+  - id: "buffer_alignment"
+    description: "Audio buffers must be 24-bit/192kHz aligned"
+    severity: "error"
+    keywords: ["192000", "24_bit", "buffer_align", "sample_rate"]
+
+  - id: "cpal_backend"
+    description: "Use CPAL for low-latency audio I/O"
+    severity: "error"
+    keywords: ["cpal::", "StreamConfig", "capture_stream"]
+
+  - id: "pluto_iq_polling"
+    description: "Pluto+ I/Q polling must use libiio async bindings"
+    severity: "error"
+    keywords: ["libiio", "iio_context", "iio_buffer"]
+
+  - id: "lock_free"
+    description: "Real-time audio path must be lock-free"
+    severity: "error"
+    keywords: ["lock_free", "atomic", "ring_buffer", "mpsc"]
+
+  - id: "raii_guards"
+    description: "Use RAII guards for stream lifecycle management"
+    severity: "warning"
+    keywords: ["Drop", "guard", "RAII", "CaptureGuard"]
+
+# =============================================================================
+# REFERENCE BUNDLES
+# =============================================================================
+
+reference_bundles:
+  - path: "docs/libiio_async_rust_bindings.md"
+    purpose: "libiio async Rust bindings for Pluto+ SDR"
+    access: "read-only"
+
+  - path: "docs/cpal_high_res_audio_guide.md"
+    purpose: "CPAL high-resolution audio configuration"
+    access: "read-only"
+
+  - path: "docs/pluto_sdr_programming_guide.md"
+    purpose: "Analog Devices Pluto+ SDR programming"
+    access: "read-only"
+
+# =============================================================================
+# TRIGGER PATTERNS
+# =============================================================================
+
+triggers:
+  file_patterns:
+    - "crates/toto/src/**/*.rs"
+    - "crates/toto/src/audio/**/*.rs"
+    - "crates/toto/src/sdr/**/*.rs"
+    - "crates/toto/src/hal/**/*.rs"
+    - "crates/toto/Cargo.toml"
+
+  content_patterns:
+    - "cpal::"
+    - "libiio"
+    - "Pluto"
+    - "AD9363"
+    - "192000"
+    - "24_bit"
+    - "I/Q"
+    - "ring_buffer"
+    - "lock_free"
+    - "StreamConfig"
+
+# =============================================================================
+# AVAILABLE SKILLS
+# =============================================================================
+
+skills:
+  - "validate_dsp_python"
+  - "rust-pro"
+  - "rust-async-patterns"
+  - "rust-ownership"
+  - "m07-concurrency"
+
+# =============================================================================
+# VALIDATION HOOKS
+# =============================================================================
+
+validation_hooks:
+  pre_write:
+    - "hook-pre-write"
+  post_write:
+    - "hook-post-rs"
+
+# =============================================================================
+# METRICS
+# =============================================================================
+
+metrics:
+  - name: "audio_latency"
+    target: "< 5.2ms (192kHz sample period)"
+  - name: "sdr_poll_latency"
+    target: "< 1ms"
+  - name: "buffer_underruns"
+    target: "0 per hour"
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+communication:
+  upstream:
+    - "glinda-orchestrator"
+  downstream: []
+  peer:
+    - "shield-rf-scientist"
+    - "siren-extreme-dsp"

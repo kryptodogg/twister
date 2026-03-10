@@ -10,7 +10,7 @@
 // MambaAutoencoder directly; that type has no step() method, causing E0599.
 
 use crate::mamba::{
-    MambaAutoencoder, OnlineTrainer, TrainingMetrics, TrainingPair, compute_rms_db,
+    MambaAutoencoder, OnlineTrainer, SSAMBAConfig, TrainingMetrics, TrainingPair, compute_rms_db,
 };
 use crate::state::AppState;
 use candle_core::Device;
@@ -128,7 +128,8 @@ pub struct MambaTrainer {
 impl MambaTrainer {
     /// Create a new trainer with initialized autoencoder + AdamW.
     pub fn new(state: Arc<AppState>) -> anyhow::Result<Self> {
-        let trainer = OnlineTrainer::new()?;
+        let config = crate::mamba::training::TrainingConfig::new();
+        let trainer = OnlineTrainer::new(config)?;
         Ok(Self {
             trainer: Arc::new(Mutex::new(trainer)),
             state,
@@ -254,9 +255,9 @@ impl MambaTrainer {
 
         // Predict TX improvements from each pair
         let mut tx_improvements = vec![0.0f32; 512];
-        let device = Device::Cpu;
-        let autoencoder = MambaAutoencoder::new(device)
-            .unwrap_or_else(|_| MambaAutoencoder::new(Device::Cpu).unwrap());
+        let device = burn::tensor::Device::<burn_ndarray::NdArray<f32>>::Cpu;
+        let autoencoder_config = SSAMBAConfig::new();
+        let autoencoder = MambaAutoencoder::<burn_ndarray::NdArray<f32>>::new(&autoencoder_config, &device);
 
         for pair in batch {
             if pair.tx_spectrum.len() >= 256 && pair.rx_spectrum.len() >= 256 {

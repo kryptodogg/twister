@@ -1,0 +1,142 @@
+# =============================================================================
+# Agent: resonance-kinematics
+# Crate: resonance/
+# Domain: Physics Kinematics & SDF Collision Systems
+# =============================================================================
+
+name: "Resonance Kinematics"
+description: |
+  Specialized agent for the resonance/ crate responsible for 600Hz physics
+  reduction passes, signed distance field (SDF) collision math, and rigid
+  body kinematics for haptic feedback systems.
+
+version: "1.0.0"
+created: "2026-02-21"
+
+# =============================================================================
+# PATH RESTRICTIONS
+# =============================================================================
+
+restricted_paths:
+  - "crates/resonance/**/*"
+  - "docs/rdna2_infinity_cache_optimization.txt"
+
+forbidden_paths:
+  - "crates/oz/**/*"
+  - "crates/aether/**/*"
+  - "crates/shield/**/*"
+  - "crates/train/**/*"
+  - "crates/synesthesia/**/*"
+  - "crates/toto/**/*"
+  - "crates/cipher/**/*"
+  - "crates/siren/**/*"
+  - "crates/glinda/**/*"
+  - "Cargo.lock"
+  - "target/**/*"
+
+# =============================================================================
+# DOMAIN-SPECIFIC RULES
+# =============================================================================
+
+rules:
+  - id: "600hz_reduction"
+    description: "Physics reduction passes must complete within 600Hz cycle (1.67ms)"
+    severity: "error"
+    keywords: ["reduction_pass", "haptic_update", "physics_tick"]
+
+  - id: "sdf_collision_math"
+    description: "SDF collision detection must use analytical solutions where possible"
+    severity: "error"
+    keywords: ["sdf_", "signed_distance", "collision_normal"]
+
+  - id: "rigid_body_dynamics"
+    description: "Use quaternion-based rigid body dynamics, not Euler angles"
+    severity: "error"
+    keywords: ["quaternion", "rigid_body", "angular_velocity"]
+
+  - id: "cache_line_alignment"
+    description: "Physics buffers must be 128-byte aligned for GPU access"
+    severity: "error"
+    keywords: ["#[align(128)]", "PhysicsBuffer", "CollisionData"]
+
+  - id: "deterministic_physics"
+    description: "Physics must be deterministic for replay/record"
+    severity: "warning"
+    keywords: ["fixed_timestep", "deterministic", "seed"]
+
+# =============================================================================
+# REFERENCE BUNDLES
+# =============================================================================
+
+reference_bundles:
+  - path: "docs/rdna2_infinity_cache_optimization.txt"
+    purpose: "GPU cache optimization for physics buffers"
+    access: "read-only"
+
+# =============================================================================
+# TRIGGER PATTERNS
+# =============================================================================
+
+triggers:
+  file_patterns:
+    - "crates/resonance/src/**/*.rs"
+    - "crates/resonance/src/physics/**/*.rs"
+    - "crates/resonance/src/collision/**/*.rs"
+    - "crates/resonance/shaders/**/*.wgsl"
+
+  content_patterns:
+    - "sdf_"
+    - "collision_"
+    - "rigid_body"
+    - "quaternion"
+    - "600Hz"
+    - "haptic"
+    - "reduction_pass"
+    - "contact_manifold"
+
+# =============================================================================
+# AVAILABLE SKILLS
+# =============================================================================
+
+skills:
+  - "check_rdna2_alignment"
+  - "rust-pro"
+  - "shader-programming"
+  - "webgpu"
+  - "particles-physics"
+  - "procedural-animation"
+
+# =============================================================================
+# VALIDATION HOOKS
+# =============================================================================
+
+validation_hooks:
+  pre_write:
+    - "hook-pre-write"
+  post_write:
+    - "hook-post-rs"
+    - "hook-post-wgsl"
+
+# =============================================================================
+# METRICS
+# =============================================================================
+
+metrics:
+  - name: "physics_frequency"
+    target: "600 Hz"
+  - name: "collision_query_time"
+    target: "< 0.1ms"
+  - name: "determinism_error"
+    target: "< 0.0001"
+
+# =============================================================================
+# COMMUNICATION
+# =============================================================================
+
+communication:
+  upstream:
+    - "glinda-orchestrator"
+  downstream: []
+  peer:
+    - "aether-fluid-specialist"
+    - "siren-extreme-dsp"

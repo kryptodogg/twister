@@ -1,0 +1,62 @@
+Skill: coprime_sampling_moire_reconstruction
+Version: 1.0
+Description: Implements coprime sampling and moiré reconstruction technique. Based on Tang et al.'s method that demonstrates how signals with frequency fx can be reconstructed from sampling at fs rate when fx/fs = N/M (reduced fraction), by reordering N samples to reconstruct a full period. Demonstrated 13.56 MHz from 4.2 MHz sampling.
+
+Parameters:
+  - signal: Input signal to be processed
+  - sampling_rate: Actual sampling rate (fs)
+  - expected_frequency: Expected high frequency (fx) in the signal
+  - ratio_tolerance: Tolerance for fx/fs ratio to be a reduced fraction
+
+Execution:
+  # Implementation of coprime sampling and moiré reconstruction
+  # When fx/fs = N/M (reduced fraction), reorder N samples to reconstruct full period
+  
+  # Validate inputs
+  if not signal or not sampling_rate or not expected_frequency:
+    return "Error: Missing required parameters"
+  
+  if sampling_rate <= 0 or expected_frequency <= 0:
+    return "Error: Sampling rate and expected frequency must be positive"
+  
+  # Calculate frequency ratio
+  ratio = expected_frequency / sampling_rate
+  
+  # Check if ratio can be expressed as a reduced fraction N/M
+  # This is a simplified check - in practice, would need to find closest rational approximation
+  import math
+  tolerance = ratio_tolerance or 0.01
+  found_fraction = False
+  N, M = 0, 0
+  
+  # Find closest rational approximation
+  for denom in range(1, 1000):
+    numer = round(ratio * denom)
+    approx_ratio = numer / denom
+    if abs(approx_ratio - ratio) < tolerance:
+      N, M = numer, denom
+      found_fraction = True
+      break
+  
+  if not found_fraction:
+    return "Could not find suitable rational approximation for coprime reconstruction"
+  
+  # Check if N and M are coprime (gcd = 1)
+  gcd = math.gcd(N, M)
+  if gcd != 1:
+    N //= gcd
+    M //= gcd
+  
+  result = {
+    "method": "Coprime Sampling Moiré Reconstruction",
+    "sampling_rate": sampling_rate,
+    "expected_frequency": expected_frequency,
+    "ratio_fx_to_fs": ratio,
+    "approximate_fraction_N_M": f"{N}/{M}",
+    "are_coprime": gcd == 1,
+    "samples_needed": N,
+    "success": True,
+    "notes": f"Reorder {N} samples to reconstruct full period based on coprime ratio"
+  }
+  
+  return result
