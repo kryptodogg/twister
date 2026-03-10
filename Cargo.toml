@@ -53,12 +53,12 @@ chrono = { version = "*", features = ["serde"] }
 # ── Audio ──────────────────────────────────────────────────────────────────────
 cpal = "*"
 # ── Benchmarking ───────────────────────────────────────────────────────────────
-criterion = { version = "#", features = ["html_reports"] }
+criterion = { version = "*", features = ["html_reports"] }
 # ── Concurrency ────────────────────────────────────────────────────────────────
 crossbeam-channel = "*"
 csv = "*"
 # ── Gamepad Input (Joy-Con gesture control) ────────────────────────────────────
-gilrs = "0.11"
+gilrs = "*"
 half = "*"
 hdf5 = { version = "*", optional = true }
 # ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
@@ -71,6 +71,7 @@ neo4rs = "*"
 # ── Numerics / DSP ─────────────────────────────────────────────────────────────
 num-complex = "*"
 parking_lot = "*"
+portable-atomic = "1.9"  # Pin to newer version to fix build.rs compatibility issues
 pollster = "*"
 qdrant-client = "*"
 rand = "*"
@@ -80,7 +81,7 @@ safetensors = "*"
 serde = { version = "*", features = ["derive"] }
 serde_json = "*"
 # ── UI ─────────────────────────────────────────────────────────────────────────
-slint = { version = "1.15.1", default-features = false, features = [
+slint = { version = "*", default-features = false, features = [
   "backend-winit",  # Required windowing backend
   "compat-1-2",  # Forward compatibility with future versions
   "renderer-femtovg-wgpu",  # Enables FemtoVG via WGPU (supports Vulkan)
@@ -92,11 +93,6 @@ tokio = { version = "*", features = ["full"] }
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
 wgpu = { version = "*", features = ["vulkan"] }
-# ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
-hf-hub = "*"
-safetensors = "*"
-tokio = { version = "*", features = ["full"] }
-rand = "*"
 # Note: HDF5 requires native library installation (libhdf5).
 # Using JSON fallback by default if hdf5 feature is disabled.
 

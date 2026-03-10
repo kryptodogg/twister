@@ -16,8 +16,8 @@
 /// - fold_frequency_harmonics: Harmonic analysis for periodic signals
 /// - impulse_modulation: Detects impulsive patterns in waveforms
 /// - wideband_harmonic_analysis: Global harmonic structure analysis
-
 pub mod anomaly_gate;
+pub mod data_contracts;
 pub mod event_corpus;
 pub mod fold_frequency_harmonics;
 pub mod impulse_coherence;
@@ -45,6 +45,19 @@ pub use pattern_discovery::{
     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
 };
 
+pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+pub use point_decoder::PointDecoder;
+pub use point_mamba::PointMamba;
+pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+pub use pointnet_encoder::PointNetEncoder;
+pub use spectral_frame::SpectralFrame;
+pub use timegnn::TimeGnnModel;
+pub use timegnn_trainer::{
+    ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+    compute_nt_xent_loss, cosine_similarity, train_timegnn,
+};
+pub use wav2vec2_loader::Wav2Vec2Model;
 pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
 pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
 pub use point_decoder::PointDecoder;
