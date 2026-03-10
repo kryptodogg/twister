@@ -26,59 +26,42 @@ mod ai;
 mod anc;
 mod anc_calibration;
 mod anc_recording;
-mod audio;
-mod bispectrum;
-mod detection;
-mod embeddings;
-mod evidence_export;
-mod forensic;
-mod forensic_queries;
-mod fusion;
-mod gpu;
-mod gpu_shared;
-mod graph;
-mod harmony;
-mod knowledge_graph;
-mod mamba;
-mod ml;
-mod parametric;
-mod pdm;
-mod reconstruct;
-mod resample;
-mod ridge_plot;
-mod rtlsdr;
-mod rtlsdr_ffi;
-mod sdr;
-mod state;
-mod testing;
-mod trainer;
-mod training;
-mod training_tests;
-mod twister;
-mod ui;
-mod vbuffer;
-mod vector;
-mod waterfall;
+mod computer_vision;
 
-use crate::forensic::ForensicLogger;
-use crate::twister::computer_vision::pose_estimator::PoseFrame;
+// Twister library imports
+use anyhow::Context;
+use rustfft::{FftPlanner, num_complex::Complex};
 use std::sync::Arc;
 use std::sync::atomic::Ordering;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use anyhow::Context;
-use crossbeam_channel::bounded;
-use rustfft::{FftPlanner, num_complex::Complex};
+use twister::audio::{
+    AudioEngine, DEFAULT_MIC_SPACING_M, TdoaEngine, record_channel, tdoa_channel,
+};
+use twister::bispectrum::{BISPEC_FFT_SIZE, BispectrumEngine};
+use twister::computer_vision::pose_estimator::PoseFrame;
+use twister::detection::{DetectionEvent, HardwareLayer, ProductType};
+use twister::embeddings::EmbeddingStore;
+use twister::forensic::{ForensicEvent, ForensicLogger};
+use twister::fusion::FusionEngine;
+use twister::gpu::GpuContext;
+use twister::gpu_shared::GpuShared;
+use twister::graph::ForensicGraph;
+use twister::harmony::ChordMode;
+use twister::mamba::TrainingPair;
+use twister::ml::anomaly_gate::{AnomalyGateConfig, evaluate_anomaly_gate};
+use twister::ml::spectral_frame::SpectralFrame;
+use twister::parametric::ParametricManager;
+use twister::pdm::PdmEngine;
+use twister::reconstruct::CrystalBall;
+use twister::sdr::sdr_channel;
+use twister::state::AppState;
+use twister::training::{MambaTrainer, TrainingSession, spawn_background_training};
+use twister::twister::twister_targets;
+use twister::vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
+use twister::waterfall::WaterfallEngine;
 
-use audio::{AudioEngine, DEFAULT_MIC_SPACING_M, TdoaEngine, record_channel, tdoa_channel};
-use bispectrum::{BISPEC_FFT_SIZE, BispectrumEngine};
-use detection::{DetectionEvent, HardwareLayer};
-use gpu::GpuContext;
-use gpu_shared::GpuShared;
-use parametric::ParametricManager;
-use pdm::PdmEngine;
-use sdr::sdr_channel;
-use state::AppState;
+use twister::AppWindow;
 use vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
 use waterfall::WaterfallEngine;
 
@@ -102,10 +85,10 @@ async fn main() -> anyhow::Result<()> {
         "System",
         &format!("[Twister v0.5] Session: {}", session_identity),
     );
-    use crate::particle_system::{
+    use twister::particle_system::{
         frustum_culler::FrustumCuller, renderer::ParticleRenderer, streaming::ParticleStreamLoader,
     };
-    let ui = AppWindow::new().context("Slint window creation failed")?;
+    let ui = self::AppWindow::new().context("Slint window creation failed")?;
 
     let gpu_shared = GpuShared::new().context("GPU init failed")?;
     state.log(
@@ -122,11 +105,11 @@ async fn main() -> anyhow::Result<()> {
 
     let (merge_tx, merge_rx) = crossbeam_channel::bounded::<Vec<f32>>(256);
     let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(
-        crate::ml::modular_features::SignalFeaturePayload,
+        twister::ml::modular_features::SignalFeaturePayload,
         burn::tensor::Tensor<burn::backend::NdArray, 1>,
     )>(256);
     let (impulse_tx, impulse_rx) =
-        crossbeam_channel::bounded::<crate::ml::modular_features::ImpulseTrainEvent>(256);
+        crossbeam_channel::bounded::<twister::ml::modular_features::ImpulseTrainEvent>(256);
     let (tdoa_tx, tdoa_rx) = tdoa_channel();
     let (record_tx, record_rx) = record_channel();
 
@@ -168,7 +151,7 @@ async fn main() -> anyhow::Result<()> {
         }
     });
     let neo4j = Arc::new(tokio::sync::Mutex::new(
-        match crate::graph::ForensicGraph::new(
+        match twister::graph::ForensicGraph::new(
             "bolt://localhost:7687",
             "neo4j",
             "twister_forensic_2026",
@@ -186,14 +169,11 @@ async fn main() -> anyhow::Result<()> {
         },
     ));
 
-    let forensic = ForensicLogger::new(session_identity.as_str())
-        .await
-        .map_err(|e| anyhow::anyhow!("{:?}", e))
-        .context("Forensic log init")?;
+    let forensic = ForensicLogger::new(session_identity.as_str());
 
     // Log SessionStart
-    let start_ev = crate::forensic::ForensicEvent::SessionStart {
-        timestamp_micros: crate::forensic::get_current_micros(),
+    let start_ev = twister::forensic::ForensicEvent::SessionStart {
+        timestamp_micros: twister::forensic::get_current_micros(),
         app_version: env!("CARGO_PKG_VERSION").to_string(),
         total_events_prior: 0,
     };
@@ -251,7 +231,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Create telemetry channel for async tasks to emit UI events
     // (crossbeam provides better thread-safety for Slint integration)
-    let (ui_tx, ui_rx) = crossbeam_channel::unbounded::<crate::state::UiEvent>();
+    let (ui_tx, ui_rx) = crossbeam_channel::unbounded::<twister::state::UiEvent>();
 
     let mamba_trainer_handle = training::spawn_background_training(
         training_session.clone(),
@@ -310,7 +290,7 @@ async fn main() -> anyhow::Result<()> {
 
         // ── Crystal Ball ──────────────────────────────────────────────────
         // Forensic alias reconstruction engine
-        let crystal_ball = Arc::new(crate::reconstruct::CrystalBall::new(
+        let crystal_ball = Arc::new(twister::reconstruct::CrystalBall::new(
             sample_rate,
             24_576_000.0, // True PDM Wideband rate (192,000 * 128)
         ));
@@ -408,7 +388,7 @@ async fn main() -> anyhow::Result<()> {
             chunk = filtered_chunk;
 
             // Extract modular features based on flags
-            let payload = crate::ml::modular_features::SignalFeaturePayload {
+            let payload = twister::ml::modular_features::SignalFeaturePayload {
                 audio_samples: chunk.clone(),
                 freq_hz: state_disp.get_detected_freq(),
                 tdoa_confidence: Some(state_disp.get_beam_confidence()),
@@ -422,7 +402,7 @@ async fn main() -> anyhow::Result<()> {
                 harmonic_energy: None,
             };
             let device = burn::backend::ndarray::NdArrayDevice::Cpu;
-            let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
+            let extractor = twister::ml::modular_features::ModularFeatureExtractor::<
                 burn::backend::NdArray,
             >::new(&device);
             let (feature_vec, _) = extractor.extract(&payload, &feature_flags);
@@ -483,7 +463,7 @@ async fn main() -> anyhow::Result<()> {
                     .map(|(i, _)| i)
                     .unwrap_or(0);
                 let raw_freq = peak_bin as f32 * freq_scale;
-                let note = crate::twister::snap_to_note(raw_freq);
+                let note = twister::twister::snap_to_note(raw_freq);
                 state_disp.set_detected_freq(note.freq_hz);
                 state_disp.set_note_name(note.name.clone());
                 state_disp.set_note_cents(note.cents_offset);
@@ -707,15 +687,15 @@ async fn main() -> anyhow::Result<()> {
                             f1_hz: peak_freq,
                             f2_hz: 0.0,
                             product_hz: 0.0,
-                            product_type: crate::detection::ProductType::Harmonic,
+                            product_type: twister::detection::ProductType::Harmonic,
                             magnitude: max_mag,
                             phase_angle: 0.0,
                             coherence_frames: 1,
                             spl_db: 20.0 * max_mag.log10(),
                             session_id: session_identity.clone(),
-                            hardware: crate::detection::HardwareLayer::Microphone,
+                            hardware: twister::detection::HardwareLayer::Microphone,
                             embedding: vec![0.0; 128],
-                            frequency_band: crate::bispectrum::FrequencyBand::Vlf,
+                            frequency_band: twister::bispectrum::FrequencyBand::Vlf,
                             audio_dc_bias_v: Some(state_disp.get_audio_dc_bias()),
                             sdr_dc_bias_v: Some(state_disp.get_sdr_dc_bias()),
                             mamba_anomaly_db: 20.0 * anomaly.log10(),
@@ -724,20 +704,22 @@ async fn main() -> anyhow::Result<()> {
                             detection_method: "Mamba".to_string(),
                         };
 
-                        let frame = crate::ml::spectral_frame::SpectralFrame {
+                        let frame = twister::ml::spectral_frame::SpectralFrame {
                             timestamp_micros: event
                                 .timestamp
                                 .duration_since(std::time::UNIX_EPOCH)
                                 .unwrap_or_default()
                                 .as_micros() as u64,
-                            fft_magnitude: fft_mag_arr,
-                            bispectrum: [0.0; 64], // Populated later if needed
+                            fft_magnitude: fft_mag_arr.to_vec(),
+                            bispectrum: vec![0.0; 64], // Populated later if needed
                             itd_ild: [0.0; 4],
                             beamformer_outputs: [0.0; 3],
                             mamba_anomaly_score: anomaly,
                             confidence: 1.0,
                         };
-                        let gate = crate::ml::evaluate_gate(&frame, anomaly, 2.0);
+                        let gate_config = twister::ml::anomaly_gate::AnomalyGateConfig::default();
+                        let gate =
+                            twister::ml::anomaly_gate::evaluate_anomaly_gate(&frame, &gate_config);
 
                         // Sync to UI
                         if let Ok(mut gs) = state_disp.gate_status.lock() {
@@ -901,7 +883,7 @@ async fn main() -> anyhow::Result<()> {
 
                                     // Create metadata for persistence
                                     let loss_avg = state_disp.train_loss.load(Ordering::Relaxed);
-                                    let metadata = crate::state::CheckpointMetadata::new(
+                                    let metadata = twister::state::CheckpointMetadata::new(
                                         epoch, loss_avg, 0.0, // min (not tracked yet)
                                         0.0, // max (not tracked yet)
                                     );
@@ -1012,7 +994,7 @@ async fn main() -> anyhow::Result<()> {
             } else if state_disp.get_twister_active()
                 && state_disp.auto_tune.load(Ordering::Relaxed)
             {
-                crate::twister::twister_targets(denial_freq, crate::twister::ChordMode::Major)
+                twister::twister::twister_targets(denial_freq, twister::twister::ChordMode::Major)
             } else {
                 vec![
                     (denial_freq * 0.5, 0.2),
@@ -1041,7 +1023,7 @@ async fn main() -> anyhow::Result<()> {
             let current_anc_active = state_disp.anc_calibrated.load(Ordering::Relaxed)
                 && state_disp.anc_ok.load(Ordering::Relaxed);
 
-            let mamba_ctrl = crate::state::MambaControlState {
+            let mamba_ctrl = twister::state::MambaControlState {
                 active_modes: vec!["PhasedArrayAds".to_string()],
                 beam_azimuth: current_beam_az,
                 beam_elevation: current_beam_el,
@@ -1205,7 +1187,7 @@ async fn main() -> anyhow::Result<()> {
                 // Consume telemetry events from async tasks (non-blocking)
                 while let Ok(event) = ui_rx_timer.try_recv() {
                     match event {
-                        crate::state::UiEvent::TrainingProgress {
+                        twister::state::UiEvent::TrainingProgress {
                             iteration,
                             total_iterations: _,
                             loss,
@@ -1217,7 +1199,7 @@ async fn main() -> anyhow::Result<()> {
                             st.train_epoch.store(iteration, Ordering::Relaxed);
                             st.train_loss.store(loss, Ordering::Relaxed);
                         }
-                        crate::state::UiEvent::ClusteringStatus { .. } => {
+                        twister::state::UiEvent::ClusteringStatus { .. } => {
                             // Clustering events: reserved for Phase 2C visualization
                         }
                         _ => {
@@ -1397,9 +1379,9 @@ async fn main() -> anyhow::Result<()> {
                     ui.set_manual_rec_countdown_ms(rs.get_remaining_ms() as i32);
                     ui.set_manual_rec_status(
                         match rs.state {
-                            crate::state::RecordingStateEnum::Idle => "IDLE",
-                            crate::state::RecordingStateEnum::Recording => "RECORDING",
-                            crate::state::RecordingStateEnum::Saving => "SAVING",
+                            twister::state::RecordingStateEnum::Idle => "IDLE",
+                            twister::state::RecordingStateEnum::Recording => "RECORDING",
+                            twister::state::RecordingStateEnum::Saving => "SAVING",
                         }
                         .into(),
                     );
@@ -1520,15 +1502,17 @@ async fn main() -> anyhow::Result<()> {
     }
 
     // ── Initialize Particle System (Addendum AA) ────────────────────────────
-    let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
+    let particle_renderer = twister::particle_system::renderer::ParticleRenderer::new(
         gpu_shared.clone(),
         10_000_000,
         wgpu::TextureFormat::Rgba8Unorm,
     );
-    let frustum_culler =
-        crate::particle_system::frustum_culler::FrustumCuller::new(gpu_shared.clone(), 10_000_000);
+    let frustum_culler = twister::particle_system::frustum_culler::FrustumCuller::new(
+        gpu_shared.clone(),
+        10_000_000,
+    );
     let particle_streamer =
-        std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
+        std::sync::Arc::new(twister::particle_system::streaming::ParticleStreamLoader::new());
 
     let now_ms = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
@@ -1561,7 +1545,7 @@ async fn main() -> anyhow::Result<()> {
         // Capture current training progress
         let epoch = state.train_epoch.load(Ordering::Relaxed);
         let loss_avg = state.train_loss.load(Ordering::Relaxed);
-        let metadata = crate::state::CheckpointMetadata::new(
+        let metadata = twister::state::CheckpointMetadata::new(
             epoch, loss_avg,
             loss_avg, // loss_min = current (will be improved on next training session)
             loss_avg, // loss_max = current
@@ -1601,7 +1585,11 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+fn wire_ui_callbacks(
+    ui: &self::AppWindow,
+    state: &Arc<AppState>,
+    ui_weak: slint::Weak<self::AppWindow>,
+) {
     let s = state.clone();
     ui.on_set_mode(move |m| {
         s.mode.store(m as u32, Ordering::Relaxed);
@@ -1676,13 +1664,13 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
                 return;
             };
 
-            let mut cal = crate::anc_calibration::FullRangeCalibration::new();
+            let mut cal = twister::anc_calibration::FullRangeCalibration::new();
             cal.calibrate_from_sweep(&c0, &c1, &c2, |bin| {
                 let a = s.mamba_anomaly_score.load(Ordering::Relaxed);
                 a * (0.5 + 0.5 * (bin as f32 / 8192.0).min(1.0))
             });
             if let Ok(mut ae) = s.anc_engine.lock() {
-                let sw = crate::anc::AncEngine::calibration_sweep(192000.0);
+                let sw = twister::anc::AncEngine::calibration_sweep(192000.0);
                 ae.calibrate(&sw, &c0);
                 ae.lms.initialize_from_calibration(
                     &|b| cal.phase_for((b as f32 / 8192.0) * 6_144_000.0),
@@ -1820,7 +1808,7 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
 
 fn rt_store_async(
     qdrant: Arc<Option<embeddings::EmbeddingStore>>,
-    neo4j: Arc<tokio::sync::Mutex<Option<crate::graph::ForensicGraph>>>,
+    neo4j: Arc<tokio::sync::Mutex<Option<twister::graph::ForensicGraph>>>,
     event: DetectionEvent,
     state: Arc<AppState>,
 ) {
@@ -1864,11 +1852,11 @@ fn snr_db(original: &[f32], decoded: &[f32]) -> f32 {
 
 // Add trainer loop
 fn _start_impulse_trainer_loop(
-    state: std::sync::Arc<std::sync::Mutex<crate::state::AppState>>,
-    impulse_rx: crossbeam_channel::Receiver<crate::ml::modular_features::ImpulseTrainEvent>,
+    state: std::sync::Arc<std::sync::Mutex<twister::state::AppState>>,
+    impulse_rx: crossbeam_channel::Receiver<twister::ml::modular_features::ImpulseTrainEvent>,
 ) {
     tokio::spawn(async move {
-        let impulse_model = crate::ml::modular_features::ImpulsePatternModel::new();
+        let impulse_model = twister::ml::modular_features::ImpulsePatternModel::new();
         loop {
             if let Ok(impulse_event) = impulse_rx.recv() {
                 let pattern = impulse_model.extract_pattern(&impulse_event);
@@ -1890,12 +1878,12 @@ fn _start_impulse_trainer_loop(
 }
 
 fn _start_trainer_loop(
-    state: std::sync::Arc<std::sync::Mutex<crate::state::AppState>>,
+    state: std::sync::Arc<std::sync::Mutex<twister::state::AppState>>,
     feature_rx: crossbeam_channel::Receiver<(
-        crate::ml::modular_features::SignalFeaturePayload,
+        twister::ml::modular_features::SignalFeaturePayload,
         burn::tensor::Tensor<burn::backend::ndarray::NdArray<f32>, 1>,
     )>,
-    mut mamba_trainer: crate::ml::point_mamba_trainer::PointMambaTrainer,
+    mut mamba_trainer: twister::ml::point_mamba_trainer::PointMambaTrainer,
 ) {
     tokio::spawn(async move {
         let mut batch = Vec::new();

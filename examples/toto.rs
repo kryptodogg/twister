@@ -1,13 +1,20 @@
-slint::include_modules!();
 use std::sync::Arc;
 use tokio::time::{interval, Duration};
-use slint::{Weak, SharedString};
+use slint::SharedString;
 use twister::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
 use twister::dispatch::audio_ingester::AudioIngester;
+use twister::ui::enable_acrylic_blur;
+
+slint::include_modules!();
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ui = TotoHudApplet::new()?;
+
+    // Apply Windows Acrylic effect
+    #[cfg(target_os = "windows")]
+    enable_acrylic_blur(ui.window());
+
     let ui_handle = ui.as_weak();
 
     // Instantiate Concrete Ingester for the physics pipeline

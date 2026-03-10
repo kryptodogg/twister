@@ -1,7 +1,6 @@
 use std::sync::Arc;
-use rand::Rng;
-use tokio::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
+use tokio::sync::Mutex;
 
 use crate::particle_system::ParticleGPU;
 
@@ -33,7 +32,6 @@ impl ParticleStreamLoader {
 
         // Spawn a background task to simulate reading/loading chunks from disk/network
         tokio::spawn(async move {
-            let mut rng = rand::rngs::OsRng;
             let mut new_particles = Vec::with_capacity(max_particles);
 
             // Generate some fake parameters based on time to show variation
@@ -41,27 +39,29 @@ impl ParticleStreamLoader {
             let duration = end_ms.saturating_sub(start_ms) as f32;
             let time_factor = (start_ms as f64 % 1000000.0) as f32 / 100000.0;
 
-            for i in 0..max_particles {
-                let radius = rng.gen_range(5.0..100.0);
-                let angle1 = rng.gen_range(0.0..std::f32::consts::TAU);
-                let angle2 = rng.gen_range(0.0..std::f32::consts::TAU);
+            for _ in 0..max_particles {
+                let radius = 5.0 + (rand::random::<f32>() * 95.0);
+                let angle1 = rand::random::<f32>() * std::f32::consts::TAU;
+                let angle2 = rand::random::<f32>() * std::f32::consts::TAU;
 
-                let px = radius * angle1.cos() * angle2.sin();
-                let py = radius * angle1.sin() * angle2.sin() + (time_factor * 10.0);
-                let pz = radius * angle2.cos();
+                let mut pos = [
+                    radius * angle1.cos() * angle2.sin(),
+                    radius * angle1.sin() * angle2.sin(),
+                    radius * angle2.cos(),
+                ];
 
                 // Fake forensics pattern
-                let hardness = rng.gen_range(0.1..1.0);
-                let roughness = rng.gen_range(0.0..0.5);
-                let intensity = rng.gen_range(0.5..1.5);
+                let hardness = 0.1 + (rand::random::<f32>() * 0.9);
+                let roughness = rand::random::<f32>() * 0.5;
+                let intensity = 0.5 + (rand::random::<f32>() * 1.0);
 
                 // Reddish hue for mock attack patterns
-                let r = rng.gen_range(0.5..1.0);
-                let g = rng.gen_range(0.0..0.3);
-                let b = rng.gen_range(0.0..0.3);
+                let r = 0.5 + (rand::random::<f32>() * 0.5);
+                let g = rand::random::<f32>() * 0.3;
+                let b = rand::random::<f32>() * 0.3;
 
                 new_particles.push(ParticleGPU {
-                    position: [px, py, pz],
+                    position: pos,
                     color: [r, g, b, 1.0],
                     intensity,
                     hardness,

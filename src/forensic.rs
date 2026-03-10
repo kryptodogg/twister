@@ -273,15 +273,8 @@ impl ForensicLogger {
 
         for line in std::io::BufRead::lines(reader) {
             let line = line?;
-            use crate::particle_system::{
-                frustum_culler::FrustumCuller, renderer::ParticleRenderer,
-                streaming::ParticleStreamLoader,
-            };
-            // Slint's include_modules! generates AppWindow by default in typical Slint setups,
-            // but we need to ensure it's available. Usually it's in the root namespace.
-            let ui = AppWindow::new().context("Slint window creation failed")?;
             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&line) {
-                // In new format, we check timestamp_micros roughly to mimic date ranges if needed
+                // Parse JSONL events from forensic log
                 events.push(json);
             }
         }

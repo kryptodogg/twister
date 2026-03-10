@@ -1,4 +1,4 @@
-
+pub mod anomaly_gate;
 pub mod event_corpus;
 pub mod fold_frequency_harmonics;
 pub mod impulse_coherence;
@@ -17,9 +17,9 @@ pub mod timegnn_trainer;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
 
-pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
 pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
 pub use mamba_block::MambaBlock;
+pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
 
 pub use pattern_discovery::{
     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
@@ -47,7 +47,7 @@ pub mod pose_mamba_trainer;
 pub mod unified_field_mamba;
 pub use unified_field_mamba::UnifiedFieldMamba;
 pub mod waveshape_projection;
-pub use waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
+pub use waveshape_projection::{NeuralWaveshapeParams, project_latent_to_waveshape};
 pub mod spectral_frame;
 
 pub mod field_particle;
