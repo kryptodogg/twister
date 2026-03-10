@@ -27,6 +27,7 @@ pub mod graph;
 pub mod harmony;
 pub mod knowledge_graph;
 pub mod mamba;
+pub mod materials;
 pub mod ml;
 pub mod parametric;
 pub mod pdm;

@@ -53,8 +53,8 @@ wgpu = { version = "*", features = ["vulkan"] }
 # ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
 hf-hub = "*"
 safetensors = "*"
-tokio = { version = "1.43", features = ["full"] }
-rand = "0.8"
+tokio = { version = "*", features = ["full"] }
+rand = "*"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]
@@ -77,5 +77,3 @@ opt-level = 2
 opt-level = 3
 lto = "thin"
 codegen-units = 1
-tokio = { version = "*", features = ["full"] }
-rand = "0.8"
