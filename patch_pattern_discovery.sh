@@ -1,0 +1,3 @@
+sed -i 's/let mask_f: Tensor<B, 2> = Tensor::<B, 1, Int>::from_data(mask.clone().into_data().convert::<i32>(), &device).into_data().convert::<f32>();/let mask_f: Tensor<B, 1> = Tensor::<B, 1>::from_data(mask.clone().into_data().convert::<f32>(), \&device);\n            let mask_2d = mask_f.unsqueeze_dim::<2>(1);/g' src/ml/pattern_discovery.rs
+sed -i 's/let masked_emb = embeddings.clone().mul(mask_f.clone());/let masked_emb = embeddings.clone().mul(mask_2d.clone());/g' src/ml/pattern_discovery.rs
+sed -i 's/let count = mask_f.sum_dim(0).clamp_min(1.0);/let count = mask_2d.sum_dim(0).clamp_min(1.0);/g' src/ml/pattern_discovery.rs

@@ -4,8 +4,17 @@ def patch():
     with open('src/forensic.rs', 'r') as f:
         content = f.read()
 
-    # Just do the basic stubs without messing up ForensicEvent struct.
+    # The missing timestamp_micros fields and double enums are because I ran a script that appended to an existing broken file or the file was already a mess.
+    # Let's fix the structs.
 
+    # Fix ForensicEvent definition if it's missing timestamp_micros.
+    # Actually, the error shows "missing `timestamp_micros`" in "AnomalyGateDecision".
+    content = content.replace("AnomalyGateDecision {\n        anomaly_score: f32,", "AnomalyGateDecision {\n        timestamp_micros: u64,\n        anomaly_score: f32,")
+
+    # Fix Bispectrum missing confidence
+    content = content.replace("coherence_frames: u32,\n    },", "coherence_frames: u32,\n        confidence: f32,\n    },")
+
+    # Fix log_gate_decision
     old_gate = "pub fn log_gate_decision(&mut self, score: f32, confidence: f32, threshold: f32, forward: bool, reason: &str) -> anyhow::Result<()> {"
     new_gate = "pub fn log_gate_decision(&self, _score: f32, _confidence: f32, _threshold: f32, _forward: bool, _reason: &str) -> anyhow::Result<()> {\n        Ok(())\n    }"
 
@@ -14,18 +23,10 @@ def patch():
         end_gate = content.find("Ok(())\n    }", idx_gate) + len("Ok(())\n    }")
         content = content[:idx_gate] + new_gate + content[end_gate:]
 
+    # Fix log_detection
     old_det = "pub fn log_detection(&mut self, event: &DetectionEvent) -> anyhow::Result<()> {"
     new_det = "pub fn log_detection_old(&mut self, event: &DetectionEvent) -> anyhow::Result<()> {"
     content = content.replace(old_det, new_det)
 
-    old_det2 = "pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {"
-    new_det2 = "pub fn log_detection(&self, _event: &DetectionEvent) -> Result<(), LogError> {\n        Ok(())\n    }\n\n    pub fn log_detection_stub(&self, event: &DetectionEvent) -> Result<(), LogError> {"
-
-    idx_det2 = content.find(old_det2)
-    if idx_det2 != -1:
-        end_det2 = content.find("self.log(fe)\n    }", idx_det2) + len("self.log(fe)\n    }")
-        content = content[:idx_det2] + new_det2 + content[end_det2:]
-
     with open('src/forensic.rs', 'w') as f:
         f.write(content)
-
