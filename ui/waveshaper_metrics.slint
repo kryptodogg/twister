@@ -1,0 +1,613 @@
+// ui/waveshaper_metrics.slint
+//
+// Live neural waveshaper metrics visualization
+// Real-time display of Mamba anomaly detection, latent embeddings, and waveform analysis
+//
+// Features:
+// - Live threat metrics (anomaly score 0-100%)
+// - Waveform oscilloscope visualization
+// - 128D latent embedding activity (Drive, Foldback, Asymmetry)
+// - Neural Auto-Steer toggle (AI vs manual control)
+// - Parameter sliders (Drive, Foldback, Asymmetry)
+// - Status indicator (Monitoring vs Defense Active)
+// - Multi-rate signal fusion display
+
+import { VerticalBox, HorizontalBox, GridBox, Slider, Switch, ProgressBar, Button, CheckBox } from "std-widgets.slint";
+
+export struct MetricsState {
+    anomaly_score: float,           // 0.0-1.0 threat level
+    drive: float,                   // 0.0-1.0 waveshaping drive
+    foldback: float,                // 0.0-1.0 harmonic foldback
+    asymmetry: float,               // -1.0-1.0 asymmetric distortion
+    frame_index: int,               // Frame counter
+    total_samples: int,             // Total samples processed
+    is_connected: bool,             // WebSocket connection status
+    auto_steer: bool,               // AI control toggle
+}
+
+export component WaveshaperMetrics {
+    in-out property <MetricsState> metrics: {
+        anomaly_score: 0.0,
+        drive: 0.0,
+        foldback: 0.0,
+        asymmetry: 0.5,
+        frame_index: 0,
+        total_samples: 0,
+        is_connected: true,
+        auto_steer: true,
+    };
+
+    // Computed properties
+    property <bool> is_attack: metrics.anomaly_score > 0.5;
+    property <color> threat_color: is_attack ? #dc2626ff : #16a34aff;  // Red or Green
+    property <color> threat_bg_start: is_attack ? #7f1d1dff : #166534ff; // Dark red or dark green
+    property <color> threat_bg_end: is_attack ? #5e1a1aff : #143a1eff;   // Darker red or darker green
+    property <string> threat_status: is_attack ? "🔴 DEFENSE ACTIVE" : "🟢 MONITORING";
+    property <string> threat_message: is_attack ? "RF interference detected • Harmonic distortion active" : "System nominal • Ready to intercept";
+
+    // Latent activity (128D pooled into 3 chunks: Drive, Foldback, Asymmetry)
+    property <float> latent_drive: metrics.drive;
+    property <float> latent_foldback: metrics.foldback;
+    property <float> latent_asymmetry: (metrics.asymmetry - (-1.0)) / 2.0; // Normalize -1..1 to 0..1
+
+    background: LinearGradient {
+        angle: 135deg;
+        colors: [#0f172aff, #1e293bff];
+    };
+
+    VerticalBox {
+        padding: 24px;
+        spacing: 24px;
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // HEADER: Title + Connection Status
+        // ─────────────────────────────────────────────────────────────────────────────
+
+        HorizontalBox {
+            spacing: 20px;
+            alignment: space-between;
+
+            // Title
+            Text {
+                text: "🤖 UNIFIED MAMBA INFERENCE LOOP";
+                font-size: 22px;
+                font-weight: 700;
+                color: #06b6d4ff; // Cyan
+            }
+
+            // Connection Status
+            HorizontalBox {
+                spacing: 12px;
+                width: 200px;
+                alignment: end;
+
+                Rectangle {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background: metrics.is_connected ? #22c55eff : #ef4444ff;
+                    animate background { duration: 600ms; }
+                }
+
+                Text {
+                    text: metrics.is_connected ? "LIVE" : "DISCONNECTED";
+                    font-size: 12px;
+                    color: metrics.is_connected ? #22c55eff : #ef4444ff;
+                    font-weight: 700;
+                }
+            }
+        }
+
+        // Subtitle
+        Text {
+            text: "Multi-rate signal fusion • Real-time anomaly detection • Neural auto-steer";
+            font-size: 11px;
+            color: #64748bff; // Slate-500
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // MAIN GRID: Threat + Waveform + Controls
+        // ─────────────────────────────────────────────────────────────────────────────
+
+        HorizontalBox {
+            spacing: 16px;
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // LEFT COLUMN: Threat Metric
+            // ─────────────────────────────────────────────────────────────────────────────
+
+            Rectangle {
+                width: 280px;
+                background: LinearGradient {
+                    angle: 135deg;
+                    colors: [threat_bg_start, threat_bg_end];
+                };
+                border-color: threat_color;
+                border-width: 2px;
+                border-radius: 8px;
+
+                VerticalBox {
+                    padding: 24px;
+                    spacing: 16px;
+
+                    // Label
+                    Text {
+                        text: "THREAT LEVEL";
+                        font-size: 11px;
+                        color: #a1a5b4ff; // Slate-400
+                        letter-spacing: 0.1px;
+                    }
+
+                    // Large Anomaly Score
+                    Text {
+                        text: Math.round(metrics.anomaly_score * 1000.0) / 10.0 + "%";
+                        font-size: 56px;
+                        font-weight: 900;
+                        color: threat_color;
+                        animate color { duration: 300ms; }
+                    }
+
+                    // Progress Bar
+                    Rectangle {
+                        height: 8px;
+                        background: #0f172aff;
+                        border-radius: 4px;
+                        clip: true;
+
+                        Rectangle {
+                            width: parent.width * metrics.anomaly_score;
+                            height: 100%;
+                            background: threat_color;
+                            animate width { duration: 200ms; }
+                            border-radius: 4px;
+                        }
+                    }
+
+                    // Frame Info
+                    HorizontalBox {
+                        spacing: 12px;
+                        font-size: 10px;
+                        color: #64748bff;
+
+                        Text {
+                            text: "Frame: " + metrics.frame_index;
+                        }
+
+                        Text {
+                            text: metrics.total_samples + " samples";
+                        }
+                    }
+                }
+            }
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // CENTER COLUMN: Oscilloscope + Status
+            // ─────────────────────────────────────────────────────────────────────────────
+
+            VerticalBox {
+                spacing: 16px;
+                min-width: 400px;
+
+                // Oscilloscope Placeholder (Text-based for now)
+                Rectangle {
+                    background: #1e293bff;
+                    border-color: #475569ff;
+                    border-width: 1px;
+                    border-radius: 8px;
+                    height: 140px;
+
+                    VerticalBox {
+                        padding: 12px;
+                        alignment: center;
+
+                        Text {
+                            text: "~ Waveform Oscilloscope ~";
+                            font-size: 11px;
+                            color: #64748bff;
+                            letter-spacing: 1px;
+                        }
+
+                        Text {
+                            text: "[Super-Nyquist Harmonic Smear Visualization]";
+                            font-size: 9px;
+                            color: #475569ff;
+                        }
+                    }
+                }
+
+                // Status Card
+                Rectangle {
+                    background: LinearGradient {
+                        angle: 135deg;
+                        colors: [threat_bg_start, threat_bg_end];
+                    };
+                    border-color: threat_color;
+                    border-width: 2px;
+                    border-radius: 8px;
+                    height: 90px;
+
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 8px;
+
+                        Text {
+                            text: threat_status;
+                            font-size: 24px;
+                            font-weight: 700;
+                            color: #fffbffff;
+                        }
+
+                        Text {
+                            text: threat_message;
+                            font-size: 11px;
+                            color: #cbd5e1ff;
+                        }
+                    }
+                }
+            }
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // RIGHT COLUMN: Controls
+            // ─────────────────────────────────────────────────────────────────────────────
+
+            VerticalBox {
+                width: 320px;
+                spacing: 16px;
+
+                // Auto-Steer Toggle
+                Rectangle {
+                    background: #1e293bff;
+                    border-color: #475569ff;
+                    border-width: 1px;
+                    border-radius: 8px;
+                    height: 90px;
+
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 12px;
+
+                        // Toggle + Label
+                        HorizontalBox {
+                            spacing: 12px;
+                            alignment: space-between;
+
+                            Text {
+                                text: "Neural Auto-Steer";
+                                font-size: 13px;
+                                font-weight: 700;
+                                color: #06b6d4ff;
+                            }
+
+                            Rectangle {
+                                width: 50px;
+                                height: 28px;
+                                background: metrics.auto_steer ? #0891b2ff : #64748bff;
+                                border-radius: 14px;
+                                animate background { duration: 200ms; }
+
+                                Rectangle {
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #fffbffff;
+                                    border-radius: 12px;
+                                    x: metrics.auto_steer ? parent.width - 26px : 2px;
+                                    y: 2px;
+                                    animate x { duration: 200ms; }
+                                }
+
+                                TouchArea {
+                                    clicked => {
+                                        metrics.auto_steer = !metrics.auto_steer;
+                                    }
+                                }
+                            }
+                        }
+
+                        Text {
+                            text: metrics.auto_steer ? "AI controls parameters" : "Manual slider control";
+                            font-size: 11px;
+                            color: #94a3b8ff;
+                        }
+                    }
+                }
+
+                // Latent Activity Visualization
+                Rectangle {
+                    background: #1e293bff;
+                    border-color: #475569ff;
+                    border-width: 1px;
+                    border-radius: 8px;
+                    height: auto;
+
+                    VerticalBox {
+                        padding: 16px;
+                        spacing: 12px;
+
+                        Text {
+                            text: "128D LATENT ACTIVITY";
+                            font-size: 10px;
+                            color: #64748bff;
+                            letter-spacing: 0.05px;
+                        }
+
+                        // Drive Activity
+                        VerticalBox {
+                            spacing: 6px;
+
+                            HorizontalBox {
+                                spacing: 12px;
+                                alignment: space-between;
+
+                                Text {
+                                    text: "Drive [0..31]";
+                                    font-size: 11px;
+                                    color: #94a3b8ff;
+                                }
+
+                                Text {
+                                    text: Math.round(latent_drive * 1000.0) / 10.0 + "%";
+                                    font-size: 11px;
+                                    font-weight: 700;
+                                    color: #06b6d4ff;
+                                }
+                            }
+
+                            Rectangle {
+                                height: 8px;
+                                background: #0f172aff;
+                                border-radius: 4px;
+                                clip: true;
+
+                                Rectangle {
+                                    width: parent.width * latent_drive;
+                                    height: 100%;
+                                    background: LinearGradient {
+                                        angle: 90deg;
+                                        colors: [#0891b2ff, #10b981ff];
+                                    };
+                                    animate width { duration: 200ms; }
+                                }
+                            }
+                        }
+
+                        // Foldback Activity
+                        VerticalBox {
+                            spacing: 6px;
+
+                            HorizontalBox {
+                                spacing: 12px;
+                                alignment: space-between;
+
+                                Text {
+                                    text: "Foldback [32..63]";
+                                    font-size: 11px;
+                                    color: #94a3b8ff;
+                                }
+
+                                Text {
+                                    text: Math.round(latent_foldback * 1000.0) / 10.0 + "%";
+                                    font-size: 11px;
+                                    font-weight: 700;
+                                    color: #06b6d4ff;
+                                }
+                            }
+
+                            Rectangle {
+                                height: 8px;
+                                background: #0f172aff;
+                                border-radius: 4px;
+                                clip: true;
+
+                                Rectangle {
+                                    width: parent.width * latent_foldback;
+                                    height: 100%;
+                                    background: LinearGradient {
+                                        angle: 90deg;
+                                        colors: [#0891b2ff, #10b981ff];
+                                    };
+                                    animate width { duration: 200ms; }
+                                }
+                            }
+                        }
+
+                        // Asymmetry Activity
+                        VerticalBox {
+                            spacing: 6px;
+
+                            HorizontalBox {
+                                spacing: 12px;
+                                alignment: space-between;
+
+                                Text {
+                                    text: "Asymmetry [64..95]";
+                                    font-size: 11px;
+                                    color: #94a3b8ff;
+                                }
+
+                                Text {
+                                    text: Math.round(latent_asymmetry * 1000.0) / 10.0 + "%";
+                                    font-size: 11px;
+                                    font-weight: 700;
+                                    color: #06b6d4ff;
+                                }
+                            }
+
+                            Rectangle {
+                                height: 8px;
+                                background: #0f172aff;
+                                border-radius: 4px;
+                                clip: true;
+
+                                Rectangle {
+                                    width: parent.width * latent_asymmetry;
+                                    height: 100%;
+                                    background: LinearGradient {
+                                        angle: 90deg;
+                                        colors: [#0891b2ff, #10b981ff];
+                                    };
+                                    animate width { duration: 200ms; }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // PARAMETER SLIDERS: Drive, Foldback, Asymmetry
+        // ─────────────────────────────────────────────────────────────────────────────
+
+        HorizontalBox {
+            spacing: 16px;
+
+            // Drive Slider
+            Rectangle {
+                background: #1e293bff;
+                border-color: #475569ff;
+                border-width: 1px;
+                border-radius: 8px;
+
+                VerticalBox {
+                    padding: 16px;
+                    spacing: 12px;
+
+                    HorizontalBox {
+                        spacing: 12px;
+                        alignment: space-between;
+
+                        Text {
+                            text: "Drive";
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #cbd5e1ff;
+                        }
+
+                        Text {
+                            text: Math.round(metrics.drive * 1000.0) / 10.0 + "%";
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #10b981ff;
+                        }
+                    }
+
+                    Slider {
+                        enabled: !metrics.auto_steer;
+                        value <=> metrics.drive;
+                        minimum: 0.0;
+                        maximum: 1.0;
+                    }
+                }
+            }
+
+            // Foldback Slider
+            Rectangle {
+                background: #1e293bff;
+                border-color: #475569ff;
+                border-width: 1px;
+                border-radius: 8px;
+
+                VerticalBox {
+                    padding: 16px;
+                    spacing: 12px;
+
+                    HorizontalBox {
+                        spacing: 12px;
+                        alignment: space-between;
+
+                        Text {
+                            text: "Foldback";
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #cbd5e1ff;
+                        }
+
+                        Text {
+                            text: Math.round(metrics.foldback * 1000.0) / 10.0 + "%";
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #10b981ff;
+                        }
+                    }
+
+                    Slider {
+                        enabled: !metrics.auto_steer;
+                        value <=> metrics.foldback;
+                        minimum: 0.0;
+                        maximum: 1.0;
+                    }
+                }
+            }
+
+            // Asymmetry Slider
+            Rectangle {
+                background: #1e293bff;
+                border-color: #475569ff;
+                border-width: 1px;
+                border-radius: 8px;
+
+                VerticalBox {
+                    padding: 16px;
+                    spacing: 12px;
+
+                    HorizontalBox {
+                        spacing: 12px;
+                        alignment: space-between;
+
+                        Text {
+                            text: "Asymmetry";
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #cbd5e1ff;
+                        }
+
+                        Text {
+                            text: Math.round((metrics.asymmetry - (-1.0)) / 2.0 * 1000.0) / 10.0 + "%";
+                            font-size: 13px;
+                            font-weight: 700;
+                            color: #10b981ff;
+                        }
+                    }
+
+                    Slider {
+                        enabled: !metrics.auto_steer;
+                        value <=> metrics.asymmetry;
+                        minimum: -1.0;
+                        maximum: 1.0;
+                    }
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // FOOTER: Architecture Info
+        // ─────────────────────────────────────────────────────────────────────────────
+
+        Rectangle {
+            background: #1e293bff;
+            border-color: #475569ff;
+            border-width: 1px;
+            border-radius: 8px;
+
+            VerticalBox {
+                padding: 16px;
+                spacing: 8px;
+
+                Text {
+                    text: "Multi-Rate Signal Fusion (Native Δt)";
+                    font-size: 11px;
+                    color: #06b6d4ff;
+                    font-weight: 700;
+                    letter-spacing: 0.05px;
+                }
+
+                Text {
+                    text: "Mamba SSM integrates disparate streams (C925e @ 32kHz, SDR @ 6.144MHz) via continuous differential equations. Native sample rates preserved without upsampling hallucination. Real-time phase tracking enables detection of harmonically-distorted RF interference patterns.";
+                    font-size: 10px;
+                    color: #64748bff;
+                    wrap: word-wrap;
+                }
+            }
+        }
+    }
+}
