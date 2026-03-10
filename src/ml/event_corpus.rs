@@ -2,9 +2,6 @@ use crate::ml::wav2vec2_loader::Wav2Vec2Model;
 use burn::backend::Wgpu;
 use hdf5::File;
 use std::error::Error;
-use std::fs;
-use std::io::{BufRead, BufReader};
-use burn::tensor::Device;
 
 pub struct EventCorpus {
     pub total_events: usize,
@@ -22,7 +19,7 @@ impl EventCorpus {
         let h5_file = File::create(h5_out_path)?;
 
         let device = burn::tensor::Device::<Wgpu>::default();
-        let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+        let wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
 
         let events = Self::load_forensic_events(jsonl_path)?;
 
