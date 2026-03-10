@@ -16,8 +16,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ui_handle = ui.as_weak();
 
     // 1. Initialize the Neural Operator and CPU device
-    let device = burn::backend::ndarray::NdArrayDevice::default();
-    let mamba = UnifiedFieldMamba::<Backend>::new(&device);
+    // let device = burn::backend::ndarray::NdArrayDevice::default();
+    // let mamba = UnifiedFieldMamba::<Backend>::new(&device);
     let mut packer = GpuStreamPacker::new(4096);
 
     // 2. The 100Hz Signal Dispatch Loop
@@ -25,13 +25,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let mut tick = interval(Duration::from_millis(10)); // 100Hz
         let mut simulated_time: f32 = 0.0;
         let active_sample_rate = 192_000.0;
-
-        // Helper for simple MSE loss on tensors
-        let compute_loss = |output: &Tensor<Backend, 3>, input: &Tensor<Backend, 3>| -> f32 {
-            let diff = output.clone().sub(input.clone());
-            let mse = diff.clone().mul(diff).mean();
-            mse.into_scalar().into()
-        };
 
         loop {
             tick.tick().await;
@@ -53,32 +46,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             packer.pack_16bit_stream(&mock_pcm, &mut cursor);
 
-            let mut tensor_data = Vec::with_capacity(512 * 9);
-            for i in 0..512 {
-                let val = *packer.staging_buffer.get(i).unwrap_or(&0.0);
-                tensor_data.extend_from_slice(&[
-                    val, val, val,
-                    val, val,
-                    val, val, val,
-                    val
-                ]);
-            }
+            // TODO: AG-HUD UNIFIED ARCHITECTURE
+            // This applet awaits the SignalDispatchLoop ingestion pipeline.
+            // Once Jules implements AudioIngester and wires dispatch loop,
+            // AG-HUD will receive FieldParticles instead of raw audio samples.
+            //
+            // Current status: AG-HUD is paused waiting for:
+            // 1. AudioIngester implementation (convert PCM -> FieldParticles)
+            // 2. SignalDispatchLoop integration (dispatch loop -> ingester -> Mamba)
+            // 3. Proper latent extraction from UnifiedFieldMamba output
+            //
+            // Until then, AG-HUD returns placeholder parameters
 
-            let input_tensor = Tensor::<Backend, 3>::from_data(
-                burn::tensor::TensorData::new(tensor_data, vec![1, 512, 9]),
-                &device
-            );
+            let params = NeuralWaveshapeParams {
+                drive: 0.5,
+                foldback: 0.0,
+                asymmetry: 0.0,
+            };
 
-            let (output_tensor, latent_tensor) = mamba.forward(input_tensor.clone());
-            let anomaly_score = compute_loss(&output_tensor, &input_tensor);
-
-            let mean_latent = latent_tensor.mean_dim(1).into_data().to_vec::<f32>().unwrap();
-            let mut latent_array = [0.0f32; 128];
-            for (i, val) in mean_latent.iter().enumerate().take(128) {
-                latent_array[i] = *val;
-            }
-
-            let params = project_latent_to_waveshape(&latent_array, active_sample_rate);
+            let anomaly_score = 0.0; // Placeholder
 
             let mut path_commands = String::with_capacity(512 * 15);
             path_commands.push_str("M 0 60");
