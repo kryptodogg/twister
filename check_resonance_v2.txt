@@ -1,0 +1,564 @@
+    Blocking waiting for file lock on build directory
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+error: cannot find derive macro `Serialize` in this scope
+  --> src\ml\event_corpus.rs:19:24
+   |
+19 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                        ^^^^^^^^^
+   |
+help: consider importing this derive macro
+   |
+ 1 + use serde::Serialize;
+   |
+
+error: cannot find derive macro `Deserialize` in this scope
+  --> src\ml\event_corpus.rs:19:35
+   |
+19 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                                   ^^^^^^^^^^^
+   |
+help: consider importing this derive macro
+   |
+ 1 + use serde::Deserialize;
+   |
+
+error: cannot find derive macro `Serialize` in this scope
+  --> src\ml\event_corpus.rs:12:24
+   |
+12 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                        ^^^^^^^^^
+   |
+help: consider importing this derive macro
+   |
+ 1 + use serde::Serialize;
+   |
+
+error: cannot find derive macro `Deserialize` in this scope
+  --> src\ml\event_corpus.rs:12:35
+   |
+12 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                                   ^^^^^^^^^^^
+   |
+help: consider importing this derive macro
+   |
+ 1 + use serde::Deserialize;
+   |
+
+error: cannot find derive macro `Serialize` in this scope
+  --> src\ml\event_corpus.rs:19:24
+   |
+19 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                        ^^^^^^^^^
+   |
+   = note: derive macro `crate::state::tests::Serialize` exists but is inaccessible
+help: consider importing this derive macro
+   |
+ 1 + use serde::Serialize;
+   |
+
+error: cannot find derive macro `Deserialize` in this scope
+  --> src\ml\event_corpus.rs:19:35
+   |
+19 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                                   ^^^^^^^^^^^
+   |
+   = note: derive macro `crate::state::tests::Deserialize` exists but is inaccessible
+help: consider importing this derive macro
+   |
+ 1 + use serde::Deserialize;
+   |
+
+error: cannot find derive macro `Serialize` in this scope
+ --> src\ml\event_corpus.rs:3:24
+  |
+3 | #[derive(Debug, Clone, Serialize, Deserialize)]
+  |                        ^^^^^^^^^
+  |
+help: consider importing this derive macro
+  |
+1 + use serde::Serialize;
+  |
+
+error: cannot find derive macro `Deserialize` in this scope
+ --> src\ml\event_corpus.rs:3:35
+  |
+3 | #[derive(Debug, Clone, Serialize, Deserialize)]
+  |                                   ^^^^^^^^^^^
+  |
+help: consider importing this derive macro
+  |
+1 + use serde::Deserialize;
+  |
+
+error: cannot find derive macro `Serialize` in this scope
+  --> src\ml\event_corpus.rs:12:24
+   |
+12 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                        ^^^^^^^^^
+   |
+   = note: derive macro `crate::state::tests::Serialize` exists but is inaccessible
+help: consider importing this derive macro
+   |
+ 1 + use serde::Serialize;
+   |
+
+error: cannot find derive macro `Deserialize` in this scope
+  --> src\ml\event_corpus.rs:12:35
+   |
+12 | #[derive(Debug, Clone, Serialize, Deserialize)]
+   |                                   ^^^^^^^^^^^
+   |
+   = note: derive macro `crate::state::tests::Deserialize` exists but is inaccessible
+help: consider importing this derive macro
+   |
+ 1 + use serde::Deserialize;
+   |
+
+error: cannot find derive macro `Serialize` in this scope
+ --> src\ml\event_corpus.rs:3:24
+  |
+3 | #[derive(Debug, Clone, Serialize, Deserialize)]
+  |                        ^^^^^^^^^
+  |
+  = note: derive macro `crate::state::tests::Serialize` exists but is inaccessible
+help: consider importing this derive macro
+  |
+1 + use serde::Serialize;
+  |
+
+error: cannot find derive macro `Deserialize` in this scope
+ --> src\ml\event_corpus.rs:3:35
+  |
+3 | #[derive(Debug, Clone, Serialize, Deserialize)]
+  |                                   ^^^^^^^^^^^
+  |
+  = note: derive macro `crate::state::tests::Deserialize` exists but is inaccessible
+help: consider importing this derive macro
+  |
+1 + use serde::Deserialize;
+  |
+
+error[E0405]: cannot find trait `Error` in this scope
+  --> src\ml\event_corpus.rs:33:38
+   |
+33 |     ) -> Result<EventCorpus, Box<dyn Error>> {
+   |                                      ^^^^^ not found in this scope
+   |
+help: consider importing one of these traits
+   |
+ 1 + use std::error::Error;
+   |
+ 1 + use serde::de::Error;
+   |
+ 1 + use serde::ser::Error;
+   |
+
+error[E0425]: cannot find type `Wgpu` in this scope
+  --> src\ml\event_corpus.rs:37:45
+   |
+37 |         let device = burn::tensor::Device::<Wgpu>::default();
+   |                                             ^^^^ not found in this scope
+   |
+help: consider importing one of these type aliases
+   |
+ 1 + use burn::backend::Wgpu;
+   |
+ 1 + use burn_wgpu::Wgpu;
+   |
+
+error[E0433]: cannot find type `Wav2Vec2Model` in this scope
+  --> src\ml\event_corpus.rs:38:28
+   |
+38 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |                            ^^^^^^^^^^^^^ use of undeclared type `Wav2Vec2Model`
+   |
+help: consider importing this struct through its public re-export
+   |
+ 1 + use crate::ml::Wav2Vec2Model;
+   |
+
+error[E0425]: cannot find type `Wgpu` in this scope
+  --> src\ml\event_corpus.rs:38:44
+   |
+38 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |                                            ^^^^ not found in this scope
+   |
+help: consider importing one of these type aliases
+   |
+ 1 + use burn::backend::Wgpu;
+   |
+ 1 + use burn_wgpu::Wgpu;
+   |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:109:83
+    |
+109 |     fn load_forensic_events(_jsonl_path: &str) -> Result<Vec<DummyEvent>, Box<dyn Error>> {
+    |                                                                                   ^^^^^ not found in this scope
+    |
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:128:35
+    |
+128 |     ) -> Result<Vec<f32>, Box<dyn Error>> {
+    |                                   ^^^^^ not found in this scope
+    |
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:132:80
+    |
+132 |     fn extract_ray_features(_event: &DummyEvent) -> Result<[f32; 128], Box<dyn Error>> {
+    |                                                                                ^^^^^ not found in this scope
+    |
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:138:82
+    |
+138 |     fn extract_audio_features(_event: &DummyEvent) -> Result<[f32; 196], Box<dyn Error>> {
+    |                                                                                  ^^^^^ not found in this scope
+    |
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:164:34
+    |
+164 | ) -> Result<EventCorpus, Box<dyn Error>> {
+    |                                  ^^^^^ not found in this scope
+    |
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:168:82
+    |
+168 | pub fn load_forensic_events(jsonl_path: &str) -> Result<Vec<DummyEvent>, Box<dyn Error>> {
+    |                                                                                  ^^^^^ not found in this scope
+    |
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+warning: unused import: `serde_json::Value`
+ --> src\ai\query_tools.rs:3:5
+  |
+3 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary parentheses around method argument
+  --> src\ai\query_tools.rs:55:13
+   |
+55 |             (target_azimuth * std::f64::consts::PI / 180.0),
+   |             ^                                             ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+55 -             (target_azimuth * std::f64::consts::PI / 180.0),
+55 +             target_azimuth * std::f64::consts::PI / 180.0 ,
+   |
+
+warning: unused import: `DEFAULT_STAGING_BYTES`
+  --> src\dispatch\iq_dispatch.rs:17:45
+   |
+17 | use crate::hardware_io::iq_staging_buffer::{DEFAULT_STAGING_BYTES, IqStagingBuffer};
+   |                                             ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::collections::HashMap`
+ --> src\forensic.rs:9:5
+  |
+9 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenOptions` and `create_dir_all`
+  --> src\forensic.rs:10:21
+   |
+10 | use std::fs::{File, OpenOptions, create_dir_all};
+   |                     ^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `BufWriter`
+  --> src\forensic.rs:11:15
+   |
+11 | use std::io::{BufWriter, Write};
+   |               ^^^^^^^^^
+
+warning: unused import: `Path`
+  --> src\forensic.rs:12:17
+   |
+12 | use std::path::{Path, PathBuf};
+   |                 ^^^^
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src\knowledge_graph\cognee_schema.rs:1:14
+  |
+1 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `FieldParticleGPU`
+  --> src\ml\batch_accumulation.rs:15:50
+   |
+15 | use super::field_particle::{FieldParticleBuffer, FieldParticleGPU, HitListAccumulator};
+   |                                                  ^^^^^^^^^^^^^^^^
+
+error[E0405]: cannot find trait `Error` in this scope
+  --> src\ml\event_corpus.rs:33:38
+   |
+33 |     ) -> Result<EventCorpus, Box<dyn Error>> {
+   |                                      ^^^^^ not found in this scope
+   |
+   = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+   |
+ 1 + use std::error::Error;
+   |
+ 1 + use serde::de::Error;
+   |
+ 1 + use serde::ser::Error;
+   |
+
+warning: unused import: `super::data_contracts::FieldParticle`
+  --> src\ml\rt_blind_rays.rs:13:5
+   |
+13 | use super::data_contracts::FieldParticle;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HitListAccumulator`
+  --> src\ml\rt_blind_rays.rs:14:47
+   |
+14 | use super::field_particle::{FieldParticleGPU, HitListAccumulator};
+   |                                               ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::f32::consts::PI`
+  --> src\ml\rt_blind_rays.rs:18:5
+   |
+18 | use std::f32::consts::PI;
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::nn::Initializer`
+  --> src\ml\unified_field_mamba.rs:90:13
+   |
+90 |         use burn::nn::Initializer;
+   |             ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::unified_field_mamba::UnifiedFieldMamba`
+  --> src\ml\unified_field_mamba_trainer.rs:12:5
+   |
+12 | use super::unified_field_mamba::UnifiedFieldMamba;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::optim::Optimizer`
+  --> src\ml\unified_field_mamba_trainer.rs:13:5
+   |
+13 | use burn::optim::Optimizer;
+   |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:3:5
+  |
+3 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:4:5
+  |
+4 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:3:17
+  |
+3 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+error[E0425]: cannot find type `Wgpu` in this scope
+  --> src\ml\event_corpus.rs:37:45
+   |
+37 |         let device = burn::tensor::Device::<Wgpu>::default();
+   |                                             ^^^^ not found in this scope
+   |
+   = note: type alias `crate::ml::wav2vec2_loader::tests::Wgpu` exists but is inaccessible
+help: consider importing one of these type aliases
+   |
+ 1 + use burn::backend::Wgpu;
+   |
+ 1 + use burn_wgpu::Wgpu;
+   |
+
+error[E0425]: cannot find type `Wgpu` in this scope
+  --> src\ml\event_corpus.rs:38:44
+   |
+38 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |                                            ^^^^ not found in this scope
+   |
+   = note: type alias `crate::ml::wav2vec2_loader::tests::Wgpu` exists but is inaccessible
+help: consider importing one of these type aliases
+   |
+ 1 + use burn::backend::Wgpu;
+   |
+ 1 + use burn_wgpu::Wgpu;
+   |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:109:83
+    |
+109 |     fn load_forensic_events(_jsonl_path: &str) -> Result<Vec<DummyEvent>, Box<dyn Error>> {
+    |                                                                                   ^^^^^ not found in this scope
+    |
+    = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:128:35
+    |
+128 |     ) -> Result<Vec<f32>, Box<dyn Error>> {
+    |                                   ^^^^^ not found in this scope
+    |
+    = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:132:80
+    |
+132 |     fn extract_ray_features(_event: &DummyEvent) -> Result<[f32; 128], Box<dyn Error>> {
+    |                                                                                ^^^^^ not found in this scope
+    |
+    = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:138:82
+    |
+138 |     fn extract_audio_features(_event: &DummyEvent) -> Result<[f32; 196], Box<dyn Error>> {
+    |                                                                                  ^^^^^ not found in this scope
+    |
+    = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:164:34
+    |
+164 | ) -> Result<EventCorpus, Box<dyn Error>> {
+    |                                  ^^^^^ not found in this scope
+    |
+    = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+error[E0405]: cannot find trait `Error` in this scope
+   --> src\ml\event_corpus.rs:168:82
+    |
+168 | pub fn load_forensic_events(jsonl_path: &str) -> Result<Vec<DummyEvent>, Box<dyn Error>> {
+    |                                                                                  ^^^^^ not found in this scope
+    |
+    = note: trait `crate::ml::wav2vec2_loader::tests::Error` exists but is inaccessible
+help: consider importing one of these traits
+    |
+  1 + use std::error::Error;
+    |
+  1 + use serde::de::Error;
+    |
+  1 + use serde::ser::Error;
+    |
+
+warning: unused import: `DMA_CHUNK_SAMPLES`
+   --> src\dispatch\iq_dispatch.rs:517:43
+    |
+517 |     use crate::hardware_io::dma_vbuffer::{DMA_CHUNK_SAMPLES, IqDmaGateway};
+    |                                           ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Device`, `Instance`, and `Queue`
+   --> src\dispatch\iq_dispatch.rs:519:16
+    |
+519 |     use wgpu::{Device, Instance, Queue};
+    |                ^^^^^^  ^^^^^^^^  ^^^^^
+
+Some errors have detailed explanations: E0405, E0425, E0433.
+For more information about an error, try `rustc --explain E0405`.
+warning: `twister` (lib) generated 19 warnings
+error: could not compile `twister` (lib) due to 16 previous errors; 19 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+warning: `twister` (lib test) generated 20 warnings (18 duplicates)
+error: could not compile `twister` (lib test) due to 16 previous errors; 20 warnings emitted

@@ -26,6 +26,8 @@ pub mod timegnn;
 pub mod timegnn_trainer;
 pub mod unified_field_mamba;
 pub mod unified_field_mamba_trainer;
+pub mod vbuffer_render;
+pub mod visibility_culling;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
 

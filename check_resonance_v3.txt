@@ -1,0 +1,489 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: unused import: `serde_json::Value`
+ --> src\ai\query_tools.rs:3:5
+  |
+3 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary parentheses around method argument
+  --> src\ai\query_tools.rs:55:13
+   |
+55 |             (target_azimuth * std::f64::consts::PI / 180.0),
+   |             ^                                             ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+55 -             (target_azimuth * std::f64::consts::PI / 180.0),
+55 +             target_azimuth * std::f64::consts::PI / 180.0 ,
+   |
+
+warning: unused import: `std::collections::HashMap`
+ --> src\forensic.rs:9:5
+  |
+9 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenOptions` and `create_dir_all`
+  --> src\forensic.rs:10:21
+   |
+10 | use std::fs::{File, OpenOptions, create_dir_all};
+   |                     ^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `BufWriter`
+  --> src\forensic.rs:11:15
+   |
+11 | use std::io::{BufWriter, Write};
+   |               ^^^^^^^^^
+
+warning: unused import: `Path`
+  --> src\forensic.rs:12:17
+   |
+12 | use std::path::{Path, PathBuf};
+   |                 ^^^^
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src\knowledge_graph\cognee_schema.rs:1:14
+  |
+1 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `FieldParticleGPU`
+  --> src\ml\batch_accumulation.rs:15:50
+   |
+15 | use super::field_particle::{FieldParticleBuffer, FieldParticleGPU, HitListAccumulator};
+   |                                                  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::data_contracts::FieldParticle`
+  --> src\ml\rt_blind_rays.rs:13:5
+   |
+13 | use super::data_contracts::FieldParticle;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HitListAccumulator`
+  --> src\ml\rt_blind_rays.rs:14:47
+   |
+14 | use super::field_particle::{FieldParticleGPU, HitListAccumulator};
+   |                                               ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::f32::consts::PI`
+  --> src\ml\rt_blind_rays.rs:18:5
+   |
+18 | use std::f32::consts::PI;
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::nn::Initializer`
+  --> src\ml\unified_field_mamba.rs:90:13
+   |
+90 |         use burn::nn::Initializer;
+   |             ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::unified_field_mamba::UnifiedFieldMamba`
+  --> src\ml\unified_field_mamba_trainer.rs:12:5
+   |
+12 | use super::unified_field_mamba::UnifiedFieldMamba;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::optim::Optimizer`
+  --> src\ml\unified_field_mamba_trainer.rs:13:5
+   |
+13 | use burn::optim::Optimizer;
+   |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:3:5
+  |
+3 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:4:5
+  |
+4 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:3:17
+  |
+3 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused import: `DMA_CHUNK_SAMPLES`
+   --> src\dispatch\iq_dispatch.rs:517:43
+    |
+517 |     use crate::hardware_io::dma_vbuffer::{DMA_CHUNK_SAMPLES, IqDmaGateway};
+    |                                           ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Device`, `Instance`, and `Queue`
+   --> src\dispatch\iq_dispatch.rs:519:16
+    |
+519 |     use wgpu::{Device, Instance, Queue};
+    |                ^^^^^^  ^^^^^^^^  ^^^^^
+
+warning: variable does not need to be mutable
+  --> src\ml\event_corpus.rs:42:13
+   |
+42 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |             ----^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: `DeviceManager` doesn't implement `std::fmt::Debug`
+    --> src\dispatch\iq_dispatch.rs:160:5
+     |
+ 158 | #[derive(Debug)]
+     |          ----- in this derive macro expansion
+ 159 | pub struct IqDispatchLoop {
+ 160 |     device_manager: Arc<DeviceManager>,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+     |
+help: the trait `std::fmt::Debug` is not implemented for `DeviceManager`
+    --> src\hardware_io\device_manager.rs:40:1
+     |
+  40 | pub struct DeviceManager {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^
+     = note: add `#[derive(Debug)]` to `DeviceManager` or manually `impl std::fmt::Debug for DeviceManager`
+help: the trait `std::fmt::Debug` is implemented for `Arc<T, A>`
+    --> C:\Users\pixel\.rustup\toolchains\nightly-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\alloc\src\sync.rs:3700:1
+     |
+3700 | impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for Arc<T, A> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: `IqStagingBuffer` doesn't implement `std::fmt::Debug`
+    --> src\dispatch\iq_dispatch.rs:161:5
+     |
+ 158 | #[derive(Debug)]
+     |          ----- in this derive macro expansion
+...
+ 161 |     staging_buffer: Arc<IqStagingBuffer>,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+     |
+help: the trait `std::fmt::Debug` is not implemented for `IqStagingBuffer`
+    --> src\hardware_io\iq_staging_buffer.rs:107:1
+     |
+ 107 | pub struct IqStagingBuffer {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     = note: add `#[derive(Debug)]` to `IqStagingBuffer` or manually `impl std::fmt::Debug for IqStagingBuffer`
+help: the trait `std::fmt::Debug` is implemented for `Arc<T, A>`
+    --> C:\Users\pixel\.rustup\toolchains\nightly-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\alloc\src\sync.rs:3700:1
+     |
+3700 | impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for Arc<T, A> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: `IqDmaGateway` doesn't implement `std::fmt::Debug`
+    --> src\dispatch\iq_dispatch.rs:162:5
+     |
+ 158 | #[derive(Debug)]
+     |          ----- in this derive macro expansion
+...
+ 162 |     dma_gateway: Arc<Mutex<IqDmaGateway>>,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::fmt::Debug` is not implemented for `IqDmaGateway`
+     |
+     = note: add `#[derive(Debug)]` to `IqDmaGateway` or manually `impl std::fmt::Debug for IqDmaGateway`
+help: the trait `std::fmt::Debug` is implemented for `Arc<T, A>`
+    --> C:\Users\pixel\.rustup\toolchains\nightly-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\alloc\src\sync.rs:3700:1
+     |
+3700 | impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for Arc<T, A> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: consider annotating `IqDmaGateway` with `#[derive(Debug)]`
+    -->  src\hardware_io\dma_vbuffer.rs:17:1
+     |
+  17 + #[derive(Debug)]
+  18 | pub struct IqDmaGateway {
+     |
+
+error[E0277]: `device_manager::DeviceManager` doesn't implement `std::fmt::Debug`
+    --> src\dispatch\iq_dispatch.rs:160:5
+     |
+ 158 | #[derive(Debug)]
+     |          ----- in this derive macro expansion
+ 159 | pub struct IqDispatchLoop {
+ 160 |     device_manager: Arc<DeviceManager>,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+     |
+help: the trait `std::fmt::Debug` is not implemented for `device_manager::DeviceManager`
+    --> src\hardware_io\device_manager.rs:40:1
+     |
+  40 | pub struct DeviceManager {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^
+     = note: add `#[derive(Debug)]` to `device_manager::DeviceManager` or manually `impl std::fmt::Debug for device_manager::DeviceManager`
+help: the trait `std::fmt::Debug` is implemented for `std::sync::Arc<T, A>`
+    --> C:\Users\pixel\.rustup\toolchains\nightly-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\alloc\src\sync.rs:3700:1
+     |
+3700 | impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for Arc<T, A> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: `iq_staging_buffer::IqStagingBuffer` doesn't implement `std::fmt::Debug`
+    --> src\dispatch\iq_dispatch.rs:161:5
+     |
+ 158 | #[derive(Debug)]
+     |          ----- in this derive macro expansion
+...
+ 161 |     staging_buffer: Arc<IqStagingBuffer>,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unsatisfied trait bound
+     |
+help: the trait `std::fmt::Debug` is not implemented for `iq_staging_buffer::IqStagingBuffer`
+    --> src\hardware_io\iq_staging_buffer.rs:107:1
+     |
+ 107 | pub struct IqStagingBuffer {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     = note: add `#[derive(Debug)]` to `iq_staging_buffer::IqStagingBuffer` or manually `impl std::fmt::Debug for iq_staging_buffer::IqStagingBuffer`
+help: the trait `std::fmt::Debug` is implemented for `std::sync::Arc<T, A>`
+    --> C:\Users\pixel\.rustup\toolchains\nightly-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\alloc\src\sync.rs:3700:1
+     |
+3700 | impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for Arc<T, A> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: `IqDmaGateway` doesn't implement `std::fmt::Debug`
+    --> src\dispatch\iq_dispatch.rs:162:5
+     |
+ 158 | #[derive(Debug)]
+     |          ----- in this derive macro expansion
+...
+ 162 |     dma_gateway: Arc<Mutex<IqDmaGateway>>,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::fmt::Debug` is not implemented for `IqDmaGateway`
+     |
+     = note: add `#[derive(Debug)]` to `IqDmaGateway` or manually `impl std::fmt::Debug for IqDmaGateway`
+help: the trait `std::fmt::Debug` is implemented for `std::sync::Arc<T, A>`
+    --> C:\Users\pixel\.rustup\toolchains\nightly-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\alloc\src\sync.rs:3700:1
+     |
+3700 | impl<T: ?Sized + fmt::Debug, A: Allocator> fmt::Debug for Arc<T, A> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: consider annotating `IqDmaGateway` with `#[derive(Debug)]`
+    -->  src\hardware_io\dma_vbuffer.rs:17:1
+     |
+  17 + #[derive(Debug)]
+  18 | pub struct IqDmaGateway {
+     |
+
+warning: unused import: `Write`
+  --> src\forensic.rs:11:26
+   |
+11 | use std::io::{BufWriter, Write};
+   |                          ^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `args`
+  --> src\ai\query_tools.rs:34:9
+   |
+34 |         args: &str,
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:233:22
+    |
+233 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+233 -         let device = NdArray::<f32>::Device::default();
+233 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:242:22
+    |
+242 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+242 -         let device = NdArray::<f32>::Device::default();
+242 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:256:22
+    |
+256 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+256 -         let device = NdArray::<f32>::Device::default();
+256 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:269:22
+    |
+269 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+269 -         let device = NdArray::<f32>::Device::default();
+269 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+error: future cannot be sent between threads safely
+   --> src\dispatch\iq_dispatch.rs:218:9
+    |
+218 | /         tokio::spawn(async move {
+219 | |             loop_instance.state = DispatchState::Running;
+220 | |             loop_instance.start_time = Some(Instant::now());
+221 | |             loop_instance.last_metrics_time = Some(Instant::now());
+...   |
+303 | |             log::info!("[IQ Dispatch] Loop terminated");
+304 | |         });
+    | |__________^ future created by async block is not `Send`
+    |
+    = help: within `Vec<std::option::Option<RadioDevice>>`, the trait `Send` is not implemented for `*mut rtlsdr_dev_t`
+note: captured value is not `Send`
+   --> src\dispatch\iq_dispatch.rs:219:13
+    |
+219 |             loop_instance.state = DispatchState::Running;
+    |             ^^^^^^^^^^^^^ has type `IqDispatchLoop` which is not `Send`
+note: required by a bound in `tokio::spawn`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tokio-1.50.0\src\task\spawn.rs:176:21
+    |
+174 |     pub fn spawn<F>(future: F) -> JoinHandle<F::Output>
+    |            ----- required by a bound in this function
+175 |     where
+176 |         F: Future + Send + 'static,
+    |                     ^^^^ required by this bound in `spawn`
+
+warning: unused variable: `valid_bytes`
+   --> src\dispatch\iq_dispatch.rs:351:33
+    |
+351 |         if let Some((ready_idx, valid_bytes, _seq)) = self.staging_buffer.acquire_ready_slot() {
+    |                                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_valid_bytes`
+
+warning: variable `event_count` is assigned to, but never used
+   --> src\forensic.rs:417:17
+    |
+417 |             let mut event_count: u64 = 0;
+    |                 ^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_event_count` instead
+
+warning: value assigned to `event_count` is never read
+   --> src\forensic.rs:422:25
+    |
+422 |                         event_count += 1;
+    |                         ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:581:9
+    |
+581 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:582:9
+    |
+582 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+warning: unused variable: `particle`
+  --> src\ml\field_dispatch.rs:88:17
+   |
+88 |             let particle = FieldParticle {
+   |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_particle`
+
+warning: unused variable: `cmd1`
+   --> src\dispatch\iq_dispatch.rs:565:13
+    |
+565 |         let cmd1 = DispatchCommand::Pause;
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_cmd1`
+
+warning: unused variable: `cmd2`
+   --> src\dispatch\iq_dispatch.rs:566:13
+    |
+566 |         let cmd2 = DispatchCommand::Resume;
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_cmd2`
+
+warning: unused variable: `cmd3`
+   --> src\dispatch\iq_dispatch.rs:567:13
+    |
+567 |         let cmd3 = DispatchCommand::ResetStats;
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_cmd3`
+
+warning: unused variable: `duration`
+  --> src\particle_system\streaming.rs:41:17
+   |
+41 |             let duration = end_ms.saturating_sub(start_ms) as f32;
+   |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_duration`
+
+warning: unused variable: `i`
+  --> src\particle_system\streaming.rs:44:17
+   |
+44 |             for i in 0..max_particles {
+   |                 ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:450:24
+    |
+450 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `slice1`
+   --> src\hardware_io\iq_staging_buffer.rs:463:21
+    |
+463 |         let (slot1, slice1) = staging.acquire_write_slot().unwrap();
+    |                     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_slice1`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:495:24
+    |
+495 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `distance`
+   --> src\resonance\voxel_grid.rs:175:38
+    |
+175 |     pub fn average_along_path(&self, distance: f32) -> f32 {
+    |                                      ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_distance`
+
+warning: unused variable: `k2`
+  --> src\resonance\rf_propagation.rs:34:13
+   |
+34 |         let k2 = k * k;
+   |             ^^ help: if this is intentional, prefix it with an underscore: `_k2`
+
+warning: unused variable: `local_k2`
+  --> src\resonance\rf_propagation.rs:69:29
+   |
+69 |                         let local_k2 = local_k * local_k;
+   |                             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_local_k2`
+
+warning: unused variable: `material_library`
+   --> src\state.rs:199:13
+    |
+199 |         let material_library =
+    |             ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_material_library`
+
+For more information about this error, try `rustc --explain E0277`.
+warning: `twister` (lib) generated 34 warnings
+error: could not compile `twister` (lib) due to 4 previous errors; 34 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+Some errors have detailed explanations: E0223, E0277.
+For more information about an error, try `rustc --explain E0223`.
+warning: `twister` (lib test) generated 41 warnings (33 duplicates)
+error: could not compile `twister` (lib test) due to 8 previous errors; 41 warnings emitted
