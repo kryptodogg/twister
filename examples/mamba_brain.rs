@@ -15,7 +15,7 @@
 
 use std::time::{Duration, Instant};
 use std::sync::Arc;
-use slint::ComponentHandle;
+use slint::{ComponentHandle, VecModel, ModelRc};
 use noise::{NoiseFn, Perlin};
 
 slint::include_modules!();
@@ -136,51 +136,63 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create animated data source (NOT placeholder/random)
     let animator = Arc::new(MambaBrainLatentAnimator::new());
 
-    // Spawn Mamba Brain inference loop at 30Hz (realistic inference cadence)
+    // Spawn Mamba Brain inference loop - uncapped for OS-native refresh rate
+    // The UI will render at whatever refresh rate the OS provides (60Hz, 144Hz, etc.)
+    // This loop provides data updates at high frequency without artificial frame rate limits
     tokio::spawn({
         let animator = animator.clone();
         let ui_handle = ui_handle.clone();
         async move {
-            let mut interval = tokio::time::interval(Duration::from_millis(33)); // ~30Hz
+            let mut last_fps_update = Instant::now();
+            let mut frame_count: u32 = 0;
+            let mut display_fps: u32 = 60;
 
             loop {
-                interval.tick().await;
+                // Yield to other tasks to prevent starving the UI thread
+                tokio::time::sleep(Duration::from_micros(100)).await;
 
                 let (freq, smear, anomaly, confidence) = animator.generate_latent_frame();
                 let particles = animator.generate_particle_cloud();
+
+                // Update FPS counter every 500ms
+                frame_count += 1;
+                let now = Instant::now();
+                if now.duration_since(last_fps_update).as_millis() >= 500 {
+                    let elapsed_ms = now.duration_since(last_fps_update).as_millis() as f32;
+                    display_fps = (frame_count as f32 / (elapsed_ms / 1000.0)) as u32;
+                    frame_count = 0;
+                    last_fps_update = now;
+                }
 
                 let ui_clone = ui_handle.clone();
                 let _ = slint::invoke_from_event_loop(move || {
                     if let Some(ui) = ui_clone.upgrade() {
                         let status = ui.global::<MambaBrainStatus>();
 
-                        // Update scalar metrics
+                        // Update scalar metrics (frequency, harmonic smear, anomaly, confidence)
                         status.set_frequency_tracker(freq);
                         status.set_harmonic_smear(smear);
                         status.set_anomaly_score(anomaly);
                         status.set_material_confidence(confidence);
 
-                        // Update particle positions (12 latent clusters)
-                        let particle_data: Vec<String> = particles
-                            .iter()
-                            .enumerate()
-                            .map(|(i, (x, y, energy))| {
-                                format!(
-                                    "{:.3},{:.3},{:.3}",
-                                    x,
-                                    y,
-                                    energy
-                                )
-                            })
-                            .collect();
+                        // Update particle positions (12 animated latent clusters)
+                        // Convert to flat array: [x0, y0, e0, x1, y1, e1, ...]
+                        let mut particle_array = vec![0.0f32; 36]; // 12 particles × 3 values
+                        for (i, (x, y, energy)) in particles.iter().enumerate() {
+                            if i < 12 {
+                                particle_array[i * 3 + 0] = *x;
+                                particle_array[i * 3 + 1] = *y;
+                                particle_array[i * 3 + 2] = *energy;
+                            }
+                        }
 
-                        status.set_particle_positions(
-                            slint::SharedString::from(particle_data.join("|"))
-                        );
+                        // Convert to Slint ModelRc
+                        let model_data = ModelRc::new(VecModel::from(particle_array));
+                        status.set_particle_data(model_data);
 
                         // Inference status (always running with our animator)
                         status.set_inference_active(true);
-                        status.set_inference_fps(30);
+                        status.set_inference_fps(display_fps as i32);
                     }
                 });
             }
