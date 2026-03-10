@@ -11,10 +11,35 @@ path = "tools/convert_mediapipe.rs"
 name = "run_pose_estimation"
 path = "examples/run_pose_estimation.rs"
 
+# Track B Examples
+[[example]]
+name = "test_iq_dispatch_loop"
+path = "examples/test_iq_dispatch_loop.rs"
+
+[[example]]
+name = "test_stft_pipeline"
+path = "examples/test_stft_pipeline.rs"
+
+[[example]]
+name = "test_vbuffer_context_window"
+path = "examples/test_vbuffer_context_window.rs"
+
+[[example]]
+name = "full_signal_ingestion_demo"
+path = "examples/full_signal_ingestion_demo.rs"
+
+# Benchmarks
+[[bench]]
+name = "signal_ingestion"
+path = "benches/signal_ingestion.rs"
+harness = false
+
 [dependencies]
 # ── Error handling ─────────────────────────────────────────────────────────────
 anyhow = "*"
 async-trait = "*"
+# ── Logging ────────────────────────────────────────────────────────────────────
+log = "*"
 # ── ML: Burn framework (GPU-accelerated neural networks via wgpu/Vulkan) ────────
 burn = { version = "0.21.0-pre.2", features = ["ndarray", "std", "wgpu"] }
 burn-import = "0.21.0-pre.1"
@@ -62,6 +87,10 @@ tokio = { version = "*", features = ["full"] }
 # DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
 # wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
 wgpu = { version = "*", features = ["vulkan"] }
+# ── Benchmarking ───────────────────────────────────────────────────────────────
+criterion = { version = "0.5", features = ["html_reports"] }
+# ── Gamepad Input (Joy-Con gesture control) ────────────────────────────────────
+gilrs = "0.11"
 # Note: HDF5 requires native library installation (libhdf5).
 # Using JSON fallback by default if hdf5 feature is disabled.
 

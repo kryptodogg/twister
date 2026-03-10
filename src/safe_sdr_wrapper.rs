@@ -207,6 +207,11 @@ impl Drop for RadioDevice {
     }
 }
 
+// Safety: RadioDevice wraps FFI handles that are thread-safe when accessed
+// through the DeviceManager's Mutex. The raw pointers are only accessed
+// within synchronized contexts.
+unsafe impl Send for RadioDevice {}
+
 #[cfg(test)]
 mod tests {
     use super::*;

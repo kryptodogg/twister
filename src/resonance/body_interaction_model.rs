@@ -1,5 +1,5 @@
 use num_complex::Complex;
-use crate::physics::voxel_grid::VoxelGrid;
+use crate::resonance::voxel_grid::VoxelGrid;
 use crate::visualization::data_contracts::PoseFrame;
 
 pub struct HumanBody {

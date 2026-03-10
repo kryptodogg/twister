@@ -1,7 +1,7 @@
 use std::error::Error;
 use num_complex::Complex;
-use crate::physics::voxel_grid::VoxelGrid;
-use crate::physics::material_absorption::Material;
+use crate::resonance::voxel_grid::VoxelGrid;
+use crate::resonance::material_absorption::Material;
 
 pub struct RFWavePropagation {
     pub grid: VoxelGrid<Complex<f32>>,  // Complex amplitude per voxel (phase-aware)

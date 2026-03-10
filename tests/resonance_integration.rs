@@ -1,10 +1,10 @@
 use num_complex::Complex;
 use std::error::Error;
-use twister::physics::body_interaction_model::HumanBody;
-use twister::physics::heterodyne_mixer::HeterodyneMixer;
-use twister::physics::material_absorption::{Material, MaterialGrid};
-use twister::physics::rf_propagation::RFWavePropagation;
-use twister::physics::voxel_grid::VoxelGrid;
+use twister::resonance::body_interaction_model::HumanBody;
+use twister::resonance::heterodyne_mixer::HeterodyneMixer;
+use twister::resonance::material_absorption::{Material, MaterialGrid};
+use twister::resonance::rf_propagation::RFWavePropagation;
+use twister::resonance::voxel_grid::VoxelGrid;
 use twister::visualization::data_contracts::{PoseFrame, RoomGeometry};
 
 #[test]

@@ -1,9 +1,7 @@
 use crate::ml::wav2vec2_loader::Wav2Vec2Model;
 use burn::backend::Wgpu;
-use burn::tensor::Device;
 use serde::{Deserialize, Serialize};
-#[cfg(feature = "hdf5")]
-use hdf5::File;
+use std::collections::HashMap;
 use std::error::Error;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,9 +20,11 @@ pub struct CorpusStats {
     pub modalities_present: Vec<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EventCorpus {
     pub total_events: usize,
     pub time_range_days: f32,
+    pub tag_distribution: HashMap<String, usize>,
     pub output_path: String, // HDF5 file path
 }
 
@@ -34,7 +34,7 @@ impl EventCorpus {
         jsonl_path: &str,
         h5_out_path: &str,
         sample_rate_hz: u32,
-    ) -> Result<EventCorpus, Box<dyn Error>> {
+    ) -> Result<EventCorpus, Box<dyn std::error::Error>> {
         #[cfg(feature = "hdf5")]
         let h5_file = File::create(h5_out_path)?;
 
@@ -46,6 +46,7 @@ impl EventCorpus {
         let mut multimodal_features = Vec::new();
         let mut timestamps = Vec::new();
         let mut tags = Vec::new();
+        let mut tag_distribution = HashMap::new();
 
         for event in &events {
             // Extract 250ms audio window
@@ -66,8 +67,8 @@ impl EventCorpus {
             timestamps.push(event.timestamp_micros);
 
             // Dummy tag processing to avoid complex struct dependencies
-            let tag = String::from("EVIDENCE");
-            // let tag = event.tag.clone();
+            let tag = event.tag.clone();
+            *tag_distribution.entry(tag.clone()).or_insert(0) += 1;
             tags.push(tag);
         }
 
@@ -103,19 +104,24 @@ impl EventCorpus {
         Ok(EventCorpus {
             total_events: num_events,
             time_range_days,
+            tag_distribution,
             output_path: h5_out_path.to_string(),
         })
     }
 
     // Stub implementation for compilation
-    fn load_forensic_events(_jsonl_path: &str) -> Result<Vec<DummyEvent>, Box<dyn Error>> {
+    fn load_forensic_events(
+        _jsonl_path: &str,
+    ) -> Result<Vec<DummyEvent>, Box<dyn std::error::Error>> {
         // Return dummy events
         let events = vec![
             DummyEvent {
                 timestamp_micros: 1000,
+                tag: "EVIDENCE".to_string(),
             },
             DummyEvent {
                 timestamp_micros: 2000,
+                tag: "EVIDENCE".to_string(),
             },
         ];
         Ok(events)
@@ -125,17 +131,19 @@ impl EventCorpus {
         _event: &DummyEvent,
         _ms: u32,
         _sample_rate: u32,
-    ) -> Result<Vec<f32>, Box<dyn Error>> {
+    ) -> Result<Vec<f32>, Box<dyn std::error::Error>> {
         Ok(vec![0.0; 16000]) // 1 second of 16kHz audio
     }
 
-    fn extract_ray_features(_event: &DummyEvent) -> Result<[f32; 128], Box<dyn Error>> {
+    fn extract_ray_features(_event: &DummyEvent) -> Result<[f32; 128], Box<dyn std::error::Error>> {
         // Stub: Return synthetic 128-D ray features from spatial localization (Track D.1)
         // In production: Would deserialize from SpatialPoint structure
         Ok([0.1; 128])
     }
 
-    fn extract_audio_features(_event: &DummyEvent) -> Result<[f32; 196], Box<dyn Error>> {
+    fn extract_audio_features(
+        _event: &DummyEvent,
+    ) -> Result<[f32; 196], Box<dyn std::error::Error>> {
         Ok([0.1; 196])
     }
 
@@ -161,16 +169,19 @@ pub async fn prepare_event_corpus(
     jsonl_path: &str,
     h5_out_path: &str,
     sample_rate_hz: u32,
-) -> Result<EventCorpus, Box<dyn Error>> {
+) -> Result<EventCorpus, Box<dyn std::error::Error>> {
     EventCorpus::prepare(jsonl_path, h5_out_path, sample_rate_hz).await
 }
 
-pub fn load_forensic_events(jsonl_path: &str) -> Result<Vec<DummyEvent>, Box<dyn Error>> {
+pub fn load_forensic_events(
+    jsonl_path: &str,
+) -> Result<Vec<DummyEvent>, Box<dyn std::error::Error>> {
     EventCorpus::load_forensic_events(jsonl_path)
 }
 
 pub struct DummyEvent {
     pub timestamp_micros: u64,
+    pub tag: String,
 }
 
 #[cfg(test)]

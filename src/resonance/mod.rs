@@ -6,9 +6,9 @@ pub mod rf_propagation;
 
 use std::error::Error;
 use num_complex::Complex;
-use crate::physics::voxel_grid::VoxelGrid;
-use crate::physics::material_absorption::MaterialGrid;
-use crate::physics::rf_propagation::RFWavePropagation;
+use crate::resonance::voxel_grid::VoxelGrid;
+use crate::resonance::material_absorption::MaterialGrid;
+use crate::resonance::rf_propagation::RFWavePropagation;
 use crate::visualization::data_contracts::{PoseFrame, RoomGeometry};
 
 pub struct EnergyDensityField {
@@ -32,13 +32,13 @@ pub fn solve_rf_field(
     let mut modified_materials = material_grid.grid.clone();
 
     // Voxelize human body into the material grid
-    let human = crate::physics::body_interaction_model::HumanBody::from_pose(body_pose, grid_size, voxel_size_m);
+    let human = crate::resonance::body_interaction_model::HumanBody::from_pose(body_pose, grid_size, voxel_size_m);
     for x in 0..modified_materials.dimensions.0 {
         for y in 0..modified_materials.dimensions.1 {
             for z in 0..modified_materials.dimensions.2 {
                 if human.voxel_map.get(x, y, z) > 0.5 {
                     // Update material to lossy human tissue
-                    let mut tissue = crate::physics::material_absorption::Material::default();
+                    let mut tissue = crate::resonance::material_absorption::Material::default();
                     tissue.name = "Human Tissue".to_string();
                     tissue.permittivity = 50.0;
                     tissue.conductivity = 1.0;

@@ -392,6 +392,63 @@ export component AppWindow inherits Window {
     in property <[int]> analysis-events-cluster:    [];    // cluster_type for coloring
     in property <[float]> analysis-events-frequency: [];   // frequency_hz for each event
 
+    // ── Parameter Control Layer (Track B Addendum BB) ──────────────────────────
+    // Audio Device Selection
+    in property <int> audio-device-idx:              0;
+    in property <float> audio-gain-db:              0.0;
+    in property <[string]> audio-device-names:      [];
+
+    // Camera Configuration
+    in property <int> camera-resolution:             1;    // 0=480p, 1=720p, 2=1080p
+    in property <float> camera-fps:                 30.0;
+    in property <bool> camera-active:              false;
+
+    // Frequency Selection
+    in property <int> freq-band-index:               4;    // 0=VLF, 1=LF, 2=MF, 3=HF, 4=VHF, 5=UHF, 6=Manual
+    in property <float> freq-manual-mhz:           100.0;
+    in property <float> freq-actual-mhz:           150.0;
+
+    // Joy-Con Gesture Control
+    in property <bool> joycon-connected:           false;
+    in property <bool> joycon-active:              false;
+    in property <float> joycon-gyro-roll:            0.0;  // degrees
+    in property <float> joycon-gyro-pitch:           0.0;  // degrees
+    in property <float> joycon-gyro-yaw:             0.0;  // degrees
+    in property <float> joycon-accel-x:              0.0;  // G
+    in property <float> joycon-accel-y:              0.0;  // G
+    in property <float> joycon-accel-z:              0.0;  // G
+    in property <float> joycon-stick-left-x:         0.0;  // [-1, 1]
+    in property <float> joycon-stick-left-y:         0.0;  // [-1, 1]
+    in property <float> joycon-stick-right-x:        0.0;  // [-1, 1]
+    in property <float> joycon-stick-right-y:        0.0;  // [-1, 1]
+    in property <float> joycon-trigger-l:            0.0;  // [0, 1]
+    in property <float> joycon-trigger-r:            0.0;  // [0, 1]
+    in property <bool> joycon-button-a:            false;
+    in property <bool> joycon-button-b:            false;
+    in property <bool> joycon-button-x:            false;
+    in property <bool> joycon-button-y:            false;
+
+    // Parameter Persistence
+    callback save-parameters();
+    callback load-parameters();
+    callback reset-parameters();
+
+    // Audio Device Control
+    callback audio-device-prev();
+    callback audio-device-next();
+    callback set-audio-gain(float);
+
+    // Camera Control
+    callback set-camera-resolution(int);
+    callback toggle-camera();
+
+    // Frequency Control
+    callback set-freq-band(int);
+    callback set-freq-manual(float);
+
+    // Joy-Con Control
+    callback toggle-joycon();
+
     // Pattern Library Heatmap
     in property <[string]> analysis-signatures-names:   [];  // Attack signature names
     in property <[int]> analysis-signatures-counts:    [];   // Occurrence counts
@@ -546,6 +603,26 @@ export component AppWindow inherits Window {
                     width: 88px;
                     clicked => {
                         active-tab = 4;
+                    }
+                }
+
+                Chip {
+                    label: "CONTROLS";
+                    active: active-tab == 5;
+                    accent: Pal.cyan;
+                    width: 88px;
+                    clicked => {
+                        active-tab = 5;
+                    }
+                }
+
+                Chip {
+                    label: "JOYCON";
+                    active: active-tab == 6;
+                    accent: Pal.purple;
+                    width: 88px;
+                    clicked => {
+                        active-tab = 6;
                     }
                 }
 
@@ -3211,7 +3288,7 @@ export component AppWindow inherits Window {
             Card {
                 vertical-stretch: 1;
                 background: #05060a; // Slightly darker for console feel
-                
+
                 Flickable {
                     viewport-height: log-messages.length * 16px;
                     VerticalLayout {
@@ -3232,6 +3309,804 @@ export component AppWindow inherits Window {
                 Lbl {
                     text: log-messages.length + " entries in buffer";
                     vertical-alignment: center;
+                }
+            }
+        }
+
+        // ═══════════════════════ CONTROLS TAB ══════════════════════════════════
+        if active-tab == 5: HorizontalLayout {
+            padding: 12px;
+            spacing: 12px;
+
+            // Left Column: Audio & Camera
+            VerticalLayout {
+                width: 400px;
+                spacing: 12px;
+
+                // Audio Device Selection
+                Card {
+                    height: 140px;
+                    VerticalLayout {
+                        padding: 12px;
+                        spacing: 8px;
+
+                        Lbl {
+                            text: "AUDIO INPUT DEVICE";
+                        }
+
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+
+                            Chip {
+                                label: "◀ PREV";
+                                active: false;
+                                accent: Pal.cyan;
+                                width: 100px;
+                                clicked => {
+                                    audio-device-prev();
+                                }
+                            }
+
+                            Mon {
+                                text: audio-device-idx >= 0 && audio-device-idx < audio-device-names.length 
+                                    ? audio-device-names[audio-device-idx] 
+                                    : "No devices";
+                                font-size: 14px;
+                                horizontal-stretch: 1;
+                            }
+
+                            Chip {
+                                label: "NEXT ▶";
+                                active: false;
+                                accent: Pal.cyan;
+                                width: 100px;
+                                clicked => {
+                                    audio-device-next();
+                                }
+                            }
+                        }
+
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+
+                            Lbl {
+                                text: "GAIN";
+                                width: 60px;
+                            }
+
+                            Slider {
+                                minimum: 0.0;
+                                maximum: 120.0;
+                                value: audio-gain-db;
+                                changed(v) => {
+                                    set-audio-gain(v);
+                                }
+                            }
+
+                            Mon {
+                                text: round(audio-gain-db) + " dB";
+                                width: 60px;
+                            }
+                        }
+                    }
+                }
+
+                // Camera Configuration
+                Card {
+                    height: 120px;
+                    VerticalLayout {
+                        padding: 12px;
+                        spacing: 8px;
+
+                        HorizontalLayout {
+                            alignment: center;
+                            Lbl {
+                                text: "CAMERA";
+                            }
+                            Rectangle {
+                                horizontal-stretch: 1;
+                            }
+                            Toggle {
+                                on: camera-active;
+                                accent: Pal.green;
+                                toggled => {
+                                    toggle-camera();
+                                }
+                            }
+                        }
+
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+
+                            Lbl {
+                                text: "RESOLUTION:";
+                                width: 80px;
+                            }
+
+                            Chip {
+                                label: "480p";
+                                active: camera-resolution == 0;
+                                accent: Pal.cyan;
+                                clicked => {
+                                    set-camera-resolution(0);
+                                }
+                            }
+
+                            Chip {
+                                label: "720p";
+                                active: camera-resolution == 1;
+                                accent: Pal.cyan;
+                                clicked => {
+                                    set-camera-resolution(1);
+                                }
+                            }
+
+                            Chip {
+                                label: "1080p";
+                                active: camera-resolution == 2;
+                                accent: Pal.cyan;
+                                clicked => {
+                                    set-camera-resolution(2);
+                                }
+                            }
+
+                            Rectangle {
+                                horizontal-stretch: 1;
+                            }
+
+                            Mon {
+                                text: camera-fps + " FPS";
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Center Column: Frequency Selection
+            Card {
+                width: 350px;
+                VerticalLayout {
+                    padding: 12px;
+                    spacing: 8px;
+
+                    Lbl {
+                        text: "FREQUENCY BAND";
+                    }
+
+                    // Band selection chips
+                    HorizontalLayout {
+                        spacing: 4px;
+                        Chip {
+                            label: "VLF";
+                            active: freq-band-index == 0;
+                            accent: Pal.cyan;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(0);
+                            }
+                        }
+                        Chip {
+                            label: "LF";
+                            active: freq-band-index == 1;
+                            accent: Pal.cyan;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(1);
+                            }
+                        }
+                        Chip {
+                            label: "MF";
+                            active: freq-band-index == 2;
+                            accent: Pal.cyan;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(2);
+                            }
+                        }
+                        Chip {
+                            label: "HF";
+                            active: freq-band-index == 3;
+                            accent: Pal.cyan;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(3);
+                            }
+                        }
+                        Chip {
+                            label: "VHF";
+                            active: freq-band-index == 4;
+                            accent: Pal.cyan;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(4);
+                            }
+                        }
+                        Chip {
+                            label: "UHF";
+                            active: freq-band-index == 5;
+                            accent: Pal.cyan;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(5);
+                            }
+                        }
+                        Chip {
+                            label: "MANUAL";
+                            active: freq-band-index == 6;
+                            accent: Pal.amber;
+                            horizontal-stretch: 1;
+                            clicked => {
+                                set-freq-band(6);
+                            }
+                        }
+                    }
+
+                    // Frequency displays
+                    VerticalLayout {
+                        spacing: 12px;
+                        padding-top: 12px;
+
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+                            Lbl {
+                                text: "BAND:";
+                                width: 60px;
+                            }
+                            Mon {
+                                text: freq-band-index == 0 ? "3-30 kHz" : 
+                                      freq-band-index == 1 ? "30-300 kHz" : 
+                                      freq-band-index == 2 ? "300k-3 MHz" : 
+                                      freq-band-index == 3 ? "3-30 MHz" : 
+                                      freq-band-index == 4 ? "30-300 MHz" : 
+                                      freq-band-index == 5 ? "300M-3 GHz" : "MANUAL";
+                                color: Pal.cyan;
+                                font-size: 14px;
+                                horizontal-stretch: 1;
+                            }
+                        }
+
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+                            Lbl {
+                                text: "ACTUAL:";
+                                width: 60px;
+                            }
+                            Mon {
+                                text: round(freq-actual-mhz * 100.0) / 100.0 + " MHz";
+                                color: Pal.green;
+                                font-size: 18px;
+                                font-weight: 700;
+                                horizontal-stretch: 1;
+                            }
+                        }
+
+                        if freq-band-index == 6: VerticalLayout {
+                            spacing: 8px;
+                            Lbl {
+                                text: "MANUAL FREQUENCY (MHz)";
+                            }
+                            TextInput {
+                                text: freq-manual-mhz + "";
+                                color: Pal.hi;
+                                single-line: true;
+                                accepted => {
+                                    set-freq-manual(self.text.to-float());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Right Column: Parameter Persistence
+            Card {
+                width: 250px;
+                VerticalLayout {
+                    padding: 12px;
+                    spacing: 8px;
+
+                    Lbl {
+                        text: "PARAMETER PRESETS";
+                    }
+
+                    Rectangle {
+                        height: 1px;
+                        background: Pal.border;
+                    }
+
+                    Chip {
+                        label: "💾 SAVE";
+                        active: false;
+                        accent: Pal.green;
+                        width: 100%;
+                        clicked => {
+                            save-parameters();
+                        }
+                    }
+
+                    Chip {
+                        label: "📂 LOAD";
+                        active: false;
+                        accent: Pal.cyan;
+                        width: 100%;
+                        clicked => {
+                            load-parameters();
+                        }
+                    }
+
+                    Chip {
+                        label: "🔄 RESET";
+                        active: false;
+                        accent: Pal.red;
+                        width: 100%;
+                        clicked => {
+                            reset-parameters();
+                        }
+                    }
+
+                    Rectangle {
+                        height: 1px;
+                        background: Pal.border;
+                    }
+
+                    Lbl {
+                        text: "Settings stored in:";
+                        font-size: 8px;
+                    }
+                    Mon {
+                        text: "~/.twister/parameters.json";
+                        font-size: 9px;
+                        color: Pal.lo;
+                    }
+                }
+            }
+        }
+
+        // ═══════════════════════ JOYCON TAB ════════════════════════════════════
+        if active-tab == 6: HorizontalLayout {
+            padding: 12px;
+            spacing: 12px;
+
+            // Left Column: Connection Status & Controls
+            VerticalLayout {
+                width: 300px;
+                spacing: 12px;
+
+                // Connection Status
+                Card {
+                    height: 100px;
+                    VerticalLayout {
+                        padding: 12px;
+                        spacing: 8px;
+
+                        HorizontalLayout {
+                            alignment: center;
+                            spacing: 8px;
+
+                            Rectangle {
+                                width: 16px;
+                                height: 16px;
+                                border-radius: 8px;
+                                background: joycon-connected ? Pal.green : Pal.red;
+                                animate background { duration: 200ms; }
+                            }
+
+                            Mon {
+                                text: joycon-connected ? "JOY-CON CONNECTED" : "JOY-CON DISCONNECTED";
+                                color: joycon-connected ? Pal.green : Pal.red;
+                                font-size: 14px;
+                                font-weight: 700;
+                            }
+                        }
+
+                        HorizontalLayout {
+                            alignment: center;
+                            spacing: 8px;
+
+                            Lbl {
+                                text: "GESTURE CONTROL:";
+                            }
+
+                            Rectangle {
+                                horizontal-stretch: 1;
+                            }
+
+                            Toggle {
+                                on: joycon-active;
+                                accent: Pal.purple;
+                                toggled => {
+                                    toggle-joycon();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Button States
+                Card {
+                    height: 200px;
+                    VerticalLayout {
+                        padding: 12px;
+                        spacing: 8px;
+
+                        Lbl {
+                            text: "BUTTON STATE";
+                        }
+
+                        // Button grid (A/B/X/Y)
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+
+                            Rectangle {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 30px;
+                                background: joycon-button-y ? Pal.cyan.with-alpha(0.5) : Pal.border;
+                                border-color: Pal.cyan;
+                                border-width: joycon-button-y ? 3px : 1px;
+                                Text {
+                                    text: "Y";
+                                    color: joycon-button-y ? Pal.hi : Pal.lo;
+                                    font-size: 24px;
+                                    font-weight: 900;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+
+                            Rectangle {
+                                width: 120px;
+                            }
+
+                            Rectangle {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 30px;
+                                background: joycon-button-x ? Pal.cyan.with-alpha(0.5) : Pal.border;
+                                border-color: Pal.cyan;
+                                border-width: joycon-button-x ? 3px : 1px;
+                                Text {
+                                    text: "X";
+                                    color: joycon-button-x ? Pal.hi : Pal.lo;
+                                    font-size: 24px;
+                                    font-weight: 900;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+
+                        HorizontalLayout {
+                            spacing: 8px;
+                            alignment: center;
+
+                            Rectangle {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 30px;
+                                background: joycon-button-b ? Pal.cyan.with-alpha(0.5) : Pal.border;
+                                border-color: Pal.cyan;
+                                border-width: joycon-button-b ? 3px : 1px;
+                                Text {
+                                    text: "B";
+                                    color: joycon-button-b ? Pal.hi : Pal.lo;
+                                    font-size: 24px;
+                                    font-weight: 900;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+
+                            Rectangle {
+                                width: 120px;
+                            }
+
+                            Rectangle {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 30px;
+                                background: joycon-button-a ? Pal.cyan.with-alpha(0.5) : Pal.border;
+                                border-color: Pal.cyan;
+                                border-width: joycon-button-a ? 3px : 1px;
+                                Text {
+                                    text: "A";
+                                    color: joycon-button-a ? Pal.hi : Pal.lo;
+                                    font-size: 24px;
+                                    font-weight: 900;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Center Column: Gyroscope
+            Card {
+                width: 350px;
+                VerticalLayout {
+                    padding: 12px;
+                    spacing: 8px;
+
+                    Lbl {
+                        text: "GYROSCOPE (degrees)";
+                    }
+
+                    // Roll
+                    VerticalLayout {
+                        spacing: 4px;
+                        HorizontalLayout {
+                            Lbl {
+                                text: "ROLL";
+                                width: 60px;
+                            }
+                            HBar {
+                                frac: (joycon-gyro-roll + 180.0) / 360.0;
+                                bar-color: Pal.cyan;
+                                horizontal-stretch: 1;
+                            }
+                            Mon {
+                                text: round(joycon-gyro-roll * 10.0) / 10.0 + "°";
+                                width: 70px;
+                            }
+                        }
+                    }
+
+                    // Pitch
+                    VerticalLayout {
+                        spacing: 4px;
+                        HorizontalLayout {
+                            Lbl {
+                                text: "PITCH";
+                                width: 60px;
+                            }
+                            HBar {
+                                frac: (joycon-gyro-pitch + 180.0) / 360.0;
+                                bar-color: Pal.green;
+                                horizontal-stretch: 1;
+                            }
+                            Mon {
+                                text: round(joycon-gyro-pitch * 10.0) / 10.0 + "°";
+                                width: 70px;
+                            }
+                        }
+                    }
+
+                    // Yaw
+                    VerticalLayout {
+                        spacing: 4px;
+                        HorizontalLayout {
+                            Lbl {
+                                text: "YAW";
+                                width: 60px;
+                            }
+                            HBar {
+                                frac: (joycon-gyro-yaw + 180.0) / 360.0;
+                                bar-color: Pal.purple;
+                                horizontal-stretch: 1;
+                            }
+                            Mon {
+                                text: round(joycon-gyro-yaw * 10.0) / 10.0 + "°";
+                                width: 70px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Right Column: Accelerometer & Sticks
+            VerticalLayout {
+                width: 350px;
+                spacing: 12px;
+
+                // Accelerometer
+                Card {
+                    height: 150px;
+                    VerticalLayout {
+                        padding: 12px;
+                        spacing: 8px;
+
+                        Lbl {
+                            text: "ACCELEROMETER (G)";
+                        }
+
+                        // X axis
+                        VerticalLayout {
+                            spacing: 4px;
+                            HorizontalLayout {
+                                Lbl {
+                                    text: "X";
+                                    width: 40px;
+                                }
+                                HBar {
+                                    frac: (joycon-accel-x + 2.0) / 4.0;
+                                    bar-color: Pal.cyan;
+                                    horizontal-stretch: 1;
+                                }
+                                Mon {
+                                    text: round(joycon-accel-x * 100.0) / 100.0;
+                                    width: 50px;
+                                }
+                            }
+                        }
+
+                        // Y axis
+                        VerticalLayout {
+                            spacing: 4px;
+                            HorizontalLayout {
+                                Lbl {
+                                    text: "Y";
+                                    width: 40px;
+                                }
+                                HBar {
+                                    frac: (joycon-accel-y + 2.0) / 4.0;
+                                    bar-color: Pal.green;
+                                    horizontal-stretch: 1;
+                                }
+                                Mon {
+                                    text: round(joycon-accel-y * 100.0) / 100.0;
+                                    width: 50px;
+                                }
+                            }
+                        }
+
+                        // Z axis
+                        VerticalLayout {
+                            spacing: 4px;
+                            HorizontalLayout {
+                                Lbl {
+                                    text: "Z";
+                                    width: 40px;
+                                }
+                                HBar {
+                                    frac: (joycon-accel-z + 2.0) / 4.0;
+                                    bar-color: Pal.purple;
+                                    horizontal-stretch: 1;
+                                }
+                                Mon {
+                                    text: round(joycon-accel-z * 100.0) / 100.0;
+                                    width: 50px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Triggers
+                Card {
+                    height: 100px;
+                    VerticalLayout {
+                        padding: 12px;
+                        spacing: 8px;
+
+                        Lbl {
+                            text: "TRIGGERS";
+                        }
+
+                        // L Trigger
+                        VerticalLayout {
+                            spacing: 4px;
+                            HorizontalLayout {
+                                Lbl {
+                                    text: "L";
+                                    width: 40px;
+                                }
+                                HBar {
+                                    frac: joycon-trigger-l;
+                                    bar-color: Pal.amber;
+                                    horizontal-stretch: 1;
+                                }
+                                Mon {
+                                    text: round(joycon-trigger-l * 100.0) + "%";
+                                    width: 50px;
+                                }
+                            }
+                        }
+
+                        // R Trigger
+                        VerticalLayout {
+                            spacing: 4px;
+                            HorizontalLayout {
+                                Lbl {
+                                    text: "R";
+                                    width: 40px;
+                                }
+                                HBar {
+                                    frac: joycon-trigger-r;
+                                    bar-color: Pal.orange;
+                                    horizontal-stretch: 1;
+                                }
+                                Mon {
+                                    text: round(joycon-trigger-r * 100.0) + "%";
+                                    width: 50px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Far Right: Gesture Mapping Reference
+            Card {
+                width: 280px;
+                VerticalLayout {
+                    padding: 12px;
+                    spacing: 6px;
+
+                    Lbl {
+                        text: "GESTURE MAPPINGS";
+                    }
+
+                    Rectangle {
+                        height: 1px;
+                        background: Pal.border;
+                    }
+
+                    // Mapping reference list
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text {
+                            text: "🎮 Roll → Viewport Rotation";
+                            color: Pal.mid;
+                            font-size: 10px;
+                        }
+                        Text {
+                            text: "🎮 Pitch/Yaw → Heterodyne Steering";
+                            color: Pal.mid;
+                            font-size: 10px;
+                        }
+                        Text {
+                            text: "🕹️ L Stick → Fine AZ/EL Control";
+                            color: Pal.mid;
+                            font-size: 10px;
+                        }
+                        Text {
+                            text: "🕹️ R Stick → Frequency Modulation";
+                            color: Pal.mid;
+                            font-size: 10px;
+                        }
+                        Text {
+                            text: "📐 Accelerometer → Heterodyne Strength";
+                            color: Pal.mid;
+                            font-size: 10px;
+                        }
+                        Text {
+                            text: "🔴 R Trigger → Carrier Freq Offset";
+                            color: Pal.mid;
+                            font-size: 10px;
+                        }
+                        Text {
+                            text: "🔘 A → Toggle PDM";
+                            color: Pal.cyan;
+                            font-size: 10px;
+                            font-weight: 700;
+                        }
+                        Text {
+                            text: "🔘 B → Toggle ANC";
+                            color: Pal.green;
+                            font-size: 10px;
+                            font-weight: 700;
+                        }
+                        Text {
+                            text: "🔘 X → Toggle Auto-Tune";
+                            color: Pal.purple;
+                            font-size: 10px;
+                            font-weight: 700;
+                        }
+                        Text {
+                            text: "🔘 Y → Toggle Recording";
+                            color: Pal.amber;
+                            font-size: 10px;
+                            font-weight: 700;
+                        }
+                    }
                 }
             }
         }

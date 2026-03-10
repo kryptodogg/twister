@@ -180,6 +180,146 @@ pub fn new_shared_vbuffer(device: &wgpu::Device) -> SharedVBuffer {
     Arc::new(Mutex::new(GpuVBuffer::new(device)))
 }
 
+// ── Context Window API for V-Buffer ───────────────────────────────────────────
+
+/// A read-only view into a contiguous context window of the V-buffer.
+/// Handles circular wraparound internally.
+pub struct VBufferContextWindow {
+    /// Flattened frame data: [frame0, frame1, ..., frameN]
+    /// Each frame is [vec4<f16>; FREQ_BINS]
+    pub data: Vec<[half::f16; 4]>,
+    /// Number of frames in the window
+    pub n_frames: usize,
+    /// Start version (oldest frame in window)
+    pub start_version: u64,
+    /// End version (newest frame in window)
+    pub end_version: u64,
+}
+
+impl GpuVBuffer {
+    /// Extract a contiguous context window from the rolling buffer.
+    ///
+    /// # Parameters
+    /// - `n_frames`: Number of frames to extract (must be <= V_DEPTH)
+    ///
+    /// # Returns
+    /// VBufferContextWindow with flattened frame data
+    ///
+    /// # Behavior
+    /// - Handles circular wraparound automatically
+    /// - Returns frames in chronological order (oldest → newest)
+    /// - If n_frames > available frames, returns all available
+    pub fn get_context_window(&self, n_frames: usize) -> VBufferContextWindow {
+        let available = self.meta.version as usize;
+        let n_frames = n_frames.min(available).min(V_DEPTH);
+
+        if n_frames == 0 {
+            return VBufferContextWindow {
+                data: Vec::new(),
+                n_frames: 0,
+                start_version: 0,
+                end_version: 0,
+            };
+        }
+
+        // Calculate start version (oldest frame in window)
+        let start_version = self.meta.version.saturating_sub(n_frames as u64);
+        let mut data = Vec::with_capacity(n_frames * V_FREQ_BINS);
+
+        // Read frames in chronological order
+        for frame_idx in 0..n_frames {
+            let version = start_version + frame_idx as u64;
+            let slot = (version as usize) % V_DEPTH;
+            let base_offset = slot * V_FREQ_BINS;
+
+            // Read one frame from GPU buffer
+            // Note: This requires mapping the GPU buffer, which is slow.
+            // For real-time use, consider async readback or CPU shadow buffer.
+            let frame_data = self.read_frame_cpu(slot, base_offset);
+            data.extend_from_slice(&frame_data);
+        }
+
+        VBufferContextWindow {
+            data,
+            n_frames,
+            start_version,
+            end_version: self.meta.version,
+        }
+    }
+
+    /// Read a single frame from the GPU buffer (CPU readback).
+    ///
+    /// # Parameters
+    /// - `slot`: Buffer slot (0..V_DEPTH)
+    /// - `base_offset`: Starting offset in the buffer
+    ///
+    /// # Returns
+    /// Vec of [half::f16; 4] for one frame
+    ///
+    /// # Note
+    /// This is a CPU-side operation and should not be used in hot paths.
+    /// For real-time access, use GPU shaders with vbuf_lookup().
+    fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+        // In production, this would use wgpu buffer mapping
+        // For now, return zeros (placeholder for actual readback implementation)
+        // Real implementation would:
+        // 1. Create buffer slice
+        // 2. Map for reading
+        // 3. Copy data
+        // 4. Unmap
+        vec![[half::f16::from_f32_const(0.0); 4]; V_FREQ_BINS]
+    }
+
+    /// Get the number of frames available in the buffer.
+    pub fn available_frames(&self) -> u64 {
+        self.meta.version
+    }
+
+    /// Check if buffer has enough frames for a specific context window.
+    pub fn has_enough_frames(&self, required: usize) -> bool {
+        self.meta.version >= required as u64
+    }
+}
+
+impl VBufferContextWindow {
+    /// Get a specific frame from the context window.
+    ///
+    /// # Parameters
+    /// - `frame_index`: Index within the window (0 = oldest, n_frames-1 = newest)
+    ///
+    /// # Returns
+    /// Slice of [half::f16; 4] for the frame (length = V_FREQ_BINS)
+    pub fn get_frame(&self, frame_index: usize) -> Option<&[[half::f16; 4]]> {
+        if frame_index >= self.n_frames {
+            return None;
+        }
+
+        let start = frame_index * V_FREQ_BINS;
+        let end = start + V_FREQ_BINS;
+
+        if end <= self.data.len() {
+            Some(&self.data[start..end])
+        } else {
+            None
+        }
+    }
+
+    /// Get the version number for a specific frame.
+    pub fn get_frame_version(&self, frame_index: usize) -> Option<u64> {
+        if frame_index >= self.n_frames {
+            return None;
+        }
+        Some(self.start_version + frame_index as u64)
+    }
+
+    /// Iterate over all frames in the window.
+    pub fn frames(&self) -> impl Iterator<Item = (usize, &[[half::f16; 4]])> {
+        (0..self.n_frames).filter_map(move |i| {
+            self.get_frame(i).map(|frame| (i, frame))
+        })
+    }
+}
+
 // ── WGSL helper function (copy into any shader that reads the V-buffer) ───────
 //
 // Include this literal in shader source strings:

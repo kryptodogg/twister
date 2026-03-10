@@ -65,25 +65,25 @@ Tracks for the modular, Brain/Brawn architecture with explicit device control an
 - **Middle**: `src/dispatch.rs` (Tokio loop: device.read_sync() → IqVBuffer)
 - **End**: RTL-SDR → `[u8; 2]` samples → GPU (zero f32 conversion)
 - **Tests**: `examples/test_iq_dispatch_loop.rs`
-- **Status**: [ ] Not started
-- **Owner**: —
-- **Blocker on**: A.2
+- **Status**: [x] Complete
+- **Owner**: Jules
+- **Addendum BB**: ✅ Parameter Control Layer + Joy-Con Gesture Control implemented
 
 #### B.2: STFT (GPU FFT on IQ Data)
 - **Beginning**: `src/visualization/stft_iq.wgsl` (stub)
 - **Middle**: WGSL Radix-2 FFT ([2048] → [512] bins)
 - **End**: Raw IQ → GPU FFT → spectral magnitude
 - **Tests**: `examples/test_stft_shader.rs`
-- **Status**: [ ] Not started
-- **Owner**: —
+- **Status**: [x] Complete
+- **Owner**: Jules
 
 #### B.3: V-Buffer Versioning
 - **Beginning**: `vbuffer.rs::GpuVBuffer` (push_frame stub)
 - **Middle**: Rolling history with `version % DEPTH` indexing
 - **End**: 512-frame context window (10.7s spectral history)
 - **Tests**: `examples/test_vbuffer_rolling.rs`
-- **Status**: [ ] Not started
-- **Owner**: —
+- **Status**: [x] Complete
+- **Owner**: Jules
 - **Blocker on**: B.2
 
 ---

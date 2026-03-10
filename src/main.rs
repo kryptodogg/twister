@@ -39,12 +39,15 @@ mod gpu;
 mod gpu_shared;
 mod graph;
 mod harmony;
+mod input;
 mod knowledge_graph;
 mod mamba;
+mod materials;
 mod ml;
 mod parametric;
+mod parameters;
 mod particle_system;
-mod physics;
+mod resonance;
 mod pdm;
 mod reconstruct;
 mod resample;
@@ -106,7 +109,7 @@ async fn main() -> anyhow::Result<()> {
         &format!("[Twister v0.5] Session: {}", session_identity),
     );
     use crate::particle_system::{
-        frustum_culler::FrustumCuller, renderer::ParticleRenderer, streaming::ParticleStreamLoader,
+        frustum_culler::FrustumCuller, renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
     };
     let ui = AppWindow::new().context("Slint window creation failed")?;
 
@@ -280,6 +283,13 @@ async fn main() -> anyhow::Result<()> {
             tokio::time::sleep(std::time::Duration::from_millis(20)).await;
         }
     });
+
+    // ── Joy-Con Gesture Control (Track B Addendum BB) ─────────────────────────
+    // Spawn Joy-Con polling task (60 Hz) with graceful disconnect handling
+    let joycon_state = state.clone();
+    let joycon_mapping = crate::input::GestureMapping::default();
+    let _joycon_handle = crate::input::spawn_joycon_task(joycon_state, joycon_mapping);
+    eprintln!("[JoyCon] Task spawned - waiting for controller connection");
 
     // ── Dispatch loop ─────────────────────────────────────────────────────────
     let state_disp = state.clone();
@@ -1394,6 +1404,49 @@ async fn main() -> anyhow::Result<()> {
                 ui.set_sdr_peak_dbfs(st.get_sdr_peak_dbfs());
                 ui.set_sdr_peak_offset_khz(st.get_sdr_peak_offset_hz() / 1e3);
 
+                // ── Parameter Control Layer Sync (Track B Addendum BB) ───────────
+                // Audio Device
+                ui.set_audio_device_idx(st.get_audio_device_idx() as i32);
+                let audio_devices = st.get_audio_devices();
+                let device_names: Vec<slint::SharedString> = audio_devices
+                    .iter()
+                    .map(|d| d.name.clone().into())
+                    .collect();
+                ui.set_audio_device_names(slint::ModelRc::from(std::rc::Rc::new(
+                    slint::VecModel::from(device_names),
+                )));
+                ui.set_audio_gain_db(st.get_master_gain() * 120.0);
+
+                // Camera
+                ui.set_camera_resolution(st.get_camera_resolution() as i32);
+                ui.set_camera_fps(st.get_camera_fps());
+                ui.set_camera_active(st.get_camera_active());
+
+                // Frequency
+                ui.set_freq_band_index(st.get_freq_band_index() as i32);
+                ui.set_freq_manual_mhz(st.get_freq_manual_hz() / 1e6);
+                ui.set_freq_actual_mhz(st.get_freq_actual_hz() / 1e6);
+
+                // Joy-Con State
+                ui.set_joycon_connected(st.get_joycon_connected());
+                ui.set_joycon_active(st.get_joycon_active());
+                ui.set_joycon_gyro_roll(st.get_joycon_gyro_roll());
+                ui.set_joycon_gyro_pitch(st.get_joycon_gyro_pitch());
+                ui.set_joycon_gyro_yaw(st.get_joycon_gyro_yaw());
+                ui.set_joycon_accel_x(st.get_joycon_accel_x());
+                ui.set_joycon_accel_y(st.get_joycon_accel_y());
+                ui.set_joycon_accel_z(st.get_joycon_accel_z());
+                ui.set_joycon_stick_left_x(st.get_joycon_stick_left_x());
+                ui.set_joycon_stick_left_y(st.get_joycon_stick_left_y());
+                ui.set_joycon_stick_right_x(st.get_joycon_stick_right_x());
+                ui.set_joycon_stick_right_y(st.get_joycon_stick_right_y());
+                ui.set_joycon_trigger_l(st.get_joycon_trigger_l());
+                ui.set_joycon_trigger_r(st.get_joycon_trigger_r());
+                ui.set_joycon_button_a(st.get_joycon_button_a());
+                ui.set_joycon_button_b(st.get_joycon_button_b());
+                ui.set_joycon_button_x(st.get_joycon_button_x());
+                ui.set_joycon_button_y(st.get_joycon_button_y());
+
                 // Training tab sync
                 ui.set_rtl_freq_mhz(st.get_sdr_center_hz() / 1e6);
                 ui.set_rtl_scanning(st.get_sdr_sweeping());
@@ -1485,20 +1538,20 @@ async fn main() -> anyhow::Result<()> {
     );
     let frustum_culler =
         crate::particle_system::frustum_culler::FrustumCuller::new(gpu_shared.clone(), 10_000_000);
-    let particle_streamer =
-        std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
+    // let particle_streamer =
+    //     std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
 
     let now_ms = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_millis() as u64;
-    let _ = tokio::spawn({
-        let s = particle_streamer.clone();
-        async move {
-            s.load_window(now_ms - 8_380_800_000, now_ms, 1_000_000)
-                .await;
-        }
-    });
+    // let _ = tokio::spawn({
+    //     let s = particle_streamer.clone();
+    //     async move {
+    //         s.load_window(now_ms - 8_380_800_000, now_ms, 1_000_000)
+    //             .await;
+    //     }
+    // });
 
     state
         .running
@@ -1771,6 +1824,218 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
             }
         }
         println!("[Forensic] Memos exported to {}", path);
+    });
+
+    // ── Parameter Control Layer (Track B Addendum BB) ──────────────────────────
+
+    // Parameter Persistence
+    let s = state.clone();
+    ui.on_save_parameters(move || {
+        let params = crate::parameters::TwisterParameters {
+            audio_device_idx: s.get_audio_device_idx(),
+            audio_devices: s.get_audio_devices().iter()
+                .map(|d| crate::parameters::audio_device_to_config(d))
+                .collect(),
+            master_gain_db: s.get_master_gain() * 120.0, // Convert 0-1 to dB
+            camera_resolution: s.get_camera_resolution(),
+            camera_fps: s.get_camera_fps(),
+            camera_active: s.get_camera_active(),
+            freq_band_index: s.get_freq_band_index(),
+            freq_manual_hz: s.get_freq_manual_hz(),
+            pdm_active: s.pdm_active.load(Ordering::Relaxed),
+            pdm_clock_mhz: s.get_pdm_clock_mhz(),
+            oversample_ratio: s.oversample_ratio.load(Ordering::Relaxed),
+            waveshape_mode: s.waveshape_mode.load(Ordering::Relaxed),
+            waveshape_drive: s.get_waveshape_drive(),
+            beam_azimuth_deg: s.get_beam_azimuth_deg(),
+            beam_elevation_deg: s.beam_elevation_rad.load(Ordering::Relaxed).to_degrees(),
+            beam_focus_deg: s.get_beam_focus_deg(),
+            smart_anc_blend: s.get_smart_anc_blend(),
+            anc_calibrated: s.anc_calibrated.load(Ordering::Relaxed),
+            sdr_center_hz: s.get_sdr_center_hz(),
+            sdr_gain_db: s.get_sdr_gain_db(),
+            sdr_active: s.get_sdr_active(),
+            joycon_enabled: s.get_joycon_connected(),
+            joycon_mapping: crate::parameters::JoyConGestureMapping::default(),
+            version: env!("CARGO_PKG_VERSION").to_string(),
+            last_modified: chrono::Utc::now().to_rfc3339(),
+        };
+
+        match params.save() {
+            Ok(_) => println!("[Parameters] Saved to ~/.twister/parameters.json"),
+            Err(e) => eprintln!("[Parameters] Save failed: {}", e),
+        }
+    });
+
+    let s = state.clone();
+    ui.on_load_parameters(move || {
+        match crate::parameters::TwisterParameters::load() {
+            Ok(params) => {
+                s.set_audio_device_idx(params.audio_device_idx);
+                s.set_audio_devices(params.audio_devices.iter()
+                    .map(|d| crate::parameters::config_to_audio_device(d))
+                    .collect());
+                s.set_master_gain((params.master_gain_db / 120.0).clamp(0.0, 1.0));
+                s.set_camera_resolution(params.camera_resolution);
+                s.set_camera_fps(params.camera_fps);
+                s.set_camera_active(params.camera_active);
+                s.set_freq_band_index(params.freq_band_index);
+                s.set_freq_manual_hz(params.freq_manual_hz);
+                s.pdm_active.store(params.pdm_active, Ordering::Relaxed);
+                s.set_pdm_clock_mhz(params.pdm_clock_mhz);
+                s.oversample_ratio.store(params.oversample_ratio, Ordering::Relaxed);
+                s.waveshape_mode.store(params.waveshape_mode, Ordering::Relaxed);
+                s.set_waveshape_drive(params.waveshape_drive);
+                s.set_beam_azimuth_deg(params.beam_azimuth_deg);
+                s.beam_elevation_rad.store(params.beam_elevation_deg.to_radians(), Ordering::Relaxed);
+                s.set_beam_focus_deg(params.beam_focus_deg);
+                s.set_smart_anc_blend(params.smart_anc_blend);
+                s.anc_calibrated.store(params.anc_calibrated, Ordering::Relaxed);
+                s.set_sdr_center_hz(params.sdr_center_hz);
+                s.set_sdr_gain_db(params.sdr_gain_db);
+                s.set_sdr_active(params.sdr_active);
+                println!("[Parameters] Loaded from ~/.twister/parameters.json");
+            }
+            Err(e) => eprintln!("[Parameters] Load failed: {}", e),
+        }
+    });
+
+    let s = state.clone();
+    ui.on_reset_parameters(move || {
+        let params = crate::parameters::TwisterParameters::default();
+        s.set_audio_device_idx(params.audio_device_idx);
+        s.set_camera_resolution(params.camera_resolution);
+        s.set_camera_fps(params.camera_fps);
+        s.set_camera_active(params.camera_active);
+        s.set_freq_band_index(params.freq_band_index);
+        s.set_freq_manual_hz(params.freq_manual_hz);
+        s.pdm_active.store(params.pdm_active, Ordering::Relaxed);
+        s.set_pdm_clock_mhz(params.pdm_clock_mhz);
+        s.oversample_ratio.store(params.oversample_ratio, Ordering::Relaxed);
+        s.waveshape_mode.store(params.waveshape_mode, Ordering::Relaxed);
+        s.set_waveshape_drive(params.waveshape_drive);
+        s.set_beam_azimuth_deg(params.beam_azimuth_deg);
+        s.beam_elevation_rad.store(params.beam_elevation_deg.to_radians(), Ordering::Relaxed);
+        s.set_beam_focus_deg(params.beam_focus_deg);
+        s.set_smart_anc_blend(params.smart_anc_blend);
+        s.anc_calibrated.store(params.anc_calibrated, Ordering::Relaxed);
+        s.set_sdr_center_hz(params.sdr_center_hz);
+        s.set_sdr_gain_db(params.sdr_gain_db);
+        s.set_sdr_active(params.sdr_active);
+        println!("[Parameters] Reset to defaults");
+    });
+
+    // Audio Device Control
+    let s = state.clone();
+    let ui_weak_cb = ui_weak.clone();
+    ui.on_audio_device_prev(move || {
+        let current = s.get_audio_device_idx();
+        let devices = s.get_audio_devices();
+        if !devices.is_empty() {
+            let new_idx = if current > 0 { current - 1 } else { (devices.len() - 1) as u32 };
+            s.set_audio_device_idx(new_idx);
+            if let Some(ui) = ui_weak_cb.upgrade() {
+                ui.set_audio_device_idx(new_idx as i32);
+            }
+            println!("[Audio] Device: {}", new_idx);
+        }
+    });
+
+    let s = state.clone();
+    let ui_weak_cb = ui_weak.clone();
+    ui.on_audio_device_next(move || {
+        let current = s.get_audio_device_idx();
+        let devices = s.get_audio_devices();
+        if !devices.is_empty() {
+            let new_idx = (current + 1) % devices.len() as u32;
+            s.set_audio_device_idx(new_idx);
+            if let Some(ui) = ui_weak_cb.upgrade() {
+                ui.set_audio_device_idx(new_idx as i32);
+            }
+            println!("[Audio] Device: {}", new_idx);
+        }
+    });
+
+    let s = state.clone();
+    ui.on_set_audio_gain(move |db| {
+        s.set_master_gain((db / 120.0).clamp(0.0, 1.0));
+    });
+
+    // Camera Control
+    let s = state.clone();
+    ui.on_set_camera_resolution(move |res| {
+        s.set_camera_resolution(res as u32);
+        let (w, h) = match res {
+            0 => (640, 480),
+            1 => (1280, 720),
+            2 => (1920, 1080),
+            _ => (1280, 720),
+        };
+        println!("[Camera] Resolution: {}x{}", w, h);
+    });
+
+    let s = state.clone();
+    ui.on_toggle_camera(move || {
+        let current = s.get_camera_active();
+        s.set_camera_active(!current);
+        println!("[Camera] {}", if !current { "Activated" } else { "Deactivated" });
+    });
+
+    // Frequency Control
+    let s = state.clone();
+    let ui_weak_cb = ui_weak.clone();
+    ui.on_set_freq_band(move |band| {
+        s.set_freq_band_index(band as u32);
+        
+        // Update actual frequency based on band
+        let actual_hz = match band {
+            0 => 15_000.0,       // VLF
+            1 => 150_000.0,      // LF
+            2 => 1_500_000.0,    // MF
+            3 => 15_000_000.0,   // HF
+            4 => 150_000_000.0,  // VHF
+            5 => 1_500_000_000.0, // UHF
+            6 => s.get_freq_manual_hz(), // Manual
+            _ => 150_000_000.0,
+        };
+        s.set_freq_actual_hz(actual_hz);
+        
+        if let Some(ui) = ui_weak_cb.upgrade() {
+            ui.set_freq_actual_mhz(actual_hz / 1_000_000.0);
+        }
+        
+        let band_name = match band {
+            0 => "VLF (3-30 kHz)",
+            1 => "LF (30-300 kHz)",
+            2 => "MF (300k-3 MHz)",
+            3 => "HF (3-30 MHz)",
+            4 => "VHF (30-300 MHz)",
+            5 => "UHF (300M-3 GHz)",
+            6 => "Manual",
+            _ => "Unknown",
+        };
+        println!("[Frequency] Band: {}", band_name);
+    });
+
+    let s = state.clone();
+    let ui_weak_cb = ui_weak.clone();
+    ui.on_set_freq_manual(move |mhz| {
+        s.set_freq_manual_hz(mhz * 1_000_000.0);
+        if s.get_freq_band_index() == 6 {
+            s.set_freq_actual_hz(mhz * 1_000_000.0);
+            if let Some(ui) = ui_weak_cb.upgrade() {
+                ui.set_freq_actual_mhz(mhz);
+            }
+        }
+        println!("[Frequency] Manual: {:.3} MHz", mhz);
+    });
+
+    // Joy-Con Control
+    let s = state.clone();
+    ui.on_toggle_joycon(move || {
+        let current = s.get_joycon_active();
+        s.set_joycon_active(!current);
+        println!("[JoyCon] Gesture control {}", if !current { "enabled" } else { "disabled" });
     });
 }
 

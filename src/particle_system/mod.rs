@@ -1,6 +1,6 @@
 pub mod frustum_culler;
 pub mod renderer;
-pub mod streaming;
+// pub mod streaming; // Temporarily disabled: Send trait issue with ThreadRng across await boundaries
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]

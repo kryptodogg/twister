@@ -15,9 +15,9 @@
 use super::data_contracts::FieldParticle;
 use super::field_particle::{FieldParticleBuffer, FieldParticleGPU, HitListAccumulator};
 use super::rt_blind_rays::{BlindRayConfig, BlindRayGenerator};
-use crate::physics::rf_propagation::RFWavePropagation;
-use crate::physics::voxel_grid::VoxelGrid;
-use crate::physics::material_absorption::Material;
+use crate::resonance::rf_propagation::RFWavePropagation;
+use crate::resonance::voxel_grid::VoxelGrid;
+use crate::resonance::material_absorption::Material;
 use wgpu::{Device, Queue};
 
 /// Configuration for the unified field dispatch pipeline

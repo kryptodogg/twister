@@ -1,10 +1,12 @@
 pub mod anomaly_gate;
+pub mod batch_accumulation;
 pub mod body_region_classifier;
 pub mod data_contracts;
 pub mod event_corpus;
 pub mod field_dispatch;
 pub mod field_particle;
 pub mod fold_frequency_harmonics;
+pub mod hilbert_sort;
 pub mod impulse_coherence;
 pub mod impulse_modulation;
 pub mod losses;
@@ -16,32 +18,36 @@ pub mod point_decoder;
 pub mod point_mamba;
 pub mod point_mamba_trainer;
 pub mod pointnet_encoder;
+pub mod pose_mamba_trainer;
 pub mod pose_materials;
 pub mod rt_blind_rays;
-pub mod pose_mamba_trainer;
 pub mod spectral_frame;
 pub mod timegnn;
 pub mod timegnn_trainer;
+pub mod unified_field_mamba;
+pub mod unified_field_mamba_trainer;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
 
-pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
 pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
 pub use mamba_block::MambaBlock;
+pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
 
 pub use pattern_discovery::{
     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
 };
 
+pub use event_corpus::{EventCorpus, prepare_event_corpus};
+pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
 pub use point_decoder::PointDecoder;
 pub use point_mamba::PointMamba;
 pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
 pub use pointnet_encoder::PointNetEncoder;
+pub use spectral_frame::SpectralFrame;
 pub use timegnn::TimeGnnModel;
 pub use timegnn_trainer::{
     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
     compute_nt_xent_loss, cosine_similarity, train_timegnn,
 };
 pub use wav2vec2_loader::Wav2Vec2Model;
-pub use spectral_frame::SpectralFrame;

@@ -33,6 +33,18 @@ use crate::af32::AtomicF32;
 use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
 
+// ── Audio Device Structure ─────────────────────────────────────────────────────
+
+/// Audio input device configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AudioDevice {
+    pub index: usize,
+    pub name: String,
+    pub sample_rate_hz: u32,
+    pub channels: u32,
+    pub is_active: bool,
+}
+
 // ── Channel-Based Telemetry (UI Events for async/UI separation) ────────────────────
 
 /// UI Events emitted by async tasks (training, SDR, TDOA)
@@ -601,6 +613,41 @@ pub struct AppState {
     // ── GUI Console Logging (Fix #2) ───────────────────────────────────────────
     /// Ring buffer for UI console logs (max 1,000 messages)
     pub log_buffer: Mutex<VecDeque<LogMessage>>,
+
+    // ── Parameter Control Layer (Track B Addendum BB) ──────────────────────────
+    /// Audio device selection
+    pub audio_device_idx: AtomicU32,
+    pub audio_devices: Mutex<Vec<AudioDevice>>,
+
+    /// Camera configuration
+    pub camera_resolution: AtomicU32,  // 0=480p, 1=720p, 2=1080p
+    pub camera_fps: AtomicF32,
+    pub camera_active: AtomicBool,
+
+    /// Frequency selection
+    pub freq_band_index: AtomicU32,  // 0=VLF, 1=LF, 2=MF, 3=HF, 4=VHF, 5=UHF, 6=Manual
+    pub freq_manual_hz: AtomicF32,
+    pub freq_actual_hz: AtomicF32,
+
+    /// Joy-Con gesture control
+    pub joycon_connected: AtomicBool,
+    pub joycon_active: AtomicBool,
+    pub joycon_gyro_roll: AtomicF32,      // degrees
+    pub joycon_gyro_pitch: AtomicF32,     // degrees
+    pub joycon_gyro_yaw: AtomicF32,       // degrees
+    pub joycon_accel_x: AtomicF32,        // G
+    pub joycon_accel_y: AtomicF32,        // G
+    pub joycon_accel_z: AtomicF32,        // G
+    pub joycon_stick_left_x: AtomicF32,   // [-1, 1]
+    pub joycon_stick_left_y: AtomicF32,   // [-1, 1]
+    pub joycon_stick_right_x: AtomicF32,  // [-1, 1]
+    pub joycon_stick_right_y: AtomicF32,  // [-1, 1]
+    pub joycon_trigger_l: AtomicF32,      // [0, 1]
+    pub joycon_trigger_r: AtomicF32,      // [0, 1]
+    pub joycon_button_a: AtomicBool,
+    pub joycon_button_b: AtomicBool,
+    pub joycon_button_x: AtomicBool,
+    pub joycon_button_y: AtomicBool,
 }
 
 impl AppState {
@@ -710,6 +757,34 @@ impl AppState {
             memo_input_tag: Mutex::new("NOTE".to_string()),
             recording_state: Mutex::new(RecordingState::new()),
             log_buffer: Mutex::new(VecDeque::with_capacity(1000)),
+
+            // Parameter Control Layer (Track B Addendum BB)
+            audio_device_idx: AtomicU32::new(0),
+            audio_devices: Mutex::new(Vec::new()),
+            camera_resolution: AtomicU32::new(1), // 720p default
+            camera_fps: AtomicF32::new(30.0),
+            camera_active: AtomicBool::new(false),
+            freq_band_index: AtomicU32::new(4), // VHF default
+            freq_manual_hz: AtomicF32::new(100_000_000.0),
+            freq_actual_hz: AtomicF32::new(150_000_000.0),
+            joycon_connected: AtomicBool::new(false),
+            joycon_active: AtomicBool::new(false),
+            joycon_gyro_roll: AtomicF32::new(0.0),
+            joycon_gyro_pitch: AtomicF32::new(0.0),
+            joycon_gyro_yaw: AtomicF32::new(0.0),
+            joycon_accel_x: AtomicF32::new(0.0),
+            joycon_accel_y: AtomicF32::new(0.0),
+            joycon_accel_z: AtomicF32::new(0.0),
+            joycon_stick_left_x: AtomicF32::new(0.0),
+            joycon_stick_left_y: AtomicF32::new(0.0),
+            joycon_stick_right_x: AtomicF32::new(0.0),
+            joycon_stick_right_y: AtomicF32::new(0.0),
+            joycon_trigger_l: AtomicF32::new(0.0),
+            joycon_trigger_r: AtomicF32::new(0.0),
+            joycon_button_a: AtomicBool::new(false),
+            joycon_button_b: AtomicBool::new(false),
+            joycon_button_x: AtomicBool::new(false),
+            joycon_button_y: AtomicBool::new(false),
         })
     }
 
@@ -1436,5 +1511,327 @@ impl AppState {
 
     pub fn set_feature_confidence(&self, val: f32) {
         self.feature_confidence.store(val, Ordering::Relaxed);
+    }
+
+    // ── Parameter Control Layer (Track B Addendum BB) ──────────────────────────
+
+    // Audio Device
+    #[inline]
+    pub fn get_audio_device_idx(&self) -> u32 {
+        self.audio_device_idx.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_audio_device_idx(&self, v: u32) {
+        self.audio_device_idx.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_audio_devices(&self) -> Vec<AudioDevice> {
+        self.audio_devices.lock().unwrap().clone()
+    }
+
+    #[inline]
+    pub fn set_audio_devices(&self, devices: Vec<AudioDevice>) {
+        if let Ok(mut d) = self.audio_devices.lock() {
+            *d = devices;
+        }
+    }
+
+    #[inline]
+    pub fn add_audio_device(&self, device: AudioDevice) {
+        if let Ok(mut d) = self.audio_devices.lock() {
+            d.push(device);
+        }
+    }
+
+    // Camera
+    #[inline]
+    pub fn get_camera_resolution(&self) -> u32 {
+        self.camera_resolution.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_camera_resolution(&self, v: u32) {
+        self.camera_resolution.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_camera_fps(&self) -> f32 {
+        self.camera_fps.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_camera_fps(&self, v: f32) {
+        self.camera_fps.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_camera_active(&self) -> bool {
+        self.camera_active.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_camera_active(&self, v: bool) {
+        self.camera_active.store(v, Ordering::Relaxed);
+    }
+
+    // Frequency Selection
+    #[inline]
+    pub fn get_freq_band_index(&self) -> u32 {
+        self.freq_band_index.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_freq_band_index(&self, v: u32) {
+        self.freq_band_index.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_freq_manual_hz(&self) -> f32 {
+        self.freq_manual_hz.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_freq_manual_hz(&self, v: f32) {
+        self.freq_manual_hz.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_freq_actual_hz(&self) -> f32 {
+        self.freq_actual_hz.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_freq_actual_hz(&self, v: f32) {
+        self.freq_actual_hz.store(v, Ordering::Relaxed);
+    }
+
+    // Joy-Con
+    #[inline]
+    pub fn get_joycon_connected(&self) -> bool {
+        self.joycon_connected.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_connected(&self, v: bool) {
+        self.joycon_connected.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_active(&self) -> bool {
+        self.joycon_active.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_active(&self, v: bool) {
+        self.joycon_active.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_gyro_roll(&self) -> f32 {
+        self.joycon_gyro_roll.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_gyro_roll(&self, v: f32) {
+        self.joycon_gyro_roll.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_gyro_pitch(&self) -> f32 {
+        self.joycon_gyro_pitch.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_gyro_pitch(&self, v: f32) {
+        self.joycon_gyro_pitch.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_gyro_yaw(&self) -> f32 {
+        self.joycon_gyro_yaw.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_gyro_yaw(&self, v: f32) {
+        self.joycon_gyro_yaw.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_accel_x(&self) -> f32 {
+        self.joycon_accel_x.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_accel_x(&self, v: f32) {
+        self.joycon_accel_x.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_accel_y(&self) -> f32 {
+        self.joycon_accel_y.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_accel_y(&self, v: f32) {
+        self.joycon_accel_y.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_accel_z(&self) -> f32 {
+        self.joycon_accel_z.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_accel_z(&self, v: f32) {
+        self.joycon_accel_z.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_stick_left_x(&self) -> f32 {
+        self.joycon_stick_left_x.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_stick_left_x(&self, v: f32) {
+        self.joycon_stick_left_x.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_stick_left_y(&self) -> f32 {
+        self.joycon_stick_left_y.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_stick_left_y(&self, v: f32) {
+        self.joycon_stick_left_y.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_stick_right_x(&self) -> f32 {
+        self.joycon_stick_right_x.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_stick_right_x(&self, v: f32) {
+        self.joycon_stick_right_x.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_stick_right_y(&self) -> f32 {
+        self.joycon_stick_right_y.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_stick_right_y(&self, v: f32) {
+        self.joycon_stick_right_y.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_trigger_l(&self) -> f32 {
+        self.joycon_trigger_l.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_trigger_l(&self, v: f32) {
+        self.joycon_trigger_l.store(v.clamp(0.0, 1.0), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_trigger_r(&self) -> f32 {
+        self.joycon_trigger_r.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_trigger_r(&self, v: f32) {
+        self.joycon_trigger_r.store(v.clamp(0.0, 1.0), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_button_a(&self) -> bool {
+        self.joycon_button_a.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_button_a(&self, v: bool) {
+        self.joycon_button_a.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_button_b(&self) -> bool {
+        self.joycon_button_b.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_button_b(&self, v: bool) {
+        self.joycon_button_b.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_button_x(&self) -> bool {
+        self.joycon_button_x.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_button_x(&self, v: bool) {
+        self.joycon_button_x.store(v, Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn get_joycon_button_y(&self) -> bool {
+        self.joycon_button_y.load(Ordering::Relaxed)
+    }
+
+    #[inline]
+    pub fn set_joycon_button_y(&self, v: bool) {
+        self.joycon_button_y.store(v, Ordering::Relaxed);
+    }
+
+    /// Get Joy-Con accelerometer magnitude (for heterodyne strength mapping)
+    #[inline]
+    pub fn get_joycon_accel_magnitude(&self) -> f32 {
+        let x = self.get_joycon_accel_x();
+        let y = self.get_joycon_accel_y();
+        let z = self.get_joycon_accel_z();
+        (x * x + y * y + z * z).sqrt()
+    }
+
+    /// Update Joy-Con state from raw input values (batch update for efficiency)
+    pub fn update_joycon_state(
+        &self,
+        gyro_roll: f32,
+        gyro_pitch: f32,
+        gyro_yaw: f32,
+        accel_x: f32,
+        accel_y: f32,
+        accel_z: f32,
+        stick_left_x: f32,
+        stick_left_y: f32,
+        stick_right_x: f32,
+        stick_right_y: f32,
+        trigger_l: f32,
+        trigger_r: f32,
+        button_a: bool,
+        button_b: bool,
+        button_x: bool,
+        button_y: bool,
+    ) {
+        self.set_joycon_gyro_roll(gyro_roll);
+        self.set_joycon_gyro_pitch(gyro_pitch);
+        self.set_joycon_gyro_yaw(gyro_yaw);
+        self.set_joycon_accel_x(accel_x);
+        self.set_joycon_accel_y(accel_y);
+        self.set_joycon_accel_z(accel_z);
+        self.set_joycon_stick_left_x(stick_left_x);
+        self.set_joycon_stick_left_y(stick_left_y);
+        self.set_joycon_stick_right_x(stick_right_x);
+        self.set_joycon_stick_right_y(stick_right_y);
+        self.set_joycon_trigger_l(trigger_l);
+        self.set_joycon_trigger_r(trigger_r);
+        self.set_joycon_button_a(button_a);
+        self.set_joycon_button_b(button_b);
+        self.set_joycon_button_x(button_x);
+        self.set_joycon_button_y(button_y);
     }
 }

@@ -153,6 +153,10 @@ impl IqDmaGateway {
     }
 }
 
+// Safety: IqDmaGateway wraps wgpu Device/Queue which are Send + Sync.
+// All operations are synchronized through the Mutex in the dispatch loop.
+unsafe impl Send for IqDmaGateway {}
+
 #[cfg(test)]
 mod tests {
     use super::*;

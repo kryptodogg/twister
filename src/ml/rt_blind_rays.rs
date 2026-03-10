@@ -12,9 +12,9 @@
 
 use super::data_contracts::FieldParticle;
 use super::field_particle::{FieldParticleGPU, HitListAccumulator};
-use crate::physics::rf_propagation::RFWavePropagation;
-use crate::physics::voxel_grid::VoxelGrid;
-use crate::physics::material_absorption::Material;
+use crate::resonance::rf_propagation::RFWavePropagation;
+use crate::resonance::voxel_grid::VoxelGrid;
+use crate::resonance::material_absorption::Material;
 use std::f32::consts::PI;
 
 /// Configuration for blind ray generation from FDFD solution
