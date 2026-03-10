@@ -1,4 +1,3 @@
-pub mod active_denial;
 // src/main.rs — Twister v0.5  (Harassment Frequency Auto-Tuner + Forensic Evidence System)
 //
 // Renamed from SIREN.  All forensic / evidence functionality fully intact.
@@ -18,15 +17,10 @@ pub mod active_denial;
 
 #[allow(clippy::too_many_arguments)]
 
-slint::include_modules!();
-
-// ── Modules ───────────────────────────────────────────────────────────────────
-mod af32;
-mod ai;
-mod anc;
-mod anc_calibration;
-mod anc_recording;
-mod computer_vision;
+mod slint_generated {
+    slint::include_modules!();
+}
+use slint_generated::AppWindow;
 
 // Twister library imports
 use anyhow::Context;
@@ -47,7 +41,6 @@ use twister::fusion::FusionEngine;
 use twister::gpu::GpuContext;
 use twister::gpu_shared::GpuShared;
 use twister::graph::ForensicGraph;
-use twister::harmony::ChordMode;
 use twister::mamba::TrainingPair;
 use twister::ml::anomaly_gate::{AnomalyGateConfig, evaluate_anomaly_gate};
 use twister::ml::spectral_frame::SpectralFrame;
@@ -57,13 +50,10 @@ use twister::reconstruct::CrystalBall;
 use twister::sdr::sdr_channel;
 use twister::state::AppState;
 use twister::training::{MambaTrainer, TrainingSession, spawn_background_training};
+use twister::twister::ChordMode;
 use twister::twister::twister_targets;
 use twister::vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
 use twister::waterfall::WaterfallEngine;
-
-use twister::AppWindow;
-use vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
-use waterfall::WaterfallEngine;
 
 const PARAMETRIC_CARRIER_HZ: f32 = 40_000.0;
 #[allow(dead_code)]
@@ -88,7 +78,7 @@ async fn main() -> anyhow::Result<()> {
     use twister::particle_system::{
         frustum_culler::FrustumCuller, renderer::ParticleRenderer, streaming::ParticleStreamLoader,
     };
-    let ui = self::AppWindow::new().context("Slint window creation failed")?;
+    let ui = AppWindow::new().context("Slint window creation failed")?;
 
     let gpu_shared = GpuShared::new().context("GPU init failed")?;
     state.log(
@@ -140,7 +130,7 @@ async fn main() -> anyhow::Result<()> {
 
     let parametric_manager = ParametricManager::new(PARAMETRIC_CARRIER_HZ);
 
-    let qdrant = Arc::new(match embeddings::EmbeddingStore::new().await {
+    let qdrant = Arc::new(match twister::embeddings::EmbeddingStore::new().await {
         Ok(s) => {
             state.log("INFO", "Qdrant", "Connected.");
             Some(s)
@@ -185,10 +175,11 @@ async fn main() -> anyhow::Result<()> {
     );
 
     let (sdr_tx, sdr_rx) = sdr_channel();
-    let sdr_thread_handle = sdr::spawn_sdr_thread(state.clone(), sdr_tx);
+    let sdr_thread_handle = twister::sdr::spawn_sdr_thread(state.clone(), sdr_tx);
 
-    let mamba_trainer =
-        Arc::new(training::MambaTrainer::new(state.clone()).context("Mamba trainer init")?);
+    let mamba_trainer = Arc::new(
+        twister::training::MambaTrainer::new(state.clone()).context("Mamba trainer init")?,
+    );
 
     // Load existing checkpoint (graceful — missing file is not an error)
     {
@@ -227,13 +218,13 @@ async fn main() -> anyhow::Result<()> {
         }
     }
 
-    let training_session = Arc::new(training::TrainingSession::new(state.clone()));
+    let training_session = Arc::new(twister::training::TrainingSession::new(state.clone()));
 
     // Create telemetry channel for async tasks to emit UI events
     // (crossbeam provides better thread-safety for Slint integration)
     let (ui_tx, ui_rx) = crossbeam_channel::unbounded::<twister::state::UiEvent>();
 
-    let mamba_trainer_handle = training::spawn_background_training(
+    let mamba_trainer_handle = twister::training::spawn_background_training(
         training_session.clone(),
         mamba_trainer.clone(),
         state.clone(),
@@ -285,7 +276,7 @@ async fn main() -> anyhow::Result<()> {
         let mut planner = FftPlanner::<f32>::new();
         let fft = planner.plan_fft_forward(BISPEC_FFT_SIZE);
 
-        let mut fusion = fusion::FusionEngine::new();
+        let mut fusion = twister::fusion::FusionEngine::new();
         let mut last_bispec_event: Option<DetectionEvent> = None;
 
         // ── Crystal Ball ──────────────────────────────────────────────────
@@ -316,12 +307,12 @@ async fn main() -> anyhow::Result<()> {
             // ANC recording
             let mut run_anc_analysis = false;
             if let Ok(mut rec) = state_disp.anc_recording.lock() {
-                if rec.state == anc_recording::CalibrationState::Recording {
+                if rec.state == twister::anc_recording::CalibrationState::Recording {
                     while let Ok(tagged) = record_rx.try_recv() {
                         rec.push_samples(tagged.device_idx, &tagged.samples);
                     }
                     if rec.is_complete() {
-                        rec.state = anc_recording::CalibrationState::Analyzing;
+                        rec.state = twister::anc_recording::CalibrationState::Analyzing;
                         run_anc_analysis = true;
                     }
                 }
@@ -349,7 +340,7 @@ async fn main() -> anyhow::Result<()> {
                     state_disp.set_anc_ok(true);
                 }
                 if let Ok(mut rec) = state_disp.anc_recording.lock() {
-                    rec.state = anc_recording::CalibrationState::Idle;
+                    rec.state = twister::anc_recording::CalibrationState::Idle;
                     rec.channels.clear();
                 }
             }
@@ -384,7 +375,7 @@ async fn main() -> anyhow::Result<()> {
             let frame_start = std::time::Instant::now();
 
             // PDM spike rejection: detect and interpolate crest-targeting spikes
-            let (filtered_chunk, pdm_spike_count) = audio::reject_pdm_spikes(&chunk);
+            let (filtered_chunk, pdm_spike_count) = twister::audio::reject_pdm_spikes(&chunk);
             chunk = filtered_chunk;
 
             // Extract modular features based on flags
@@ -448,7 +439,7 @@ async fn main() -> anyhow::Result<()> {
             // Twister auto-tune
             if state_disp.auto_tune.load(Ordering::Relaxed) {
                 let (mts, freq_scale) = if pdm_enabled && !vbuf_snapshot[slot].is_empty() {
-                    let pc = pdm::pdm_clock_hz(sample_rate);
+                    let pc = twister::pdm::pdm_clock_hz(sample_rate);
                     (
                         &vbuf_snapshot[slot][..],
                         pc / vbuf_snapshot[slot].len() as f32,
@@ -480,7 +471,7 @@ async fn main() -> anyhow::Result<()> {
 
             // Waterfall
             let max_freq = if pdm_enabled {
-                pdm::pdm_clock_hz(sample_rate) / 2.0
+                twister::pdm::pdm_clock_hz(sample_rate) / 2.0
             } else {
                 sample_rate / 2.0
             };
@@ -570,7 +561,7 @@ async fn main() -> anyhow::Result<()> {
             // Bispectrum
             let fft_il: Vec<f32> = cbuf
                 .iter()
-                .take(bispectrum::BISPEC_BINS)
+                .take(twister::bispectrum::BISPEC_BINS)
                 .flat_map(|c| [c.re, c.im])
                 .collect();
             let events = bispec.analyze_frame(&fft_il, sample_rate, HardwareLayer::Microphone);
@@ -957,8 +948,8 @@ async fn main() -> anyhow::Result<()> {
 
                     if dominant_freq > 50.0 && dominant_freq < 500.0 {
                         // Likely voice pitch during attack
-                        let attack_key = harmony::detect_attack_key(dominant_freq);
-                        let chord_freqs = harmony::get_chord_frequencies(&attack_key);
+                        let attack_key = twister::harmony::detect_attack_key(dominant_freq);
+                        let chord_freqs = twister::harmony::get_chord_frequencies(&attack_key);
 
                         state_disp.log(
                             "INFO",
@@ -1074,7 +1065,7 @@ async fn main() -> anyhow::Result<()> {
             let mut par_targets = Vec::new();
             for &(freq, gain) in &multi_targets {
                 if freq > 0.0 {
-                    let pair = parametric::ParametricPair::new(
+                    let pair = twister::parametric::ParametricPair::new(
                         PARAMETRIC_CARRIER_HZ,
                         freq,
                         gain * state_disp.get_master_gain(),
@@ -1239,11 +1230,12 @@ async fn main() -> anyhow::Result<()> {
                         .into(),
                     );
                     let mut px = slint::SharedPixelBuffer::<slint::Rgba8Pixel>::new(
-                        state::WATERFALL_DISPLAY_COLS as u32,
-                        state::WATERFALL_DISPLAY_ROWS as u32,
+                        twister::state::WATERFALL_DISPLAY_COLS as u32,
+                        twister::state::WATERFALL_DISPLAY_ROWS as u32,
                     );
                     let dst = px.make_mut_slice();
-                    let sz = state::WATERFALL_DISPLAY_COLS * state::WATERFALL_DISPLAY_ROWS;
+                    let sz = twister::state::WATERFALL_DISPLAY_COLS
+                        * twister::state::WATERFALL_DISPLAY_ROWS;
                     if wf.len() >= sz {
                         for i in 0..sz {
                             let s = wf[i];
@@ -1807,7 +1799,7 @@ fn wire_ui_callbacks(
 }
 
 fn rt_store_async(
-    qdrant: Arc<Option<embeddings::EmbeddingStore>>,
+    qdrant: Arc<Option<twister::embeddings::EmbeddingStore>>,
     neo4j: Arc<tokio::sync::Mutex<Option<twister::graph::ForensicGraph>>>,
     event: DetectionEvent,
     state: Arc<AppState>,

@@ -101,17 +101,131 @@ impl Default for TrainingMetrics {
     }
 }
 
-/// Load training corpus from multimodal features (stub implementation)
+/// Load training corpus from JSON or JSONL format
 ///
 /// # Arguments
-/// * `_corpus_path` - Path to corpus file or directory
+/// * `corpus_path` - Path to JSON corpus file (supports .json and .jsonl)
+///   - JSON: Array of event objects: `[{id, features, timestamp_micros, tag, confidence, rf_frequency_hz}, ...]`
+///   - JSONL: One event per line (newline-delimited JSON)
 ///
 /// # Returns
 /// Vector of training events with 1297-D features
-pub fn load_corpus(_corpus_path: &str) -> Result<Vec<TrainingEvent>, Box<dyn Error>> {
-    // Stub: In production, this would load from HDF5 or JSON
-    // For now, return empty corpus (tests will provide synthetic data)
-    Ok(Vec::new())
+///
+/// # Errors
+/// Returns error if:
+/// - File cannot be read
+/// - JSON is malformed
+/// - Feature dimension is not 1297
+/// - Corpus is empty
+pub fn load_corpus(corpus_path: &str) -> Result<Vec<TrainingEvent>, Box<dyn Error>> {
+    use std::fs;
+    use std::path::Path;
+
+    let path = Path::new(corpus_path);
+
+    // Check file exists
+    if !path.exists() {
+        eprintln!(
+            "[Track K] Warning: corpus file not found at {}. Using empty corpus (tests will provide synthetic data)",
+            corpus_path
+        );
+        return Ok(Vec::new());
+    }
+
+    let content = fs::read_to_string(path)?;
+    let mut events = Vec::new();
+
+    // Detect format: JSONL (one object per line) vs JSON (single array)
+    let lines: Vec<&str> = content.lines().filter(|l| !l.is_empty()).collect();
+
+    if lines.len() == 1 {
+        // Single line: likely JSON array
+        parse_json_array(&content, &mut events)?;
+    } else {
+        // Multiple lines: JSONL format
+        for (line_num, line) in lines.iter().enumerate() {
+            match serde_json::from_str::<serde_json::Value>(line) {
+                Ok(obj) => {
+                    if let Some(event) = parse_json_event(&obj) {
+                        events.push(event);
+                    }
+                }
+                Err(e) => {
+                    eprintln!(
+                        "[Track K] Warning: skipping line {} (JSON parse error: {})",
+                        line_num + 1,
+                        e
+                    );
+                }
+            }
+        }
+    }
+
+    // Validate corpus
+    if events.is_empty() {
+        return Err("Corpus is empty after parsing".into());
+    }
+
+    // Validate feature dimensions
+    for event in &events {
+        if event.features.len() != 1297 {
+            return Err(format!(
+                "Feature dimension mismatch: expected 1297, got {} (event: {})",
+                event.features.len(),
+                event.id
+            )
+            .into());
+        }
+    }
+
+    eprintln!(
+        "[Track K] Loaded corpus: {} events from {}",
+        events.len(),
+        corpus_path
+    );
+    Ok(events)
+}
+
+/// Parse JSON array format: `[{...}, {...}, ...]`
+fn parse_json_array(
+    content: &str,
+    events: &mut Vec<TrainingEvent>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let array: Vec<serde_json::Value> = serde_json::from_str(content)?;
+    for obj in array {
+        if let Some(event) = parse_json_event(&obj) {
+            events.push(event);
+        }
+    }
+    Ok(())
+}
+
+/// Parse single event from JSON object
+fn parse_json_event(obj: &serde_json::Value) -> Option<TrainingEvent> {
+    let id = obj["id"].as_str().unwrap_or("unknown").to_string();
+    let features: Vec<f32> = obj["features"]
+        .as_array()?
+        .iter()
+        .filter_map(|v| v.as_f64().map(|f| f as f32))
+        .collect();
+    let timestamp_micros = obj["timestamp_micros"].as_i64().unwrap_or(0);
+    let tag = obj["tag"].as_str().unwrap_or("UNKNOWN").to_string();
+    let confidence = obj["confidence"].as_f64().unwrap_or(0.0) as f32;
+    let rf_frequency_hz = obj["rf_frequency_hz"].as_f64().unwrap_or(2.4e9) as f32;
+
+    // Skip if features missing or wrong size
+    if features.is_empty() || features.len() != 1297 {
+        return None;
+    }
+
+    Some(TrainingEvent {
+        id,
+        features,
+        timestamp_micros,
+        tag,
+        confidence,
+        rf_frequency_hz,
+    })
 }
 
 /// Compute cosine similarity between two embedding vectors

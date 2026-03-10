@@ -475,6 +475,17 @@ pub fn discover_patterns(
         // Generate label
         let label = generate_pattern_label(cluster_id, frequency_hours, rf_mode_mhz);
 
+        // ★ GENERATION-CRITICAL: Enforce silhouette score threshold ★
+        // Clusters with silhouette < 0.6 indicate poor separation and are rejected
+        // This ensures only high-quality harassment patterns are reported
+        if avg_silhouette < 0.6 {
+            eprintln!(
+                "[Track K] Silhouette filter: rejected cluster {} (silhouette={:.4} < 0.6 threshold)",
+                cluster_id, avg_silhouette
+            );
+            continue;
+        }
+
         patterns.push(Pattern {
             motif_id: cluster_id,
             label,
