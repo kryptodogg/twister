@@ -49,3 +49,6 @@ pub use unified_field_mamba::UnifiedFieldMamba;
 pub mod waveshape_projection;
 pub use waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
 pub mod spectral_frame;
+
+pub mod field_particle;
+pub use field_particle::FieldParticle;
