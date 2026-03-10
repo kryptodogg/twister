@@ -1,0 +1,327 @@
+// MAMBA BRAIN UNIFIED FIELD INFERENCE VISUALIZATION
+// Pattern Origin: joycon_wand.slint global state + monospace fonts + gradient backgrounds
+
+import { VerticalBox, HorizontalBox } from "std-widgets.slint";
+import { Standards, IconButton, ForensicPalette, ForensicMaterials } from "../standards.slint";
+
+export global MambaBrainStatus {
+    // Scalar latent metrics from 128D → 4D projection
+    in-out property <float> frequency-tracker: 0.0;     // Main 9D output dimension
+    in-out property <float> harmonic-smear: 0.0;        // Phase coherence
+    in-out property <float> anomaly-score: 0.0;         // Reconstruction MSE
+    in-out property <float> material-confidence: 0.0;   // Cluster assignment confidence
+
+    // Particle cloud (12 latent clusters, PCA projection)
+    // Format: "x1,y1,e1|x2,y2,e2|..." where x,y ∈ [-1,1], e ∈ [0,1]
+    in-out property <string> particle-positions: "";
+
+    // Inference status
+    in-out property <bool> inference-active: false;
+    in-out property <int> inference-fps: 30;
+}
+
+export component MambaBrainApplet inherits Window {
+    title: "AG-Brain: Unified Field Inference";
+    width: 1000px;
+    height: 600px;
+    background: ForensicMaterials.glass_tablet_background;
+
+    // Frosted glass effect (Pattern: joycon_wand.slint gradient)
+    Rectangle {
+        width: 100%;
+        height: 100%;
+        background: @linear-gradient(180deg, #11111166 0%, #000000bb 100%);
+    }
+
+    VerticalBox {
+        spacing: 15px;
+        padding: 20px;
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // HEADER: Inference Status & Key Metrics
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        Rectangle {
+            background: ForensicMaterials.surface_panel;
+            border-radius: 12px;
+            border-color: ForensicPalette.ag_cyan;
+            border-width: 1px;
+
+            HorizontalBox {
+                padding: 15px;
+                spacing: 20px;
+
+                VerticalBox {
+                    Text {
+                        text: MambaBrainStatus.inference-active ? "🧠 MAMBA BRAIN ACTIVE" : "🧠 MAMBA BRAIN STANDBY";
+                        color: MambaBrainStatus.inference-active ? ForensicPalette.ag_cyan : #ff8800;
+                        font-weight: 800;
+                        font-size: 14px;
+                        font-family: "monospace";
+                    }
+                    Text {
+                        text: "Unified Field Inference @ " + MambaBrainStatus.inference-fps + " FPS";
+                        color: ForensicPalette.ag_cyan;
+                        font-family: "monospace";
+                        font-size: 10px;
+                    }
+                }
+
+                // Inline metrics (Pattern: joycon_wand.slint text layout)
+                HorizontalBox {
+                    spacing: 30px;
+                    alignment: end;
+
+                    VerticalBox {
+                        Text { text: "Anomaly Score"; color: #aaa; font-size: 9px; }
+                        Text {
+                            text: round(MambaBrainStatus.anomaly-score * 1000.0) / 1000.0;
+                            color: MambaBrainStatus.anomaly-score > 0.5 ? ForensicPalette.ag_red : ForensicPalette.ag_cyan;
+                            font-family: "monospace";
+                            font-weight: 700;
+                            font-size: 12px;
+                        }
+                    }
+
+                    VerticalBox {
+                        Text { text: "Material Confidence"; color: #aaa; font-size: 9px; }
+                        Text {
+                            text: round(MambaBrainStatus.material-confidence * 100.0) + "%";
+                            color: ForensicPalette.ag_cyan;
+                            font-family: "monospace";
+                            font-weight: 700;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // MAIN VISUALIZATION: 2D Latent Particle Cloud
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        Rectangle {
+            height: 350px;
+            background: ForensicMaterials.surface_panel;
+            border-color: ForensicPalette.ag_violet;
+            border-width: 2px;
+            border-radius: 8px;
+
+            VerticalBox {
+                padding: 10px;
+                spacing: 8px;
+
+                Text {
+                    text: "128D Latent Embedding → 2D PCA Projection";
+                    color: ForensicPalette.ag_violet;
+                    font-weight: 700;
+                    font-size: 11px;
+                    font-family: "monospace";
+                }
+
+                // PCA Visualization Canvas
+                Rectangle {
+                    width: 100%;
+                    background: @linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+                    border-radius: 4px;
+
+                    // Subtle grid reference (via background pattern)
+                    Rectangle {
+                        width: 100%;
+                        height: 100%;
+                        background: transparent;
+                        border-color: #1a1a2a;
+                        border-width: 1px;
+                        opacity: 0.3;
+                    }
+
+                    // Particle cluster 1 (anomaly)
+                    Rectangle {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 6px;
+                        background: @linear-gradient(135deg, #ff0000 0%, #ff8800 100%);
+                        opacity: MambaBrainStatus.anomaly-score;
+                        x: parent.width * 0.30 - 6px;
+                        y: parent.height * 0.20 - 6px;
+                    }
+
+                    // Particle cluster 2 (confidence)
+                    Rectangle {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 6px;
+                        background: @linear-gradient(135deg, #00ff00 0%, #00ffff 100%);
+                        opacity: MambaBrainStatus.material-confidence;
+                        x: parent.width * 0.50 - 6px;
+                        y: parent.height * 0.30 - 6px;
+                    }
+
+                    // Particle cluster 3 (harmonic)
+                    Rectangle {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 6px;
+                        background: @linear-gradient(135deg, #b0f 0%, #0cf 100%);
+                        opacity: MambaBrainStatus.harmonic-smear;
+                        x: parent.width * 0.70 - 6px;
+                        y: parent.height * 0.50 - 6px;
+                    }
+
+                    // Particle cluster 4 (frequency)
+                    Rectangle {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 6px;
+                        background: @linear-gradient(135deg, #ffff00 0%, #ff0080 100%);
+                        opacity: MambaBrainStatus.frequency-tracker;
+                        x: parent.width * 0.40 - 6px;
+                        y: parent.height * 0.70 - 6px;
+                    }
+
+                    Text {
+                        text: "Latent Space (12 Mamba Clusters)";
+                        color: #666;
+                        font-size: 9px;
+                        font-family: "monospace";
+                        x: 8px;
+                        y: parent.height - 20px;
+                    }
+                }
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // MAMBA PROJECTION METRICS (Real 128D → 4D output)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        HorizontalBox {
+            spacing: 10px;
+
+            // Dimension 1: Frequency Tracker (60Hz → 2400Hz sweep)
+            Rectangle {
+                background: ForensicMaterials.surface_panel;
+                border-color: ForensicPalette.ag_red;
+                border-width: 1px;
+                border-radius: 6px;
+
+                VerticalBox {
+                    padding: 10px;
+                    spacing: 4px;
+
+                    Text {
+                        text: "📡 FREQUENCY";
+                        color: ForensicPalette.ag_red;
+                        font-weight: 700;
+                        font-size: 10px;
+                    }
+                    Text {
+                        text: round(MambaBrainStatus.frequency-tracker * 100.0) + "%";
+                        color: ForensicPalette.ag_red;
+                        font-family: "monospace";
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                }
+            }
+
+            // Dimension 2: Harmonic Smear (phase coherence)
+            Rectangle {
+                background: ForensicMaterials.surface_panel;
+                border-color: ForensicPalette.hue-e;
+                border-width: 1px;
+                border-radius: 6px;
+
+                VerticalBox {
+                    padding: 10px;
+                    spacing: 4px;
+
+                    Text {
+                        text: "🌊 HARMONIC";
+                        color: ForensicPalette.hue-e;
+                        font-weight: 700;
+                        font-size: 10px;
+                    }
+                    Text {
+                        text: round(MambaBrainStatus.harmonic-smear * 1000.0) / 1000.0;
+                        color: ForensicPalette.hue-e;
+                        font-family: "monospace";
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                }
+            }
+
+            // Dimension 3: Anomaly Score (reconstruction MSE)
+            Rectangle {
+                background: ForensicMaterials.surface_panel;
+                border-color: ForensicPalette.ag_violet;
+                border-width: 1px;
+                border-radius: 6px;
+
+                VerticalBox {
+                    padding: 10px;
+                    spacing: 4px;
+
+                    Text {
+                        text: "⚠️ ANOMALY";
+                        color: ForensicPalette.ag_violet;
+                        font-weight: 700;
+                        font-size: 10px;
+                    }
+                    Text {
+                        text: round(MambaBrainStatus.anomaly-score * 1000.0) / 1000.0;
+                        color: ForensicPalette.ag_violet;
+                        font-family: "monospace";
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                }
+            }
+
+            // Dimension 4: Material Confidence (cluster assignment)
+            Rectangle {
+                background: ForensicMaterials.surface_panel;
+                border-color: ForensicPalette.ag_cyan;
+                border-width: 1px;
+                border-radius: 6px;
+
+                VerticalBox {
+                    padding: 10px;
+                    spacing: 4px;
+
+                    Text {
+                        text: "🎯 CONFIDENCE";
+                        color: ForensicPalette.ag_cyan;
+                        font-weight: 700;
+                        font-size: 10px;
+                    }
+                    Text {
+                        text: round(MambaBrainStatus.material-confidence * 1000.0) / 1000.0;
+                        color: ForensicPalette.ag_cyan;
+                        font-family: "monospace";
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+
+        // Bottom status bar
+        Rectangle {
+            height: 24px;
+            background: ForensicMaterials.surface_panel;
+            border-radius: 6px;
+            border-color: #444;
+            border-width: 1px;
+
+            Text {
+                text: MambaBrainStatus.inference-active ? "✓ Inference running | 128D latent space | 12 particle clusters" : "⊘ Waiting for particles...";
+                color: MambaBrainStatus.inference-active ? #0f0 : #f80;
+                font-family: "monospace";
+                font-size: 9px;
+                vertical-alignment: center;
+                x: 8px;
+                y: 6px;
+            }
+        }
+    }
+}
