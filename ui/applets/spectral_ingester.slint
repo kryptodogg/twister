@@ -1,0 +1,34 @@
+import { VerticalBox } from "std-widgets.slint";
+export component SpectralIngester inherits Window {
+    background: #000000aa;
+    width: 120px;
+    height: 700px;
+
+    in property <string> spectrum_path;
+    in property <image> waterfall_image;
+
+    VerticalBox {
+        padding: 6px; spacing: 4px;
+        Text { text: "RF INGESTER"; color: #0cf; font-weight: 800; font-size: 12px; }
+        Text { text: "2.4 GHZ ISM"; color: #aaa; font-size: 9px; }
+
+        // Live Spectrum Analyzer (SVG Path)
+        Rectangle {
+            height: 100px; background: #050505;
+            Path {
+                stroke: #0cf; stroke-width: 1.2px;
+                commands: root.spectrum_path;
+            }
+        }
+
+        // Waterfall Display (Raster Image)
+        Rectangle {
+            height: 500px; background: #050505;
+            Image {
+                width: 100%; height: 100%;
+                source: root.waterfall_image;
+                image-fit: fill;
+            }
+        }
+    }
+}
