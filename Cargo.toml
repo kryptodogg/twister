@@ -29,6 +29,11 @@ path = "examples/test_vbuffer_context_window.rs"
 name = "full_signal_ingestion_demo"
 path = "examples/full_signal_ingestion_demo.rs"
 
+# Wiring Pattern Demonstrations
+[[example]]
+name = "waveshaping_mamba_widget"
+path = "examples/waveshaping_mamba_widget.rs"
+
 # Benchmarks
 [[bench]]
 harness = false

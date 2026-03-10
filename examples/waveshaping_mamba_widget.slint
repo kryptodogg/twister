@@ -1,0 +1,259 @@
+// examples/waveshaping_mamba_widget.slint
+// Waveshaping Control Widget with Mamba Integration UI
+
+import { Button, Slider, ComboBox, VerticalBox, HorizontalBox, Text, GroupBox } from "std-widgets.slint";
+
+export global WaveshapingSignals {
+    callback auto_waveshape();
+    callback drive_changed(float);
+    callback mode_changed(int);
+    callback tone_changed(float);
+}
+
+export component AppWindow inherits Window {
+    width: 700px;
+    height: 600px;
+    title: "Waveshaping Widget + Unified Mamba";
+
+    // State properties
+    in-out property <float> drive_slider: 0.5;
+    in-out property <int> mode_dropdown: 0;
+    in-out property <float> tone_slider: 0.5;
+    in-out property <string> confidence_display: "0.0%";
+    in-out property <string> anomaly_display: "0.0000";
+    in-out property <string> mamba_status: "Inactive";
+
+    // Callbacks
+    public function set_drive_slider(drive: float) {
+        drive_slider = drive;
+    }
+
+    public function set_mode_dropdown(mode: int) {
+        mode_dropdown = mode;
+    }
+
+    public function set_tone_slider(tone: float) {
+        tone_slider = tone;
+    }
+
+    public function set_confidence_display(text: string) {
+        confidence_display = text;
+    }
+
+    public function set_anomaly_display(text: string) {
+        anomaly_display = text;
+    }
+
+    public function set_mamba_status(text: string) {
+        mamba_status = text;
+    }
+
+    background: #2a2a2a;
+    foreground: #ffffff;
+
+    VerticalBox {
+        spacing: 15px;
+        padding: 20px;
+
+        // ─────────────────────────────────────────────────────────────────────
+        // TITLE & STATUS
+        // ─────────────────────────────────────────────────────────────────────
+
+        Text {
+            text: "🎛️  Waveshaping Widget with Unified Mamba";
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        HorizontalBox {
+            spacing: 10px;
+
+            Text {
+                text: "Mamba Status:";
+                font-size: 12px;
+                color: #aaaaaa;
+            }
+
+            Text {
+                text: mamba_status;
+                font-size: 12px;
+                color: #00ff88;
+                font-weight: bold;
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // AUTO-WAVESHAPE BUTTON
+        // ─────────────────────────────────────────────────────────────────────
+
+        Button {
+            text: "🤖 Auto-Waveshape (Unified Mamba)";
+            clicked => {
+                WaveshapingSignals.auto_waveshape();
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // MAMBA PREDICTIONS DISPLAY
+        // ─────────────────────────────────────────────────────────────────────
+
+        GroupBox {
+            title: "📊 Mamba Predictions";
+
+            VerticalBox {
+                spacing: 10px;
+                padding: 10px;
+
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Confidence:";
+                        min-width: 100px;
+                        color: #aaaaaa;
+                    }
+                    Text {
+                        text: confidence_display;
+                        font-weight: bold;
+                        color: #ffaa00;
+                    }
+                }
+
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Anomaly Score:";
+                        min-width: 100px;
+                        color: #aaaaaa;
+                    }
+                    Text {
+                        text: anomaly_display;
+                        font-weight: bold;
+                        color: #ff5555;
+                    }
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // DRIVE CONTROL
+        // ─────────────────────────────────────────────────────────────────────
+
+        GroupBox {
+            title: "Drive (Distortion Amount)";
+
+            VerticalBox {
+                padding: 10px;
+                spacing: 8px;
+
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Drive:";
+                        min-width: 60px;
+                    }
+                    Slider {
+                        width: 100%;
+                        value <=> drive_slider;
+                        minimum: 0.0;
+                        maximum: 1.0;
+                        changed(value) => {
+                            WaveshapingSignals.drive_changed(value);
+                        }
+                    }
+                    Text {
+                        text: round(drive_slider * 100.0) / 100.0;
+                        min-width: 40px;
+                        text-alignment: right;
+                        color: #00ff88;
+                    }
+                }
+
+                Text {
+                    text: "0 = Off     0.5 = Moderate     1.0 = Max Distortion";
+                    font-size: 10px;
+                    color: #666666;
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // MODE CONTROL
+        // ─────────────────────────────────────────────────────────────────────
+
+        GroupBox {
+            title: "Waveshape Mode";
+
+            VerticalBox {
+                padding: 10px;
+
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Mode:";
+                        min-width: 60px;
+                    }
+                    ComboBox {
+                        model: ["Sine", "Triangle", "Square", "Sawtooth"];
+                        current-index <=> mode_dropdown;
+                        current-index-changed(index) => {
+                            WaveshapingSignals.mode_changed(index);
+                        }
+                    }
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // TONE CONTROL
+        // ─────────────────────────────────────────────────────────────────────
+
+        GroupBox {
+            title: "Tone (Brightness)";
+
+            VerticalBox {
+                padding: 10px;
+                spacing: 8px;
+
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Tone:";
+                        min-width: 60px;
+                    }
+                    Slider {
+                        width: 100%;
+                        value <=> tone_slider;
+                        minimum: 0.0;
+                        maximum: 1.0;
+                        changed(value) => {
+                            WaveshapingSignals.tone_changed(value);
+                        }
+                    }
+                    Text {
+                        text: round(tone_slider * 100.0) / 100.0;
+                        min-width: 40px;
+                        text-alignment: right;
+                        color: #00ff88;
+                    }
+                }
+
+                Text {
+                    text: "0 = Bright     0.5 = Neutral     1.0 = Dark";
+                    font-size: 10px;
+                    color: #666666;
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // FOOTER
+        // ─────────────────────────────────────────────────────────────────────
+
+        Text {
+            text: "Wiring Pattern: Input → Mamba Inference → Parameters → UI";
+            font-size: 10px;
+            color: #666666;
+        }
+    }
+}
