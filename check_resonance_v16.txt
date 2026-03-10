@@ -1,0 +1,1173 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling libm v0.2.16
+   Compiling serde v1.0.228
+   Compiling autocfg v1.5.0
+    Checking cfg-if v1.0.4
+    Checking windows-link v0.2.1
+   Compiling zerocopy v0.8.42
+   Compiling portable-atomic v1.13.1
+    Checking critical-section v1.2.0
+   Compiling crossbeam-utils v0.8.21
+    Checking memchr v2.8.0
+    Checking log v0.4.29
+    Checking pin-project-lite v0.2.17
+   Compiling getrandom v0.3.4
+    Checking windows-sys v0.61.2
+   Compiling cfg_aliases v0.2.1
+    Checking scopeguard v1.2.0
+   Compiling parking_lot_core v0.9.12
+   Compiling thiserror v2.0.18
+    Checking lock_api v0.4.14
+   Compiling libc v0.2.183
+    Checking allocator-api2 v0.2.21
+    Checking equivalent v1.0.2
+   Compiling num-traits v0.2.19
+    Checking foldhash v0.2.0
+    Checking futures-core v0.3.32
+   Compiling paste v1.0.15
+    Checking itoa v1.0.17
+    Checking windows-strings v0.5.1
+    Checking windows-result v0.4.1
+   Compiling zmij v1.0.21
+    Checking arrayvec v0.7.6
+   Compiling ident_case v1.0.1
+    Checking rand_core v0.9.5
+    Checking futures-io v0.3.32
+   Compiling version_check v0.9.5
+   Compiling unicode-segmentation v1.12.0
+   Compiling hashbrown v0.16.1
+    Checking fnv v1.0.7
+   Compiling unicode-xid v0.2.6
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling rayon-core v1.13.0
+   Compiling strsim v0.11.1
+   Compiling crc32fast v1.5.0
+   Compiling syn v2.0.117
+    Checking unicode-width v0.2.2
+   Compiling serde_json v1.0.149
+    Checking windows-threading v0.2.1
+   Compiling khronos_api v3.1.0
+   Compiling convert_case v0.10.0
+   Compiling xml-rs v0.8.28
+    Checking libloading v0.8.9
+   Compiling ash v0.38.0+1.3.281
+   Compiling naga v28.0.0
+   Compiling khronos-egl v6.0.0
+    Checking bit-vec v0.8.0
+    Checking stable_deref_trait v1.2.1
+    Checking foldhash v0.1.5
+    Checking bitflags v2.11.0
+    Checking codespan-reporting v0.12.0
+    Checking aho-corasick v1.1.4
+    Checking hashbrown v0.15.5
+    Checking bit-set v0.8.0
+    Checking spirv v0.3.0+sdk-1.3.268.0
+    Checking gpu-descriptor-types v0.2.0
+   Compiling wgpu-hal v28.0.1
+    Checking regex-syntax v0.8.10
+    Checking raw-window-handle v0.6.2
+    Checking indexmap v2.13.0
+    Checking presser v0.3.1
+    Checking hexf-parse v0.2.1
+    Checking rustc-hash v1.1.0
+    Checking gpu-descriptor v0.3.2
+    Checking ordered-float v5.1.0
+    Checking rand_core v0.10.0
+   Compiling getrandom v0.4.2
+    Checking renderdoc-sys v1.1.0
+   Compiling anyhow v1.0.102
+    Checking range-alloc v0.1.5
+    Checking glow v0.16.0
+   Compiling wgpu-core v28.0.1
+    Checking parking v2.2.1
+   Compiling litrs v1.0.0
+   Compiling wgpu v28.0.0
+    Checking cpufeatures v0.3.0
+   Compiling gl_generator v0.14.0
+    Checking option-ext v0.2.0
+    Checking fastrand v2.3.0
+    Checking static_assertions v1.1.0
+    Checking concurrent-queue v2.5.0
+    Checking chacha20 v0.10.0
+    Checking dirs-sys v0.5.0
+   Compiling cubecl-common v0.10.0-pre.2
+   Compiling prettyplease v0.2.37
+    Checking dirs v6.0.0
+    Checking rustc-demangle v0.1.27
+    Checking regex-automata v0.4.14
+   Compiling synstructure v0.13.2
+   Compiling document-features v0.2.12
+   Compiling darling_core v0.23.0
+   Compiling darling_core v0.21.3
+   Compiling glutin_wgl_sys v0.6.1
+    Checking backtrace v0.3.76
+    Checking rand v0.10.0
+    Checking event-listener v5.4.1
+    Checking futures-lite v2.6.1
+    Checking serde_bytes v0.11.19
+    Checking xxhash-rust v0.8.15
+    Checking float4 v0.1.0
+    Checking winnow v0.7.15
+    Checking embassy-futures v0.1.2
+    Checking web-time v1.1.0
+   Compiling spin v0.10.0
+    Checking serde_spanned v1.0.4
+    Checking event-listener-strategy v0.5.4
+    Checking toml_datetime v0.7.5+spec-1.1.0
+   Compiling cubecl-runtime v0.10.0-pre.2
+   Compiling cubecl-macros v0.10.0-pre.2
+    Checking float-ord v0.3.2
+    Checking toml_writer v1.0.6+spec-1.1.0
+    Checking async-channel v2.5.0
+    Checking crossbeam-epoch v0.9.18
+    Checking md5 v0.8.0
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.10.2
+   Compiling zerocopy-derive v0.8.42
+   Compiling thiserror-impl v2.0.18
+   Compiling zerofrom-derive v0.1.6
+   Compiling profiling-procmacros v1.0.17
+   Compiling yoke-derive v0.8.1
+   Compiling tracing-attributes v0.1.31
+   Compiling windows-implement v0.60.2
+   Compiling derive_more-impl v2.1.1
+   Compiling windows-interface v0.59.3
+   Compiling zerovec-derive v0.11.2
+   Compiling displaydoc v0.2.5
+   Compiling derive-new v0.7.0
+   Compiling darling_macro v0.21.3
+    Checking profiling v1.0.17
+   Compiling darling_macro v0.23.0
+    Checking regex v1.12.3
+    Checking toml_parser v1.0.9+spec-1.1.0
+   Compiling darling v0.21.3
+    Checking windows-core v0.62.2
+   Compiling variadics_please v1.1.0
+   Compiling darling v0.23.0
+    Checking sanitize-filename v0.6.0
+   Compiling enumset_derive v0.14.0
+    Checking toml v0.9.12+spec-1.1.0
+    Checking either v1.15.0
+   Compiling cubecl-macros-internal v0.10.0-pre.2
+    Checking crossbeam-deque v0.8.6
+    Checking bytemuck v1.25.0
+    Checking windows-collections v0.3.2
+    Checking windows-numerics v0.3.1
+    Checking windows-future v0.3.2
+    Checking simd-adler32 v0.3.8
+    Checking wgpu-types v28.0.0
+   Compiling cubecl-wgpu v0.10.0-pre.2
+    Checking zerofrom v0.1.6
+   Compiling equator-macro v0.4.2
+    Checking adler2 v2.0.1
+   Compiling cubecl v0.10.0-pre.2
+    Checking yoke v0.8.1
+    Checking windows v0.62.2
+    Checking miniz_oxide v0.8.9
+    Checking rayon v1.11.0
+   Compiling windows-targets v0.52.6
+    Checking slab v0.4.12
+    Checking zerovec v0.11.5
+   Compiling tokio-macros v2.6.1
+    Checking socket2 v0.6.3
+    Checking flate2 v1.1.9
+    Checking mio v1.1.1
+   Compiling icu_normalizer_data v2.1.1
+   Compiling smallvec v1.15.1
+   Compiling icu_properties_data v2.1.2
+   Compiling windows-implement v0.58.0
+   Compiling windows-interface v0.58.0
+    Checking bytes v1.11.1
+    Checking enumset v1.1.10
+    Checking num-integer v0.1.46
+    Checking cubecl-zspace v0.10.0-pre.2
+   Compiling av-scenechange v0.14.1
+    Checking once_cell v1.21.3
+    Checking parking_lot v0.12.5
+    Checking futures-sink v0.3.32
+   Compiling built v0.8.0
+    Checking tracing-core v0.1.36
+    Checking tinystr v0.8.2
+   Compiling arg_enum_proc_macro v0.3.4
+   Compiling derive_more v2.1.1
+    Checking tokio v1.50.0
+   Compiling pastey v0.1.1
+    Checking litemap v0.8.1
+   Compiling heck v0.5.0
+   Compiling find-msvc-tools v0.1.9
+   Compiling shlex v1.3.0
+    Checking writeable v0.6.2
+    Checking tracing v0.1.44
+    Checking futures-channel v0.3.32
+    Checking icu_locale_core v2.1.1
+   Compiling rav1e v0.8.1
+   Compiling cc v1.2.56
+    Checking core_maths v0.1.1
+   Compiling semver v1.0.27
+    Checking zeroize v1.8.2
+    Checking ppv-lite86 v0.2.21
+   Compiling siphasher v1.0.2
+   Compiling half v2.7.1
+   Compiling rustc_version v0.4.1
+    Checking http v1.4.0
+   Compiling fax_derive v0.2.0
+   Compiling num-derive v0.4.2
+    Checking rand_chacha v0.9.0
+   Compiling futures-macro v0.3.32
+    Checking rand_distr v0.6.0
+   Compiling simd_helpers v0.1.0
+    Checking base64 v0.22.1
+   Compiling noop_proc_macro v0.3.0
+    Checking futures-task v0.3.32
+    Checking rand v0.9.2
+   Compiling thiserror v1.0.69
+    Checking rustls-pki-types v1.14.0
+    Checking num-complex v0.4.6
+    Checking getrandom v0.2.17
+   Compiling strum_macros v0.27.2
+    Checking rand_distr v0.5.1
+   Compiling thiserror-impl v1.0.69
+   Compiling windows-result v0.2.0
+   Compiling itertools v0.14.0
+   Compiling ttf-parser v0.25.1
+    Checking percent-encoding v2.3.2
+    Checking futures-util v0.3.32
+   Compiling ring v0.17.14
+   Compiling windows-strings v0.1.0
+    Checking http-body v1.0.1
+    Checking float8 v0.7.0
+    Checking equator v0.4.2
+    Checking memmap2 v0.9.10
+   Compiling ahash v0.8.12
+    Checking tower-service v0.3.3
+   Compiling rustversion v1.0.22
+   Compiling seq-macro v0.3.6
+   Compiling httparse v1.10.1
+    Checking cubecl-ir v0.10.0-pre.2
+   Compiling num-bigint v0.4.6
+   Compiling aligned-vec v0.6.4
+   Compiling windows-core v0.58.0
+   Compiling potential_utf v0.1.4
+   Compiling zerotrie v0.2.3
+    Checking font-types v0.10.1
+   Compiling darling_core v0.20.11
+    Checking read-fonts v0.35.0
+   Compiling windows v0.58.0
+   Compiling num-rational v0.4.2
+   Compiling icu_provider v2.1.1
+    Checking v_frame v0.3.9
+   Compiling icu_collections v2.1.1
+    Checking tokio-util v0.7.18
+   Compiling fdeflate v0.3.7
+   Compiling as-slice v0.2.1
+   Compiling slotmap v1.1.1
+   Compiling pulp v0.22.2
+    Checking schannel v0.1.28
+    Checking crossbeam-channel v0.5.15
+   Compiling linebender_resource_handle v0.1.1
+   Compiling darling_macro v0.20.11
+    Checking quick-error v2.0.1
+    Checking untrusted v0.9.0
+   Compiling float-cmp v0.9.0
+    Checking num_cpus v1.17.0
+   Compiling strict-num v0.1.1
+    Checking aligned v0.4.3
+   Compiling darling v0.20.11
+    Checking cubecl-core v0.10.0-pre.2
+   Compiling nom v8.0.0
+   Compiling core2 v0.4.0
+    Checking raw-cpuid v11.6.0
+   Compiling memoffset v0.9.1
+    Checking reborrow v0.5.5
+   Compiling weezl v0.1.12
+   Compiling rustix v0.38.44
+   Compiling rustls v0.23.37
+   Compiling tinyvec_macros v0.1.1
+   Compiling arrayref v0.3.9
+   Compiling y4m v0.8.0
+   Compiling dyn-stack-macros v0.1.3
+    Checking pulp-wasm-simd-flag v0.1.0
+    Checking try-lock v0.2.5
+   Compiling fontique v0.7.0
+   Compiling toml_datetime v1.0.0+spec-1.1.0
+    Checking atomic-waker v1.1.2
+    Checking dyn-stack v0.13.2
+    Checking h2 v0.4.13
+   Compiling toml_edit v0.25.4+spec-1.1.0
+    Checking rustls-webpki v0.103.9
+    Checking want v0.3.1
+   Compiling i-slint-common v1.15.1
+   Compiling tiny-skia-path v0.11.4
+   Compiling tinyvec v1.10.0
+    Checking cubecl-std v0.10.0-pre.2
+    Checking bitstream-io v4.9.0
+   Compiling icu_properties v2.1.2
+    Checking av1-grain v0.2.5
+   Compiling icu_normalizer v2.1.1
+   Compiling errno v0.3.14
+   Compiling maybe-rayon v0.1.1
+   Compiling field-offset v0.3.6
+   Compiling kurbo v0.13.0
+   Compiling windows-sys v0.59.0
+    Checking rgb v0.8.53
+   Compiling pin-project-internal v1.1.11
+    Checking euclid v0.22.13
+    Checking colored v3.1.1
+   Compiling byteorder-lite v0.1.0
+   Compiling zune-core v0.4.12
+   Compiling unicode-script v0.5.8
+    Checking new_debug_unreachable v1.0.6
+   Compiling bitflags v1.3.2
+    Checking zune-core v0.5.1
+    Checking tower-layer v0.3.3
+    Checking subtle v2.6.1
+    Checking uuid v1.22.0
+    Checking httpdate v1.0.3
+   Compiling unicode-ccc v0.4.0
+   Compiling crunchy v0.2.4
+   Compiling protobuf v3.7.2
+   Compiling unicode-properties v0.1.4
+    Checking pin-utils v0.1.0
+   Compiling color_quant v1.1.0
+   Compiling unicode-bidi-mirroring v0.4.0
+    Checking imgref v1.12.0
+    Checking zune-jpeg v0.4.21
+    Checking hyper v1.8.1
+    Checking loop9 v0.1.5
+   Compiling rustybuzz v0.20.1
+    Checking gemm-common v0.19.0
+    Checking gif v0.14.1
+   Compiling zune-jpeg v0.5.12
+   Compiling lyon_geom v1.0.19
+    Checking image-webp v0.2.4
+    Checking pin-project v1.1.11
+   Compiling svgtypes v0.16.1
+   Compiling png v0.17.16
+   Compiling idna_adapter v1.2.1
+   Compiling fontdb v0.23.0
+   Compiling protobuf-support v3.7.2
+   Compiling proc-macro-crate v3.5.0
+   Compiling home v0.5.12
+    Checking strum v0.27.2
+   Compiling fax v0.2.6
+   Compiling phf_shared v0.11.3
+   Compiling zune-inflate v0.2.54
+   Compiling snafu-derive v0.8.9
+   Compiling avif-serialize v0.8.8
+   Compiling roxmltree v0.21.1
+    Checking rmp v0.8.15
+    Checking windows-registry v0.6.1
+    Checking sync_wrapper v1.0.2
+   Compiling simplecss v0.2.2
+    Checking pxfm v0.1.28
+   Compiling utf8_iter v1.0.4
+   Compiling xmlwriter v0.1.0
+   Compiling rspolib v0.1.2
+   Compiling native-tls v0.2.18
+   Compiling data-url v0.3.2
+   Compiling windows_x86_64_msvc v0.53.1
+   Compiling lebe v0.5.3
+    Checking byteorder v1.5.0
+   Compiling rand_core v0.6.4
+    Checking unty v0.0.4
+   Compiling tiny-keccak v2.0.2
+   Compiling pico-args v0.5.0
+   Compiling unicode-bidi v0.3.18
+   Compiling bit_field v0.10.3
+    Checking ipnet v2.12.0
+   Compiling imagesize v0.14.0
+   Compiling unicode-vo v0.1.0
+   Compiling exr v1.74.0
+    Checking hyper-util v0.1.20
+   Compiling usvg v0.46.0
+   Compiling moxcms v0.7.11
+    Checking ravif v0.12.0
+   Compiling snafu v0.8.9
+    Checking bincode v2.0.1
+   Compiling rand v0.8.5
+   Compiling tempfile v3.26.0
+   Compiling idna v1.1.0
+   Compiling form_urlencoded v1.2.2
+    Checking gpu-allocator v0.28.0
+    Checking rmp-serde v1.3.1
+   Compiling num_enum_derive v0.7.5
+    Checking tiff v0.10.3
+   Compiling which v4.4.2
+   Compiling tiny-skia v0.11.4
+    Checking lyon_path v1.0.19
+    Checking skrifa v0.37.0
+    Checking png v0.18.1
+    Checking http-body-util v0.1.3
+    Checking webpki-roots v1.0.6
+    Checking windows-sys v0.52.0
+    Checking chrono v0.4.44
+    Checking qoi v0.4.1
+   Compiling burn-derive v0.21.0-pre.2
+   Compiling const-field-offset-macro v0.1.5
+   Compiling matrixmultiply v0.3.10
+   Compiling unicode-linebreak v0.1.5
+   Compiling linked-hash-map v0.5.6
+   Compiling text-size v1.1.1
+   Compiling i-slint-compiler v1.15.1
+   Compiling ttf-parser v0.21.1
+   Compiling countme v3.0.1
+   Compiling hashbrown v0.14.5
+   Compiling lazy_static v1.5.0
+    Checking data-encoding v2.10.0
+   Compiling natord v1.0.9
+   Compiling pulldown-cmark v0.13.1
+   Compiling anstyle v1.0.13
+   Compiling winapi v0.3.9
+   Compiling annotate-snippets v0.12.13
+   Compiling rowan v0.16.1
+    Checking swash v0.2.6
+   Compiling linked_hash_set v0.1.6
+   Compiling protobuf-parse v3.7.2
+    Checking const-field-offset v0.1.5
+    Checking wgpu-core-deps-windows-linux-android v28.0.0
+   Compiling fontdue v0.9.3
+    Checking image v0.25.9
+   Compiling num_enum v0.7.5
+   Compiling resvg v0.46.0
+    Checking rand_chacha v0.3.1
+   Compiling lyon_extra v1.1.0
+   Compiling url v2.5.8
+   Compiling phf_generator v0.11.3
+    Checking tokio-rustls v0.26.4
+    Checking tower v0.5.3
+    Checking harfrust v0.3.2
+    Checking thread-tree v0.3.3
+    Checking hashbrown v0.13.2
+   Compiling macerator v0.3.0
+   Compiling vtable-macro v0.3.0
+   Compiling async-trait v0.1.89
+   Compiling derive_utils v0.15.1
+    Checking getopts v0.2.24
+    Checking unicase v2.9.0
+    Checking mime v0.3.17
+    Checking ciborium-io v0.2.2
+   Compiling smol_str v0.3.6
+   Compiling by_address v1.2.1
+   Compiling syn v1.0.109
+   Compiling typed-index-collections v3.5.0
+    Checking rawpointer v0.2.1
+    Checking pulldown-cmark-escape v0.11.0
+    Checking ciborium-ll v0.2.2
+    Checking vtable v0.3.0
+   Compiling spin_on v0.1.1
+   Compiling auto_enums v0.8.8
+   Compiling const-random-macro v0.1.16
+    Checking text_placeholder v0.5.1
+    Checking windows-targets v0.53.5
+   Compiling phf_codegen v0.11.3
+   Compiling i-slint-core-macros v1.15.1
+   Compiling protobuf-codegen v3.7.2
+    Checking lyon_algorithms v1.0.19
+   Compiling phf v0.11.3
+   Compiling macerator-macros v0.1.4
+   Compiling parse-zoneinfo v0.3.1
+    Checking safetensors v0.7.0
+    Checking clru v0.6.3
+   Compiling indexmap v1.9.3
+   Compiling winit v0.30.13
+    Checking dpi v0.1.2
+    Checking ryu v1.0.23
+    Checking pin-weak v1.1.0
+    Checking moddef v0.3.0
+   Compiling burn-ndarray v0.21.0-pre.2
+    Checking sys-locale v0.3.2
+   Compiling prettyplease v0.1.25
+    Checking htmlparser v0.2.1
+    Checking scoped-tls-hkt v0.1.5
+    Checking error-code v3.3.2
+    Checking clipboard-win v5.4.1
+    Checking parley v0.7.0
+   Compiling chrono-tz-build v0.2.1
+    Checking const-random v0.1.18
+    Checking windows-sys v0.60.2
+    Checking ndarray v0.17.2
+    Checking ciborium v0.2.2
+    Checking tokio-native-tls v0.3.1
+    Checking keyboard-types v0.7.0
+   Compiling onnx-ir v0.21.0-pre.1
+    Checking gemm-f32 v0.19.0
+    Checking futures-executor v0.3.32
+   Compiling prost-derive v0.13.5
+    Checking rustls-pemfile v2.2.0
+   Compiling i-slint-backend-winit v1.15.1
+    Checking atomic_float v1.1.0
+    Checking iri-string v0.7.10
+    Checking hashbrown v0.12.3
+    Checking base64ct v1.8.3
+    Checking cursor-icon v1.2.0
+    Checking smol_str v0.2.2
+    Checking pem-rfc7468 v0.7.0
+   Compiling toml_edit v0.24.1+spec-1.1.0
+    Checking gemm-f16 v0.19.0
+    Checking sharded-slab v0.1.7
+   Compiling chrono-tz v0.8.6
+    Checking futures v0.3.32
+    Checking tower-http v0.6.8
+    Checking prost v0.13.5
+    Checking hyper-tls v0.6.0
+    Checking copypasta v0.10.2
+    Checking serde_urlencoded v0.7.1
+    Checking axum-core v0.4.5
+    Checking hyper-rustls v0.27.7
+    Checking gemm-c64 v0.19.0
+    Checking gemm-f64 v0.19.0
+    Checking gemm-c32 v0.19.0
+   Compiling i-slint-backend-selector v1.15.1
+   Compiling derive_builder_core v0.20.2
+    Checking femtovg v0.20.4
+    Checking i-slint-core v1.15.1
+   Compiling alloca v0.4.0
+    Checking muda v0.17.1
+    Checking tracing-log v0.2.0
+    Checking matchers v0.2.0
+   Compiling onnx-ir-derive v0.21.0-pre.1
+   Compiling async-stream-impl v0.3.6
+    Checking nu-ansi-term v0.50.3
+    Checking winapi-util v0.1.11
+    Checking thread_local v1.1.9
+    Checking encoding_rs v0.8.35
+    Checking textdistance v1.1.1
+    Checking plotters-backend v0.3.7
+    Checking clap_lex v1.0.0
+    Checking matchit v0.7.3
+    Checking encode_unicode v1.0.0
+    Checking typed-path v0.12.3
+   Compiling derive_builder_macro v0.20.2
+    Checking tracing-subscriber v0.3.22
+    Checking clap_builder v4.5.60
+    Checking plotters-svg v0.3.7
+    Checking async-stream v0.3.6
+    Checking same-file v1.0.6
+    Checking gemm v0.19.0
+    Checking burn-std v0.21.0-pre.2
+    Checking cubek-matmul v0.2.0-pre.2
+    Checking cubek-random v0.2.0-pre.2
+    Checking cubek-reduce v0.2.0-pre.2
+    Checking cubek-quant v0.2.0-pre.2
+    Checking axum v0.7.9
+    Checking console v0.16.2
+    Checking burn-backend v0.21.0-pre.2
+    Checking zip v7.2.0
+    Checking reqwest v0.12.28
+    Checking rust-format v0.3.4
+    Checking tower v0.4.13
+    Checking der v0.7.10
+    Checking socks v0.3.4
+    Checking socket2 v0.5.10
+    Checking hyper-timeout v0.5.2
+    Checking rustls-native-certs v0.8.3
+    Checking ureq-proto v0.5.3
+    Checking tokio-stream v0.1.18
+    Checking float8 v0.6.1
+    Checking webpki-root-certs v1.0.6
+    Checking itertools v0.13.0
+    Checking burn-ir v0.21.0-pre.2
+    Checking burn-tensor v0.21.0-pre.2
+    Checking burn-autodiff v0.21.0-pre.2
+    Checking instant v0.1.13
+   Compiling qdrant-client v1.17.0
+    Checking utf-8 v0.7.6
+   Compiling gilrs v0.11.1
+    Checking cast v0.3.0
+    Checking deadpool-runtime v0.1.4
+    Checking strength_reduce v0.2.4
+   Compiling cpal v0.17.3
+    Checking unit-prefix v0.5.2
+    Checking retain_mut v0.1.9
+    Checking transpose v0.2.3
+    Checking deadpool v0.9.5
+    Checking indicatif v0.18.4
+    Checking ureq v3.2.0
+    Checking backoff v0.4.0
+    Checking burn-core v0.21.0-pre.2
+    Checking criterion-plot v0.8.2
+    Checking candle-core v0.9.2
+    Checking clap v4.5.60
+    Checking derive_builder v0.20.2
+    Checking i-slint-renderer-femtovg v1.15.1
+    Checking walkdir v2.5.0
+    Checking plotters v0.3.7
+    Checking prost-types v0.13.5
+    Checking tonic v0.12.3
+    Checking rustls-native-certs v0.7.3
+    Checking page_size v0.6.0
+    Checking webpki-roots v0.26.11
+    Checking gilrs-core v0.6.7
+    Checking primal-check v0.3.4
+    Checking tinytemplate v1.2.1
+   Compiling neo4rs-macros v0.3.0
+    Checking csv-core v0.1.13
+    Checking vec_map v0.8.2
+    Checking dasp_sample v0.11.0
+    Checking anes v0.1.6
+    Checking burn-nn v0.21.0-pre.2
+    Checking burn-optim v0.21.0-pre.2
+    Checking burn-store v0.21.0-pre.2
+    Checking oorandom v11.1.5
+    Checking csv v1.4.0
+    Checking criterion v0.8.2
+    Checking burn-fusion v0.21.0-pre.2
+    Checking rustfft v6.4.1
+    Checking hf-hub v0.5.0
+   Compiling slint-build v1.15.1
+    Checking pollster v0.4.0
+    Checking cubek-attention v0.2.0-pre.2
+    Checking cubek-convolution v0.2.0-pre.2
+   Compiling delegate v0.10.0
+    Checking candle-nn v0.9.2
+    Checking neo4rs v0.8.0
+   Compiling twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+   Compiling slint-macros v1.15.1
+    Checking cubek v0.2.0-pre.2
+    Checking burn-cubecl-fusion v0.21.0-pre.2
+    Checking slint v1.15.1
+    Checking burn-cubecl v0.21.0-pre.2
+    Checking burn-wgpu v0.21.0-pre.2
+    Checking burn v0.21.0-pre.2
+    Checking burn-onnx v0.21.0-pre.1
+    Checking burn-import v0.21.0-pre.1
+error[E0252]: the name `prepare_event_corpus` is defined multiple times
+  --> src\ml\mod.rs:61:56
+   |
+48 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                                                        -------------------- previous import of the value `prepare_event_corpus` here
+...
+61 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                                                        ^^^^^^^^^^^^^^^^^^^^ `prepare_event_corpus` reimported here
+   |
+   = note: `prepare_event_corpus` must be defined only once in the value namespace of this module
+
+error[E0252]: the name `compute_modality_stats` is defined multiple times
+  --> src\ml\mod.rs:62:44
+   |
+49 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                                            ---------------------- previous import of the value `compute_modality_stats` here
+...
+62 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^--
+   |                                            |
+   |                                            `compute_modality_stats` reimported here
+   |                                            help: remove unnecessary import
+   |
+   = note: `compute_modality_stats` must be defined only once in the value namespace of this module
+
+error[E0252]: the name `fuse_multimodal` is defined multiple times
+  --> src\ml\mod.rs:62:68
+   |
+49 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                                                                    --------------- previous import of the value `fuse_multimodal` here
+...
+62 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                                                                    ^^^^^^^^^^^^^^^ `fuse_multimodal` reimported here
+   |
+   = note: `fuse_multimodal` must be defined only once in the value namespace of this module
+
+error[E0252]: the name `PointMambaTrainer` is defined multiple times
+  --> src\ml\mod.rs:65:31
+   |
+52 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ----------------- previous import of the type `PointMambaTrainer` here
+...
+65 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^--
+   |                               |
+   |                               `PointMambaTrainer` reimported here
+   |                               help: remove unnecessary import
+   |
+   = note: `PointMambaTrainer` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `ContrastiveLossConfig` is defined multiple times
+  --> src\ml\mod.rs:70:5
+   |
+57 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     --------------------- previous import of the type `ContrastiveLossConfig` here
+...
+70 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^--
+   |     |
+   |     `ContrastiveLossConfig` reimported here
+   |     help: remove unnecessary import
+   |
+   = note: `ContrastiveLossConfig` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `TimeGnnTrainingConfig` is defined multiple times
+  --> src\ml\mod.rs:70:28
+   |
+57 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |                            --------------------- previous import of the type `TimeGnnTrainingConfig` here
+...
+70 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |                            ^^^^^^^^^^^^^^^^^^^^^--
+   |                            |
+   |                            `TimeGnnTrainingConfig` reimported here
+   |                            help: remove unnecessary import
+   |
+   = note: `TimeGnnTrainingConfig` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `compute_nt_xent_loss` is defined multiple times
+  --> src\ml\mod.rs:71:5
+   |
+58 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     -------------------- previous import of the value `compute_nt_xent_loss` here
+...
+71 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^--
+   |     |
+   |     `compute_nt_xent_loss` reimported here
+   |     help: remove unnecessary import
+   |
+   = note: `compute_nt_xent_loss` must be defined only once in the value namespace of this module
+
+error[E0252]: the name `cosine_similarity` is defined multiple times
+  --> src\ml\mod.rs:71:27
+   |
+58 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |                           ----------------- previous import of the value `cosine_similarity` here
+...
+71 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |                           ^^^^^^^^^^^^^^^^^--
+   |                           |
+   |                           `cosine_similarity` reimported here
+   |                           help: remove unnecessary import
+   |
+   = note: `cosine_similarity` must be defined only once in the value namespace of this module
+
+error[E0252]: the name `train_timegnn` is defined multiple times
+  --> src\ml\mod.rs:71:46
+   |
+58 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |                                              ------------- previous import of the value `train_timegnn` here
+...
+71 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |                                              ^^^^^^^^^^^^^-
+   |                                              |
+   |                                              `train_timegnn` reimported here
+   |                                              help: remove unnecessary import
+   |
+   = note: `train_timegnn` must be defined only once in the value namespace of this module
+
+error[E0252]: the name `Wav2Vec2Model` is defined multiple times
+  --> src\ml\mod.rs:73:9
+   |
+60 | pub use wav2vec2_loader::Wav2Vec2Model;
+   |         ------------------------------ previous import of the type `Wav2Vec2Model` here
+...
+73 | pub use wav2vec2_loader::Wav2Vec2Model;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Wav2Vec2Model` reimported here
+   |
+   = note: `Wav2Vec2Model` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `CorpusStats` is defined multiple times
+  --> src\ml\mod.rs:61:24
+   |
+48 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                        ----------- previous import of the type `CorpusStats` here
+...
+61 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                        ^^^^^^^^^^^--
+   |                        |
+   |                        `CorpusStats` reimported here
+   |                        help: remove unnecessary import
+   |
+   = note: `CorpusStats` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `ForensicEventData` is defined multiple times
+  --> src\ml\mod.rs:61:37
+   |
+48 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                                     ----------------- previous import of the type `ForensicEventData` here
+...
+61 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                                     ^^^^^^^^^^^^^^^^^--
+   |                                     |
+   |                                     `ForensicEventData` reimported here
+   |                                     help: remove unnecessary import
+   |
+   = note: `ForensicEventData` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `ModalityStats` is defined multiple times
+  --> src\ml\mod.rs:62:29
+   |
+49 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                             ------------- previous import of the type `ModalityStats` here
+...
+62 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                             ^^^^^^^^^^^^^--
+   |                             |
+   |                             `ModalityStats` reimported here
+   |                             help: remove unnecessary import
+   |
+   = note: `ModalityStats` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `PointDecoder` is defined multiple times
+  --> src\ml\mod.rs:63:9
+   |
+50 | pub use point_decoder::PointDecoder;
+   |         --------------------------- previous import of the type `PointDecoder` here
+...
+63 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ `PointDecoder` reimported here
+   |
+   = note: `PointDecoder` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `PointMamba` is defined multiple times
+  --> src\ml\mod.rs:64:9
+   |
+51 | pub use point_mamba::PointMamba;
+   |         ----------------------- previous import of the type `PointMamba` here
+...
+64 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ `PointMamba` reimported here
+   |
+   = note: `PointMamba` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `PointMambaTrainingConfig` is defined multiple times
+  --> src\ml\mod.rs:65:50
+   |
+52 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                                                  ----------------------------------------- previous import of the type `PointMambaTrainingConfig` here
+...
+65 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `PointMambaTrainingConfig` reimported here
+   |
+   = note: `PointMambaTrainingConfig` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `PointNetEncoder` is defined multiple times
+  --> src\ml\mod.rs:66:9
+   |
+53 | pub use pointnet_encoder::PointNetEncoder;
+   |         --------------------------------- previous import of the type `PointNetEncoder` here
+...
+66 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `PointNetEncoder` reimported here
+   |
+   = note: `PointNetEncoder` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `SpectralFrame` is defined multiple times
+  --> src\ml\mod.rs:67:9
+   |
+54 | pub use spectral_frame::SpectralFrame;
+   |         ----------------------------- previous import of the type `SpectralFrame` here
+...
+67 | pub use spectral_frame::SpectralFrame;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `SpectralFrame` reimported here
+   |
+   = note: `SpectralFrame` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `TimeGnnModel` is defined multiple times
+  --> src\ml\mod.rs:68:9
+   |
+55 | pub use timegnn::TimeGnnModel;
+   |         --------------------- previous import of the type `TimeGnnModel` here
+...
+68 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^ `TimeGnnModel` reimported here
+   |
+   = note: `TimeGnnModel` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `TrainingEvent` is defined multiple times
+  --> src\ml\mod.rs:70:51
+   |
+57 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |                                                   ------------- previous import of the type `TrainingEvent` here
+...
+70 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |                                                   ^^^^^^^^^^^^^--
+   |                                                   |
+   |                                                   `TrainingEvent` reimported here
+   |                                                   help: remove unnecessary import
+   |
+   = note: `TrainingEvent` must be defined only once in the type namespace of this module
+
+error[E0252]: the name `TrainingMetrics` is defined multiple times
+  --> src\ml\mod.rs:70:66
+   |
+57 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |                                                                  --------------- previous import of the type `TrainingMetrics` here
+...
+70 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |                                                                  ^^^^^^^^^^^^^^^-
+   |                                                                  |
+   |                                                                  `TrainingMetrics` reimported here
+   |                                                                  help: remove unnecessary import
+   |
+   = note: `TrainingMetrics` must be defined only once in the type namespace of this module
+
+warning: unused import: `serde_json::Value`
+ --> src\ai\query_tools.rs:3:5
+  |
+3 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary parentheses around method argument
+  --> src\ai\query_tools.rs:55:13
+   |
+55 |             (target_azimuth * std::f64::consts::PI / 180.0),
+   |             ^                                             ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+55 -             (target_azimuth * std::f64::consts::PI / 180.0),
+55 +             target_azimuth * std::f64::consts::PI / 180.0 ,
+   |
+
+warning: unused import: `std::collections::HashMap`
+ --> src\forensic.rs:9:5
+  |
+9 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenOptions` and `create_dir_all`
+  --> src\forensic.rs:10:21
+   |
+10 | use std::fs::{File, OpenOptions, create_dir_all};
+   |                     ^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `BufWriter`
+  --> src\forensic.rs:11:15
+   |
+11 | use std::io::{BufWriter, Write};
+   |               ^^^^^^^^^
+
+warning: unused import: `Path`
+  --> src\forensic.rs:12:17
+   |
+12 | use std::path::{Path, PathBuf};
+   |                 ^^^^
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src\knowledge_graph\cognee_schema.rs:1:14
+  |
+1 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `std::error::Error`
+ --> src\ml\event_corpus.rs:5:5
+  |
+5 | use std::error::Error;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AdamWConfig`, `AdamW`, and `Optimizer`
+ --> src\ml\material_learning.rs:2:19
+  |
+2 | use burn::optim::{AdamW, AdamWConfig, Optimizer};
+  |                   ^^^^^  ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `std::collections::HashMap`
+ --> src\ml\material_learning.rs:5:5
+  |
+5 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CorpusStats`, `ForensicEventData`, and `prepare_event_corpus`
+  --> src\ml\mod.rs:61:24
+   |
+61 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                        ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ModalityStats`, `compute_modality_stats`, and `fuse_multimodal`
+  --> src\ml\mod.rs:62:29
+   |
+62 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                             ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+
+warning: unused import: `point_decoder::PointDecoder`
+  --> src\ml\mod.rs:63:9
+   |
+63 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `point_mamba::PointMamba`
+  --> src\ml\mod.rs:64:9
+   |
+64 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
+  --> src\ml\mod.rs:65:31
+   |
+65 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pointnet_encoder::PointNetEncoder`
+  --> src\ml\mod.rs:66:9
+   |
+66 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `spectral_frame::SpectralFrame`
+  --> src\ml\mod.rs:67:9
+   |
+67 | pub use spectral_frame::SpectralFrame;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `timegnn::TimeGnnModel`
+  --> src\ml\mod.rs:68:9
+   |
+68 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
+  --> src\ml\mod.rs:70:5
+   |
+70 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+71 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `wav2vec2_loader::Wav2Vec2Model`
+  --> src\ml\mod.rs:73:9
+   |
+73 | pub use wav2vec2_loader::Wav2Vec2Model;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:3:5
+  |
+3 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:4:5
+  |
+4 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> src\ml\event_corpus.rs:42:13
+   |
+42 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |             ----^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+  --> src\forensic.rs:11:26
+   |
+11 | use std::io::{BufWriter, Write};
+   |                          ^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `args`
+  --> src\ai\query_tools.rs:34:9
+   |
+34 |         args: &str,
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable `event_count` is assigned to, but never used
+   --> src\forensic.rs:417:17
+    |
+417 |             let mut event_count: u64 = 0;
+    |                 ^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_event_count` instead
+
+warning: value assigned to `event_count` is never read
+   --> src\forensic.rs:422:25
+    |
+422 |                         event_count += 1;
+    |                         ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:581:9
+    |
+581 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:582:9
+    |
+582 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:454:24
+    |
+454 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `slice1`
+   --> src\hardware_io\iq_staging_buffer.rs:467:21
+    |
+467 |         let (slot1, slice1) = staging.acquire_write_slot().unwrap();
+    |                     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_slice1`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:499:24
+    |
+499 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `distance`
+   --> src\resonance\voxel_grid.rs:175:38
+    |
+175 |     pub fn average_along_path(&self, distance: f32) -> f32 {
+    |                                      ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_distance`
+
+warning: unused variable: `k2`
+  --> src\resonance\rf_propagation.rs:34:13
+   |
+34 |         let k2 = k * k;
+   |             ^^ help: if this is intentional, prefix it with an underscore: `_k2`
+
+warning: unused variable: `local_k2`
+  --> src\resonance\rf_propagation.rs:69:29
+   |
+69 |                         let local_k2 = local_k * local_k;
+   |                             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_local_k2`
+
+warning: unused variable: `material_library`
+   --> src\state.rs:211:13
+    |
+211 |         let material_library =
+    |             ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_material_library`
+
+warning: unused variable: `slot`
+   --> src\vbuffer.rs:262:30
+    |
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |                              ^^^^ help: if this is intentional, prefix it with an underscore: `_slot`
+
+warning: unused variable: `base_offset`
+   --> src\vbuffer.rs:262:43
+    |
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |                                           ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_base_offset`
+
+For more information about this error, try `rustc --explain E0252`.
+warning: `twister` (lib) generated 37 warnings
+error: could not compile `twister` (lib) due to 21 previous errors; 37 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+warning: `twister` (lib test) generated 39 warnings (36 duplicates)
+error: could not compile `twister` (lib test) due to 21 previous errors; 39 warnings emitted

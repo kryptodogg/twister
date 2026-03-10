@@ -1,0 +1,1452 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling libm v0.2.16
+   Compiling serde v1.0.228
+   Compiling autocfg v1.5.0
+    Checking cfg-if v1.0.4
+    Checking windows-link v0.2.1
+   Compiling zerocopy v0.8.42
+   Compiling portable-atomic v1.13.1
+   Compiling crossbeam-utils v0.8.21
+    Checking critical-section v1.2.0
+    Checking memchr v2.8.0
+    Checking log v0.4.29
+    Checking pin-project-lite v0.2.17
+   Compiling getrandom v0.3.4
+    Checking windows-sys v0.61.2
+   Compiling cfg_aliases v0.2.1
+   Compiling parking_lot_core v0.9.12
+    Checking scopeguard v1.2.0
+   Compiling thiserror v2.0.18
+    Checking lock_api v0.4.14
+    Checking allocator-api2 v0.2.21
+    Checking foldhash v0.2.0
+   Compiling num-traits v0.2.19
+    Checking equivalent v1.0.2
+   Compiling libc v0.2.183
+    Checking futures-core v0.3.32
+   Compiling paste v1.0.15
+    Checking itoa v1.0.17
+    Checking windows-strings v0.5.1
+    Checking windows-result v0.4.1
+   Compiling zmij v1.0.21
+    Checking rand_core v0.9.5
+    Checking arrayvec v0.7.6
+   Compiling syn v2.0.117
+    Checking futures-io v0.3.32
+   Compiling ident_case v1.0.1
+   Compiling version_check v0.9.5
+   Compiling unicode-segmentation v1.12.0
+   Compiling hashbrown v0.16.1
+    Checking fnv v1.0.7
+   Compiling unicode-xid v0.2.6
+   Compiling rayon-core v1.13.0
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling crc32fast v1.5.0
+   Compiling strsim v0.11.1
+   Compiling convert_case v0.10.0
+    Checking unicode-width v0.2.2
+   Compiling serde_json v1.0.149
+    Checking windows-threading v0.2.1
+   Compiling khronos_api v3.1.0
+   Compiling xml-rs v0.8.28
+    Checking libloading v0.8.9
+    Checking bitflags v2.11.0
+   Compiling ash v0.38.0+1.3.281
+   Compiling naga v28.0.0
+   Compiling khronos-egl v6.0.0
+    Checking foldhash v0.1.5
+    Checking bit-vec v0.8.0
+    Checking stable_deref_trait v1.2.1
+    Checking spirv v0.3.0+sdk-1.3.268.0
+    Checking gpu-descriptor-types v0.2.0
+    Checking codespan-reporting v0.12.0
+    Checking hashbrown v0.15.5
+    Checking aho-corasick v1.1.4
+    Checking bit-set v0.8.0
+    Checking indexmap v2.13.0
+   Compiling wgpu-hal v28.0.1
+    Checking rustc-hash v1.1.0
+    Checking hexf-parse v0.2.1
+    Checking regex-syntax v0.8.10
+    Checking presser v0.3.1
+    Checking raw-window-handle v0.6.2
+    Checking gpu-descriptor v0.3.2
+   Compiling synstructure v0.13.2
+    Checking ordered-float v5.1.0
+    Checking rand_core v0.10.0
+    Checking glow v0.16.0
+   Compiling getrandom v0.4.2
+   Compiling gl_generator v0.14.0
+   Compiling anyhow v1.0.102
+    Checking renderdoc-sys v1.1.0
+    Checking range-alloc v0.1.5
+   Compiling wgpu-core v28.0.1
+    Checking parking v2.2.1
+   Compiling litrs v1.0.0
+   Compiling darling_core v0.23.0
+   Compiling darling_core v0.21.3
+   Compiling wgpu v28.0.0
+    Checking cpufeatures v0.3.0
+    Checking option-ext v0.2.0
+    Checking static_assertions v1.1.0
+    Checking fastrand v2.3.0
+   Compiling glutin_wgl_sys v0.6.1
+    Checking concurrent-queue v2.5.0
+   Compiling document-features v0.2.12
+    Checking chacha20 v0.10.0
+   Compiling cubecl-common v0.10.0-pre.2
+    Checking dirs-sys v0.5.0
+   Compiling prettyplease v0.2.37
+    Checking rustc-demangle v0.1.27
+    Checking dirs v6.0.0
+    Checking rand v0.10.0
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.10.2
+   Compiling zerocopy-derive v0.8.42
+   Compiling thiserror-impl v2.0.18
+   Compiling zerofrom-derive v0.1.6
+   Compiling profiling-procmacros v1.0.17
+   Compiling tracing-attributes v0.1.31
+   Compiling yoke-derive v0.8.1
+   Compiling windows-interface v0.59.3
+   Compiling derive_more-impl v2.1.1
+   Compiling windows-implement v0.60.2
+   Compiling zerovec-derive v0.11.2
+   Compiling displaydoc v0.2.5
+    Checking profiling v1.0.17
+    Checking regex-automata v0.4.14
+    Checking windows-core v0.62.2
+   Compiling derive-new v0.7.0
+    Checking bytemuck v1.25.0
+   Compiling darling_macro v0.23.0
+   Compiling darling_macro v0.21.3
+    Checking wgpu-types v28.0.0
+    Checking backtrace v0.3.76
+    Checking windows-collections v0.3.2
+    Checking windows-numerics v0.3.1
+    Checking windows-future v0.3.2
+    Checking futures-lite v2.6.1
+    Checking event-listener v5.4.1
+    Checking serde_bytes v0.11.19
+   Compiling darling v0.21.3
+   Compiling darling v0.23.0
+    Checking windows v0.62.2
+    Checking embassy-futures v0.1.2
+    Checking float4 v0.1.0
+    Checking winnow v0.7.15
+    Checking xxhash-rust v0.8.15
+   Compiling enumset_derive v0.14.0
+    Checking web-time v1.1.0
+    Checking smallvec v1.15.1
+    Checking bytes v1.11.1
+   Compiling cubecl-macros-internal v0.10.0-pre.2
+    Checking event-listener-strategy v0.5.4
+   Compiling spin v0.10.0
+   Compiling variadics_please v1.1.0
+    Checking regex v1.12.3
+    Checking once_cell v1.21.3
+    Checking serde_spanned v1.0.4
+    Checking toml_datetime v0.7.5+spec-1.1.0
+   Compiling cubecl-runtime v0.10.0-pre.2
+   Compiling cubecl-macros v0.10.0-pre.2
+    Checking tracing-core v0.1.36
+    Checking parking_lot v0.12.5
+    Checking sanitize-filename v0.6.0
+    Checking toml_parser v1.0.9+spec-1.1.0
+    Checking derive_more v2.1.1
+    Checking float-ord v0.3.2
+    Checking toml_writer v1.0.6+spec-1.1.0
+    Checking cubecl-zspace v0.10.0-pre.2
+    Checking enumset v1.1.10
+    Checking async-channel v2.5.0
+    Checking crossbeam-epoch v0.9.18
+    Checking md5 v0.8.0
+    Checking tracing v0.1.44
+    Checking either v1.15.0
+    Checking ppv-lite86 v0.2.21
+   Compiling half v2.7.1
+    Checking toml v0.9.12+spec-1.1.0
+    Checking simd-adler32 v0.3.8
+   Compiling cubecl-wgpu v0.10.0-pre.2
+    Checking zerofrom v0.1.6
+    Checking crossbeam-deque v0.8.6
+   Compiling equator-macro v0.4.2
+   Compiling cubecl v0.10.0-pre.2
+    Checking rand_chacha v0.9.0
+    Checking adler2 v2.0.1
+    Checking slab v0.4.12
+    Checking yoke v0.8.1
+   Compiling tokio-macros v2.6.1
+    Checking miniz_oxide v0.8.9
+    Checking socket2 v0.6.3
+    Checking mio v1.1.1
+    Checking rand v0.9.2
+   Compiling windows-targets v0.52.6
+    Checking zerovec v0.11.5
+    Checking rayon v1.11.0
+   Compiling icu_properties_data v2.1.2
+   Compiling icu_normalizer_data v2.1.1
+    Checking flate2 v1.1.9
+   Compiling windows-implement v0.58.0
+   Compiling windows-interface v0.58.0
+    Checking num-integer v0.1.46
+   Compiling av-scenechange v0.14.1
+    Checking rand_distr v0.5.1
+    Checking futures-sink v0.3.32
+    Checking tokio v1.50.0
+   Compiling built v0.8.0
+    Checking tinystr v0.8.2
+   Compiling arg_enum_proc_macro v0.3.4
+   Compiling find-msvc-tools v0.1.9
+   Compiling heck v0.5.0
+   Compiling shlex v1.3.0
+    Checking litemap v0.8.1
+   Compiling pastey v0.1.1
+    Checking writeable v0.6.2
+    Checking futures-channel v0.3.32
+   Compiling cc v1.2.56
+   Compiling rav1e v0.8.1
+    Checking icu_locale_core v2.1.1
+    Checking core_maths v0.1.1
+    Checking zeroize v1.8.2
+   Compiling semver v1.0.27
+    Checking float8 v0.7.0
+   Compiling siphasher v1.0.2
+   Compiling rustc_version v0.4.1
+    Checking http v1.4.0
+    Checking rand_distr v0.6.0
+   Compiling num-derive v0.4.2
+   Compiling fax_derive v0.2.0
+   Compiling futures-macro v0.3.32
+   Compiling simd_helpers v0.1.0
+   Compiling thiserror v1.0.69
+   Compiling noop_proc_macro v0.3.0
+    Checking base64 v0.22.1
+    Checking futures-task v0.3.32
+    Checking cubecl-ir v0.10.0-pre.2
+    Checking rustls-pki-types v1.14.0
+    Checking num-complex v0.4.6
+    Checking getrandom v0.2.17
+   Compiling strum_macros v0.27.2
+   Compiling thiserror-impl v1.0.69
+    Checking futures-util v0.3.32
+   Compiling ttf-parser v0.25.1
+   Compiling windows-result v0.2.0
+   Compiling itertools v0.14.0
+    Checking percent-encoding v2.3.2
+   Compiling windows-strings v0.1.0
+   Compiling ring v0.17.14
+    Checking http-body v1.0.1
+   Compiling equator v0.4.2
+    Checking memmap2 v0.9.10
+   Compiling ahash v0.8.12
+   Compiling seq-macro v0.3.6
+    Checking tower-service v0.3.3
+   Compiling httparse v1.10.1
+   Compiling rustversion v1.0.22
+   Compiling num-bigint v0.4.6
+    Checking aligned-vec v0.6.4
+   Compiling windows-core v0.58.0
+   Compiling potential_utf v0.1.4
+   Compiling zerotrie v0.2.3
+    Checking cubecl-core v0.10.0-pre.2
+    Checking font-types v0.10.1
+   Compiling darling_core v0.20.11
+    Checking read-fonts v0.35.0
+   Compiling icu_provider v2.1.1
+   Compiling windows v0.58.0
+   Compiling icu_collections v2.1.1
+   Compiling num-rational v0.4.2
+   Compiling v_frame v0.3.9
+    Checking tokio-util v0.7.18
+   Compiling fdeflate v0.3.7
+   Compiling as-slice v0.2.1
+    Checking schannel v0.1.28
+   Compiling slotmap v1.1.1
+    Checking cubecl-std v0.10.0-pre.2
+   Compiling darling_macro v0.20.11
+   Compiling pulp v0.22.2
+    Checking crossbeam-channel v0.5.15
+    Checking untrusted v0.9.0
+   Compiling quick-error v2.0.1
+   Compiling linebender_resource_handle v0.1.1
+    Checking num_cpus v1.17.0
+   Compiling float-cmp v0.9.0
+    Checking aligned v0.4.3
+   Compiling strict-num v0.1.1
+   Compiling darling v0.20.11
+   Compiling core2 v0.4.0
+   Compiling nom v8.0.0
+    Checking raw-cpuid v11.6.0
+   Compiling memoffset v0.9.1
+   Compiling fontique v0.7.0
+    Checking y4m v0.8.0
+   Compiling weezl v0.1.12
+    Checking reborrow v0.5.5
+    Checking try-lock v0.2.5
+    Checking atomic-waker v1.1.2
+   Compiling toml_datetime v1.0.0+spec-1.1.0
+   Compiling dyn-stack-macros v0.1.3
+   Compiling rustls v0.23.37
+   Compiling arrayref v0.3.9
+   Compiling tinyvec_macros v0.1.1
+   Compiling rustix v0.38.44
+    Checking pulp-wasm-simd-flag v0.1.0
+   Compiling tinyvec v1.10.0
+   Compiling i-slint-common v1.15.1
+   Compiling tiny-skia-path v0.11.4
+    Checking dyn-stack v0.13.2
+   Compiling toml_edit v0.25.4+spec-1.1.0
+    Checking h2 v0.4.13
+    Checking want v0.3.1
+    Checking bitstream-io v4.9.0
+    Checking rustls-webpki v0.103.9
+   Compiling icu_properties v2.1.2
+   Compiling icu_normalizer v2.1.1
+   Compiling errno v0.3.14
+    Checking av1-grain v0.2.5
+   Compiling maybe-rayon v0.1.1
+   Compiling field-offset v0.3.6
+   Compiling kurbo v0.13.0
+   Compiling windows-sys v0.59.0
+    Checking rgb v0.8.53
+   Compiling pin-project-internal v1.1.11
+    Checking colored v3.1.1
+   Compiling euclid v0.22.13
+    Checking httpdate v1.0.3
+   Compiling crunchy v0.2.4
+    Checking new_debug_unreachable v1.0.6
+    Checking uuid v1.22.0
+    Checking color_quant v1.1.0
+   Compiling byteorder-lite v0.1.0
+   Compiling unicode-properties v0.1.4
+   Compiling unicode-ccc v0.4.0
+    Checking zune-core v0.4.12
+    Checking gpu-allocator v0.28.0
+   Compiling protobuf v3.7.2
+    Checking pin-utils v0.1.0
+    Checking zune-core v0.5.1
+   Compiling unicode-bidi-mirroring v0.4.0
+    Checking imgref v1.12.0
+    Checking subtle v2.6.1
+   Compiling unicode-script v0.5.8
+    Checking tower-layer v0.3.3
+   Compiling bitflags v1.3.2
+   Compiling png v0.17.16
+    Checking zune-jpeg v0.5.12
+    Checking gemm-common v0.19.0
+   Compiling loop9 v0.1.5
+    Checking image-webp v0.2.4
+   Compiling zune-jpeg v0.4.21
+   Compiling rustybuzz v0.20.1
+   Compiling gif v0.14.1
+    Checking hyper v1.8.1
+    Checking pin-project v1.1.11
+    Checking lyon_geom v1.0.19
+   Compiling svgtypes v0.16.1
+   Compiling idna_adapter v1.2.1
+   Compiling fontdb v0.23.0
+   Compiling protobuf-support v3.7.2
+   Compiling proc-macro-crate v3.5.0
+   Compiling home v0.5.12
+    Checking strum v0.27.2
+   Compiling fax v0.2.6
+   Compiling phf_shared v0.11.3
+   Compiling zune-inflate v0.2.54
+   Compiling snafu-derive v0.8.9
+   Compiling avif-serialize v0.8.8
+   Compiling roxmltree v0.21.1
+    Checking rmp v0.8.15
+    Checking windows-registry v0.6.1
+    Checking sync_wrapper v1.0.2
+   Compiling simplecss v0.2.2
+    Checking byteorder v1.5.0
+   Compiling data-url v0.3.2
+   Compiling unicode-bidi v0.3.18
+   Compiling unicode-vo v0.1.0
+    Checking lebe v0.5.3
+   Compiling native-tls v0.2.18
+    Checking wgpu-core-deps-windows-linux-android v28.0.0
+   Compiling xmlwriter v0.1.0
+    Checking bit_field v0.10.3
+   Compiling rspolib v0.1.2
+   Compiling rand_core v0.6.4
+    Checking pxfm v0.1.28
+   Compiling windows_x86_64_msvc v0.53.1
+   Compiling imagesize v0.14.0
+    Checking unty v0.0.4
+    Checking ipnet v2.12.0
+   Compiling utf8_iter v1.0.4
+   Compiling tiny-keccak v2.0.2
+   Compiling pico-args v0.5.0
+   Compiling usvg v0.46.0
+    Checking hyper-util v0.1.20
+   Compiling exr v1.74.0
+   Compiling idna v1.1.0
+    Checking bincode v2.0.1
+   Compiling snafu v0.8.9
+    Checking ravif v0.12.0
+   Compiling form_urlencoded v1.2.2
+    Checking moxcms v0.7.11
+   Compiling rand v0.8.5
+   Compiling tempfile v3.26.0
+    Checking rmp-serde v1.3.1
+   Compiling num_enum_derive v0.7.5
+    Checking tiff v0.10.3
+   Compiling which v4.4.2
+    Checking lyon_path v1.0.19
+   Compiling tiny-skia v0.11.4
+    Checking skrifa v0.37.0
+    Checking png v0.18.1
+    Checking http-body-util v0.1.3
+    Checking webpki-roots v1.0.6
+    Checking windows-sys v0.52.0
+    Checking chrono v0.4.44
+   Compiling burn-derive v0.21.0-pre.2
+    Checking qoi v0.4.1
+   Compiling const-field-offset-macro v0.1.5
+   Compiling matrixmultiply v0.3.10
+   Compiling hashbrown v0.14.5
+   Compiling lazy_static v1.5.0
+   Compiling unicode-linebreak v0.1.5
+   Compiling natord v1.0.9
+   Compiling winapi v0.3.9
+   Compiling anstyle v1.0.13
+   Compiling countme v3.0.1
+   Compiling pulldown-cmark v0.13.1
+   Compiling linked-hash-map v0.5.6
+   Compiling i-slint-compiler v1.15.1
+   Compiling ttf-parser v0.21.1
+   Compiling text-size v1.1.1
+    Checking data-encoding v2.10.0
+    Checking swash v0.2.6
+   Compiling linked_hash_set v0.1.6
+   Compiling rowan v0.16.1
+   Compiling annotate-snippets v0.12.13
+   Compiling image v0.25.9
+    Checking const-field-offset v0.1.5
+   Compiling fontdue v0.9.3
+   Compiling protobuf-parse v3.7.2
+   Compiling resvg v0.46.0
+   Compiling num_enum v0.7.5
+    Checking rand_chacha v0.3.1
+    Checking burn-std v0.21.0-pre.2
+    Checking cubek-matmul v0.2.0-pre.2
+    Checking cubek-random v0.2.0-pre.2
+    Checking cubek-reduce v0.2.0-pre.2
+    Checking cubek-quant v0.2.0-pre.2
+   Compiling lyon_extra v1.1.0
+   Compiling phf_generator v0.11.3
+    Checking burn-backend v0.21.0-pre.2
+   Compiling url v2.5.8
+    Checking tower v0.5.3
+    Checking tokio-rustls v0.26.4
+    Checking harfrust v0.3.2
+    Checking thread-tree v0.3.3
+    Checking hashbrown v0.13.2
+   Compiling macerator v0.3.0
+   Compiling vtable-macro v0.3.0
+   Compiling async-trait v0.1.89
+   Compiling derive_utils v0.15.1
+    Checking getopts v0.2.24
+    Checking unicase v2.9.0
+    Checking rawpointer v0.2.1
+    Checking ciborium-io v0.2.2
+    Checking pulldown-cmark-escape v0.11.0
+    Checking burn-tensor v0.21.0-pre.2
+    Checking burn-ir v0.21.0-pre.2
+   Compiling by_address v1.2.1
+    Checking mime v0.3.17
+   Compiling typed-index-collections v3.5.0
+   Compiling smol_str v0.3.6
+   Compiling syn v1.0.109
+    Checking vtable v0.3.0
+   Compiling spin_on v0.1.1
+   Compiling const-random-macro v0.1.16
+    Checking ciborium-ll v0.2.2
+    Checking burn-core v0.21.0-pre.2
+   Compiling auto_enums v0.8.8
+    Checking text_placeholder v0.5.1
+    Checking windows-targets v0.53.5
+    Checking parley v0.7.0
+   Compiling protobuf-codegen v3.7.2
+   Compiling phf_codegen v0.11.3
+   Compiling i-slint-core-macros v1.15.1
+    Checking lyon_algorithms v1.0.19
+   Compiling phf v0.11.3
+   Compiling macerator-macros v0.1.4
+   Compiling parse-zoneinfo v0.3.1
+    Checking safetensors v0.7.0
+    Checking clru v0.6.3
+   Compiling indexmap v1.9.3
+   Compiling winit v0.30.13
+    Checking htmlparser v0.2.1
+    Checking dpi v0.1.2
+   Compiling prettyplease v0.1.25
+    Checking burn-fusion v0.21.0-pre.2
+    Checking scoped-tls-hkt v0.1.5
+    Checking moddef v0.3.0
+    Checking cubek-attention v0.2.0-pre.2
+    Checking cubek-convolution v0.2.0-pre.2
+    Checking sys-locale v0.3.2
+    Checking error-code v3.3.2
+    Checking ryu v1.0.23
+    Checking pin-weak v1.1.0
+   Compiling burn-ndarray v0.21.0-pre.2
+    Checking clipboard-win v5.4.1
+   Compiling chrono-tz-build v0.2.1
+    Checking i-slint-core v1.15.1
+    Checking windows-sys v0.60.2
+    Checking const-random v0.1.18
+   Compiling onnx-ir v0.21.0-pre.1
+    Checking ndarray v0.17.2
+    Checking ciborium v0.2.2
+    Checking femtovg v0.20.4
+    Checking burn-autodiff v0.21.0-pre.2
+    Checking tokio-native-tls v0.3.1
+    Checking keyboard-types v0.7.0
+    Checking gemm-f32 v0.19.0
+    Checking futures-executor v0.3.32
+   Compiling prost-derive v0.13.5
+    Checking rustls-pemfile v2.2.0
+   Compiling i-slint-backend-winit v1.15.1
+    Checking base64ct v1.8.3
+    Checking cursor-icon v1.2.0
+    Checking cubek v0.2.0-pre.2
+    Checking iri-string v0.7.10
+    Checking atomic_float v1.1.0
+    Checking smol_str v0.2.2
+    Checking hashbrown v0.12.3
+    Checking sharded-slab v0.1.7
+    Checking pem-rfc7468 v0.7.0
+    Checking burn-cubecl-fusion v0.21.0-pre.2
+    Checking gemm-f16 v0.19.0
+   Compiling toml_edit v0.24.1+spec-1.1.0
+    Checking futures v0.3.32
+   Compiling chrono-tz v0.8.6
+    Checking tower-http v0.6.8
+    Checking muda v0.17.1
+    Checking hyper-tls v0.6.0
+    Checking copypasta v0.10.2
+    Checking prost v0.13.5
+    Checking serde_urlencoded v0.7.1
+    Checking burn-nn v0.21.0-pre.2
+    Checking burn-optim v0.21.0-pre.2
+    Checking axum-core v0.4.5
+    Checking i-slint-renderer-femtovg v1.15.1
+    Checking hyper-rustls v0.27.7
+    Checking gemm-c32 v0.19.0
+    Checking gemm-f64 v0.19.0
+    Checking gemm-c64 v0.19.0
+   Compiling i-slint-backend-selector v1.15.1
+   Compiling derive_builder_core v0.20.2
+   Compiling alloca v0.4.0
+    Checking tracing-log v0.2.0
+    Checking matchers v0.2.0
+   Compiling async-stream-impl v0.3.6
+   Compiling onnx-ir-derive v0.21.0-pre.1
+    Checking winapi-util v0.1.11
+    Checking nu-ansi-term v0.50.3
+    Checking encoding_rs v0.8.35
+    Checking thread_local v1.1.9
+    Checking typed-path v0.12.3
+    Checking encode_unicode v1.0.0
+    Checking burn-cubecl v0.21.0-pre.2
+    Checking clap_lex v1.0.0
+    Checking matchit v0.7.3
+    Checking textdistance v1.1.1
+    Checking plotters-backend v0.3.7
+    Checking async-stream v0.3.6
+    Checking clap_builder v4.5.60
+   Compiling derive_builder_macro v0.20.2
+    Checking tracing-subscriber v0.3.22
+    Checking axum v0.7.9
+    Checking burn-store v0.21.0-pre.2
+    Checking console v0.16.2
+    Checking plotters-svg v0.3.7
+   Compiling slint-build v1.15.1
+    Checking same-file v1.0.6
+    Checking zip v7.2.0
+    Checking gemm v0.19.0
+    Checking reqwest v0.12.28
+    Checking tower v0.4.13
+    Checking rust-format v0.3.4
+    Checking der v0.7.10
+    Checking socks v0.3.4
+    Checking socket2 v0.5.10
+    Checking hyper-timeout v0.5.2
+    Checking rustls-native-certs v0.8.3
+    Checking ureq-proto v0.5.3
+    Checking tokio-stream v0.1.18
+    Checking webpki-root-certs v1.0.6
+    Checking float8 v0.6.1
+    Checking itertools v0.13.0
+    Checking instant v0.1.13
+    Checking strength_reduce v0.2.4
+   Compiling qdrant-client v1.17.0
+    Checking unit-prefix v0.5.2
+    Checking deadpool-runtime v0.1.4
+    Checking retain_mut v0.1.9
+   Compiling cpal v0.17.3
+    Checking cast v0.3.0
+    Checking utf-8 v0.7.6
+   Compiling gilrs v0.11.1
+    Checking transpose v0.2.3
+    Checking deadpool v0.9.5
+    Checking indicatif v0.18.4
+    Checking candle-core v0.9.2
+    Checking ureq v3.2.0
+    Checking backoff v0.4.0
+    Checking clap v4.5.60
+    Checking criterion-plot v0.8.2
+    Checking tonic v0.12.3
+    Checking walkdir v2.5.0
+    Checking plotters v0.3.7
+    Checking burn-wgpu v0.21.0-pre.2
+    Checking derive_builder v0.20.2
+    Checking prost-types v0.13.5
+    Checking rustls-native-certs v0.7.3
+    Checking page_size v0.6.0
+    Checking webpki-roots v0.26.11
+    Checking gilrs-core v0.6.7
+    Checking primal-check v0.3.4
+    Checking burn v0.21.0-pre.2
+    Checking tinytemplate v1.2.1
+   Compiling neo4rs-macros v0.3.0
+    Checking csv-core v0.1.13
+    Checking oorandom v11.1.5
+    Checking anes v0.1.6
+    Checking vec_map v0.8.2
+   Compiling delegate v0.10.0
+    Checking burn-onnx v0.21.0-pre.1
+    Checking dasp_sample v0.11.0
+    Checking csv v1.4.0
+    Checking rustfft v6.4.1
+    Checking hf-hub v0.5.0
+    Checking criterion v0.8.2
+    Checking pollster v0.4.0
+    Checking candle-nn v0.9.2
+    Checking neo4rs v0.8.0
+   Compiling slint-macros v1.15.1
+   Compiling twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+    Checking burn-import v0.21.0-pre.1
+    Checking slint v1.15.1
+warning: unused import: `serde_json::Value`
+ --> src\ai\query_tools.rs:3:5
+  |
+3 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary parentheses around method argument
+  --> src\ai\query_tools.rs:55:13
+   |
+55 |             (target_azimuth * std::f64::consts::PI / 180.0),
+   |             ^                                             ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+55 -             (target_azimuth * std::f64::consts::PI / 180.0),
+55 +             target_azimuth * std::f64::consts::PI / 180.0 ,
+   |
+
+warning: unused import: `std::collections::HashMap`
+ --> src\forensic.rs:9:5
+  |
+9 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenOptions` and `create_dir_all`
+  --> src\forensic.rs:10:21
+   |
+10 | use std::fs::{File, OpenOptions, create_dir_all};
+   |                     ^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `BufWriter`
+  --> src\forensic.rs:11:15
+   |
+11 | use std::io::{BufWriter, Write};
+   |               ^^^^^^^^^
+
+warning: unused import: `Path`
+  --> src\forensic.rs:12:17
+   |
+12 | use std::path::{Path, PathBuf};
+   |                 ^^^^
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src\knowledge_graph\cognee_schema.rs:1:14
+  |
+1 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `FieldParticleGPU`
+  --> src\ml\batch_accumulation.rs:15:50
+   |
+15 | use super::field_particle::{FieldParticleBuffer, FieldParticleGPU, HitListAccumulator};
+   |                                                  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::error::Error`
+ --> src\ml\event_corpus.rs:5:5
+  |
+5 | use std::error::Error;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AdamWConfig`, `AdamW`, and `Optimizer`
+ --> src\ml\material_learning.rs:2:19
+  |
+2 | use burn::optim::{AdamW, AdamWConfig, Optimizer};
+  |                   ^^^^^  ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `std::collections::HashMap`
+ --> src\ml\material_learning.rs:5:5
+  |
+5 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::data_contracts::FieldParticle`
+  --> src\ml\rt_blind_rays.rs:13:5
+   |
+13 | use super::data_contracts::FieldParticle;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HitListAccumulator`
+  --> src\ml\rt_blind_rays.rs:14:47
+   |
+14 | use super::field_particle::{FieldParticleGPU, HitListAccumulator};
+   |                                               ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::f32::consts::PI`
+  --> src\ml\rt_blind_rays.rs:18:5
+   |
+18 | use std::f32::consts::PI;
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Buffer` and `Queue`
+ --> src\ml\vbuffer_render.rs:8:12
+  |
+8 | use wgpu::{Buffer, Device, Queue, Texture, TextureView, RenderPipeline};
+  |            ^^^^^^          ^^^^^
+
+warning: unused imports: `Device` and `Queue`
+ --> src\ml\visibility_culling.rs:9:20
+  |
+9 | use wgpu::{Buffer, Device, Queue};
+  |                    ^^^^^^  ^^^^^
+
+warning: unused import: `std::mem`
+  --> src\ml\visibility_culling.rs:10:5
+   |
+10 | use std::mem;
+   |     ^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:3:5
+  |
+3 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:4:5
+  |
+4 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> src\ml\event_corpus.rs:42:13
+   |
+42 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |             ----^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+  --> src\forensic.rs:11:26
+   |
+11 | use std::io::{BufWriter, Write};
+   |                          ^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:232:22
+    |
+232 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+232 -         let device = NdArray::<f32>::Device::default();
+232 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:241:22
+    |
+241 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+241 -         let device = NdArray::<f32>::Device::default();
+241 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+warning: unused variable: `args`
+  --> src\ai\query_tools.rs:34:9
+   |
+34 |         args: &str,
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:255:22
+    |
+255 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+255 -         let device = NdArray::<f32>::Device::default();
+255 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+error[E0223]: ambiguous associated type
+   --> src\ml\unified_field_mamba.rs:268:22
+    |
+268 |         let device = NdArray::<f32>::Device::default();
+    |                      ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: use fully-qualified syntax
+    |
+268 -         let device = NdArray::<f32>::Device::default();
+268 +         let device = <burn_ndarray::NdArray as burn::prelude::Backend>::Device::default();
+    |
+
+warning: variable `event_count` is assigned to, but never used
+   --> src\forensic.rs:417:17
+    |
+417 |             let mut event_count: u64 = 0;
+    |                 ^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_event_count` instead
+
+warning: value assigned to `event_count` is never read
+   --> src\forensic.rs:422:25
+    |
+422 |                         event_count += 1;
+    |                         ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:581:9
+    |
+581 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:582:9
+    |
+582 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+warning: unused variable: `particle`
+  --> src\ml\field_dispatch.rs:88:17
+   |
+88 |             let particle = FieldParticle {
+   |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_particle`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:454:24
+    |
+454 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `slice1`
+   --> src\hardware_io\iq_staging_buffer.rs:467:21
+    |
+467 |         let (slot1, slice1) = staging.acquire_write_slot().unwrap();
+    |                     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_slice1`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:499:24
+    |
+499 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `distance`
+   --> src\resonance\voxel_grid.rs:175:38
+    |
+175 |     pub fn average_along_path(&self, distance: f32) -> f32 {
+    |                                      ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_distance`
+
+warning: unused variable: `k2`
+  --> src\resonance\rf_propagation.rs:34:13
+   |
+34 |         let k2 = k * k;
+   |             ^^ help: if this is intentional, prefix it with an underscore: `_k2`
+
+warning: unused variable: `local_k2`
+  --> src\resonance\rf_propagation.rs:69:29
+   |
+69 |                         let local_k2 = local_k * local_k;
+   |                             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_local_k2`
+
+warning: unused variable: `material_library`
+   --> src\state.rs:211:13
+    |
+211 |         let material_library =
+    |             ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_material_library`
+
+warning: unused variable: `slot`
+   --> src\vbuffer.rs:262:30
+    |
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |                              ^^^^ help: if this is intentional, prefix it with an underscore: `_slot`
+
+warning: unused variable: `base_offset`
+   --> src\vbuffer.rs:262:43
+    |
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |                                           ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_base_offset`
+
+warning: field `sample_rate` is never read
+ --> src\ml\fold_frequency_harmonics.rs:2:5
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            --------------------- field in this struct
+2 |     sample_rate: u32,
+  |     ^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `device` and `model` are never read
+  --> src\ml\wav2vec2_loader.rs:38:5
+   |
+37 | pub struct Wav2Vec2Model<B: Backend> {
+   |            ------------- fields in this struct
+38 |     device: burn::tensor::Device<B>,
+   |     ^^^^^^
+39 |     model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
+   |     ^^^^^
+
+warning: field `bins_per_octave` is never read
+ --> src\ml\wideband_harmonic_analysis.rs:4:5
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ------------------------ field in this struct
+...
+4 |     bins_per_octave: u32, // 8 (96 total bins = 12 octaves ├ù 8)
+  |     ^^^^^^^^^^^^^^^
+
+warning: method `bin_to_freq` is never used
+  --> src\ml\wideband_harmonic_analysis.rs:38:8
+   |
+18 | impl WidebandHarmonicAnalyzer {
+   | ----------------------------- method in this implementation
+...
+38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+   |        ^^^^^^^^^^^
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: field `device_id` is never read
+  --> src\safe_sdr_wrapper.rs:15:5
+   |
+13 | pub struct RadioDevice {
+   |            ----------- field in this struct
+14 |     device_type: RadioDeviceType,
+15 |     device_id: u32,
+   |     ^^^^^^^^^
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: field `interface` is never read
+ --> src\ui\copilot_handler.rs:9:5
+  |
+8 | pub struct CopilotUIHandler {
+  |            ---------------- field in this struct
+9 |     interface: Arc<Mutex<CopilotInterface>>,
+  |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src\visualization\radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> src\ml\field_particle.rs:138:23
+    |
+138 |     pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource {
+    |                       ^^^^^                   ^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                       |
+    |                       the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+138 |     pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource<'_> {
+    |                                                                    ++++
+
+warning: `twister` (lib) generated 48 warnings (run `cargo fix --lib -p twister` to apply 32 suggestions)
+warning: unused variable: `grad_norm_encoder`
+  --> tests\phase_3e_trainer_integration.rs:41:13
+   |
+41 |         let grad_norm_encoder = 0.5f32;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_encoder`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `grad_norm_mamba`
+  --> tests\phase_3e_trainer_integration.rs:42:13
+   |
+42 |         let grad_norm_mamba = 0.8f32;
+   |             ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_mamba`
+
+warning: unused variable: `small_loss`
+   --> tests\phase_3e_trainer_integration.rs:140:13
+    |
+140 |         let small_loss = 0.5 * small_error * small_error;
+    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_small_loss`
+
+warning: unused import: `burn_import::onnx::ModelGen`
+ --> tools\convert_mediapipe.rs:1:5
+  |
+1 | use burn_import::onnx::ModelGen;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (test "phase_3e_trainer_integration") generated 3 warnings (run `cargo fix --test "phase_3e_trainer_integration" -p twister` to apply 3 suggestions)
+warning: `twister` (bin "convert_mediapipe" test) generated 1 warning (run `cargo fix --bin "convert_mediapipe" -p twister --tests` to apply 1 suggestion)
+warning: unused import: `MeshLodLevel`
+ --> tests\mesh_shaders_integration.rs:6:48
+  |
+6 |     use twister::visualization::mesh_shaders::{MeshLodLevel, MeshShaderPipeline};
+  |                                                ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0601]: `main` function not found in crate `particle_system_demo`
+  |
+  = note: consider adding a `main` function to `examples\particle_system_demo.rs`
+
+For more information about this error, try `rustc --explain E0601`.
+warning: unused import: `twister::vbuffer::GpuVBuffer`
+  --> examples\full_signal_ingestion_demo.rs:20:5
+   |
+20 | use twister::vbuffer::GpuVBuffer;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error: could not compile `twister` (example "particle_system_demo") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+warning: unused import: `std::collections::HashMap`
+  --> tests\timegnn_training.rs:14:9
+   |
+14 |     use std::collections::HashMap;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `train_timegnn`
+  --> tests\timegnn_training.rs:19:17
+   |
+19 |         kmeans, train_timegnn,
+   |                 ^^^^^^^^^^^^^
+
+error[E0603]: constant `BYTES_PER_FRAME` is private
+  --> examples\test_iq_dispatch_loop.rs:13:54
+   |
+13 | use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+   |                                                      ^^^^^^^^^^^^^^^ private constant
+   |
+note: the constant `BYTES_PER_FRAME` is defined here
+  --> src\dispatch\iq_dispatch.rs:23:1
+   |
+23 | const BYTES_PER_FRAME: usize = SAMPLES_PER_FRAME * 2; // I+Q = 2 bytes per complex sample
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0603]: constant `SAMPLES_PER_FRAME` is private
+  --> examples\test_iq_dispatch_loop.rs:13:71
+   |
+13 | use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+   |                                                                       ^^^^^^^^^^^^^^^^^ private constant
+   |
+note: the constant `SAMPLES_PER_FRAME` is defined here
+  --> src\dispatch\iq_dispatch.rs:22:1
+   |
+22 | const SAMPLES_PER_FRAME: usize = 65536;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> examples\test_iq_dispatch_loop.rs:8:5
+  |
+8 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `Duration` and `timeout`
+ --> examples\test_iq_dispatch_loop.rs:9:19
+  |
+9 | use tokio::time::{timeout, Duration};
+  |                   ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `twister::app_state::DirtyFlags`
+  --> examples\test_iq_dispatch_loop.rs:12:5
+   |
+12 | use twister::app_state::DirtyFlags;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `IqDispatchLoop`
+  --> examples\test_iq_dispatch_loop.rs:13:38
+   |
+13 | use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+   |                                      ^^^^^^^^^^^^^^
+
+warning: unused import: `twister::hardware_io::device_manager::DeviceManager`
+  --> examples\test_iq_dispatch_loop.rs:14:5
+   |
+14 | use twister::hardware_io::device_manager::DeviceManager;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `DMA_CHUNK_SAMPLES` and `IqDmaGateway`
+  --> examples\test_iq_dispatch_loop.rs:15:41
+   |
+15 | use twister::hardware_io::dma_vbuffer::{IqDmaGateway, DMA_CHUNK_SAMPLES};
+   |                                         ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+error[E0601]: `main` function not found in crate `test_iq_dispatch_loop`
+   --> examples\test_iq_dispatch_loop.rs:111:2
+    |
+111 | }
+    |  ^ consider adding a `main` function to `examples\test_iq_dispatch_loop.rs`
+
+error[E0308]: mismatched types
+   --> examples\full_signal_ingestion_demo.rs:101:40
+    |
+101 |       let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+    |  ____________________-------------------_^
+    | |                    |
+    | |                    arguments to this function are incorrect
+102 | |         backends: wgpu::Backends::VULKAN,
+103 | |         ..Default::default()
+104 | |     });
+    | |_____^ expected `&InstanceDescriptor`, found `InstanceDescriptor`
+    |
+note: associated function defined here
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\instance.rs:62:12
+    |
+ 62 |     pub fn new(desc: &InstanceDescriptor) -> Self {
+    |            ^^^
+help: consider borrowing here
+    |
+101 |     let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+    |                                        +
+
+error[E0063]: missing fields `experimental_features` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+   --> examples\full_signal_ingestion_demo.rs:115:14
+    |
+115 |             &wgpu::DeviceDescriptor {
+    |              ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features` and `trace`
+
+error[E0061]: this method takes 1 argument but 2 arguments were supplied
+   --> examples\full_signal_ingestion_demo.rs:114:10
+    |
+114 |         .request_device(
+    |          ^^^^^^^^^^^^^^
+...
+121 |             None,
+    |             ---- unexpected argument #2 of type `Option<_>`
+    |
+note: method defined here
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\adapter.rs:57:12
+    |
+ 57 |     pub fn request_device(
+    |            ^^^^^^^^^^^^^^
+help: remove the extra argument
+    |
+120 -             },
+121 -             None,
+120 +             },
+    |
+
+warning: `twister` (test "mesh_shaders_integration") generated 1 warning (run `cargo fix --test "mesh_shaders_integration" -p twister` to apply 1 suggestion)
+error[E0432]: unresolved import `twister::visualization::ray_tracing_renderer`
+ --> tests\megalights_rendering.rs:3:29
+  |
+3 | use twister::visualization::ray_tracing_renderer::{RayTracingRenderer, Camera};
+  |                             ^^^^^^^^^^^^^^^^^^^^ could not find `ray_tracing_renderer` in `visualization`
+
+error[E0432]: unresolved import `twister::visualization::lumen_global_illumination`
+ --> tests\megalights_rendering.rs:4:29
+  |
+4 | use twister::visualization::lumen_global_illumination::LumenGI;
+  |                             ^^^^^^^^^^^^^^^^^^^^^^^^^ could not find `lumen_global_illumination` in `visualization`
+
+error[E0432]: unresolved import `twister::visualization::volumetric_lighting`
+ --> tests\megalights_rendering.rs:5:29
+  |
+5 | use twister::visualization::volumetric_lighting::VolumetricLighting;
+  |                             ^^^^^^^^^^^^^^^^^^^ could not find `volumetric_lighting` in `visualization`
+
+error[E0432]: unresolved import `twister::visualization::tone_mapping`
+ --> tests\megalights_rendering.rs:6:29
+  |
+6 | use twister::visualization::tone_mapping::{tone_map_reinhard, tone_map_aces};
+  |                             ^^^^^^^^^^^^ could not find `tone_mapping` in `visualization`
+
+warning: variable does not need to be mutable
+  --> examples\full_signal_ingestion_demo.rs:46:9
+   |
+46 |     let mut stft_processor = StftProcessor::new(
+   |         ----^^^^^^^^^^^^^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `loss_similar`
+  --> tests\timegnn_training.rs:47:13
+   |
+47 |         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
+   |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_loss_similar`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0061, E0063, E0308.
+For more information about an error, try `rustc --explain E0061`.
+error[E0432]: unresolved import `twister::ui::DeviceControlsController`
+ --> examples\test_slint_device_controls.rs:9:5
+  |
+9 | use twister::ui::DeviceControlsController;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `DeviceControlsController` in `ui`
+
+warning: unused variable: `config`
+  --> tests\timegnn_training.rs:76:13
+   |
+76 |         let config = TimeGnnTrainingConfig {
+   |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+error[E0308]: mismatched types
+  --> examples\test_iq_dispatch_loop.rs:87:40
+   |
+87 |       let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+   |  ____________________-------------------_^
+   | |                    |
+   | |                    arguments to this function are incorrect
+88 | |         backends: wgpu::Backends::VULKAN,
+89 | |         ..Default::default()
+90 | |     });
+   | |_____^ expected `&InstanceDescriptor`, found `InstanceDescriptor`
+   |
+note: associated function defined here
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\instance.rs:62:12
+   |
+62 |     pub fn new(desc: &InstanceDescriptor) -> Self {
+   |            ^^^
+help: consider borrowing here
+   |
+87 |     let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+   |                                        +
+
+error[E0063]: missing fields `experimental_features` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+  --> examples\test_iq_dispatch_loop.rs:99:14
+   |
+99 |             &wgpu::DeviceDescriptor {
+   |              ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features` and `trace`
+
+warning: `twister` (example "full_signal_ingestion_demo") generated 2 warnings
+error: could not compile `twister` (example "full_signal_ingestion_demo") due to 3 previous errors; 2 warnings emitted
+For more information about this error, try `rustc --explain E0223`.
+error[E0061]: this method takes 1 argument but 2 arguments were supplied
+   --> examples\test_iq_dispatch_loop.rs:98:10
+    |
+ 98 |         .request_device(
+    |          ^^^^^^^^^^^^^^
+...
+105 |             None,
+    |             ---- unexpected argument #2 of type `Option<_>`
+    |
+note: method defined here
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\adapter.rs:57:12
+    |
+ 57 |     pub fn request_device(
+    |            ^^^^^^^^^^^^^^
+help: remove the extra argument
+    |
+104 -             },
+105 -             None,
+104 +             },
+    |
+
+For more information about this error, try `rustc --explain E0432`.
+Some errors have detailed explanations: E0061, E0063, E0308, E0601, E0603.
+warning: `twister` (example "test_iq_dispatch_loop") generated 6 warnings
+error: could not compile `twister` (example "test_iq_dispatch_loop") due to 6 previous errors; 6 warnings emitted
+warning: `twister` (lib test) generated 37 warnings (34 duplicates)
+error: could not compile `twister` (lib test) due to 4 previous errors; 37 warnings emitted
+error: could not compile `twister` (example "test_slint_device_controls") due to 1 previous error
+error[E0308]: mismatched types
+  --> tests\megalights_rendering.rs:9:40
+   |
+ 9 |       let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+   |  ____________________-------------------_^
+   | |                    |
+   | |                    arguments to this function are incorrect
+10 | |         backends: wgpu::Backends::VULKAN | wgpu::Backends::DX12,
+11 | |         ..Default::default()
+12 | |     });
+   | |_____^ expected `&InstanceDescriptor`, found `InstanceDescriptor`
+   |
+note: associated function defined here
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\instance.rs:62:12
+   |
+62 |     pub fn new(desc: &InstanceDescriptor) -> Self {
+   |            ^^^
+help: consider borrowing here
+   |
+ 9 |     let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+   |                                        +
+
+warning: `twister` (test "timegnn_training") generated 4 warnings (run `cargo fix --test "timegnn_training" -p twister` to apply 4 suggestions)
+error[E0599]: no method named `ok_or` found for enum `std::result::Result<T, E>` in the current scope
+  --> tests\megalights_rendering.rs:18:14
+   |
+14 |       let adapter = instance.request_adapter(&wgpu::RequestAdapterOptions {
+   |  ___________________-
+15 | |         power_preference: wgpu::PowerPreference::HighPerformance,
+16 | |         force_fallback_adapter: false,
+17 | |         compatible_surface: None,
+18 | |     }).await.ok_or("Failed to find suitable adapter")?;
+   | |             -^^^^^ method not found in `std::result::Result<wgpu::Adapter, RequestAdapterError>`
+   | |_____________|
+   |
+
+error[E0599]: no associated item named `RAY_QUERY` found for struct `wgpu::Features` in the current scope
+  --> tests\megalights_rendering.rs:20:45
+   |
+20 |     let required_features = wgpu::Features::RAY_QUERY | wgpu::Features::RAY_TRACING_ACCELERATION_STRUCTURE;
+   |                                             ^^^^^^^^^ associated item not found in `wgpu::Features`
+
+error[E0599]: no associated item named `RAY_TRACING_ACCELERATION_STRUCTURE` found for struct `wgpu::Features` in the current scope
+  --> tests\megalights_rendering.rs:20:73
+   |
+20 |     let required_features = wgpu::Features::RAY_QUERY | wgpu::Features::RAY_TRACING_ACCELERATION_STRUCTURE;
+   |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated item not found in `wgpu::Features`
+
+error[E0063]: missing fields `experimental_features`, `memory_hints` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+  --> tests\megalights_rendering.rs:23:10
+   |
+23 |         &wgpu::DeviceDescriptor {
+   |          ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features`, `memory_hints` and `trace`
+
+Some errors have detailed explanations: E0063, E0308, E0432, E0599.
+For more information about an error, try `rustc --explain E0063`.
+error: could not compile `twister` (test "megalights_rendering") due to 9 previous errors

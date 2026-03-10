@@ -50,12 +50,6 @@ warning: unused imports: `DateTime` and `Utc`
 1 | use chrono::{DateTime, Utc};
   |              ^^^^^^^^  ^^^
 
-warning: unused import: `FieldParticleGPU`
-  --> src\ml\batch_accumulation.rs:15:50
-   |
-15 | use super::field_particle::{FieldParticleBuffer, FieldParticleGPU, HitListAccumulator};
-   |                                                  ^^^^^^^^^^^^^^^^
-
 warning: unused import: `std::error::Error`
  --> src\ml\event_corpus.rs:5:5
   |
@@ -73,42 +67,6 @@ warning: unused import: `std::collections::HashMap`
   |
 5 | use std::collections::HashMap;
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-warning: unused import: `super::data_contracts::FieldParticle`
-  --> src\ml\rt_blind_rays.rs:13:5
-   |
-13 | use super::data_contracts::FieldParticle;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-warning: unused import: `HitListAccumulator`
-  --> src\ml\rt_blind_rays.rs:14:47
-   |
-14 | use super::field_particle::{FieldParticleGPU, HitListAccumulator};
-   |                                               ^^^^^^^^^^^^^^^^^^
-
-warning: unused import: `std::f32::consts::PI`
-  --> src\ml\rt_blind_rays.rs:18:5
-   |
-18 | use std::f32::consts::PI;
-   |     ^^^^^^^^^^^^^^^^^^^^
-
-warning: unused imports: `Buffer` and `Queue`
- --> src\ml\vbuffer_render.rs:8:12
-  |
-8 | use wgpu::{Buffer, Device, Queue, Texture, TextureView, RenderPipeline};
-  |            ^^^^^^          ^^^^^
-
-warning: unused imports: `Device` and `Queue`
- --> src\ml\visibility_culling.rs:9:20
-  |
-9 | use wgpu::{Buffer, Device, Queue};
-  |                    ^^^^^^  ^^^^^
-
-warning: unused import: `std::mem`
-  --> src\ml\visibility_culling.rs:10:5
-   |
-10 | use std::mem;
-   |     ^^^^^^^^
 
 warning: unused import: `burn::backend::Wgpu`
  --> src\ml\wav2vec2_loader.rs:1:5
@@ -161,36 +119,6 @@ warning: unused variable: `args`
    |
    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
 
-warning: unused variable: `recon`
-   --> src\dispatch\signal_dispatch.rs:251:50
-    |
-251 |                         Ok((anomaly, mut latent, recon)) => {
-    |                                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_recon`
-
-warning: unused variable: `qd`
-   --> src\dispatch\signal_dispatch.rs:420:25
-    |
-420 |                     let qd = self.qdrant.clone();
-    |                         ^^ help: if this is intentional, prefix it with an underscore: `_qd`
-
-warning: unused variable: `nj`
-   --> src\dispatch\signal_dispatch.rs:421:25
-    |
-421 |                     let nj = self.neo4j.clone();
-    |                         ^^ help: if this is intentional, prefix it with an underscore: `_nj`
-
-warning: unused variable: `ev`
-   --> src\dispatch\signal_dispatch.rs:422:25
-    |
-422 |                     let ev = detection_event.clone();
-    |                         ^^ help: if this is intentional, prefix it with an underscore: `_ev`
-
-warning: unused variable: `st`
-   --> src\dispatch\signal_dispatch.rs:423:25
-    |
-423 |                     let st = self.state.clone();
-    |                         ^^ help: if this is intentional, prefix it with an underscore: `_st`
-
 warning: variable `event_count` is assigned to, but never used
    --> src\forensic.rs:417:17
     |
@@ -219,12 +147,6 @@ warning: unused variable: `end_date`
 582 |         end_date: Option<&str>,
     |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
 
-warning: unused variable: `particle`
-  --> src\ml\field_dispatch.rs:88:17
-   |
-88 |             let particle = FieldParticle {
-   |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_particle`
-
 warning: unused variable: `distance`
    --> src\resonance\voxel_grid.rs:175:38
     |
@@ -244,9 +166,9 @@ warning: unused variable: `local_k2`
    |                             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_local_k2`
 
 warning: unused variable: `material_library`
-   --> src\state.rs:209:13
+   --> src\state.rs:211:13
     |
-209 |         let material_library =
+211 |         let material_library =
     |             ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_material_library`
 
 warning: unused variable: `slot`
@@ -261,28 +183,6 @@ warning: unused variable: `base_offset`
 262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
     |                                           ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_base_offset`
 
-warning: fields `impulse_tx`, `pdm`, `bispec`, `crystal_ball`, and `forensic` are never read
-  --> src\dispatch\signal_dispatch.rs:38:5
-   |
-27 | pub struct SignalDispatchLoop {
-   |            ------------------ fields in this struct
-...
-38 |     impulse_tx: Sender<ImpulseTrainEvent>,
-   |     ^^^^^^^^^^
-...
-43 |     pdm: PdmEngine,
-   |     ^^^
-44 |     bispec: BispectrumEngine,
-   |     ^^^^^^
-...
-47 |     crystal_ball: Arc<crate::reconstruct::CrystalBall>,
-   |     ^^^^^^^^^^^^
-...
-57 |     forensic: ForensicLogger,
-   |     ^^^^^^^^
-   |
-   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
 warning: field `sample_rate` is never read
  --> src\ml\fold_frequency_harmonics.rs:2:5
   |
@@ -290,6 +190,8 @@ warning: field `sample_rate` is never read
   |            --------------------- field in this struct
 2 |     sample_rate: u32,
   |     ^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
 warning: fields `device` and `model` are never read
   --> src\ml\wav2vec2_loader.rs:38:5
@@ -426,53 +328,269 @@ warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` a
 61 |     output_texture: Texture,
    |     ^^^^^^^^^^^^^^
 
-warning: hiding a lifetime that's elided elsewhere is confusing
-   --> src\ml\field_particle.rs:138:23
-    |
-138 |     pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource {
-    |                       ^^^^^                   ^^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
-    |                       |
-    |                       the lifetime is elided here
-    |
-    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
-    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
-help: use `'_` for type paths
-    |
-138 |     pub fn as_binding(&self, _offset: u64) -> wgpu::BindingResource<'_> {
-    |                                                                    ++++
-
-warning: `twister` (lib) generated 54 warnings (run `cargo fix --lib -p twister` to apply 37 suggestions)
     Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
-warning: unused import: `burn_import::onnx::ModelGen`
- --> tools\convert_mediapipe.rs:1:5
+warning: `twister` (lib) generated 39 warnings (run `cargo fix --lib -p twister` to apply 23 suggestions)
+error[E0601]: `main` function not found in crate `lumen_demo`
   |
-1 | use burn_import::onnx::ModelGen;
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = note: consider adding a `main` function to `examples\lumen_demo.rs`
+
+For more information about this error, try `rustc --explain E0601`.
+error: could not compile `twister` (example "lumen_demo") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+warning: unused import: `std::sync::Arc`
+  --> tests\phase3_async_event_handler.rs:12:9
+   |
+12 |     use std::sync::Arc;
+   |         ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::time::Instant`
+  --> tests\phase3_async_event_handler.rs:13:9
+   |
+13 |     use std::time::Instant;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+  --> tests\phase3_async_event_handler.rs:14:9
+   |
+14 |     use tokio::sync::Mutex;
+   |         ^^^^^^^^^^^^^^^^^^
+
+warning: `twister` (test "phase3_async_event_handler") generated 3 warnings (run `cargo fix --test "phase3_async_event_handler" -p twister` to apply 3 suggestions)
+warning: unused import: `burn::tensor::backend::Backend`
+ --> tests\ml_integration.rs:3:5
+  |
+3 | use burn::tensor::backend::Backend;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   |
   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
 
-warning: `twister` (bin "convert_mediapipe") generated 1 warning (run `cargo fix --bin "convert_mediapipe" -p twister` to apply 1 suggestion)
-error[E0433]: cannot find `hardware_io` in `crate`
-  --> src\dispatch\iq_dispatch.rs:10:12
-   |
-10 | use crate::hardware_io::device_manager::DeviceManager;
-   |            ^^^^^^^^^^^ unresolved import
-   |
-help: a similar path exists
-   |
-10 | use crate::twister::hardware_io::device_manager::DeviceManager;
-   |            +++++++++
+warning: unused imports: `SignalFeaturePayload` and `VideoFrame`
+ --> tests\ml_integration.rs:5:42
+  |
+5 |     FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame,
+  |                                          ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
 
-error[E0433]: cannot find `hardware_io` in `crate`
-  --> src\dispatch\iq_dispatch.rs:11:12
+warning: variable does not need to be mutable
+  --> examples\alignment_comparison.rs:88:25
    |
-11 | use crate::hardware_io::dma_vbuffer::{IqDmaGateway, DMA_CHUNK_SAMPLES};
-   |            ^^^^^^^^^^^ unresolved import
+88 |                     let mut times: Vec<f64> = Vec::new();
+   |                         ----^^^^^
+   |                         |
+   |                         help: remove this `mut`
    |
-help: a similar path exists
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> examples\alignment_comparison.rs:138:25
+    |
+138 |                     let mut times: Vec<f64> = Vec::new();
+    |                         ----^^^^^
+    |                         |
+    |                         help: remove this `mut`
+
+warning: unused variable: `times`
+  --> examples\alignment_comparison.rs:88:25
    |
-11 | use crate::twister::hardware_io::dma_vbuffer::{IqDmaGateway, DMA_CHUNK_SAMPLES};
-   |            +++++++++
+88 |                     let mut times: Vec<f64> = Vec::new();
+   |                         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_times`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `run`
+  --> examples\alignment_comparison.rs:89:25
+   |
+89 |                     for run in 1..=3 {
+   |                         ^^^ help: if this is intentional, prefix it with an underscore: `_run`
+
+warning: unused variable: `times`
+   --> examples\alignment_comparison.rs:138:25
+    |
+138 |                     let mut times: Vec<f64> = Vec::new();
+    |                         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_times`
+
+warning: unused variable: `run`
+   --> examples\alignment_comparison.rs:139:25
+    |
+139 |                     for run in 1..=3 {
+    |                         ^^^ help: if this is intentional, prefix it with an underscore: `_run`
+
+warning: unused variable: `c_freq`
+   --> tests\chord_dominance.rs:208:9
+    |
+208 |     let c_freq = 261.63;
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_c_freq`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `e_freq`
+   --> tests\chord_dominance.rs:209:9
+    |
+209 |     let e_freq = 329.63; // Major 3rd (5:4 ratio)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_e_freq`
+
+warning: unused variable: `g_freq`
+   --> tests\chord_dominance.rs:210:9
+    |
+210 |     let g_freq = 392.00; // Perfect 5th (3:2 ratio from C)
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_g_freq`
+
+warning: unused variable: `beam_confidence`
+  --> tests\mamba_control_capture.rs:10:9
+   |
+10 |     let beam_confidence = 0.85;
+   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_beam_confidence`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_beams`
+  --> tests\mamba_control_capture.rs:98:9
+   |
+98 |     let num_beams = 4;
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_beams`
+
+warning: unused variable: `memo_uuid`
+   --> tests\mamba_control_capture.rs:307:9
+    |
+307 |     let memo_uuid = "abc-def-123";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_memo_uuid`
+
+warning: unused variable: `timestamp`
+   --> tests\mamba_control_capture.rs:308:9
+    |
+308 |     let timestamp = "2026-03-07T14:25:30Z";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
+
+error[E0432]: unresolved import `twister::visualization::mesh_shaders::WavefieldRenderer`
+ --> examples\mesh_shader_demo.rs:3:73
+  |
+3 | use twister::visualization::mesh_shaders::{CameraUniform, InstanceData, WavefieldRenderer};
+  |                                                                         ^^^^^^^^^^^^^^^^^ no `WavefieldRenderer` in `visualization::mesh_shaders`
+
+warning: unused import: `num_complex::Complex`
+  --> examples\chaos_physics_proving_ground.rs:47:5
+   |
+47 | use num_complex::Complex;
+   |     ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::sync::Arc`
+  --> examples\chaos_physics_proving_ground.rs:49:5
+   |
+49 | use std::sync::Arc;
+   |     ^^^^^^^^^^^^^^
+
+warning: unused import: `twister::resonance::heterodyne_mixer::HeterodyneMixer`
+  --> examples\chaos_physics_proving_ground.rs:51:5
+   |
+51 | use twister::resonance::heterodyne_mixer::HeterodyneMixer;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `twister::resonance::voxel_grid::VoxelGrid`
+  --> examples\chaos_physics_proving_ground.rs:54:5
+   |
+54 | use twister::resonance::voxel_grid::VoxelGrid;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `twister` (test "ml_integration") generated 2 warnings (run `cargo fix --test "ml_integration" -p twister` to apply 2 suggestions)
+error[E0432]: unresolved import `twister::ui::DeviceControlsController`
+ --> examples\test_slint_device_controls.rs:9:5
+  |
+9 | use twister::ui::DeviceControlsController;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `DeviceControlsController` in `ui`
+
+warning: `twister` (example "alignment_comparison") generated 6 warnings (run `cargo fix --example "alignment_comparison" -p twister` to apply 6 suggestions)
+error[E0063]: missing fields `experimental_features` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+  --> examples\mesh_shader_demo.rs:19:30
+   |
+19 |             .request_device(&wgpu::DeviceDescriptor {
+   |                              ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features` and `trace`
+
+warning: `twister` (test "chord_dominance") generated 3 warnings (run `cargo fix --test "chord_dominance" -p twister` to apply 3 suggestions)
+Some errors have detailed explanations: E0063, E0432.
+For more information about an error, try `rustc --explain E0063`.
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `twister` (example "mesh_shader_demo") due to 2 previous errors
+error: could not compile `twister` (example "test_slint_device_controls") due to 1 previous error
+error[E0599]: no method named `expect` found for opaque type `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>` in the current scope
+   --> tests\wav2vec2_integration.rs:271:63
+    |
+271 |             prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+    |                                                               ^^^^^^ method not found in `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>`
+    |
+help: consider `await`ing on the `Future` and calling the method on its `Output`
+    |
+271 |             prepare_event_corpus(test_jsonl, test_h5, 192000).await.expect("Corpus generation failed");
+    |                                                               ++++++
+
+warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+error[E0599]: no method named `expect` found for opaque type `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>` in the current scope
+   --> tests\wav2vec2_integration.rs:324:63
+    |
+324 |             prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+    |                                                               ^^^^^^ method not found in `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>`
+    |
+help: consider `await`ing on the `Future` and calling the method on its `Output`
+    |
+324 |             prepare_event_corpus(test_jsonl, test_h5, 192000).await.expect("Corpus generation failed");
+    |                                                               ++++++
+
+error[E0599]: no method named `expect` found for opaque type `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>` in the current scope
+   --> tests\wav2vec2_integration.rs:380:63
+    |
+380 |             prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+    |                                                               ^^^^^^ method not found in `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>`
+    |
+help: consider `await`ing on the `Future` and calling the method on its `Output`
+    |
+380 |             prepare_event_corpus(test_jsonl, test_h5, 192000).await.expect("Corpus generation failed");
+    |                                                               ++++++
+
+warning: unused variable: `audio`
+  --> tests\wav2vec2_integration.rs:71:13
+   |
+71 |         let audio: Vec<f32> = (0..16000)
+   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0599`.
+warning: `twister` (test "wav2vec2_integration") generated 1 warning
+error: could not compile `twister` (test "wav2vec2_integration") due to 3 previous errors; 1 warning emitted
+warning: variable does not need to be mutable
+   --> examples\chaos_physics_proving_ground.rs:145:17
+    |
+145 |             let mut pixels = pixel_buffer.make_mut_slice();
+    |                 ----^^^^^^
+    |                 |
+    |                 help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (example "chaos_physics_proving_ground") generated 5 warnings (run `cargo fix --example "chaos_physics_proving_ground" -p twister` to apply 5 suggestions)
+error[E0425]: cannot find type `StftPushConstants` in this scope
+   --> src\visualization\stft_pipeline.rs:239:37
+    |
+239 |         assert!(std::mem::size_of::<StftPushConstants>() <= 128);
+    |                                     ^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+help: you might be missing a type parameter
+    |
+237 |     fn test_push_constants_size<StftPushConstants>() {
+    |                                +++++++++++++++++++
+
+error[E0425]: cannot find type `StftPushConstants` in this scope
+   --> src\visualization\stft_pipeline.rs:240:40
+    |
+240 |         assert_eq!(std::mem::size_of::<StftPushConstants>(), 16); // 4 u32s
+    |                                        ^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+help: you might be missing a type parameter
+    |
+237 |     fn test_push_constants_size<StftPushConstants>() {
+    |                                +++++++++++++++++++
 
 warning: unused attribute `allow`
   --> src\main.rs:19:1
@@ -505,24 +623,6 @@ warning: unused import: `reasoning_engine::*`
 9 | pub use reasoning_engine::*;
   |         ^^^^^^^^^^^^^^^^^^^
 
-warning: unused import: `iq_dispatch::IqDispatchLoop`
-  --> src\dispatch\mod.rs:10:9
-   |
-10 | pub use iq_dispatch::IqDispatchLoop;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-warning: unused import: `signal_dispatch::SignalDispatchLoop`
-  --> src\dispatch\mod.rs:11:9
-   |
-11 | pub use signal_dispatch::SignalDispatchLoop;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-warning: unused imports: `MultiRateSignalFrame`, `SampleDeltaTime`, and `TaggedSignalBuffer`
-  --> src\dispatch\mod.rs:12:27
-   |
-12 | pub use signal_metadata::{MultiRateSignalFrame, SampleDeltaTime, TaggedSignalBuffer};
-   |                           ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
-
 warning: unused imports: `JoyConAction`, `JoyConState`, and `JoyconHandler`
  --> src\input\mod.rs:5:26
   |
@@ -541,105 +641,87 @@ warning: unused import: `event_ingestion::*`
 6 | pub use event_ingestion::*;
   |         ^^^^^^^^^^^^^^^^^^
 
-warning: unused imports: `ChamferDistance` and `HuberLoss`
-  --> src\ml\losses\mod.rs:14:28
-   |
-14 | pub use chamfer_distance::{ChamferDistance, HuberLoss};
-   |                            ^^^^^^^^^^^^^^^  ^^^^^^^^^
-
-warning: unused imports: `ChamferDistance` and `HuberLoss`
-  --> src\ml\mod.rs:59:36
-   |
-59 | pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
-   |                                    ^^^^^^^^^^^^^^^  ^^^^^^^^^
-
 warning: unused import: `mamba_block::MambaBlock`
-  --> src\ml\mod.rs:60:9
+  --> src\ml\mod.rs:41:9
    |
-60 | pub use mamba_block::MambaBlock;
+41 | pub use mamba_block::MambaBlock;
    |         ^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused imports: `FeatureFlags`, `ModularFeatureEncoder`, `SignalFeaturePayload`, and `VideoFrame`
-  --> src\ml\mod.rs:61:28
+  --> src\ml\mod.rs:42:28
    |
-61 | pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+42 | pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
    |                            ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
 
 warning: unused imports: `ClusteringResult`, `Event`, `KMeansConfig`, `Pattern`, `compute_silhouette_score`, `compute_temporal_frequency`, `discover_patterns`, `generate_pattern_label`, and `kmeans`
-  --> src\ml\mod.rs:64:5
+  --> src\ml\mod.rs:45:5
    |
-64 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
+45 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
    |     ^^^^^^^^^^^^^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
-65 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
+46 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
 
-warning: unused imports: `CorpusStats`, `ForensicEventData`, `load_forensic_events`, and `prepare_event_corpus`
-  --> src\ml\mod.rs:68:24
+warning: unused imports: `CorpusStats`, `ForensicEventData`, and `prepare_event_corpus`
+  --> src\ml\mod.rs:49:24
    |
-68 | pub use event_corpus::{CorpusStats, ForensicEventData, load_forensic_events, prepare_event_corpus};
-   |                        ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+49 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                        ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
 
 warning: unused imports: `ModalityStats`, `compute_modality_stats`, and `fuse_multimodal`
-  --> src\ml\mod.rs:69:29
+  --> src\ml\mod.rs:50:29
    |
-69 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+50 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
    |                             ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
 
 warning: unused import: `point_decoder::PointDecoder`
-  --> src\ml\mod.rs:70:9
+  --> src\ml\mod.rs:51:9
    |
-70 | pub use point_decoder::PointDecoder;
+51 | pub use point_decoder::PointDecoder;
    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused import: `point_mamba::PointMamba`
-  --> src\ml\mod.rs:71:9
+  --> src\ml\mod.rs:52:9
    |
-71 | pub use point_mamba::PointMamba;
+52 | pub use point_mamba::PointMamba;
    |         ^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
-  --> src\ml\mod.rs:72:31
+  --> src\ml\mod.rs:53:31
    |
-72 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+53 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
    |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused import: `pointnet_encoder::PointNetEncoder`
-  --> src\ml\mod.rs:73:9
+  --> src\ml\mod.rs:54:9
    |
-73 | pub use pointnet_encoder::PointNetEncoder;
+54 | pub use pointnet_encoder::PointNetEncoder;
    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused import: `spectral_frame::SpectralFrame`
-  --> src\ml\mod.rs:74:9
+  --> src\ml\mod.rs:55:9
    |
-74 | pub use spectral_frame::SpectralFrame;
+55 | pub use spectral_frame::SpectralFrame;
    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused import: `timegnn::TimeGnnModel`
-  --> src\ml\mod.rs:75:9
+  --> src\ml\mod.rs:56:9
    |
-75 | pub use timegnn::TimeGnnModel;
+56 | pub use timegnn::TimeGnnModel;
    |         ^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
-  --> src\ml\mod.rs:77:5
+  --> src\ml\mod.rs:58:5
    |
-77 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+58 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
    |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
-78 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+59 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
    |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
 
 warning: unused import: `wav2vec2_loader::Wav2Vec2Model`
-  --> src\ml\mod.rs:80:9
+  --> src\ml\mod.rs:61:9
    |
-80 | pub use wav2vec2_loader::Wav2Vec2Model;
+61 | pub use wav2vec2_loader::Wav2Vec2Model;
    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-warning: unused imports: `WaveshaperLatentProjector` and `WaveshaperParams`
-  --> src\ml\mod.rs:81:39
-   |
-81 | pub use waveshaper_latent_projector::{WaveshaperLatentProjector, WaveshaperParams};
-   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 
 warning: unused import: `copilot_handler::*`
  --> src\ui\mod.rs:2:9
@@ -666,119 +748,137 @@ warning: unused imports: `FFT_SIZE`, `FREQ_BINS`, `StftPipeline`, and `StftProce
    |                         ^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^^
 
 warning: unused import: `crossbeam_channel::bounded`
-  --> src\main.rs:77:5
+  --> src\main.rs:76:5
    |
-77 | use crossbeam_channel::bounded;
+76 | use crossbeam_channel::bounded;
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: unused imports: `frustum_culler::FrustumCuller` and `renderer::ParticleRenderer`
-   --> src\main.rs:113:9
+   --> src\main.rs:112:9
     |
-113 |         frustum_culler::FrustumCuller,
-    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-114 |         renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
-    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+112 |         frustum_culler::FrustumCuller, renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-warning: variable does not need to be mutable
-   --> src\main.rs:746:37
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:454:24
     |
-746 | ...                   let mut rx_cur =
+454 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `slice1`
+   --> src\hardware_io\iq_staging_buffer.rs:467:21
+    |
+467 |         let (slot1, slice1) = staging.acquire_write_slot().unwrap();
+    |                     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_slice1`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:499:24
+    |
+499 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+For more information about this error, try `rustc --explain E0425`.
+warning: `twister` (lib test) generated 29 warnings (26 duplicates)
+error: could not compile `twister` (lib test) due to 2 previous errors; 29 warnings emitted
+warning: variable does not need to be mutable
+   --> src\main.rs:744:37
+    |
+744 | ...                   let mut rx_cur =
     |                           ----^^^^^^
     |                           |
     |                           help: remove this `mut`
 
 warning: variable does not need to be mutable
-   --> src\main.rs:839:33
+   --> src\main.rs:831:33
     |
-839 | ...                   let mut rx_cur = if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
+831 | ...                   let mut rx_cur = if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
     |                           ----^^^^^^
     |                           |
     |                           help: remove this `mut`
 
 warning: unused variable: `feature_flags`
-   --> src\main.rs:343:17
+   --> src\main.rs:341:17
     |
-343 |             let feature_flags = state_disp.get_feature_flags();
+341 |             let feature_flags = state_disp.get_feature_flags();
     |                 ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_feature_flags`
 
 warning: unused variable: `sdr_last_center_hz`
-   --> src\main.rs:393:33
+   --> src\main.rs:391:33
     |
-393 |             while let Ok((mags, sdr_last_center_hz, sdr_last_rate)) = sdr_rx.try_recv() {
+391 |             while let Ok((mags, sdr_last_center_hz, sdr_last_rate)) = sdr_rx.try_recv() {
     |                                 ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sdr_last_center_hz`
 
 warning: unused variable: `pdm_chunk_snr`
-   --> src\main.rs:533:21
+   --> src\main.rs:531:21
     |
-533 |                 let pdm_chunk_snr = snr_db(&chunk, &decoded);
+531 |                 let pdm_chunk_snr = snr_db(&chunk, &decoded);
     |                     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pdm_chunk_snr`
 
 warning: unused variable: `current_gain`
-    --> src\main.rs:1015:17
+    --> src\main.rs:1007:17
      |
-1015 |             let current_gain = state_disp.get_master_gain();
+1007 |             let current_gain = state_disp.get_master_gain();
      |                 ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_current_gain`
 
 warning: unused variable: `mamba_ctrl`
-    --> src\main.rs:1020:17
+    --> src\main.rs:1012:17
      |
-1020 |             let mamba_ctrl = crate::state::MambaControlState {
+1012 |             let mamba_ctrl = crate::state::MambaControlState {
      |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_mamba_ctrl`
 
 warning: unused variable: `feature_rx`
-   --> src\main.rs:132:22
+   --> src\main.rs:130:22
     |
-132 |     let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(
+130 |     let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(
     |                      ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_feature_rx`
 
 warning: unused variable: `impulse_rx`
-   --> src\main.rs:136:22
+   --> src\main.rs:134:22
     |
-136 |     let (impulse_tx, impulse_rx) =
+134 |     let (impulse_tx, impulse_rx) =
     |                      ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_impulse_rx`
 
 warning: unused variable: `parametric_manager`
-   --> src\main.rs:166:9
+   --> src\main.rs:164:9
     |
-166 |     let parametric_manager = ParametricManager::new(PARAMETRIC_CARRIER_HZ);
+164 |     let parametric_manager = ParametricManager::new(PARAMETRIC_CARRIER_HZ);
     |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parametric_manager`
 
 warning: unused variable: `sdr_thread_handle`
-   --> src\main.rs:216:9
+   --> src\main.rs:214:9
     |
-216 |     let sdr_thread_handle = sdr::spawn_sdr_thread(state.clone(), sdr_tx);
+214 |     let sdr_thread_handle = sdr::spawn_sdr_thread(state.clone(), sdr_tx);
     |         ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sdr_thread_handle`
 
 warning: unused variable: `mamba_trainer_handle`
-   --> src\main.rs:264:9
+   --> src\main.rs:262:9
     |
-264 |     let mamba_trainer_handle = training::spawn_background_training(
+262 |     let mamba_trainer_handle = training::spawn_background_training(
     |         ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_mamba_trainer_handle`
 
 warning: unused variable: `impulse_tx`
-   --> src\main.rs:311:9
+   --> src\main.rs:309:9
     |
-311 |     let impulse_tx = impulse_tx.clone();
+309 |     let impulse_tx = impulse_tx.clone();
     |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_impulse_tx`
 
 warning: unused variable: `particle_renderer`
-    --> src\main.rs:1542:9
+    --> src\main.rs:1534:9
      |
-1542 |     let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
+1534 |     let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
      |         ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_particle_renderer`
 
 warning: unused variable: `frustum_culler`
-    --> src\main.rs:1547:9
+    --> src\main.rs:1539:9
      |
-1547 |     let frustum_culler =
+1539 |     let frustum_culler =
      |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_frustum_culler`
 
 warning: unused variable: `now_ms`
-    --> src\main.rs:1552:9
+    --> src\main.rs:1544:9
      |
-1552 |     let now_ms = std::time::SystemTime::now()
+1544 |     let now_ms = std::time::SystemTime::now()
      |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_now_ms`
 
-For more information about this error, try `rustc --explain E0433`.
-warning: `twister` (bin "twister") generated 88 warnings (40 duplicates)
-error: could not compile `twister` (bin "twister") due to 2 previous errors; 88 warnings emitted
+warning: `twister` (bin "twister" test) generated 68 warnings (26 duplicates)
+error: could not compile `twister` (bin "twister" test) due to 2 previous errors; 68 warnings emitted

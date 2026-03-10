@@ -1,0 +1,127 @@
+
+      Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+  warning: `twister` (lib) generated 39 warnings (run `cargo fix --lib -p twister` to apply 23 suggestions)
+> error[E0601]: `main` function not found in crate `lumen_demo`
+    |
+    = note: consider adding a `main` function to `examples\lumen_demo.rs`
+  
+  For more information about this error, try `rustc --explain E0601`.
+  error: could not compile `twister` (example "lumen_demo") due to 1 previous error
+  warning: build failed, waiting for other jobs to finish...
+  warning: unused import: `std::sync::Arc`
+    --> tests\phase3_async_event_handler.rs:12:9
+     |
+  12 |     use std::sync::Arc;
+     |         ^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+  
+  warning: unused import: `std::time::Instant`
+      |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
+  
+> error[E0432]: unresolved import `twister::visualization::mesh_shaders::WavefieldRenderer`
+   --> examples\mesh_shader_demo.rs:3:73
+    |
+  3 | use twister::visualization::mesh_shaders::{CameraUniform, InstanceData, WavefieldRenderer};
+    |                                                                         ^^^^^^^^^^^^^^^^^ no `WavefieldRenderer` in `visualization::mesh_shaders`
+  
+  warning: unused import: `num_complex::Complex`
+    --> examples\chaos_physics_proving_ground.rs:47:5
+     |
+  47 | use num_complex::Complex;
+     |     ^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+  
+  warning: unused import: `std::sync::Arc`
+    --> examples\chaos_physics_proving_ground.rs:49:5
+  
+  warning: `twister` (test "ml_integration") generated 2 warnings (run `cargo fix --test "ml_integration" -p twister` to apply 2 suggestions)
+> error[E0432]: unresolved import `twister::ui::DeviceControlsController`
+   --> examples\test_slint_device_controls.rs:9:5
+    |
+  9 | use twister::ui::DeviceControlsController;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `DeviceControlsController` in `ui`
+  
+  warning: `twister` (example "alignment_comparison") generated 6 warnings (run `cargo fix --example "alignment_comparison" -p twister` to apply 6 suggestions)
+> error[E0063]: missing fields `experimental_features` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+    --> examples\mesh_shader_demo.rs:19:30
+     |
+  19 |             .request_device(&wgpu::DeviceDescriptor {
+     |                              ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features` and `trace`
+  
+  warning: `twister` (test "chord_dominance") generated 3 warnings (run `cargo fix --test "chord_dominance" -p twister` to apply 3 suggestions)
+  Some errors have detailed explanations: E0063, E0432.
+  For more information about an error, try `rustc --explain E0063`.
+  For more information about this error, try `rustc --explain E0432`.
+  error: could not compile `twister` (example "mesh_shader_demo") due to 2 previous errors
+  error: could not compile `twister` (example "test_slint_device_controls") due to 1 previous error
+> error[E0599]: no method named `expect` found for opaque type `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>` in the current scope
+     --> tests\wav2vec2_integration.rs:271:63
+      |
+  271 |             prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+      |                                                               ^^^^^^ method not found in `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>`
+      |
+  help: consider `await`ing on the `Future` and calling the method on its `Output`
+      |
+  271 |             prepare_event_corpus(test_jsonl, test_h5, 192000).await.expect("Corpus generation failed");
+      |                                                               ++++++
+  
+  warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+> error[E0599]: no method named `expect` found for opaque type `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>` in the current scope
+     --> tests\wav2vec2_integration.rs:324:63
+      |
+  324 |             prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+      |                                                               ^^^^^^ method not found in `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>`
+      |
+  help: consider `await`ing on the `Future` and calling the method on its `Output`
+      |
+  324 |             prepare_event_corpus(test_jsonl, test_h5, 192000).await.expect("Corpus generation failed");
+      |                                                               ++++++
+  
+> error[E0599]: no method named `expect` found for opaque type `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>` in the current scope
+     --> tests\wav2vec2_integration.rs:380:63
+      |
+  380 |             prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+      |                                                               ^^^^^^ method not found in `impl Future<Output = Result<EventCorpus, Box<(dyn std::error::Error + 'static)>>>`
+      |
+  help: consider `await`ing on the `Future` and calling the method on its `Output`
+      |
+  380 |             prepare_event_corpus(test_jsonl, test_h5, 192000).await.expect("Corpus generation failed");
+      |                                                               ++++++
+  
+  warning: unused variable: `audio`
+    --> tests\wav2vec2_integration.rs:71:13
+     |
+  71 |         let audio: Vec<f32> = (0..16000)
+     |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
+  
+  warning: `twister` (example "chaos_physics_proving_ground") generated 5 warnings (run `cargo fix --example "chaos_physics_proving_ground" -p twister` to apply 5 suggestions)
+> error[E0425]: cannot find type `StftPushConstants` in this scope
+     --> src\visualization\stft_pipeline.rs:239:37
+      |
+  239 |         assert!(std::mem::size_of::<StftPushConstants>() <= 128);
+      |                                     ^^^^^^^^^^^^^^^^^ not found in this scope
+      |
+  help: you might be missing a type parameter
+      |
+  237 |     fn test_push_constants_size<StftPushConstants>() {
+      |                                +++++++++++++++++++
+  
+> error[E0425]: cannot find type `StftPushConstants` in this scope
+     --> src\visualization\stft_pipeline.rs:240:40
+      |
+  240 |         assert_eq!(std::mem::size_of::<StftPushConstants>(), 16); // 4 u32s
+      |                                        ^^^^^^^^^^^^^^^^^ not found in this scope
+      |
+  help: you might be missing a type parameter
+      |
+  237 |     fn test_push_constants_size<StftPushConstants>() {
+      |                                +++++++++++++++++++
+  
+  warning: unused attribute `allow`
+    --> src\main.rs:19:1
+     |
+  19 | #[allow(clippy::too_many_arguments)]
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

@@ -1,0 +1,4767 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling serde_core v1.0.228
+   Compiling libm v0.2.16
+   Compiling serde v1.0.228
+   Compiling autocfg v1.5.0
+   Compiling zerocopy v0.8.42
+   Compiling portable-atomic v1.13.1
+   Compiling crossbeam-utils v0.8.21
+    Checking memchr v2.8.0
+    Checking log v0.4.29
+    Checking windows-sys v0.61.2
+   Compiling getrandom v0.3.4
+   Compiling cfg_aliases v0.2.1
+   Compiling parking_lot_core v0.9.12
+    Checking scopeguard v1.2.0
+error: only metadata stub found for `rlib` dependency `rustc_demangle` please provide path to the corresponding .rmeta file with full metadata
+
+error: cannot resolve a prelude import
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:5:5
+  |
+5 | use std::env;
+  |     ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:1:5
+  |
+1 | use std::env;
+  |     ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\build.rs:1:5
+  |
+1 | use std::env;
+  |     ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:1:5
+  |
+1 | use std::env;
+  |     ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:19:9
+   |
+19 |         println!("cargo:rustc-cfg=no_diagnostic_namespace");
+   |         ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:36:25
+   |
+36 |     let semver_exempt = cfg!(procmacro2_semver_exempt);
+   |                         ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 5 + use core::cfg;
+   |
+
+error: cannot find attribute `derive` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:9:3
+  |
+9 | #[derive(Debug)]
+  |   ^^^^^^
+
+error: cannot find macro `write` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:37:17
+   |
+37 |                 write!(f, "process exited unsuccessfully: {}", status)
+   |                 ^^^^^
+
+error: cannot find attribute `derive` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:44:3
+   |
+44 | #[derive(Debug)]
+   |   ^^^^^^
+
+error: cannot find attribute `derive` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:9:3
+  |
+9 | #[derive(Clone, Debug)]
+  |   ^^^^^^
+
+error: cannot find attribute `derive` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:7:3
+  |
+7 | #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+  |   ^^^^^^
+
+error: cannot find attribute `derive` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:87:3
+   |
+87 | #[derive(Clone, Debug)]
+   |   ^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:111:5
+    |
+111 |     println!("cargo:rustc-cfg={}", cfg);
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:121:5
+    |
+121 |     println!("cargo:rerun-if-changed={}", path);
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:132:5
+    |
+132 |     println!("cargo:rerun-if-env-changed={}", var);
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:151:5
+    |
+151 |     println!("cargo:rustc-check-cfg=cfg({})", cfg);
+    |     ^^^^^^^
+
+error: cannot find macro `format` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:290:24
+    |
+290 |         let cfg_flag = format!("rustc_{}_{}", major, minor);
+    |                        ^^^^^^
+
+error: cannot find macro `format` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:303:9
+    |
+303 |         format!("autocfg_{:016x}_{}", self.uuid, id)
+    |         ^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:352:28
+    |
+352 |             self.probe_fmt(format_args!("#![no_std]\n{}", code))
+    |                            ^^^^^^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:404:24
+    |
+404 |         self.probe_fmt(format_args!("{}", code))
+    |                        ^^^^^^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:416:20
+    |
+416 |         self.probe(format_args!("extern crate {} as probe;", name))
+    |                    ^^^^^^^^^^^
+
+error: cannot find macro `format` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:421:24
+    |
+421 |         let cfg_flag = format!("has_{}", mangle(name));
+    |                        ^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:436:20
+    |
+436 |         self.probe(format_args!("pub use {};", path))
+    |                    ^^^^^^^^^^^
+
+error: cannot find macro `format` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:444:35
+    |
+444 |         self.emit_path_cfg(path, &format!("has_{}", mangle(path)));
+    |                                   ^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:463:20
+    |
+463 |         self.probe(format_args!("pub trait Probe: {} + Sized {{}}", name))
+    |                    ^^^^^^^^^^^
+
+error: cannot find macro `format` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:471:36
+    |
+471 |         self.emit_trait_cfg(name, &format!("has_{}", mangle(name)));
+    |                                    ^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:490:20
+    |
+490 |         self.probe(format_args!("pub type Probe = {};", name))
+    |                    ^^^^^^^^^^^
+
+error: cannot find macro `format` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:498:35
+    |
+498 |         self.emit_type_cfg(name, &format!("has_{}", mangle(name)));
+    |                                   ^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:517:20
+    |
+517 |         self.probe(format_args!("pub fn probe() {{ let _ = {}; }}", expr))
+    |                    ^^^^^^^^^^^
+
+error: cannot find macro `format_args` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:536:20
+    |
+536 |         self.probe(format_args!("pub const PROBE: () = ((), {}).0;", expr))
+    |                    ^^^^^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:13:9
+   |
+13 |         println!("cargo:rustc-check-cfg=cfg(no_diagnostic_namespace)");
+   |         ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:42:25
+   |
+42 |     if semver_exempt || cfg!(feature = "span-locations") {
+   |                         ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 5 + use core::cfg;
+   |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\build.rs:14:9
+   |
+14 |         println!("cargo:rustc-cfg=assert_no_panic");
+   |         ^^^^^^^
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:1:5
+  |
+1 | use std::env;
+  |     ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:100:9
+    |
+100 |         println!("cargo:rustc-cfg=no_core_error");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:6:5
+  |
+6 |     println!("cargo:rerun-if-changed=build.rs");
+  |     ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:69:9
+   |
+69 |     if !cfg!(feature = "proc-macro") {
+   |         ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 5 + use core::cfg;
+   |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\build.rs:10:5
+   |
+10 |     println!("cargo:rustc-check-cfg=cfg(assert_no_panic)");
+   |     ^^^^^^^
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:19:24
+   |
+19 |     fn cause(&self) -> Option<&error::Error> {
+   |                        ^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:24:60
+   |
+24 |             ErrorKind::Process(_) | ErrorKind::Other(_) => None,
+   |                                                            ^^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:30:46
+   |
+30 |     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+   |                                              ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:12:20
+   |
+12 |     rustc_wrapper: Option<PathBuf>,
+   |                    ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:13:30
+   |
+13 |     rustc_workspace_wrapper: Option<PathBuf>,
+   |                              ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:42:30
+   |
+42 |     pub fn version(&self) -> Result<Version, Error> {
+   |                              ^^^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:54:16
+   |
+54 |         if let Some(ref rw) = self.rustc_wrapper {
+   |                ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:55:20
+   |
+55 |             if let Some(ref rww) = self.rustc_workspace_wrapper {
+   |                    ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:47:24
+   |
+47 |                 if let Ok(value) = Version::from_command($command) {
+   |                        ^^ not found in this scope
+...
+56 |                 try_version!(Command::new(rw).args(&[rww, rustc]));
+   |                 -------------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try_version` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:47:24
+   |
+47 |                 if let Ok(value) = Version::from_command($command) {
+   |                        ^^ not found in this scope
+...
+58 |             try_version!(Command::new(rw).arg(rustc));
+   |             ----------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try_version` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:60:16
+   |
+60 |         if let Some(ref rww) = self.rustc_workspace_wrapper {
+   |                ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:47:24
+   |
+47 |                 if let Ok(value) = Version::from_command($command) {
+   |                        ^^ not found in this scope
+...
+61 |             try_version!(Command::new(rww).arg(rustc));
+   |             ------------------------------------------ in this macro invocation
+   |
+   = note: this error originates in the macro `try_version` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:67:42
+   |
+67 | fn get_rustc_wrapper(workspace: bool) -> Option<PathBuf> {
+   |                                          ^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:72:16
+   |
+72 |         return None;
+   |                ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:81:12
+   |
+81 |     if let Some(wrapper) = env::var_os(name) {
+   |            ^^^^ not found in this scope
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:88:5
+   |
+88 |     None
+   |     ^^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:24:51
+   |
+24 |     pub fn from_command(command: &mut Command) -> Result<Self, Error> {
+   |                                                   ^^^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |               Ok(value) => value,
+   |               ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:26:22
+   |
+26 |           let output = try!(command
+   |  ______________________-
+27 | |             .args(&["--version", "--verbose"])
+28 | |             .output()
+29 | |             .map_err(error::from_io));
+   | |_____________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |               Err(error) => return Err(error),
+   |               ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:26:22
+   |
+26 |           let output = try!(command
+   |  ______________________-
+27 | |             .args(&["--version", "--verbose"])
+28 | |             .output()
+29 | |             .map_err(error::from_io));
+   | |_____________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |             Ok(value) => value,
+   |             ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:33:22
+   |
+33 |         let output = try!(str::from_utf8(&output.stdout).map_err(error::from_utf8));
+   |                      -------------------------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |             Err(error) => return Err(error),
+   |             ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:33:22
+   |
+33 |         let output = try!(str::from_utf8(&output.stdout).map_err(error::from_utf8));
+   |                      -------------------------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:37:13
+   |
+37 |             Some(line) => &line["release: ".len()..],
+   |             ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:43:13
+   |
+43 |             Some(i) => &release[..i],
+   |             ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |               Ok(value) => value,
+   |               ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:49:21
+   |
+49 |           let major = try!(iter
+   |  _____________________-
+50 | |             .next()
+51 | |             .ok_or_else(|| error::from_str("missing major version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |               Err(error) => return Err(error),
+   |               ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:49:21
+   |
+49 |           let major = try!(iter
+   |  _____________________-
+50 | |             .next()
+51 | |             .ok_or_else(|| error::from_str("missing major version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:94:9
+   |
+94 |         println!("cargo:rustc-cfg=no_diagnostic_namespace");
+   |         ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |               Ok(value) => value,
+   |               ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:52:21
+   |
+52 |           let minor = try!(iter
+   |  _____________________-
+53 | |             .next()
+54 | |             .ok_or_else(|| error::from_str("missing minor version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |               Err(error) => return Err(error),
+   |               ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:52:21
+   |
+52 |           let minor = try!(iter
+   |  _____________________-
+53 | |             .next()
+54 | |             .ok_or_else(|| error::from_str("missing minor version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |               Ok(value) => value,
+   |               ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:55:21
+   |
+55 |           let patch = try!(iter
+   |  _____________________-
+56 | |             .next()
+57 | |             .ok_or_else(|| error::from_str("missing patch version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |               Err(error) => return Err(error),
+   |               ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:55:21
+   |
+55 |           let patch = try!(iter
+   |  _____________________-
+56 | |             .next()
+57 | |             .ok_or_else(|| error::from_str("missing patch version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |             Ok(value) => value,
+   |             ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:60:13
+   |
+60 |             try!(major.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |             Err(error) => return Err(error),
+   |             ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:60:13
+   |
+60 |             try!(major.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |             Ok(value) => value,
+   |             ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:61:13
+   |
+61 |             try!(minor.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |             Err(error) => return Err(error),
+   |             ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:61:13
+   |
+61 |             try!(minor.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+   |
+57 |             Ok(value) => value,
+   |             ^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:62:13
+   |
+62 |             try!(patch.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+   |
+58 |             Err(error) => return Err(error),
+   |             ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:62:13
+   |
+62 |             try!(patch.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:92:13
+   |
+92 |     target: Option<OsString>,
+   |             ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:94:14
+   |
+94 |     edition: Option<String>,
+   |              ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:94:21
+   |
+94 |     edition: Option<String>,
+   |                     ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+88 | pub struct AutoCfg<String> {
+   |                   ++++++++
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:95:16
+   |
+95 |     rustflags: Vec<String>,
+   |                ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:95:20
+   |
+95 |     rustflags: Vec<String>,
+   |                    ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+88 | pub struct AutoCfg<String> {
+   |                   ++++++++
+
+error[E0425]: cannot find type `Result` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:172:21
+    |
+172 |     pub fn new() -> Result<Self, Error> {
+    |                     ^^^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:174:13
+    |
+174 |             Some(d) => Self::with_dir(d),
+    |             ^^^^ not found in this scope
+
+error[E0405]: cannot find trait `Into` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:187:24
+    |
+187 |     pub fn with_dir<T: Into<PathBuf>>(dir: T) -> Result<Self, Error> {
+    |                        ^^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:187:50
+    |
+187 |     pub fn with_dir<T: Into<PathBuf>>(dir: T) -> Result<Self, Error> {
+    |                                                  ^^^^^^ not found in this scope
+
+error: cannot find macro `println` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\build.rs:9:5
+  |
+9 |     println!("cargo:rerun-if-changed=configure.rs");
+  |     ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+    |
+ 57 |             Ok(value) => value,
+    |             ^^ not found in this scope
+...
+189 |         let rustc_version = try!(rustc.version());
+    |                             --------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+    |
+ 58 |             Err(error) => return Err(error),
+    |             ^^^ not found in this scope
+...
+189 |         let rustc_version = try!(rustc.version());
+    |                             --------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:18:9
+   |
+18 |         println!("cargo:rustc-check-cfg=cfg(fuzzing)");
+   |         ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+    |
+ 57 |             Ok(value) => value,
+    |             ^^ not found in this scope
+...
+195 |         let meta = try!(fs::metadata(&dir).map_err(error::from_io));
+    |                    ------------------------------------------------ in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+    |
+ 58 |             Err(error) => return Err(error),
+    |             ^^^ not found in this scope
+...
+195 |         let meta = try!(fs::metadata(&dir).map_err(error::from_io));
+    |                    ------------------------------------------------ in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:88:9
+   |
+88 |         println!("cargo:rustc-cfg=no_core_net");
+   |         ^^^^^^^
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:207:22
+    |
+207 |             edition: None,
+    |                      ^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:253:30
+    |
+253 |     pub fn edition(&self) -> Option<&str> {
+    |                              ^^^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:255:13
+    |
+255 |             Some(ref edition) => Some(&**edition),
+    |             ^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:277:44
+    |
+277 |     pub fn set_edition(&mut self, edition: Option<String>) {
+    |                                            ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:277:51
+    |
+277 |     pub fn set_edition(&mut self, edition: Option<String>) {
+    |                                                   ^^^^^^ not found in this scope
+    |
+help: you might be missing a type parameter
+    |
+163 | impl<String> AutoCfg {
+    |     ++++++++
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:298:33
+    |
+298 |     fn new_crate_name(&self) -> String {
+    |                                 ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:306:55
+    |
+306 |     fn probe_fmt<'a>(&self, source: Arguments<'a>) -> Result<(), Error> {
+    |                                                       ^^^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:317:16
+    |
+317 |         if let Some(edition) = self.edition.as_ref() {
+    |                ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:321:16
+    |
+321 |         if let Some(target) = self.target.as_ref() {
+    |                ^^^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+    |
+ 57 |             Ok(value) => value,
+    |             ^^ not found in this scope
+...
+328 |         let mut child = try!(command.spawn().map_err(error::from_io));
+    |                         --------------------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+    |
+ 58 |             Err(error) => return Err(error),
+    |             ^^^ not found in this scope
+...
+328 |         let mut child = try!(command.spawn().map_err(error::from_io));
+    |                         --------------------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `println` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\build.rs:8:5
+  |
+8 |     println!("cargo:rerun-if-changed=build.rs");
+  |     ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:57:13
+    |
+ 57 |             Ok(value) => value,
+    |             ^^ not found in this scope
+...
+331 |         try!(stdin.write_fmt(source).map_err(error::from_io));
+    |         ----------------------------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:13
+    |
+ 58 |             Err(error) => return Err(error),
+    |             ^^^ not found in this scope
+...
+331 |         try!(stdin.write_fmt(source).map_err(error::from_io));
+    |         ----------------------------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:335:13
+    |
+335 |             Ok(status) if status.success() => {
+    |             ^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:345:13
+    |
+345 |             Ok(status) => Err(error::from_exit(status)),
+    |             ^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:346:13
+    |
+346 |             Err(error) => Err(error::from_io(error)),
+    |             ^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:403:44
+    |
+403 |     pub fn probe_raw(&self, code: &str) -> Result<(), Error> {
+    |                                            ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:548:23
+    |
+548 | fn mangle(s: &str) -> String {
+    |                       ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:558:14
+    |
+558 |     target: &Option<OsString>,
+    |              ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:560:23
+    |
+560 |     cargo_target_dir: Option<OsString>,
+    |                       ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:579:23
+    |
+579 | fn rustflags(target: &Option<OsString>, dir: &Path) -> Vec<String> {
+    |                       ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:579:56
+    |
+579 | fn rustflags(target: &Option<OsString>, dir: &Path) -> Vec<String> {
+    |                                                        ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:579:60
+    |
+579 | fn rustflags(target: &Option<OsString>, dir: &Path) -> Vec<String> {
+    |                                                            ^^^^^^ not found in this scope
+    |
+help: you might be missing a type parameter
+    |
+579 | fn rustflags<String>(target: &Option<OsString>, dir: &Path) -> Vec<String> {
+    |             ++++++++
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:19:9
+   |
+19 |         println!("cargo:rustc-check-cfg=cfg(no_is_available)");
+   |         ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:585:12
+    |
+585 |     if let Ok(a) = env::var("CARGO_ENCODED_RUSTFLAGS") {
+    |            ^^ not found in this scope
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:605:16
+    |
+605 |         if let Ok(rustflags) = env::var("RUSTFLAGS") {
+    |                ^^ not found in this scope
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:82:9
+   |
+82 |         println!("cargo:rustc-cfg=no_core_num_saturating");
+   |         ^^^^^^^
+
+error: requires `None` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:35:9
+   |
+35 | /         for arg in rustc {
+36 | |             command.arg(arg);
+37 | |         }
+   | |_________^
+
+error[E0433]: cannot find type `Vec` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:587:13
+    |
+587 |             Vec::new()
+    |             ^^^ use of undeclared type `Vec`
+
+error[E0433]: cannot find type `Vec` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:617:5
+    |
+617 |     Vec::new()
+    |     ^^^ use of undeclared type `Vec`
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:21:37
+   |
+21 |             ErrorKind::Io(ref e) => Some(e),
+   |                                     ^^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:22:38
+   |
+22 |             ErrorKind::Num(ref e) => Some(e),
+   |                                      ^^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\error.rs:23:39
+   |
+23 |             ErrorKind::Utf8(ref e) => Some(e),
+   |                                       ^^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:33:20
+   |
+33 |             .chain(Some(&self.rustc));
+   |                    ^^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:48:28
+   |
+48 |                     return Ok(value);
+   |                            ^^ not found in this scope
+...
+56 |                 try_version!(Command::new(rw).args(&[rww, rustc]));
+   |                 -------------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try_version` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:48:28
+   |
+48 |                     return Ok(value);
+   |                            ^^ not found in this scope
+...
+58 |             try_version!(Command::new(rw).arg(rustc));
+   |             ----------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try_version` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:48:28
+   |
+48 |                     return Ok(value);
+   |                            ^^ not found in this scope
+...
+61 |             try_version!(Command::new(rww).arg(rustc));
+   |             ------------------------------------------ in this macro invocation
+   |
+   = note: this error originates in the macro `try_version` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\rustc.rs:84:20
+   |
+84 |             return Some(wrapper.into());
+   |                    ^^^^ not found in this scope
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:156:9
+    |
+156 |         println!("cargo:rustc-cfg=f128_enabled");
+    |         ^^^^^^^
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |               Err(error) => return Err(error),
+   |                                    ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:26:22
+   |
+26 |           let output = try!(command
+   |  ______________________-
+27 | |             .args(&["--version", "--verbose"])
+28 | |             .output()
+29 | |             .map_err(error::from_io));
+   | |_____________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:31:20
+   |
+31 |             return Err(error::from_str("could not execute rustc"));
+   |                    ^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |             Err(error) => return Err(error),
+   |                                  ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:33:22
+   |
+33 |         let output = try!(str::from_utf8(&output.stdout).map_err(error::from_utf8));
+   |                      -------------------------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:38:28
+   |
+38 |             None => return Err(error::from_str("could not find rustc release")),
+   |                            ^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |               Err(error) => return Err(error),
+   |                                    ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:49:21
+   |
+49 |           let major = try!(iter
+   |  _____________________-
+50 | |             .next()
+51 | |             .ok_or_else(|| error::from_str("missing major version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |               Err(error) => return Err(error),
+   |                                    ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:52:21
+   |
+52 |           let minor = try!(iter
+   |  _____________________-
+53 | |             .next()
+54 | |             .ok_or_else(|| error::from_str("missing minor version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |               Err(error) => return Err(error),
+   |                                    ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:55:21
+   |
+55 |           let patch = try!(iter
+   |  _____________________-
+56 | |             .next()
+57 | |             .ok_or_else(|| error::from_str("missing patch version")));
+   | |_____________________________________________________________________- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0463]: can't find crate for `std`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:14:5
+   |
+14 | use std::{env, str};
+   |     ^^^ can't find crate
+   |
+   = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+   = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:59:9
+   |
+59 |         Ok(Version::new(
+   |         ^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |             Err(error) => return Err(error),
+   |                                  ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:60:13
+   |
+60 |             try!(major.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |             Err(error) => return Err(error),
+   |                                  ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:61:13
+   |
+61 |             try!(minor.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+   |
+58 |             Err(error) => return Err(error),
+   |                                  ^^^ not found in this scope
+   |
+  ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\version.rs:62:13
+   |
+62 |             try!(patch.parse().map_err(error::from_num)),
+   |             -------------------------------------------- in this macro invocation
+   |
+   = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:175:21
+    |
+175 |             None => Err(error::from_str("no OUT_DIR specified!")),
+    |                     ^^^ not found in this scope
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:76:9
+   |
+76 |         println!("cargo:rustc-cfg=no_core_cstr");
+   |         ^^^^^^^
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+    |
+ 58 |             Err(error) => return Err(error),
+    |                                  ^^^ not found in this scope
+...
+189 |         let rustc_version = try!(rustc.version());
+    |                             --------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+    |
+ 58 |             Err(error) => return Err(error),
+    |                                  ^^^ not found in this scope
+...
+195 |         let meta = try!(fs::metadata(&dir).map_err(error::from_io));
+    |                    ------------------------------------------------ in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:197:20
+    |
+197 |             return Err(error::from_str("output path is not a writable directory"));
+    |                    ^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:221:9
+    |
+221 |         Ok(ac)
+    |         ^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:255:34
+    |
+255 |             Some(ref edition) => Some(&**edition),
+    |                                  ^^^^ not found in this scope
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:20:9
+   |
+20 |         println!("cargo:rustc-check-cfg=cfg(no_literal_byte_character)");
+   |         ^^^^^^^
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+    |
+ 58 |             Err(error) => return Err(error),
+    |                                  ^^^ not found in this scope
+...
+328 |         let mut child = try!(command.spawn().map_err(error::from_io));
+    |                         --------------------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:58:34
+    |
+ 58 |             Err(error) => return Err(error),
+    |                                  ^^^ not found in this scope
+...
+331 |         try!(stdin.write_fmt(source).map_err(error::from_io));
+    |         ----------------------------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `try` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0425]: cannot find function `drop` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:332:9
+    |
+332 |         drop(stdin);
+    |         ^^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:343:17
+    |
+343 |                 Ok(())
+    |                 ^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:345:27
+    |
+345 |             Ok(status) => Err(error::from_exit(status)),
+    |                           ^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\autocfg-1.5.0\src\lib.rs:346:27
+    |
+346 |             Err(error) => Err(error::from_io(error)),
+    |                           ^^^ not found in this scope
+
+Some errors have detailed explanations: E0405, E0425, E0433, E0531.
+For more information about an error, try `rustc --explain E0405`.
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:8:9
+  |
+8 |     let Some(minor) = rustc_minor_version() else {
+  |         ^^^^ not found in this scope
+  |
+help: consider importing this tuple variant
+  |
+1 + use core::option::Option::Some;
+  |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:23:29
+   |
+23 | fn rustc_minor_version() -> Option<u32> {
+   |                             ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+ 1 + use core::option::Option;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:28:25
+   |
+28 |     if pieces.next() != Some("rustc 1") {
+   |                         ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 1 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:29:16
+   |
+29 |         return None;
+   |                ^^^^ not found in this scope
+   |
+help: consider importing this unit variant
+   |
+ 1 + use core::option::Option::None;
+   |
+
+error: no global memory allocator found but one is required; link to std or add `#[global_allocator]` to a static item that implements the GlobalAlloc trait
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:154:5
+    |
+154 |     println!("cargo:rustc-check-cfg=cfg(f128_enabled)");
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:70:9
+   |
+70 |         println!("cargo:rustc-cfg=no_serde_derive");
+   |         ^^^^^^^
+
+error: `#[panic_handler]` function required, but not found
+
+error: unwinding panics are not supported without std
+  |
+  = help: using nightly cargo, use -Zbuild-std with panic="abort" to avoid unwinding
+  = note: since the core library is usually precompiled with panic="unwind", rebuilding your crate with panic="abort" may not be enough to fix the problem
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:21:9
+   |
+21 |         println!("cargo:rustc-check-cfg=cfg(no_literal_c_string)");
+   |         ^^^^^^^
+
+error: requires `branch` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.45\build.rs:24:17
+   |
+24 |     let rustc = env::var_os("RUSTC")?;
+   |                 ^^^^^^^^^^^^^^^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:151:9
+    |
+151 |         println!("cargo:rustc-cfg=f16_enabled");
+    |         ^^^^^^^
+
+Some errors have detailed explanations: E0425, E0463, E0531.
+For more information about an error, try `rustc --explain E0425`.
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:64:13
+   |
+64 |             println!("cargo:rustc-cfg=no_std_atomic");
+   |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:22:9
+   |
+22 |         println!("cargo:rustc-check-cfg=cfg(no_source_text)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:149:5
+    |
+149 |     println!("cargo:rustc-check-cfg=cfg(f16_enabled)");
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:61:13
+   |
+61 |             println!("cargo:rustc-cfg=no_std_atomic64");
+   |             ^^^^^^^
+
+error[E0463]: can't find crate for `std`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:399:5
+    |
+399 | use std::cfg;
+    |     ^^^ can't find crate
+    |
+    = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+    = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:23:9
+   |
+23 |         println!("cargo:rustc-check-cfg=cfg(proc_macro_span)");
+   |         ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:140:9
+    |
+140 |     if !cfg!(feature = "unstable-float") {
+    |         ^^^
+    |
+    = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+    |
+  3 + use core::cfg;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:56:9
+   |
+56 |         println!("cargo:rustc-cfg=no_diagnostic_namespace");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:49:9
+   |
+49 |         println!("cargo:rustc-cfg=no_target_has_atomic");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:137:5
+    |
+137 |     println!("cargo:rustc-check-cfg=cfg(f128_enabled)");
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:50:9
+   |
+50 |         println!("cargo:rustc-cfg=no_serde_derive");
+   |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:122:3
+    |
+122 | #[derive(PartialEq, PartialOrd)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+  3 + use core::prelude::rust_2024::derive;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:41:9
+   |
+41 |         println!("cargo:rustc-check-cfg=cfg(no_target_has_atomic)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:24:9
+   |
+24 |         println!("cargo:rustc-check-cfg=cfg(proc_macro_span_file)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:45:9
+   |
+45 |         println!("cargo:rustc-check-cfg=cfg(no_target_has_atomic)");
+   |         ^^^^^^^
+
+error: could not compile `quote` (build script) due to 14 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:17:5
+   |
+17 |     println!("cargo:rerun-if-changed=build.rs");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:40:9
+   |
+40 |         println!("cargo:rustc-check-cfg=cfg(no_std_atomic64)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:136:5
+    |
+136 |     println!("cargo:rustc-check-cfg=cfg(f16_enabled)");
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:25:9
+   |
+25 |         println!("cargo:rustc-check-cfg=cfg(proc_macro_span_location)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:44:9
+   |
+44 |         println!("cargo:rustc-check-cfg=cfg(no_std_atomic64)");
+   |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:474:3
+    |
+474 | #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+399 + use core::prelude::rust_2024::derive;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:18:5
+   |
+18 |     println!("cargo:rerun-if-changed=src/gen/build.rs");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:128:5
+    |
+128 |     println!(
+    |     ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:635:3
+    |
+635 | #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+399 + use core::prelude::rust_2024::derive;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:39:9
+   |
+39 |         println!("cargo:rustc-check-cfg=cfg(no_std_atomic)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:26:9
+   |
+26 |         println!("cargo:rustc-check-cfg=cfg(procmacro2_backtrace)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:43:9
+   |
+43 |         println!("cargo:rustc-check-cfg=cfg(no_std_atomic)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:19:5
+   |
+19 |     println!("cargo:rerun-if-changed=version.rs");
+   |     ^^^^^^^
+
+error: could not compile `autocfg` (lib) due to 133 previous errors
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:127:5
+    |
+127 |     println!("cargo:rustc-env=CFG_OPT_LEVEL={}", cfg.opt_level);
+    |     ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:780:3
+    |
+780 | #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+399 + use core::prelude::rust_2024::derive;
+    |
+
+error[E0463]: can't find crate for `std`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:58:5
+   |
+58 | use std::{env, fs, process::Command, str};
+   |     ^^^ can't find crate
+   |
+   = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+   = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error[E0463]: can't find crate for `std`
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:15:5
+   |
+15 | use std::env;
+   |     ^^^ can't find crate
+   |
+   = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+   = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:38:9
+   |
+38 |         println!("cargo:rustc-check-cfg=cfg(no_serde_derive)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:27:9
+   |
+27 |         println!("cargo:rustc-check-cfg=cfg(procmacro2_build_probe)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:42:9
+   |
+42 |         println!("cargo:rustc-check-cfg=cfg(no_serde_derive)");
+   |         ^^^^^^^
+
+error: cannot find macro `panic` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:40:17
+   |
+40 |                 panic!("unable to determine rustc version")
+   |                 ^^^^^
+   |
+help: consider importing this macro
+   |
+ 9 + use core::panic;
+   |
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:841:3
+    |
+841 | #[derive(Clone, Debug)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+399 + use core::prelude::rust_2024::derive;
+    |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:123:5
+    |
+123 |     println!(
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:37:9
+   |
+37 |         println!("cargo:rustc-check-cfg=cfg(no_diagnostic_namespace)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:28:9
+   |
+28 |         println!("cargo:rustc-check-cfg=cfg(procmacro2_nightly_testing)");
+   |         ^^^^^^^
+
+error: only metadata stub found for `rlib` dependency `rustc_demangle` please provide path to the corresponding .rmeta file with full metadata
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\memchr-2.8.0\src\lib.rs:198:1
+    |
+198 | extern crate std;
+    | ^^^^^^^^^^^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1002:3
+     |
+1002 | #[derive(Debug)]
+     |   ^^^^^^
+     |
+help: consider importing this attribute macro
+     |
+ 399 + use core::prelude::rust_2024::derive;
+     |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:41:9
+   |
+41 |         println!("cargo:rustc-check-cfg=cfg(no_diagnostic_namespace)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:42:13
+   |
+42 |             println!(
+   |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:117:9
+    |
+117 |         println!("cargo:rustc-cfg=x86_no_sse");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:36:9
+   |
+36 |         println!("cargo:rustc-check-cfg=cfg(no_core_num_saturating)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:29:9
+   |
+29 |         println!("cargo:rustc-check-cfg=cfg(procmacro2_semver_exempt)");
+   |         ^^^^^^^
+
+error: cannot find macro `format_args` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1024:23
+     |
+1024 |                 args: format_args!(""),
+     |                       ^^^^^^^^^^^
+     |
+help: consider importing this macro
+     |
+ 399 + use core::format_args;
+     |
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:1:5
+  |
+1 | use std::{env, ffi::OsString, process::Command};
+  |     ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:40:9
+   |
+40 |         println!("cargo:rustc-check-cfg=cfg(no_core_num_saturating)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:52:9
+   |
+52 |         println!(
+   |         ^^^^^^^
+
+error: cannot find macro `panic` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:230:9
+    |
+230 |         panic!(
+    |         ^^^^^
+    |
+help: consider importing this macro
+    |
+ 58 + use core::panic;
+    |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:114:5
+    |
+114 |     println!("cargo:rustc-check-cfg=cfg(x86_no_sse)");
+    |     ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1157:3
+     |
+1157 | #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+     |   ^^^^^^
+     |
+help: consider importing this attribute macro
+     |
+ 399 + use core::prelude::rust_2024::derive;
+     |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:35:9
+   |
+35 |         println!("cargo:rustc-check-cfg=cfg(no_core_net)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:46:9
+   |
+46 |         println!("cargo:rustc-cfg=crossbeam_sanitize_thread");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:39:9
+   |
+39 |         println!("cargo:rustc-check-cfg=cfg(no_core_net)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:30:9
+   |
+30 |         println!("cargo:rustc-check-cfg=cfg(randomize_layout)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:58:9
+   |
+58 |         println!(
+   |         ^^^^^^^
+
+error: cannot find macro `assert_eq` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:214:13
+    |
+214 |             assert_eq!(iter.next(), None, "{}", EXPECT_MSG);
+    |             ^^^^^^^^^
+    |
+help: consider importing this macro
+    |
+ 58 + use core::assert_eq;
+    |
+
+error: cannot find attribute `derive` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1199:3
+     |
+1199 | #[derive(Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+     |   ^^^^^^
+     |
+help: consider importing this attribute macro
+     |
+ 399 + use core::prelude::rust_2024::derive;
+     |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:34:9
+   |
+34 |         println!("cargo:rustc-check-cfg=cfg(no_core_error)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:108:9
+    |
+108 |         println!("cargo:rustc-cfg=optimizations_enabled");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:63:9
+   |
+63 |         println!(
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:40:9
+   |
+40 |         println!("cargo:rustc-cfg=crossbeam_no_atomic");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:31:9
+   |
+31 |         println!("cargo:rustc-check-cfg=cfg(span_locations)");
+   |         ^^^^^^^
+
+error: cannot find macro `unreachable` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1538:13
+     |
+1538 |             unreachable!("set_logger_racy must not be used with other initialization functions")
+     |             ^^^^^^^^^^^
+     |
+help: consider importing this macro
+     |
+ 399 + use core::unreachable;
+     |
+
+error: cannot find macro `assert_eq` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:201:13
+    |
+201 |             assert_eq!(equals_sign, "=", "{}", EXPECT_MSG);
+    |             ^^^^^^^^^
+    |
+help: consider importing this macro
+    |
+ 58 + use core::assert_eq;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:38:9
+   |
+38 |         println!("cargo:rustc-check-cfg=cfg(no_core_error)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:33:9
+   |
+33 |         println!("cargo:rustc-check-cfg=cfg(no_core_cstr)");
+   |         ^^^^^^^
+
+error: cannot find macro `matches` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:107:9
+    |
+107 |     if !matches!(cfg.opt_level.as_str(), "0" | "1") {
+    |         ^^^^^^^
+    |
+help: consider importing this macro
+    |
+  3 + use core::matches;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:53:21
+   |
+53 |             None => println!("cargo:warning=Couldn't detect minor version of the Rust compiler"),
+   |                     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:76:9
+   |
+76 |         println!("cargo:rerun-if-env-changed=CARGO_ENCODED_RUSTFLAGS");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:27:13
+   |
+27 |             println!(
+   |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:32:9
+   |
+32 |         println!("cargo:rustc-check-cfg=cfg(super_unstable)");
+   |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1548:3
+     |
+1548 | #[derive(Debug)]
+     |   ^^^^^^
+     |
+help: consider importing this attribute macro
+     |
+ 399 + use core::prelude::rust_2024::derive;
+     |
+
+error: cannot find macro `panic` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:146:9
+    |
+146 |         panic!("{}", format!("Cargo.toml does not contain `{}`", TABLE_HEADER));
+    |         ^^^^^
+    |
+help: consider importing this macro
+    |
+ 58 + use core::panic;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:32:9
+   |
+32 |         println!("cargo:rustc-check-cfg=cfg(if_docsrs_then_no_serde_core)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:51:17
+   |
+51 |                 println!("cargo:rustc-cfg=getrandom_backend=\"windows_legacy\"");
+   |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:37:9
+   |
+37 |         println!("cargo:rustc-check-cfg=cfg(no_core_cstr)");
+   |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1565:3
+     |
+1565 | #[derive(Debug, PartialEq, Eq)]
+     |   ^^^^^^
+     |
+help: consider importing this attribute macro
+     |
+ 399 + use core::prelude::rust_2024::derive;
+     |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:105:5
+    |
+105 |     println!("cargo:rustc-check-cfg=cfg(optimizations_enabled)");
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:77:9
+   |
+77 |         println!("cargo:rerun-if-env-changed=RUSTFLAGS");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:22:5
+   |
+22 |     println!("cargo:rustc-check-cfg=cfg(crossbeam_no_atomic,crossbeam_sanitize_thread)");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:33:9
+   |
+33 |         println!("cargo:rustc-check-cfg=cfg(wrap_proc_macro)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\parking_lot_core-0.9.12\build.rs:9:9
+  |
+9 |         println!("cargo:rustc-cfg=tsan_enabled");
+  |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:112:3
+    |
+112 | #[derive(Debug)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+ 58 + use core::prelude::rust_2024::derive;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:19:5
+   |
+19 |     println!("cargo:rerun-if-changed=build.rs");
+   |     ^^^^^^^
+
+error: could not compile `cfg_aliases` (lib) due to 2 previous errors
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:39:9
+   |
+39 |         println!("cargo:rustc-cfg=getrandom_msan");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:36:9
+   |
+36 |         println!("cargo:rustc-check-cfg=cfg(if_docsrs_then_no_serde_core)");
+   |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:38:3
+   |
+38 | #[derive(Debug)]
+   |   ^^^^^^
+   |
+help: consider importing this attribute macro
+   |
+ 3 + use core::prelude::rust_2024::derive;
+   |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:99:9
+   |
+99 |         println!("cargo:rustc-cfg=arch_enabled");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:78:9
+   |
+78 |         println!("cargo:rerun-if-env-changed=CARGO_BUILD_RUSTFLAGS");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:21:5
+   |
+21 |     println!("cargo:rerun-if-changed=no_atomic.rs");
+   |     ^^^^^^^
+
+error: cannot find macro `panic` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:65:9
+   |
+65 |         panic!("key-value support is experimental and must be enabled using the `kv` feature")
+   |         ^^^^^
+   |
+help: consider importing this macro
+   |
+ 3 + use core::panic;
+   |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:39:9
+   |
+39 |         println!("cargo:rustc-cfg=procmacro2_semver_exempt");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\parking_lot_core-0.9.12\build.rs:6:5
+  |
+6 |     println!("cargo:rustc-check-cfg=cfg(tsan_enabled)");
+  |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:36:5
+   |
+36 |     println!("cargo:rerun-if-changed=build.rs");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:35:9
+   |
+35 |         println!("cargo:rustc-check-cfg=cfg(feature, values(\"result\"))");
+   |         ^^^^^^^
+
+error: cannot find attribute `derive` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:105:3
+    |
+105 | #[derive(Debug, Ord, PartialEq, PartialOrd, Eq)]
+    |   ^^^^^^
+    |
+help: consider importing this attribute macro
+    |
+ 58 + use core::prelude::rust_2024::derive;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:81:9
+   |
+81 |         println!("cargo:rerun-if-env-changed=CARGO_TARGET_{}_RUSTFLAGS", target_upper);
+   |         ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:98:35
+   |
+98 |     if cfg!(feature = "arch") && !cfg!(feature = "force-soft-floats") {
+   |                                   ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 3 + use core::cfg;
+   |
+
+error: cannot find macro `include` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:18:1
+   |
+18 | include!("build-common.rs");
+   | ^^^^^^^
+   |
+help: consider importing this macro
+   |
+15 + use core::include;
+   |
+
+error: cannot find macro `println` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\parking_lot_core-0.9.12\build.rs:5:5
+  |
+5 |     println!("cargo:rerun-if-changed=build.rs");
+  |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:46:9
+   |
+46 |         println!("cargo:rustc-cfg=span_locations");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:22:5
+   |
+22 |     println!("cargo:rustc-cfg=if_docsrs_then_no_serde_core");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:90:9
+   |
+90 |         println!("cargo:rustc-cfg=portable_atomic_no_atomic_min_max");
+   |         ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:98:8
+   |
+98 |     if cfg!(feature = "arch") && !cfg!(feature = "force-soft-floats") {
+   |        ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 3 + use core::cfg;
+   |
+
+error: cannot find macro `include` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:17:1
+   |
+17 | include!("no_atomic.rs");
+   | ^^^^^^^
+   |
+help: consider importing this macro
+   |
+15 + use core::include;
+   |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:100:13
+    |
+100 |             println!("cargo:rustc-cfg={}", version_cfg.cfg_name);
+    |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:54:9
+   |
+54 |         println!("cargo:rustc-cfg=no_is_available");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:20:5
+   |
+20 |     println!("cargo:rerun-if-changed=build.rs");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:94:9
+   |
+94 |         println!("cargo:rustc-cfg=portable_atomic_no_track_caller");
+   |         ^^^^^^^
+
+error[E0463]: can't find crate for `std`
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\parking_lot_core-0.9.12\build.rs:7:26
+  |
+7 |     let sanitizer_list = std::env::var("CARGO_CFG_SANITIZE").unwrap_or_default();
+  |                          ^^^ can't find crate
+  |
+  = note: the `x86_64-pc-windows-msvc` target may not support the standard library
+  = help: consider building the standard library from source with `cargo build -Zbuild-std`
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:95:5
+   |
+95 |     println!("cargo:rustc-check-cfg=cfg(arch_enabled)");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:59:9
+   |
+59 |         println!("cargo:rustc-cfg=no_source_text");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:95:9
+   |
+95 |         println!("cargo:rustc-check-cfg=cfg(coverage_nightly)");
+   |         ^^^^^^^
+
+error: requires `sized` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\parking_lot_core-0.9.12\build.rs:4:11
+   |
+ 4 |   fn main() {
+   |  ___________^
+ 5 | |     println!("cargo:rerun-if-changed=build.rs");
+ 6 | |     println!("cargo:rustc-check-cfg=cfg(tsan_enabled)");
+ 7 | |     let sanitizer_list = std::env::var("CARGO_CFG_SANITIZE").unwrap_or_default();
+...  |
+11 | | }
+   | |_^
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:27:9
+   |
+27 |         Some(minor) => minor,
+   |         ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 1 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:104:29
+    |
+104 | fn rustc_minor_version() -> Option<u32> {
+    |                             ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  1 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:109:25
+    |
+109 |     if pieces.next() != Some("rustc 1") {
+    |                         ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  1 + use core::option::Option::Some;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:98:9
+   |
+98 |         println!("cargo:rustc-cfg=portable_atomic_no_unsafe_op_in_unsafe_fn");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:88:9
+   |
+88 |         println!("cargo:rustc-cfg=intrinsics_enabled");
+   |         ^^^^^^^
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:110:16
+    |
+110 |         return None;
+    |                ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  1 + use core::option::Option::None;
+    |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:65:9
+   |
+65 |         println!("cargo:rustc-cfg=no_literal_byte_character");
+   |         ^^^^^^^
+
+error: requires `branch` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde_core-1.0.228\build.rs:105:17
+    |
+105 |     let rustc = env::var_os("RUSTC")?;
+    |                 ^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0463`.
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:94:9
+   |
+94 |         println!("cargo:rustc-check-cfg=cfg(__ZEROCOPY_INTERNAL_USE_ONLY_DEV_MODE)");
+   |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:102:9
+    |
+102 |         println!("cargo:rustc-cfg=portable_atomic_no_const_transmute");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:66:9
+   |
+66 |         println!("cargo:rustc-cfg=no_literal_c_string");
+   |         ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:87:50
+   |
+87 |     if cfg!(feature = "unstable-intrinsics") && !cfg!(feature = "force-soft-floats") {
+   |                                                  ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 3 + use core::cfg;
+   |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:91:9
+   |
+91 |         println!(
+   |         ^^^^^^^
+
+error[E0425]: cannot find type `Option` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:7:29
+  |
+7 | fn rustc_minor_version() -> Option<u64> {
+  |                             ^^^^^^ not found in this scope
+  |
+help: consider importing this enum
+  |
+1 + use core::option::Option;
+  |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:9:26
+  |
+9 |     let mut cmd = if let Some(wrapper) = env::var_os("RUSTC_WRAPPER").filter(|w| !w.is_empty()) {
+  |                          ^^^^ not found in this scope
+  |
+help: consider importing this tuple variant
+  |
+1 + use core::option::Option::Some;
+  |
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:20:16
+   |
+20 |         return None;
+   |                ^^^^ not found in this scope
+   |
+help: consider importing this unit variant
+   |
+ 1 + use core::option::Option::None;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:45:36
+   |
+45 |     if target_family.as_deref() == Some("windows") {
+   |                                    ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 1 + use core::option::Option::Some;
+   |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:50:13
+   |
+50 |             Some(minor_ver) if minor_ver < WIN7_INTRODUCED_MINOR_VER => {
+   |             ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 1 + use core::option::Option::Some;
+   |
+
+error: cannot find macro `cfg` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:87:8
+   |
+87 |     if cfg!(feature = "unstable-intrinsics") && !cfg!(feature = "force-soft-floats") {
+   |        ^^^
+   |
+   = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+   |
+ 3 + use core::cfg;
+   |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:106:9
+    |
+106 |         println!("cargo:rustc-cfg=portable_atomic_no_core_unwind_safe");
+    |         ^^^^^^^
+
+error: requires `branch` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\getrandom-0.3.4\build.rs:17:15
+   |
+17 |     let out = cmd.arg("-vV").output().ok()?;
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:70:9
+   |
+70 |         println!("cargo:rerun-if-changed=build.rs");
+   |         ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:25:9
+   |
+25 |         Ok(target) => convert_custom_linux_target(target),
+   |         ^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+15 + use core::result::Result::Ok;
+   |
+
+error: could not compile `parking_lot_core` (build script) due to 10 previous errors
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:30:9
+   |
+30 |         Some(minor) => minor,
+   |         ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 1 + use core::option::Option::Some;
+   |
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:26:9
+   |
+26 |         Err(e) => {
+   |         ^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+15 + use core::result::Result::Err;
+   |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:60:29
+   |
+60 | fn rustc_minor_version() -> Option<u32> {
+   |                             ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+ 1 + use core::option::Option;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:65:25
+   |
+65 |     if pieces.next() != Some("rustc 1") {
+   |                         ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 1 + use core::option::Option::Some;
+   |
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:90:9
+   |
+90 |         println!("cargo:rustc-check-cfg=cfg(kani)");
+   |         ^^^^^^^
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:66:16
+   |
+66 |         return None;
+   |                ^^^^ not found in this scope
+   |
+help: consider importing this unit variant
+   |
+ 1 + use core::option::Option::None;
+   |
+
+error[E0425]: cannot find value `NO_ATOMIC` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:39:8
+   |
+39 |     if NO_ATOMIC.contains(&&*target) {
+   |        ^^^^^^^^^ not found in this scope
+
+error: could not compile `serde_core` (build script) due to 31 previous errors
+error: requires `branch` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\build.rs:61:17
+   |
+61 |     let rustc = env::var_os("RUSTC")?;
+   |                 ^^^^^^^^^^^^^^^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:83:5
+   |
+83 |     println!("cargo:rustc-check-cfg=cfg(intrinsics_enabled)");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:110:9
+    |
+110 |         println!("cargo:rustc-cfg=portable_atomic_no_const_raw_ptr_deref");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:89:9
+   |
+89 |         println!("cargo:rustc-check-cfg=cfg(doc_cfg)");
+   |         ^^^^^^^
+
+error: requires `sized` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:20:11
+   |
+20 |   fn main() {
+   |  ___________^
+21 | |     println!("cargo:rerun-if-changed=no_atomic.rs");
+22 | |     println!("cargo:rustc-check-cfg=cfg(crossbeam_no_atomic,crossbeam_sanitize_thread)");
+...  |
+48 | | }
+   | |_^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:116:9
+    |
+116 |         println!("cargo:rustc-cfg=wrap_proc_macro");
+    |         ^^^^^^^
+
+error[E0425]: cannot find function `convert_custom_linux_target` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\crossbeam-utils-0.8.21\build.rs:25:23
+   |
+25 |         Ok(target) => convert_custom_linux_target(target),
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:114:9
+    |
+114 |         println!("cargo:rustc-cfg=portable_atomic_no_stronger_failure_ordering");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:85:13
+   |
+85 |             println!("cargo:rustc-check-cfg=cfg(rust, values(\"{}.{}.{}\"))", major, minor, patch);
+   |             ^^^^^^^
+
+error: could not compile `getrandom` (build script) due to 16 previous errors
+error: cannot find attribute `derive` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:6:3
+  |
+6 | #[derive(Debug)]
+  |   ^^^^^^
+  |
+help: consider importing this attribute macro
+  |
+3 + use core::prelude::rust_2024::derive;
+  |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:124:9
+    |
+124 |         println!("cargo:rustc-cfg=proc_macro_span");
+    |         ^^^^^^^
+
+error: could not compile `serde` (build script) due to 26 previous errors
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:118:9
+    |
+118 |         println!("cargo:rustc-cfg=portable_atomic_no_asm_maybe_uninit");
+    |         ^^^^^^^
+
+error: could not compile `crossbeam-utils` (build script) due to 18 previous errors
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:77:13
+   |
+77 |             println!("cargo:rustc-check-cfg=cfg({})", version_cfg.cfg_name);
+   |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:130:9
+    |
+130 |         println!("cargo:rustc-cfg=proc_macro_span_location");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:122:9
+    |
+122 |         println!("cargo:rustc-cfg=portable_atomic_no_diagnostic_namespace");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:67:5
+   |
+67 |     println!("cargo:rerun-if-changed=Cargo.toml");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:136:9
+    |
+136 |         println!("cargo:rustc-cfg=proc_macro_span_file");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:126:9
+    |
+126 |         println!("cargo:rustc-cfg=portable_atomic_no_const_mut_refs");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:62:5
+   |
+62 |     println!("cargo:rerun-if-changed=build.rs");
+   |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:142:9
+    |
+142 |         println!("cargo:rustc-cfg=super_unstable");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:130:9
+    |
+130 |         println!("cargo:rustc-cfg=portable_atomic_no_strict_provenance");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:146:9
+    |
+146 |         println!("cargo:rerun-if-env-changed=RUSTC_BOOTSTRAP");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:134:9
+    |
+134 |         println!("cargo:rustc-cfg=portable_atomic_no_strict_provenance_atomic_ptr");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:145:9
+    |
+145 |         println!("cargo:rustc-cfg=portable_atomic_atomic_intrinsics");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:166:5
+    |
+166 |     println!("cargo:rerun-if-changed=src/probe/{}.rs", feature);
+    |     ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:162:13
+    |
+162 |             println!("cargo:rustc-cfg=portable_atomic_unstable_asm");
+    |             ^^^^^^^
+
+error: cannot find macro `eprintln` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:178:13
+    |
+178 |             eprintln!("Failed to create {}: {}", out_subdir.display(), err);
+    |             ^^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:165:17
+    |
+165 |                 println!("cargo:rustc-cfg=portable_atomic_no_outline_atomics");
+    |                 ^^^^^^^
+
+error: cannot find macro `cfg` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:238:17
+    |
+238 |             || (cfg!(target_os = "linux") && err.raw_os_error() == Some(ENOTEMPTY)))
+    |                 ^^^
+    |
+    = note: `cfg` is in scope, but it is an attribute: `#[cfg]`
+help: consider importing this macro
+    |
+  5 + use core::cfg;
+    |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:168:9
+    |
+168 |         println!("cargo:rustc-cfg=portable_atomic_no_asm");
+    |         ^^^^^^^
+
+error: cannot find macro `eprintln` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:240:13
+    |
+240 |             eprintln!("Failed to clean up {}: {}", out_subdir.display(), err);
+    |             ^^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:181:25
+    |
+181 |                         println!("cargo:rustc-cfg=portable_atomic_unstable_asm_experimental_arch");
+    |                         ^^^^^^^
+
+error: cannot find macro `eprintln` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:261:9
+    |
+261 |         eprintln!(
+    |         ^^^^^^^^
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:115:15
+    |
+115 |     cfg_name: String,
+    |               ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:120:44
+    |
+120 | fn parse_version_cfgs_from_cargo_toml() -> Vec<VersionCfg> {
+    |                                            ^^^ not found in this scope
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:182:24
+    |
+182 |                 return None;
+    |                        ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+ 58 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:220:13
+    |
+220 |             Some(VersionCfg { version: Version { major, minor, patch }, cfg_name: name })
+    |             ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+ 58 + use core::option::Option::Some;
+    |
+
+error: requires `None` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\zerocopy-0.8.42\build.rs:73:9
+   |
+73 | /         for version_cfg in &version_cfgs {
+...  |
+85 | |             println!("cargo:rustc-check-cfg=cfg(rust, values(\"{}.{}.{}\"))", major, minor, patch);
+86 | |         }
+   | |_________^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:183:25
+    |
+183 |                         println!("cargo:rustc-cfg=portable_atomic_no_asm");
+    |                         ^^^^^^^
+
+Some errors have detailed explanations: E0425, E0463.
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:197:25
+    |
+197 |                         println!("cargo:rustc-cfg=portable_atomic_unstable_asm_experimental_arch");
+    |                         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:199:25
+    |
+199 |                         println!("cargo:rustc-cfg=portable_atomic_no_asm");
+    |                         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:215:13
+    |
+215 |             println!("cargo:rustc-cfg=portable_atomic_unstable_cfg_target_has_atomic");
+    |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:217:13
+    |
+217 |             println!("cargo:rustc-cfg=portable_atomic_no_cfg_target_has_atomic");
+    |             ^^^^^^^
+
+error: could not compile `zerocopy` (build script) due to 27 previous errors
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:220:17
+    |
+220 |                 println!("cargo:rustc-cfg=portable_atomic_no_atomic_cas");
+    |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:223:17
+    |
+223 |                 println!("cargo:rustc-cfg=portable_atomic_no_atomic_64");
+    |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:231:9
+    |
+231 |         println!("cargo:rustc-cfg=portable_atomic_no_atomic_load_store");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:235:9
+    |
+235 |         println!("cargo:rustc-cfg=portable_atomic_pre_llvm_20");
+    |         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:237:13
+    |
+237 |             println!("cargo:rustc-cfg=portable_atomic_pre_llvm_18");
+    |             ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:239:17
+    |
+239 |                 println!("cargo:rustc-cfg=portable_atomic_pre_llvm_16");
+    |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:241:21
+    |
+241 |                     println!("cargo:rustc-cfg=portable_atomic_pre_llvm_15");
+    |                     ^^^^^^^
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:82:19
+   |
+82 |     } else if let Some(rustc_bootstrap) = env::var_os("RUSTC_BOOTSTRAP") {
+   |                   ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 5 + use core::option::Option::Some;
+   |
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:176:12
+    |
+176 |     if let Err(err) = fs::create_dir(&out_subdir) {
+    |            ^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::result::Result::Err;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:208:12
+    |
+208 |     if let Some(target) = env::var_os("TARGET") {
+    |            ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:213:12
+    |
+213 |     if let Ok(rustflags) = env::var("CARGO_ENCODED_RUSTFLAGS") {
+    |            ^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::result::Result::Ok;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:222:9
+    |
+222 |         Ok(status) => status.success(),
+    |         ^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::result::Result::Ok;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:223:9
+    |
+223 |         Err(_) => false,
+    |         ^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::result::Result::Err;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:229:12
+    |
+229 |     if let Err(err) = fs::remove_dir_all(&out_subdir) {
+    |            ^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::result::Result::Err;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:238:68
+    |
+238 |             || (cfg!(target_os = "linux") && err.raw_os_error() == Some(ENOTEMPTY)))
+    |                                                                    ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:248:29
+    |
+248 | fn rustc_minor_version() -> Option<u32> {
+    |                             ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  5 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:253:25
+    |
+253 |     if pieces.next() != Some("rustc 1") {
+    |                         ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  5 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:254:16
+    |
+254 |         return None;
+    |                ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  5 + use core::option::Option::None;
+    |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:255:13
+    |
+255 |             println!("cargo:rustc-cfg=portable_atomic_sanitize_thread");
+    |             ^^^^^^^
+
+error: requires `None` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro2-1.0.106\build.rs:215:13
+    |
+215 | /             for arg in rustflags.split('\x1f') {
+216 | |                 cmd.arg(arg);
+217 | |             }
+    | |_____________^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:263:17
+    |
+263 |                 println!("cargo:rustc-cfg=portable_atomic_no_cmpxchg16b_target_feature");
+    |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:268:17
+    |
+268 |                 println!("cargo:rustc-cfg=portable_atomic_no_cmpxchg16b_intrinsic");
+    |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:316:17
+    |
+316 |                 println!("cargo:rustc-cfg=portable_atomic_ll_sc_rmw");
+    |                 ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:323:17
+    |
+323 |                 println!("cargo:rustc-cfg=portable_atomic_unstable_isa_attribute");
+    |                 ^^^^^^^
+
+error: could not compile `proc-macro2` (build script) due to 55 previous errors
+error: cannot find macro `panic` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:354:29
+    |
+354 | ...                   panic!("unrecognized Arm subarch: {}", target)
+    |                       ^^^^^
+    |
+help: consider importing this macro
+    |
+  9 + use core::panic;
+    |
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:356:25
+    |
+356 |                         println!(
+    |                         ^^^^^^^
+
+error: cannot find macro `println` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:551:9
+    |
+551 |         println!("cargo:rustc-cfg=portable_atomic_target_feature=\"{}\"", name);
+    |         ^^^^^^^
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:11:20
+   |
+11 |     pub opt_level: String,
+   |                    ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:12:25
+   |
+12 |     pub cargo_features: Vec<String>,
+   |                         ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:12:29
+   |
+12 |     pub cargo_features: Vec<String>,
+   |                             ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+ 8 | pub struct Config<String> {
+   |                  ++++++++
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:13:24
+   |
+13 |     pub target_triple: String,
+   |                        ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:14:22
+   |
+14 |     pub target_arch: String,
+   |                      ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:15:21
+   |
+15 |     pub target_env: String,
+   |                     ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:16:26
+   |
+16 |     pub target_families: Vec<String>,
+   |                          ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:16:30
+   |
+16 |     pub target_families: Vec<String>,
+   |                              ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+ 8 | pub struct Config<String> {
+   |                  ++++++++
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:17:20
+   |
+17 |     pub target_os: String,
+   |                    ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:18:24
+   |
+18 |     pub target_string: String,
+   |                        ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:19:24
+   |
+19 |     pub target_vendor: String,
+   |                        ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:20:26
+   |
+20 |     pub target_features: Vec<String>,
+   |                          ^^^ not found in this scope
+
+error[E0425]: cannot find type `String` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:20:30
+   |
+20 |     pub target_features: Vec<String>,
+   |                              ^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+ 8 | pub struct Config<String> {
+   |                  ++++++++
+
+error: requires `sized` lang_item
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:9:23
+  |
+9 |     pub manifest_dir: PathBuf,
+  |                       ^^^^^^^
+
+error: requires `sized` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:62:39
+   |
+62 |   pub fn emit_libm_config(cfg: &Config) {
+   |  _______________________________________^
+63 | |     emit_intrinsics_cfg();
+64 | |     emit_arch_cfg();
+65 | |     emit_optimization_cfg(cfg);
+...  |
+68 | |     emit_f16_f128_cfg(cfg);
+69 | | }
+   | |_^
+
+error: requires `sized` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:73:39
+   |
+73 |   pub fn emit_test_config(cfg: &Config) {
+   |  _______________________________________^
+74 | |     emit_optimization_cfg(cfg);
+75 | |     emit_cfg_shorthands(cfg);
+76 | |     emit_cfg_env(cfg);
+77 | |     emit_f16_f128_cfg(cfg);
+78 | | }
+   | |_^
+
+error: requires `sized` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:82:26
+   |
+82 |   fn emit_intrinsics_cfg() {
+   |  __________________________^
+83 | |     println!("cargo:rustc-check-cfg=cfg(intrinsics_enabled)");
+...  |
+90 | | }
+   | |_^
+
+error: requires `sized` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:94:20
+    |
+ 94 |   fn emit_arch_cfg() {
+    |  ____________________^
+ 95 | |     println!("cargo:rustc-check-cfg=cfg(arch_enabled)");
+...   |
+101 | | }
+    | |_^
+
+error: requires `sized` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:104:40
+    |
+104 |   fn emit_optimization_cfg(cfg: &Config) {
+    |  ________________________________________^
+105 | |     println!("cargo:rustc-check-cfg=cfg(optimizations_enabled)");
+106 | |
+107 | |     if !matches!(cfg.opt_level.as_str(), "0" | "1") {
+...   |
+110 | | }
+    | |_^
+
+error: requires `sized` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:113:38
+    |
+113 |   fn emit_cfg_shorthands(cfg: &Config) {
+    |  ______________________________________^
+114 | |     println!("cargo:rustc-check-cfg=cfg(x86_no_sse)");
+115 | |     if cfg.target_arch == "x86" && !cfg.target_features.iter().any(|f| f == "sse") {
+...   |
+119 | | }
+    | |_^
+
+error: requires `sized` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:122:31
+    |
+122 |   fn emit_cfg_env(cfg: &Config) {
+    |  _______________________________^
+123 | |     println!(
+124 | |         "cargo:rustc-env=CFG_CARGO_FEATURES={:?}",
+125 | |         cfg.cargo_features
+...   |
+131 | |     );
+132 | | }
+    | |_^
+
+error: requires `sized` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:135:36
+    |
+135 |   fn emit_f16_f128_cfg(cfg: &Config) {
+    |  ____________________________________^
+136 | |     println!("cargo:rustc-check-cfg=cfg(f16_enabled)");
+137 | |     println!("cargo:rustc-check-cfg=cfg(f128_enabled)");
+...   |
+158 | | }
+    | |_^
+
+error: requires `sized` lang_item
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\build.rs:5:11
+   |
+ 5 |   fn main() {
+   |  ___________^
+ 6 | |     let cfg = configure::Config::from_env();
+ 7 | |
+ 8 | |     println!("cargo:rerun-if-changed=build.rs");
+...  |
+17 | |     configure::emit_libm_config(&cfg);
+18 | | }
+   | |_^
+
+error[E0433]: cannot find type `ToOwned` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:29:47
+   |
+29 |             .map(|feats| feats.split(',').map(ToOwned::to_owned).collect())
+   |                                               ^^^^^^^ use of undeclared type `ToOwned`
+
+error[E0433]: cannot find type `ToOwned` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:32:47
+   |
+32 |             .map(|feats| feats.split(',').map(ToOwned::to_owned).collect())
+   |                                               ^^^^^^^ use of undeclared type `ToOwned`
+
+error[E0433]: cannot find type `ToOwned` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\libm-0.2.16\configure.rs:35:82
+   |
+35 |             .filter_map(|(name, _value)| name.strip_prefix("CARGO_FEATURE_").map(ToOwned::to_owned))
+   |                                                                                  ^^^^^^^ use of undeclared type `ToOwned`
+
+Some errors have detailed explanations: E0425, E0433, E0463.
+error: could not compile `libm` (build script) due to 60 previous errors
+error[E0405]: cannot find trait `PartialEq` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:501:6
+    |
+501 | impl PartialEq<LevelFilter> for Level {
+    |      ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this trait
+    |
+399 + use core::cmp::PartialEq;
+    |
+
+error[E0405]: cannot find trait `PartialOrd` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:508:6
+    |
+508 | impl PartialOrd<LevelFilter> for Level {
+    |      ^^^^^^^^^^ not found in this scope
+    |
+help: consider importing this trait
+    |
+399 + use core::cmp::PartialOrd;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:510:51
+    |
+510 |     fn partial_cmp(&self, other: &LevelFilter) -> Option<cmp::Ordering> {
+    |                                                   ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:511:9
+    |
+511 |         Some((*self as usize).cmp(&(*other as usize)))
+    |         ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `Result` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:517:33
+    |
+517 |     fn from_str(level: &str) -> Result<Level, Self::Err> {
+    |                                 ^^^^^^ not found in this scope
+    |
+help: consider importing one of these items
+    |
+399 + use core::fmt::Result;
+    |
+399 + use core::result::Result;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:521:24
+    |
+521 |                 return Ok(Level::from_usize(idx).unwrap());
+    |                        ^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::result::Result::Ok;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:524:9
+    |
+524 |         Err(ParseLevelError(()))
+    |         ^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::result::Result::Err;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:535:32
+    |
+535 |     fn from_usize(u: usize) -> Option<Level> {
+    |                                ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:537:18
+    |
+537 |             1 => Some(Level::Error),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:538:18
+    |
+538 |             2 => Some(Level::Warn),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:539:18
+    |
+539 |             3 => Some(Level::Info),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:540:18
+    |
+540 |             4 => Some(Level::Debug),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:541:18
+    |
+541 |             5 => Some(Level::Trace),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:542:18
+    |
+542 |             _ => None,
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+399 + use core::option::Option::None;
+    |
+
+error[E0405]: cannot find trait `Iterator` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:579:27
+    |
+579 |     pub fn iter() -> impl Iterator<Item = Self> {
+    |                           ^^^^^^^^ not found in this scope
+    |
+help: consider importing this trait
+    |
+399 + use core::iter::Iterator;
+    |
+
+error[E0405]: cannot find trait `PartialEq` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:651:6
+    |
+651 | impl PartialEq<Level> for LevelFilter {
+    |      ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this trait
+    |
+399 + use core::cmp::PartialEq;
+    |
+
+error[E0405]: cannot find trait `PartialOrd` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:658:6
+    |
+658 | impl PartialOrd<Level> for LevelFilter {
+    |      ^^^^^^^^^^ not found in this scope
+    |
+help: consider importing this trait
+    |
+399 + use core::cmp::PartialOrd;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:660:45
+    |
+660 |     fn partial_cmp(&self, other: &Level) -> Option<cmp::Ordering> {
+    |                                             ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:661:9
+    |
+661 |         Some((*self as usize).cmp(&(*other as usize)))
+    |         ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `Result` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:667:33
+    |
+667 |     fn from_str(level: &str) -> Result<LevelFilter, Self::Err> {
+    |                                 ^^^^^^ not found in this scope
+    |
+help: consider importing one of these items
+    |
+399 + use core::fmt::Result;
+    |
+399 + use core::result::Result;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:671:24
+    |
+671 |                 return Ok(LevelFilter::from_usize(idx).unwrap());
+    |                        ^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::result::Result::Ok;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:674:9
+    |
+674 |         Err(ParseLevelError(()))
+    |         ^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::result::Result::Err;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:685:32
+    |
+685 |     fn from_usize(u: usize) -> Option<LevelFilter> {
+    |                                ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:687:18
+    |
+687 |             0 => Some(LevelFilter::Off),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:688:18
+    |
+688 |             1 => Some(LevelFilter::Error),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:689:18
+    |
+689 |             2 => Some(LevelFilter::Warn),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:690:18
+    |
+690 |             3 => Some(LevelFilter::Info),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:691:18
+    |
+691 |             4 => Some(LevelFilter::Debug),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:692:18
+    |
+692 |             5 => Some(LevelFilter::Trace),
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:693:18
+    |
+693 |             _ => None,
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+399 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:707:31
+    |
+707 |     pub fn to_level(&self) -> Option<Level> {
+    |                               ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0405]: cannot find trait `Iterator` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:732:27
+    |
+732 |     pub fn iter() -> impl Iterator<Item = Self> {
+    |                           ^^^^^^^^ not found in this scope
+    |
+help: consider importing this trait
+    |
+399 + use core::iter::Iterator;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:845:18
+    |
+845 |     module_path: Option<MaybeStaticStr<'a>>,
+    |                  ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:846:11
+    |
+846 |     file: Option<MaybeStaticStr<'a>>,
+    |           ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:847:11
+    |
+847 |     line: Option<u32>,
+    |           ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:902:34
+    |
+902 |     pub fn module_path(&self) -> Option<&'a str> {
+    |                                  ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:908:41
+    |
+908 |     pub fn module_path_static(&self) -> Option<&'static str> {
+    |                                         ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:910:13
+    |
+910 |             Some(MaybeStaticStr::Static(s)) => Some(s),
+    |             ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:910:48
+    |
+910 |             Some(MaybeStaticStr::Static(s)) => Some(s),
+    |                                                ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:911:18
+    |
+911 |             _ => None,
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+399 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:917:27
+    |
+917 |     pub fn file(&self) -> Option<&'a str> {
+    |                           ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:923:34
+    |
+923 |     pub fn file_static(&self) -> Option<&'static str> {
+    |                                  ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:925:13
+    |
+925 |             Some(MaybeStaticStr::Static(s)) => Some(s),
+    |             ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:925:48
+    |
+925 |             Some(MaybeStaticStr::Static(s)) => Some(s),
+    |                                                ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+399 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:926:18
+    |
+926 |             _ => None,
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+399 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:932:27
+    |
+932 |     pub fn line(&self) -> Option<u32> {
+    |                           ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+399 + use core::option::Option;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1026:30
+     |
+1026 |                 module_path: None,
+     |                              ^^^^ not found in this scope
+     |
+help: consider importing this unit variant
+     |
+ 399 + use core::option::Option::None;
+     |
+
+error[E0425]: cannot find value `None` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1027:23
+     |
+1027 |                 file: None,
+     |                       ^^^^ not found in this scope
+     |
+help: consider importing this unit variant
+     |
+ 399 + use core::option::Option::None;
+     |
+
+error[E0425]: cannot find value `None` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1028:23
+     |
+1028 |                 line: None,
+     |                       ^^^^ not found in this scope
+     |
+help: consider importing this unit variant
+     |
+ 399 + use core::option::Option::None;
+     |
+
+error[E0425]: cannot find type `Option` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1065:41
+     |
+1065 |     pub fn module_path(&mut self, path: Option<&'a str>) -> &mut RecordBuilder<'a> {
+     |                                         ^^^^^^ not found in this scope
+     |
+help: consider importing this enum
+     |
+ 399 + use core::option::Option;
+     |
+
+error[E0425]: cannot find type `Option` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1072:48
+     |
+1072 |     pub fn module_path_static(&mut self, path: Option<&'static str>) -> &mut RecordBuilder<'a> {
+     |                                                ^^^^^^ not found in this scope
+     |
+help: consider importing this enum
+     |
+ 399 + use core::option::Option;
+     |
+
+error[E0425]: cannot find type `Option` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1079:34
+     |
+1079 |     pub fn file(&mut self, file: Option<&'a str>) -> &mut RecordBuilder<'a> {
+     |                                  ^^^^^^ not found in this scope
+     |
+help: consider importing this enum
+     |
+ 399 + use core::option::Option;
+     |
+
+error[E0425]: cannot find type `Option` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1086:41
+     |
+1086 |     pub fn file_static(&mut self, file: Option<&'static str>) -> &mut RecordBuilder<'a> {
+     |                                         ^^^^^^ not found in this scope
+     |
+help: consider importing this enum
+     |
+ 399 + use core::option::Option;
+     |
+
+error[E0425]: cannot find type `Option` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1093:34
+     |
+1093 |     pub fn line(&mut self, line: Option<u32>) -> &mut RecordBuilder<'a> {
+     |                                  ^^^^^^ not found in this scope
+     |
+help: consider importing this enum
+     |
+ 399 + use core::option::Option;
+     |
+
+error[E0405]: cannot find trait `Default` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1113:6
+     |
+1113 | impl Default for RecordBuilder<'_> {
+     |      ^^^^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::default::Default;
+     |
+
+error[E0405]: cannot find trait `Default` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1242:6
+     |
+1242 | impl Default for MetadataBuilder<'_> {
+     |      ^^^^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::default::Default;
+     |
+
+error[E0405]: cannot find trait `Sync` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1249:16
+     |
+1249 | pub trait Log: Sync + Send {
+     |                ^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::marker::Sync;
+     |
+
+error[E0405]: cannot find trait `Send` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1249:23
+     |
+1249 | pub trait Log: Sync + Send {
+     |                       ^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::marker::Send;
+     |
+
+error[E0405]: cannot find trait `Sized` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1296:9
+     |
+1296 |     T: ?Sized + Log,
+     |         ^^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::marker::Sized;
+     |
+
+error[E0405]: cannot find trait `Sized` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1313:9
+     |
+1313 |     T: ?Sized + Log,
+     |         ^^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::marker::Sized;
+     |
+
+error[E0405]: cannot find trait `Sized` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1330:9
+     |
+1330 |     T: ?Sized + Log,
+     |         ^^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::marker::Sized;
+     |
+
+error[E0425]: cannot find type `Box` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1420:33
+     |
+1420 | pub fn set_boxed_logger(logger: Box<dyn Log>) -> Result<(), SetLoggerError> {
+     |                                 ^^^ not found in this scope
+
+error[E0425]: cannot find type `Result` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1420:50
+     |
+1420 | pub fn set_boxed_logger(logger: Box<dyn Log>) -> Result<(), SetLoggerError> {
+     |                                                  ^^^^^^ not found in this scope
+     |
+help: consider importing one of these items
+     |
+ 399 + use core::fmt::Result;
+     |
+ 399 + use core::result::Result;
+     |
+
+error[E0425]: cannot find type `Result` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1478:48
+     |
+1478 | pub fn set_logger(logger: &'static dyn Log) -> Result<(), SetLoggerError> {
+     |                                                ^^^^^^ not found in this scope
+     |
+help: consider importing one of these items
+     |
+ 399 + use core::fmt::Result;
+     |
+ 399 + use core::result::Result;
+     |
+
+error[E0405]: cannot find trait `FnOnce` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1485:8
+     |
+1485 |     F: FnOnce() -> &'static dyn Log,
+     |        ^^^^^^ not found in this scope
+     |
+help: consider importing this trait
+     |
+ 399 + use core::ops::FnOnce;
+     |
+
+error[E0425]: cannot find type `Result` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1483:43
+     |
+1483 | fn set_logger_inner<F>(make_logger: F) -> Result<(), SetLoggerError>
+     |                                           ^^^^^^ not found in this scope
+     |
+help: consider importing one of these items
+     |
+ 399 + use core::fmt::Result;
+     |
+ 399 + use core::result::Result;
+     |
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1493:9
+     |
+1493 |         Ok(UNINITIALIZED) => {
+     |         ^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Ok;
+     |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1498:13
+     |
+1498 |             Ok(())
+     |             ^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Ok;
+     |
+
+error[E0531]: cannot find tuple struct or tuple variant `Err` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1500:9
+     |
+1500 |         Err(INITIALIZING) => {
+     |         ^^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Err;
+     |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1504:13
+     |
+1504 |             Err(SetLoggerError(()))
+     |             ^^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Err;
+     |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1506:14
+     |
+1506 |         _ => Err(SetLoggerError(())),
+     |              ^^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Err;
+     |
+
+error[E0425]: cannot find type `Result` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1529:60
+     |
+1529 | pub unsafe fn set_logger_racy(logger: &'static dyn Log) -> Result<(), SetLoggerError> {
+     |                                                            ^^^^^^ not found in this scope
+     |
+help: consider importing one of these items
+     |
+ 399 + use core::fmt::Result;
+     |
+ 399 + use core::result::Result;
+     |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Ok` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1534:13
+     |
+1534 |             Ok(())
+     |             ^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Ok;
+     |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Err` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1540:14
+     |
+1540 |         _ => Err(SetLoggerError(())),
+     |              ^^^ not found in this scope
+     |
+help: consider importing this tuple variant
+     |
+ 399 + use core::result::Result::Err;
+     |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:15:30
+   |
+15 |         fn into_kvs(self) -> Option<&'a [(&'a str, super::Value<'a>)]>;
+   |                              ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+13 +     use core::option::Option;
+   |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:23:26
+   |
+23 |     fn into_kvs(self) -> Option<&'a [(&'a str, Value<'a>)]> {
+   |                          ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+ 3 + use core::option::Option;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:24:9
+   |
+24 |         Some(self)
+   |         ^^^^
+   |
+help: try calling `Some` as a method
+   |
+24 -         Some(self)
+24 +         self.Some()
+   |
+help: consider importing this tuple variant
+   |
+ 3 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:30:26
+   |
+30 |     fn into_kvs(self) -> Option<&'a [(&'a str, Value<'a>)]> {
+   |                          ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+ 3 + use core::option::Option;
+   |
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:31:9
+   |
+31 |         None
+   |         ^^^^ not found in this scope
+   |
+help: consider importing this unit variant
+   |
+ 3 + use core::option::Option::None;
+   |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:61:10
+   |
+61 |     kvs: Option<&[(&str, Value)]>,
+   |          ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+ 3 + use core::option::Option;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:74:29
+   |
+74 |         .module_path_static(Some(module_path))
+   |                             ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 3 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:75:22
+   |
+75 |         .file_static(Some(loc.file()))
+   |                      ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 3 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\__private_api.rs:76:15
+   |
+76 |         .line(Some(loc.line()));
+   |               ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 3 + use core::option::Option::Some;
+   |
+
+error: requires `Range` lang_item
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:519:20
+    |
+519 |         for idx in 1..LOG_LEVEL_NAMES.len() {
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0433]: cannot find type `Box` in this scope
+    --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\log-0.4.29\src\lib.rs:1421:25
+     |
+1421 |     set_logger_inner(|| Box::leak(logger))
+     |                         ^^^ use of undeclared type `Box`
+
+Some errors have detailed explanations: E0405, E0425, E0433, E0463, E0531.
+error: could not compile `log` (lib) due to 101 previous errors
+error[E0425]: cannot find type `Option` in this scope
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:5:34
+  |
+5 | pub(crate) fn rustc_version() -> Option<Version> {
+  |                                  ^^^^^^ not found in this scope
+  |
+help: consider importing this enum
+  |
+3 + use core::option::Option;
+  |
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:11:9
+   |
+11 |         None
+   |         ^^^^ not found in this scope
+   |
+help: consider importing this unit variant
+   |
+ 3 + use core::option::Option::None;
+   |
+
+error[E0425]: cannot find type `Option` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:59:51
+   |
+59 |     pub(crate) fn parse(verbose_version: &str) -> Option<Self> {
+   |                                                   ^^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+ 3 + use core::option::Option;
+   |
+
+error[E0425]: cannot find value `None` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:70:20
+   |
+70 |             return None;
+   |                    ^^^^ not found in this scope
+   |
+help: consider importing this unit variant
+   |
+ 3 + use core::option::Option::None;
+   |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:76:13
+   |
+76 |             Some(ref v) if v == "-1" => false,
+   |             ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 3 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:90:13
+   |
+90 |             Some(major)
+   |             ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 3 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:106:28
+    |
+106 |                     return None;
+    |                            ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  3 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:108:17
+    |
+108 |                 Some(Date::new(year, month, day))
+    |                 ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  3 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:110:13
+    |
+110 |             Some(Self {
+    |             ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  3 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:117:13
+    |
+117 |             Some(Self::stable(minor, llvm_major))
+    |             ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  3 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:37:9
+   |
+37 |         Some(version) => version,
+   |         ^^^^ not found in this scope
+   |
+help: consider importing this tuple variant
+   |
+ 9 + use core::option::Option::Some;
+   |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:272:56
+    |
+272 |             if needs_target_feature_fallback(&version, Some(69)) {
+    |                                                        ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:290:91
+    |
+290 |             if !version.probe(82, 2024, 8, 29) || needs_target_feature_fallback(&version, None) {
+    |                                                                                           ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  9 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:304:60
+    |
+304 |                 if needs_target_feature_fallback(&version, Some(61)) {
+    |                                                            ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:326:56
+    |
+326 |             if needs_target_feature_fallback(&version, None) {
+    |                                                        ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  9 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:401:91
+    |
+401 |             if !version.probe(87, 2025, 2, 25) || needs_target_feature_fallback(&version, Some(94))
+    |                                                                                           ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:411:91
+    |
+411 |             if !version.probe(83, 2024, 10, 1) || needs_target_feature_fallback(&version, Some(94))
+    |                                                                                           ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:424:91
+    |
+424 |             if !version.probe(83, 2024, 9, 27) || needs_target_feature_fallback(&version, None) {
+    |                                                                                           ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  9 + use core::option::Option::None;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:426:24
+    |
+426 |                 if let Some(cpu) = target_cpu() {
+    |                        ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:427:28
+    |
+427 |                     if let Some(mut cpu_version) = strip_prefix(&cpu, "pwr") {
+    |                            ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:429:32
+    |
+429 |                         if let Ok(cpu_version) = cpu_version.parse::<u32>() {
+    |                                ^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::result::Result::Ok;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:455:20
+    |
+455 |             if let Some(cpu) = target_cpu() {
+    |                    ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:459:24
+    |
+459 |                 if let Some(arch_version) = strip_prefix(&cpu, "arch") {
+    |                        ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Ok` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:460:28
+    |
+460 |                     if let Ok(arch_version) = arch_version.parse::<u32>() {
+    |                            ^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::result::Result::Ok;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:478:90
+    |
+478 |             if !version.probe(89, 2025, 6, 4) || needs_target_feature_fallback(&version, Some(93)) {
+    |                                                                                          ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:497:20
+    |
+497 |             if let Some(cpu) = target_cpu() {
+    |                    ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:525:61
+    |
+525 | fn needs_target_feature_fallback(version: &Version, stable: Option<u32>) -> bool {
+    |                                                             ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  9 + use core::option::Option;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:529:9
+    |
+529 |         Some(stabilized) if version.minor >= stabilized => false,
+    |         ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:534:12
+    |
+534 |     if let Some(rustflags) = env::var_os("CARGO_ENCODED_RUSTFLAGS") {
+    |            ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:537:20
+    |
+537 |             if let Some(flag) = strip_prefix(flag, "target-feature=") {
+    |                    ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:542:26
+    |
+542 |                         (Some(b'+'), Some(f)) if f == name.as_bytes() => has_target_feature = true,
+    |                          ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:542:38
+    |
+542 |                         (Some(b'+'), Some(f)) if f == name.as_bytes() => has_target_feature = true,
+    |                                      ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:543:26
+    |
+543 |                         (Some(b'-'), Some(f)) if f == name.as_bytes() => has_target_feature = false,
+    |                          ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:543:38
+    |
+543 |                         (Some(b'-'), Some(f)) if f == name.as_bytes() => has_target_feature = false,
+    |                                      ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:556:20
+    |
+556 | fn target_cpu() -> Option<String> {
+    |                    ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  9 + use core::option::Option;
+    |
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:556:27
+    |
+556 | fn target_cpu() -> Option<String> {
+    |                           ^^^^^^ not found in this scope
+    |
+help: you might be missing a type parameter
+    |
+556 | fn target_cpu<String>() -> Option<String> {
+    |              ++++++++
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:559:19
+    |
+559 |     let mut cpu = None;
+    |                   ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  9 + use core::option::Option::None;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:562:16
+    |
+562 |         if let Some(flag) = strip_prefix(flag, "target-cpu=") {
+    |                ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:563:19
+    |
+563 |             cpu = Some(flag);
+    |                   ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:577:12
+    |
+577 |     if let Some(rustflags) = env::var_os("CARGO_ENCODED_RUSTFLAGS") {
+    |            ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:580:20
+    |
+580 |             if let Some(flag) = strip_prefix(flag, "allow-features=") {
+    |                    ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `String` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:596:49
+    |
+596 | fn convert_custom_linux_target(target: &str) -> String {
+    |                                                 ^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `Vec` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:597:20
+    |
+597 |     let mut parts: Vec<&str> = target.split('-').collect();
+    |                    ^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:599:18
+    |
+599 |     if system == Some(&"linux") {
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:607:47
+    |
+607 | fn strip_prefix<'a>(s: &'a str, pat: &str) -> Option<&'a str> {
+    |                                               ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  9 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:608:29
+    |
+608 |     if s.starts_with(pat) { Some(&s[pat.len()..]) } else { None }
+    |                             ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:608:60
+    |
+608 |     if s.starts_with(pat) { Some(&s[pat.len()..]) } else { None }
+    |                                                            ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  9 + use core::option::Option::None;
+    |
+
+error[E0425]: cannot find type `Option` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:612:47
+    |
+612 | fn strip_suffix<'a>(s: &'a str, pat: &str) -> Option<&'a str> {
+    |                                               ^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+  9 + use core::option::Option;
+    |
+
+error[E0425]: cannot find function, tuple struct or tuple variant `Some` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:613:27
+    |
+613 |     if s.ends_with(pat) { Some(&s[..s.len() - pat.len()]) } else { None }
+    |                           ^^^^ not found in this scope
+    |
+help: consider importing this tuple variant
+    |
+  9 + use core::option::Option::Some;
+    |
+
+error[E0425]: cannot find value `None` in this scope
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\build.rs:613:68
+    |
+613 |     if s.ends_with(pat) { Some(&s[..s.len() - pat.len()]) } else { None }
+    |                                                                    ^^^^ not found in this scope
+    |
+help: consider importing this unit variant
+    |
+  9 + use core::option::Option::None;
+    |
+
+error: requires `branch` lang_item
+ --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\portable-atomic-1.13.1\version.rs:6:17
+  |
+6 |     let rustc = env::var_os("RUSTC")?;
+  |                 ^^^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `portable-atomic` (build script) due to 107 previous errors
+error: could not compile `memchr` (lib) due to 1 previous error

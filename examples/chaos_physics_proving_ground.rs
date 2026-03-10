@@ -47,11 +47,11 @@ slint::slint! {
 use num_complex::Complex;
 use slint::{Image, Rgba8Pixel, SharedPixelBuffer};
 use std::sync::Arc;
-use twister::physics::body_interaction_model::HumanBody;
-use twister::physics::heterodyne_mixer::HeterodyneMixer;
-use twister::physics::material_absorption::MaterialGrid;
-use twister::physics::rf_propagation::RFWavePropagation;
-use twister::physics::voxel_grid::VoxelGrid;
+use twister::resonance::body_interaction_model::HumanBody;
+use twister::resonance::heterodyne_mixer::HeterodyneMixer;
+use twister::resonance::material_absorption::MaterialGrid;
+use twister::resonance::rf_propagation::RFWavePropagation;
+use twister::resonance::voxel_grid::VoxelGrid;
 use twister::visualization::data_contracts::{PoseFrame, RoomGeometry};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -84,7 +84,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         for y in 0..material_grid.grid.dimensions.1 {
             for z in 0..material_grid.grid.dimensions.2 {
                 if human.voxel_map.get(x, y, z) > 0.5 {
-                    let mut tissue = twister::physics::material_absorption::Material::default();
+                    let mut tissue = twister::resonance::material_absorption::Material::default();
                     tissue.name = "Tissue".to_string();
                     tissue.permittivity = 50.0;
                     tissue.conductivity = 1.0;

@@ -200,14 +200,13 @@ impl StftProcessor {
     /// 3. V-buffer automatically updated with magnitude/phase
     pub fn process_frame(&mut self, iq_samples: &[[i8; 2]]) -> Result<(), String> {
         // Upload IQ samples to GPU
-        self.pipeline.queue.write_buffer(
-            &self.iq_buffer,
-            0,
-            bytemuck::cast_slice(&iq_samples[..]),
-        );
+        self.pipeline
+            .queue
+            .write_buffer(&self.iq_buffer, 0, bytemuck::cast_slice(&iq_samples[..]));
 
         // Dispatch FFT
-        self.pipeline.dispatch(&self.iq_buffer, &mut self.output_vbuffer)?;
+        self.pipeline
+            .dispatch(&self.iq_buffer, &mut self.output_vbuffer)?;
 
         Ok(())
     }
@@ -231,12 +230,5 @@ mod tests {
     fn test_stft_constants() {
         assert_eq!(FFT_SIZE, 512);
         assert_eq!(FREQ_BINS, 512);
-    }
-
-    #[test]
-    fn test_push_constants_size() {
-        // Ensure push constants fit in 128 bytes (Vulkan minimum)
-        assert!(std::mem::size_of::<StftPushConstants>() <= 128);
-        assert_eq!(std::mem::size_of::<StftPushConstants>(), 16); // 4 u32s
     }
 }

@@ -1,0 +1,4509 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling libm v0.2.16
+   Compiling serde v1.0.228
+   Compiling autocfg v1.5.0
+    Checking cfg-if v1.0.4
+    Checking windows-link v0.2.1
+   Compiling zerocopy v0.8.42
+   Compiling portable-atomic v1.13.1
+   Compiling crossbeam-utils v0.8.21
+    Checking critical-section v1.2.0
+    Checking memchr v2.8.0
+    Checking pin-project-lite v0.2.17
+    Checking log v0.4.29
+    Checking windows-sys v0.61.2
+   Compiling getrandom v0.3.4
+   Compiling cfg_aliases v0.2.1
+    Checking scopeguard v1.2.0
+   Compiling parking_lot_core v0.9.12
+    Checking lock_api v0.4.14
+   Compiling thiserror v2.0.18
+    Checking foldhash v0.2.0
+    Checking allocator-api2 v0.2.21
+   Compiling libc v0.2.183
+   Compiling num-traits v0.2.19
+    Checking equivalent v1.0.2
+   Compiling paste v1.0.15
+    Checking futures-core v0.3.32
+    Checking itoa v1.0.17
+    Checking windows-result v0.4.1
+    Checking windows-strings v0.5.1
+   Compiling zmij v1.0.21
+    Checking arrayvec v0.7.6
+   Compiling hashbrown v0.16.1
+    Checking futures-io v0.3.32
+   Compiling ident_case v1.0.1
+   Compiling version_check v0.9.5
+   Compiling unicode-segmentation v1.12.0
+    Checking fnv v1.0.7
+   Compiling unicode-xid v0.2.6
+   Compiling rayon-core v1.13.0
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling crc32fast v1.5.0
+    Checking rand_core v0.9.5
+   Compiling strsim v0.11.1
+   Compiling serde_json v1.0.149
+   Compiling convert_case v0.10.0
+    Checking unicode-width v0.2.2
+    Checking windows-threading v0.2.1
+   Compiling khronos_api v3.1.0
+   Compiling xml-rs v0.8.28
+    Checking libloading v0.8.9
+   Compiling syn v2.0.117
+   Compiling ash v0.38.0+1.3.281
+   Compiling naga v28.0.0
+    Checking bit-vec v0.8.0
+   Compiling khronos-egl v6.0.0
+    Checking stable_deref_trait v1.2.1
+    Checking foldhash v0.1.5
+    Checking codespan-reporting v0.12.0
+    Checking aho-corasick v1.1.4
+    Checking bitflags v2.11.0
+    Checking bit-set v0.8.0
+    Checking hashbrown v0.15.5
+   Compiling wgpu-hal v28.0.1
+    Checking rustc-hash v1.1.0
+    Checking spirv v0.3.0+sdk-1.3.268.0
+    Checking gpu-descriptor-types v0.2.0
+    Checking regex-syntax v0.8.10
+    Checking indexmap v2.13.0
+    Checking raw-window-handle v0.6.2
+    Checking presser v0.3.1
+    Checking hexf-parse v0.2.1
+    Checking ordered-float v5.1.0
+    Checking range-alloc v0.1.5
+   Compiling gl_generator v0.14.0
+    Checking rand_core v0.10.0
+    Checking renderdoc-sys v1.1.0
+    Checking glow v0.16.0
+    Checking gpu-descriptor v0.3.2
+   Compiling getrandom v0.4.2
+   Compiling anyhow v1.0.102
+   Compiling wgpu-core v28.0.1
+   Compiling litrs v1.0.0
+    Checking parking v2.2.1
+   Compiling wgpu v28.0.0
+    Checking option-ext v0.2.0
+    Checking cpufeatures v0.3.0
+    Checking static_assertions v1.1.0
+    Checking fastrand v2.3.0
+   Compiling glutin_wgl_sys v0.6.1
+    Checking concurrent-queue v2.5.0
+   Compiling cubecl-common v0.10.0-pre.2
+    Checking chacha20 v0.10.0
+    Checking dirs-sys v0.5.0
+   Compiling synstructure v0.13.2
+   Compiling darling_core v0.21.3
+   Compiling darling_core v0.23.0
+    Checking dirs v6.0.0
+   Compiling document-features v0.2.12
+   Compiling prettyplease v0.2.37
+    Checking regex-automata v0.4.14
+    Checking rustc-demangle v0.1.27
+    Checking event-listener v5.4.1
+    Checking futures-lite v2.6.1
+    Checking serde_bytes v0.11.19
+    Checking backtrace v0.3.76
+    Checking embassy-futures v0.1.2
+    Checking rand v0.10.0
+    Checking xxhash-rust v0.8.15
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.10.2
+   Compiling zerocopy-derive v0.8.42
+   Compiling thiserror-impl v2.0.18
+   Compiling zerofrom-derive v0.1.6
+   Compiling profiling-procmacros v1.0.17
+   Compiling tracing-attributes v0.1.31
+   Compiling yoke-derive v0.8.1
+   Compiling windows-interface v0.59.3
+   Compiling windows-implement v0.60.2
+   Compiling derive_more-impl v2.1.1
+   Compiling zerovec-derive v0.11.2
+   Compiling displaydoc v0.2.5
+   Compiling derive-new v0.7.0
+   Compiling darling_macro v0.21.3
+    Checking profiling v1.0.17
+    Checking regex v1.12.3
+   Compiling darling_macro v0.23.0
+    Checking winnow v0.7.15
+   Compiling darling v0.21.3
+    Checking windows-core v0.62.2
+    Checking sanitize-filename v0.6.0
+    Checking float4 v0.1.0
+    Checking web-time v1.1.0
+    Checking bytemuck v1.25.0
+   Compiling enumset_derive v0.14.0
+   Compiling spin v0.10.0
+   Compiling variadics_please v1.1.0
+    Checking event-listener-strategy v0.5.4
+   Compiling darling v0.23.0
+    Checking windows-future v0.3.2
+    Checking windows-numerics v0.3.1
+    Checking windows-collections v0.3.2
+    Checking wgpu-types v28.0.0
+    Checking serde_spanned v1.0.4
+    Checking toml_datetime v0.7.5+spec-1.1.0
+   Compiling cubecl-runtime v0.10.0-pre.2
+   Compiling cubecl-macros-internal v0.10.0-pre.2
+   Compiling cubecl-macros v0.10.0-pre.2
+    Checking float-ord v0.3.2
+    Checking toml_writer v1.0.6+spec-1.1.0
+    Checking windows v0.62.2
+    Checking async-channel v2.5.0
+    Checking toml_parser v1.0.9+spec-1.1.0
+    Checking crossbeam-epoch v0.9.18
+    Checking either v1.15.0
+    Checking md5 v0.8.0
+    Checking crossbeam-deque v0.8.6
+    Checking toml v0.9.12+spec-1.1.0
+    Checking simd-adler32 v0.3.8
+   Compiling cubecl-wgpu v0.10.0-pre.2
+    Checking zerofrom v0.1.6
+   Compiling equator-macro v0.4.2
+    Checking adler2 v2.0.1
+   Compiling cubecl v0.10.0-pre.2
+    Checking yoke v0.8.1
+    Checking derive_more v2.1.1
+    Checking smallvec v1.15.1
+    Checking bytes v1.11.1
+    Checking enumset v1.1.10
+    Checking miniz_oxide v0.8.9
+    Checking rayon v1.11.0
+    Checking slab v0.4.12
+    Checking ppv-lite86 v0.2.21
+   Compiling windows-targets v0.52.6
+   Compiling half v2.7.1
+    Checking cubecl-zspace v0.10.0-pre.2
+    Checking zerovec v0.11.5
+   Compiling tokio-macros v2.6.1
+    Checking once_cell v1.21.3
+    Checking flate2 v1.1.9
+    Checking mio v1.1.1
+    Checking socket2 v0.6.3
+    Checking tracing-core v0.1.36
+   Compiling icu_normalizer_data v2.1.1
+    Checking parking_lot v0.12.5
+   Compiling icu_properties_data v2.1.2
+    Checking rand_chacha v0.9.0
+   Compiling windows-implement v0.58.0
+   Compiling windows-interface v0.58.0
+    Checking num-integer v0.1.46
+   Compiling av-scenechange v0.14.1
+    Checking futures-sink v0.3.32
+   Compiling built v0.8.0
+    Checking rand v0.9.2
+    Checking tracing v0.1.44
+    Checking tinystr v0.8.2
+   Compiling arg_enum_proc_macro v0.3.4
+   Compiling shlex v1.3.0
+   Compiling find-msvc-tools v0.1.9
+    Checking tokio v1.50.0
+   Compiling pastey v0.1.1
+    Checking litemap v0.8.1
+   Compiling heck v0.5.0
+    Checking writeable v0.6.2
+    Checking rand_distr v0.5.1
+   Compiling rav1e v0.8.1
+    Checking icu_locale_core v2.1.1
+    Checking futures-channel v0.3.32
+    Checking core_maths v0.1.1
+    Checking zeroize v1.8.2
+   Compiling cc v1.2.56
+   Compiling semver v1.0.27
+   Compiling siphasher v1.0.2
+    Checking http v1.4.0
+   Compiling rustc_version v0.4.1
+    Checking rand_distr v0.6.0
+   Compiling futures-macro v0.3.32
+   Compiling fax_derive v0.2.0
+   Compiling num-derive v0.4.2
+   Compiling simd_helpers v0.1.0
+    Checking base64 v0.22.1
+    Checking float8 v0.7.0
+   Compiling noop_proc_macro v0.3.0
+   Compiling thiserror v1.0.69
+    Checking futures-task v0.3.32
+    Checking rustls-pki-types v1.14.0
+    Checking num-complex v0.4.6
+    Checking getrandom v0.2.17
+   Compiling strum_macros v0.27.2
+   Compiling thiserror-impl v1.0.69
+    Checking futures-util v0.3.32
+   Compiling windows-result v0.2.0
+   Compiling itertools v0.14.0
+    Checking cubecl-ir v0.10.0-pre.2
+   Compiling ttf-parser v0.25.1
+    Checking percent-encoding v2.3.2
+   Compiling windows-strings v0.1.0
+   Compiling ring v0.17.14
+    Checking http-body v1.0.1
+    Checking equator v0.4.2
+    Checking memmap2 v0.9.10
+   Compiling ahash v0.8.12
+   Compiling httparse v1.10.1
+   Compiling seq-macro v0.3.6
+   Compiling rustversion v1.0.22
+    Checking tower-service v0.3.3
+   Compiling num-bigint v0.4.6
+    Checking aligned-vec v0.6.4
+   Compiling windows-core v0.58.0
+   Compiling potential_utf v0.1.4
+   Compiling zerotrie v0.2.3
+    Checking font-types v0.10.1
+   Compiling darling_core v0.20.11
+    Checking read-fonts v0.35.0
+   Compiling windows v0.58.0
+   Compiling icu_provider v2.1.1
+   Compiling num-rational v0.4.2
+   Compiling icu_collections v2.1.1
+   Compiling v_frame v0.3.9
+    Checking tokio-util v0.7.18
+   Compiling fdeflate v0.3.7
+    Checking cubecl-core v0.10.0-pre.2
+   Compiling as-slice v0.2.1
+   Compiling slotmap v1.1.1
+   Compiling pulp v0.22.2
+    Checking crossbeam-channel v0.5.15
+    Checking schannel v0.1.28
+   Compiling float-cmp v0.9.0
+    Checking quick-error v2.0.1
+   Compiling linebender_resource_handle v0.1.1
+    Checking num_cpus v1.17.0
+    Checking untrusted v0.9.0
+   Compiling strict-num v0.1.1
+    Checking aligned v0.4.3
+   Compiling darling_macro v0.20.11
+    Checking cubecl-std v0.10.0-pre.2
+   Compiling core2 v0.4.0
+   Compiling nom v8.0.0
+   Compiling darling v0.20.11
+    Checking raw-cpuid v11.6.0
+   Compiling memoffset v0.9.1
+   Compiling fontique v0.7.0
+   Compiling toml_datetime v1.0.0+spec-1.1.0
+    Checking pulp-wasm-simd-flag v0.1.0
+    Checking reborrow v0.5.5
+   Compiling tinyvec_macros v0.1.1
+   Compiling arrayref v0.3.9
+   Compiling y4m v0.8.0
+    Checking atomic-waker v1.1.2
+    Checking try-lock v0.2.5
+    Checking weezl v0.1.12
+   Compiling dyn-stack-macros v0.1.3
+   Compiling rustix v0.38.44
+   Compiling rustls v0.23.37
+   Compiling i-slint-common v1.15.1
+    Checking rustls-webpki v0.103.9
+    Checking h2 v0.4.13
+    Checking dyn-stack v0.13.2
+    Checking want v0.3.1
+   Compiling tiny-skia-path v0.11.4
+   Compiling tinyvec v1.10.0
+   Compiling toml_edit v0.25.4+spec-1.1.0
+    Checking bitstream-io v4.9.0
+    Checking av1-grain v0.2.5
+   Compiling icu_normalizer v2.1.1
+   Compiling icu_properties v2.1.2
+   Compiling errno v0.3.14
+   Compiling maybe-rayon v0.1.1
+   Compiling field-offset v0.3.6
+   Compiling kurbo v0.13.0
+   Compiling windows-sys v0.59.0
+    Checking rgb v0.8.53
+   Compiling pin-project-internal v1.1.11
+    Checking euclid v0.22.13
+    Checking colored v3.1.1
+    Checking new_debug_unreachable v1.0.6
+    Checking imgref v1.12.0
+   Compiling byteorder-lite v0.1.0
+    Checking tower-layer v0.3.3
+   Compiling unicode-bidi-mirroring v0.4.0
+   Compiling unicode-script v0.5.8
+    Checking httpdate v1.0.3
+   Compiling zune-core v0.4.12
+   Compiling crunchy v0.2.4
+    Checking zune-core v0.5.1
+    Checking subtle v2.6.1
+   Compiling color_quant v1.1.0
+   Compiling bitflags v1.3.2
+    Checking pin-utils v0.1.0
+   Compiling unicode-ccc v0.4.0
+   Compiling protobuf v3.7.2
+   Compiling unicode-properties v0.1.4
+    Checking uuid v1.22.0
+    Checking gif v0.14.1
+    Checking zune-jpeg v0.4.21
+   Compiling zune-jpeg v0.5.12
+   Compiling rustybuzz v0.20.1
+    Checking image-webp v0.2.4
+    Checking hyper v1.8.1
+    Checking gemm-common v0.19.0
+   Compiling png v0.17.16
+    Checking pin-project v1.1.11
+   Compiling loop9 v0.1.5
+   Compiling lyon_geom v1.0.19
+   Compiling svgtypes v0.16.1
+   Compiling idna_adapter v1.2.1
+   Compiling fontdb v0.23.0
+   Compiling proc-macro-crate v3.5.0
+   Compiling protobuf-support v3.7.2
+   Compiling home v0.5.12
+    Checking strum v0.27.2
+   Compiling fax v0.2.6
+   Compiling phf_shared v0.11.3
+   Compiling zune-inflate v0.2.54
+   Compiling snafu-derive v0.8.9
+   Compiling avif-serialize v0.8.8
+   Compiling roxmltree v0.21.1
+    Checking rmp v0.8.15
+    Checking windows-registry v0.6.1
+    Checking sync_wrapper v1.0.2
+   Compiling simplecss v0.2.2
+    Checking gpu-allocator v0.28.0
+   Compiling unicode-vo v0.1.0
+   Compiling pico-args v0.5.0
+    Checking lebe v0.5.3
+   Compiling data-url v0.3.2
+   Compiling rspolib v0.1.2
+   Compiling pxfm v0.1.28
+   Compiling native-tls v0.2.18
+   Compiling bit_field v0.10.3
+   Compiling imagesize v0.14.0
+   Compiling windows_x86_64_msvc v0.53.1
+   Compiling xmlwriter v0.1.0
+    Checking ipnet v2.12.0
+   Compiling tiny-keccak v2.0.2
+    Checking unty v0.0.4
+   Compiling rand_core v0.6.4
+   Compiling utf8_iter v1.0.4
+   Compiling unicode-bidi v0.3.18
+    Checking byteorder v1.5.0
+   Compiling idna v1.1.0
+    Checking exr v1.74.0
+   Compiling rand v0.8.5
+   Compiling tempfile v3.26.0
+   Compiling snafu v0.8.9
+   Compiling usvg v0.46.0
+   Compiling ravif v0.12.0
+    Checking bincode v2.0.1
+    Checking hyper-util v0.1.20
+   Compiling form_urlencoded v1.2.2
+   Compiling moxcms v0.7.11
+    Checking rmp-serde v1.3.1
+   Compiling num_enum_derive v0.7.5
+    Checking tiff v0.10.3
+    Checking wgpu-core-deps-windows-linux-android v28.0.0
+   Compiling which v4.4.2
+   Compiling lyon_path v1.0.19
+   Compiling tiny-skia v0.11.4
+    Checking skrifa v0.37.0
+    Checking png v0.18.1
+    Checking http-body-util v0.1.3
+    Checking webpki-roots v1.0.6
+    Checking windows-sys v0.52.0
+    Checking chrono v0.4.44
+    Checking qoi v0.4.1
+   Compiling burn-derive v0.21.0-pre.2
+   Compiling const-field-offset-macro v0.1.5
+   Compiling matrixmultiply v0.3.10
+   Compiling linked-hash-map v0.5.6
+   Compiling pulldown-cmark v0.13.1
+   Compiling text-size v1.1.1
+   Compiling i-slint-compiler v1.15.1
+   Compiling anstyle v1.0.13
+   Compiling unicode-linebreak v0.1.5
+   Compiling lazy_static v1.5.0
+   Compiling winapi v0.3.9
+   Compiling countme v3.0.1
+   Compiling ttf-parser v0.21.1
+    Checking data-encoding v2.10.0
+   Compiling natord v1.0.9
+   Compiling hashbrown v0.14.5
+   Compiling annotate-snippets v0.12.13
+   Compiling image v0.25.9
+    Checking swash v0.2.6
+   Compiling rowan v0.16.1
+   Compiling protobuf-parse v3.7.2
+   Compiling fontdue v0.9.3
+   Compiling linked_hash_set v0.1.6
+    Checking const-field-offset v0.1.5
+   Compiling resvg v0.46.0
+   Compiling num_enum v0.7.5
+    Checking rand_chacha v0.3.1
+   Compiling lyon_extra v1.1.0
+   Compiling url v2.5.8
+   Compiling phf_generator v0.11.3
+    Checking tokio-rustls v0.26.4
+    Checking tower v0.5.3
+    Checking harfrust v0.3.2
+    Checking thread-tree v0.3.3
+    Checking hashbrown v0.13.2
+   Compiling macerator v0.3.0
+   Compiling vtable-macro v0.3.0
+   Compiling async-trait v0.1.89
+   Compiling derive_utils v0.15.1
+    Checking getopts v0.2.24
+   Compiling by_address v1.2.1
+    Checking ciborium-io v0.2.2
+    Checking mime v0.3.17
+   Compiling typed-index-collections v3.5.0
+    Checking rawpointer v0.2.1
+   Compiling syn v1.0.109
+    Checking unicase v2.9.0
+   Compiling smol_str v0.3.6
+    Checking pulldown-cmark-escape v0.11.0
+   Compiling spin_on v0.1.1
+    Checking ciborium-ll v0.2.2
+   Compiling auto_enums v0.8.8
+    Checking vtable v0.3.0
+   Compiling const-random-macro v0.1.16
+    Checking text_placeholder v0.5.1
+    Checking windows-targets v0.53.5
+   Compiling phf_codegen v0.11.3
+   Compiling i-slint-core-macros v1.15.1
+   Compiling protobuf-codegen v3.7.2
+    Checking burn-std v0.21.0-pre.2
+    Checking cubek-matmul v0.2.0-pre.2
+    Checking cubek-random v0.2.0-pre.2
+    Checking cubek-quant v0.2.0-pre.2
+    Checking cubek-reduce v0.2.0-pre.2
+    Checking parley v0.7.0
+    Checking lyon_algorithms v1.0.19
+    Checking burn-backend v0.21.0-pre.2
+   Compiling phf v0.11.3
+   Compiling macerator-macros v0.1.4
+   Compiling parse-zoneinfo v0.3.1
+    Checking safetensors v0.7.0
+    Checking clru v0.6.3
+   Compiling indexmap v1.9.3
+   Compiling winit v0.30.13
+    Checking htmlparser v0.2.1
+    Checking error-code v3.3.2
+    Checking dpi v0.1.2
+    Checking moddef v0.3.0
+   Compiling prettyplease v0.1.25
+    Checking sys-locale v0.3.2
+    Checking ryu v1.0.23
+   Compiling burn-ndarray v0.21.0-pre.2
+    Checking scoped-tls-hkt v0.1.5
+    Checking pin-weak v1.1.0
+    Checking clipboard-win v5.4.1
+   Compiling chrono-tz-build v0.2.1
+    Checking const-random v0.1.18
+    Checking i-slint-core v1.15.1
+    Checking burn-tensor v0.21.0-pre.2
+    Checking burn-ir v0.21.0-pre.2
+    Checking burn-autodiff v0.21.0-pre.2
+   Compiling onnx-ir v0.21.0-pre.1
+    Checking windows-sys v0.60.2
+    Checking ndarray v0.17.2
+    Checking ciborium v0.2.2
+    Checking femtovg v0.20.4
+    Checking burn-core v0.21.0-pre.2
+    Checking tokio-native-tls v0.3.1
+    Checking keyboard-types v0.7.0
+    Checking gemm-f32 v0.19.0
+    Checking futures-executor v0.3.32
+   Compiling prost-derive v0.13.5
+    Checking rustls-pemfile v2.2.0
+   Compiling i-slint-backend-winit v1.15.1
+    Checking hashbrown v0.12.3
+    Checking smol_str v0.2.2
+    Checking atomic_float v1.1.0
+    Checking cursor-icon v1.2.0
+    Checking iri-string v0.7.10
+    Checking cubek-convolution v0.2.0-pre.2
+    Checking cubek-attention v0.2.0-pre.2
+    Checking base64ct v1.8.3
+    Checking burn-fusion v0.21.0-pre.2
+    Checking muda v0.17.1
+    Checking pem-rfc7468 v0.7.0
+   Compiling toml_edit v0.24.1+spec-1.1.0
+    Checking sharded-slab v0.1.7
+    Checking burn-nn v0.21.0-pre.2
+    Checking burn-optim v0.21.0-pre.2
+    Checking i-slint-renderer-femtovg v1.15.1
+    Checking tower-http v0.6.8
+    Checking gemm-f16 v0.19.0
+    Checking futures v0.3.32
+    Checking prost v0.13.5
+    Checking hyper-tls v0.6.0
+   Compiling chrono-tz v0.8.6
+    Checking copypasta v0.10.2
+    Checking serde_urlencoded v0.7.1
+    Checking axum-core v0.4.5
+    Checking hyper-rustls v0.27.7
+    Checking gemm-c64 v0.19.0
+    Checking gemm-f64 v0.19.0
+    Checking gemm-c32 v0.19.0
+   Compiling i-slint-backend-selector v1.15.1
+   Compiling derive_builder_core v0.20.2
+   Compiling alloca v0.4.0
+    Checking tracing-log v0.2.0
+    Checking cubek v0.2.0-pre.2
+    Checking matchers v0.2.0
+   Compiling onnx-ir-derive v0.21.0-pre.1
+   Compiling async-stream-impl v0.3.6
+    Checking burn-cubecl-fusion v0.21.0-pre.2
+    Checking winapi-util v0.1.11
+    Checking nu-ansi-term v0.50.3
+    Checking thread_local v1.1.9
+    Checking encoding_rs v0.8.35
+    Checking matchit v0.7.3
+    Checking plotters-backend v0.3.7
+    Checking textdistance v1.1.1
+    Checking typed-path v0.12.3
+    Checking encode_unicode v1.0.0
+    Checking clap_lex v1.0.0
+    Checking tracing-subscriber v0.3.22
+    Checking burn-store v0.21.0-pre.2
+    Checking plotters-svg v0.3.7
+    Checking clap_builder v4.5.60
+   Compiling derive_builder_macro v0.20.2
+    Checking console v0.16.2
+    Checking async-stream v0.3.6
+    Checking axum v0.7.9
+    Checking reqwest v0.12.28
+    Checking zip v7.2.0
+    Checking same-file v1.0.6
+    Checking gemm v0.19.0
+    Checking rust-format v0.3.4
+   Compiling slint-build v1.15.1
+    Checking der v0.7.10
+    Checking burn-cubecl v0.21.0-pre.2
+    Checking tower v0.4.13
+    Checking socks v0.3.4
+    Checking socket2 v0.5.10
+    Checking hyper-timeout v0.5.2
+    Checking rustls-native-certs v0.8.3
+    Checking ureq-proto v0.5.3
+    Checking tokio-stream v0.1.18
+    Checking webpki-root-certs v1.0.6
+    Checking float8 v0.6.1
+    Checking itertools v0.13.0
+    Checking instant v0.1.13
+    Checking retain_mut v0.1.9
+    Checking unit-prefix v0.5.2
+   Compiling gilrs v0.11.1
+    Checking utf-8 v0.7.6
+   Compiling qdrant-client v1.17.0
+    Checking deadpool-runtime v0.1.4
+    Checking strength_reduce v0.2.4
+    Checking cast v0.3.0
+   Compiling cpal v0.17.3
+    Checking indicatif v0.18.4
+    Checking candle-core v0.9.2
+    Checking deadpool v0.9.5
+    Checking ureq v3.2.0
+    Checking transpose v0.2.3
+    Checking backoff v0.4.0
+    Checking clap v4.5.60
+    Checking criterion-plot v0.8.2
+    Checking derive_builder v0.20.2
+    Checking walkdir v2.5.0
+    Checking tonic v0.12.3
+    Checking plotters v0.3.7
+    Checking prost-types v0.13.5
+    Checking rustls-native-certs v0.7.3
+    Checking page_size v0.6.0
+    Checking webpki-roots v0.26.11
+    Checking gilrs-core v0.6.7
+    Checking primal-check v0.3.4
+    Checking tinytemplate v1.2.1
+   Compiling neo4rs-macros v0.3.0
+    Checking csv-core v0.1.13
+    Checking vec_map v0.8.2
+    Checking dasp_sample v0.11.0
+    Checking oorandom v11.1.5
+    Checking anes v0.1.6
+    Checking rustfft v6.4.1
+    Checking csv v1.4.0
+    Checking hf-hub v0.5.0
+    Checking pollster v0.4.0
+    Checking criterion v0.8.2
+   Compiling delegate v0.10.0
+    Checking burn-wgpu v0.21.0-pre.2
+    Checking candle-nn v0.9.2
+    Checking burn v0.21.0-pre.2
+    Checking burn-onnx v0.21.0-pre.1
+    Checking neo4rs v0.8.0
+   Compiling slint-macros v1.15.1
+   Compiling twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+    Checking slint v1.15.1
+    Checking burn-import v0.21.0-pre.1
+warning: unused import: `serde_json::Value`
+ --> src\ai\query_tools.rs:3:5
+  |
+3 | use serde_json::Value;
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary parentheses around method argument
+  --> src\ai\query_tools.rs:55:13
+   |
+55 |             (target_azimuth * std::f64::consts::PI / 180.0),
+   |             ^                                             ^
+   |
+   = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+   |
+55 -             (target_azimuth * std::f64::consts::PI / 180.0),
+55 +             target_azimuth * std::f64::consts::PI / 180.0 ,
+   |
+
+warning: unused import: `std::collections::HashMap`
+ --> src\forensic.rs:9:5
+  |
+9 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenOptions` and `create_dir_all`
+  --> src\forensic.rs:10:21
+   |
+10 | use std::fs::{File, OpenOptions, create_dir_all};
+   |                     ^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused import: `BufWriter`
+  --> src\forensic.rs:11:15
+   |
+11 | use std::io::{BufWriter, Write};
+   |               ^^^^^^^^^
+
+warning: unused import: `Path`
+  --> src\forensic.rs:12:17
+   |
+12 | use std::path::{Path, PathBuf};
+   |                 ^^^^
+
+warning: unused imports: `DateTime` and `Utc`
+ --> src\knowledge_graph\cognee_schema.rs:1:14
+  |
+1 | use chrono::{DateTime, Utc};
+  |              ^^^^^^^^  ^^^
+
+warning: unused import: `std::error::Error`
+ --> src\ml\event_corpus.rs:5:5
+  |
+5 | use std::error::Error;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AdamWConfig`, `AdamW`, and `Optimizer`
+ --> src\ml\material_learning.rs:2:19
+  |
+2 | use burn::optim::{AdamW, AdamWConfig, Optimizer};
+  |                   ^^^^^  ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `std::collections::HashMap`
+ --> src\ml\material_learning.rs:5:5
+  |
+5 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:3:5
+  |
+3 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:4:5
+  |
+4 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> src\ml\event_corpus.rs:42:13
+   |
+42 |         let mut wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
+   |             ----^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+  --> src\forensic.rs:11:26
+   |
+11 | use std::io::{BufWriter, Write};
+   |                          ^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `args`
+  --> src\ai\query_tools.rs:34:9
+   |
+34 |         args: &str,
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable `event_count` is assigned to, but never used
+   --> src\forensic.rs:417:17
+    |
+417 |             let mut event_count: u64 = 0;
+    |                 ^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_event_count` instead
+
+warning: value assigned to `event_count` is never read
+   --> src\forensic.rs:422:25
+    |
+422 |                         event_count += 1;
+    |                         ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:581:9
+    |
+581 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:582:9
+    |
+582 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:454:24
+    |
+454 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `slice1`
+   --> src\hardware_io\iq_staging_buffer.rs:467:21
+    |
+467 |         let (slot1, slice1) = staging.acquire_write_slot().unwrap();
+    |                     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_slice1`
+
+warning: unused variable: `slice`
+   --> src\hardware_io\iq_staging_buffer.rs:499:24
+    |
+499 |         let (slot_idx, slice) = staging.acquire_write_slot().unwrap();
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_slice`
+
+warning: unused variable: `distance`
+   --> src\resonance\voxel_grid.rs:175:38
+    |
+175 |     pub fn average_along_path(&self, distance: f32) -> f32 {
+    |                                      ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_distance`
+
+warning: unused variable: `k2`
+  --> src\resonance\rf_propagation.rs:34:13
+   |
+34 |         let k2 = k * k;
+   |             ^^ help: if this is intentional, prefix it with an underscore: `_k2`
+
+warning: unused variable: `local_k2`
+  --> src\resonance\rf_propagation.rs:69:29
+   |
+69 |                         let local_k2 = local_k * local_k;
+   |                             ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_local_k2`
+
+warning: unused variable: `material_library`
+   --> src\state.rs:211:13
+    |
+211 |         let material_library =
+    |             ^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_material_library`
+
+warning: unused variable: `slot`
+   --> src\vbuffer.rs:262:30
+    |
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |                              ^^^^ help: if this is intentional, prefix it with an underscore: `_slot`
+
+warning: unused variable: `base_offset`
+   --> src\vbuffer.rs:262:43
+    |
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |                                           ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_base_offset`
+
+warning: field `sample_rate` is never read
+ --> src\ml\fold_frequency_harmonics.rs:2:5
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            --------------------- field in this struct
+2 |     sample_rate: u32,
+  |     ^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `device` and `model` are never read
+  --> src\ml\wav2vec2_loader.rs:38:5
+   |
+37 | pub struct Wav2Vec2Model<B: Backend> {
+   |            ------------- fields in this struct
+38 |     device: burn::tensor::Device<B>,
+   |     ^^^^^^
+39 |     model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
+   |     ^^^^^
+
+warning: field `bins_per_octave` is never read
+ --> src\ml\wideband_harmonic_analysis.rs:4:5
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ------------------------ field in this struct
+...
+4 |     bins_per_octave: u32, // 8 (96 total bins = 12 octaves ├ù 8)
+  |     ^^^^^^^^^^^^^^^
+
+warning: method `bin_to_freq` is never used
+  --> src\ml\wideband_harmonic_analysis.rs:38:8
+   |
+18 | impl WidebandHarmonicAnalyzer {
+   | ----------------------------- method in this implementation
+...
+38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+   |        ^^^^^^^^^^^
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: field `device_id` is never read
+  --> src\safe_sdr_wrapper.rs:15:5
+   |
+13 | pub struct RadioDevice {
+   |            ----------- field in this struct
+14 |     device_type: RadioDeviceType,
+15 |     device_id: u32,
+   |     ^^^^^^^^^
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: field `interface` is never read
+ --> src\ui\copilot_handler.rs:9:5
+  |
+8 | pub struct CopilotUIHandler {
+  |            ---------------- field in this struct
+9 |     interface: Arc<Mutex<CopilotInterface>>,
+  |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src\visualization\radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: `twister` (lib) generated 39 warnings (run `cargo fix --lib -p twister` to apply 23 suggestions)
+warning: unused variable: `grad_norm_encoder`
+  --> tests\phase_3e_trainer_integration.rs:41:13
+   |
+41 |         let grad_norm_encoder = 0.5f32;
+   |             ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_encoder`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `grad_norm_mamba`
+  --> tests\phase_3e_trainer_integration.rs:42:13
+   |
+42 |         let grad_norm_mamba = 0.8f32;
+   |             ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_grad_norm_mamba`
+
+warning: unused variable: `small_loss`
+   --> tests\phase_3e_trainer_integration.rs:140:13
+    |
+140 |         let small_loss = 0.5 * small_error * small_error;
+    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_small_loss`
+
+warning: `twister` (test "phase_3e_trainer_integration") generated 3 warnings (run `cargo fix --test "phase_3e_trainer_integration" -p twister` to apply 3 suggestions)
+error[E0603]: constant `BYTES_PER_FRAME` is private
+  --> examples\test_iq_dispatch_loop.rs:13:54
+   |
+13 | use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+   |                                                      ^^^^^^^^^^^^^^^ private constant
+   |
+note: the constant `BYTES_PER_FRAME` is defined here
+  --> src\dispatch\iq_dispatch.rs:23:1
+   |
+23 | const BYTES_PER_FRAME: usize = SAMPLES_PER_FRAME * 2; // I+Q = 2 bytes per complex sample
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0603]: constant `SAMPLES_PER_FRAME` is private
+  --> examples\test_iq_dispatch_loop.rs:13:71
+   |
+13 | use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+   |                                                                       ^^^^^^^^^^^^^^^^^ private constant
+   |
+note: the constant `SAMPLES_PER_FRAME` is defined here
+  --> src\dispatch\iq_dispatch.rs:22:1
+   |
+22 | const SAMPLES_PER_FRAME: usize = 65536;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> examples\test_iq_dispatch_loop.rs:8:5
+  |
+8 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `Duration` and `timeout`
+ --> examples\test_iq_dispatch_loop.rs:9:19
+  |
+9 | use tokio::time::{timeout, Duration};
+  |                   ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `twister::app_state::DirtyFlags`
+  --> examples\test_iq_dispatch_loop.rs:12:5
+   |
+12 | use twister::app_state::DirtyFlags;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `IqDispatchLoop`
+  --> examples\test_iq_dispatch_loop.rs:13:38
+   |
+13 | use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+   |                                      ^^^^^^^^^^^^^^
+
+warning: unused import: `twister::hardware_io::device_manager::DeviceManager`
+  --> examples\test_iq_dispatch_loop.rs:14:5
+   |
+14 | use twister::hardware_io::device_manager::DeviceManager;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `DMA_CHUNK_SAMPLES` and `IqDmaGateway`
+  --> examples\test_iq_dispatch_loop.rs:15:41
+   |
+15 | use twister::hardware_io::dma_vbuffer::{IqDmaGateway, DMA_CHUNK_SAMPLES};
+   |                                         ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+error[E0601]: `main` function not found in crate `test_iq_dispatch_loop`
+   --> examples\test_iq_dispatch_loop.rs:111:2
+    |
+111 | }
+    |  ^ consider adding a `main` function to `examples\test_iq_dispatch_loop.rs`
+
+warning: function `create_test_event` is never used
+   --> src\ml\pattern_discovery.rs:503:8
+    |
+503 |     fn create_test_event(idx: usize, timestamp_micros: i64, cluster_id: usize) -> Event {
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> examples\test_stft_pipeline.rs:8:5
+  |
+8 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `twister::vbuffer::GpuVBuffer`
+ --> examples\test_stft_pipeline.rs:9:5
+  |
+9 | use twister::vbuffer::GpuVBuffer;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FFT_SIZE`, `FREQ_BINS`, `StftPipeline`, and `StftProcessor`
+  --> examples\test_stft_pipeline.rs:10:45
+   |
+10 | use twister::visualization::stft_pipeline::{FFT_SIZE, FREQ_BINS, StftPipeline, StftProcessor};
+   |                                             ^^^^^^^^  ^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+error[E0601]: `main` function not found in crate `test_stft_pipeline`
+   --> examples\test_stft_pipeline.rs:102:2
+    |
+102 | }
+    |  ^ consider adding a `main` function to `examples\test_stft_pipeline.rs`
+
+warning: unused variable: `last_block_end`
+   --> tests\phase_3d_blelloch_scan.rs:185:13
+    |
+185 |         let last_block_end = last_block_start + BLOCK_SIZE;
+    |             ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_last_block_end`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `PAYLOAD_SIZE` is never used
+   --> tests\phase_3d_blelloch_scan.rs:133:15
+    |
+133 |         const PAYLOAD_SIZE: usize = 8;
+    |               ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `KEY_SIZE` is never used
+   --> tests\phase_3d_blelloch_scan.rs:136:15
+    |
+136 |         const KEY_SIZE: usize = 4;
+    |               ^^^^^^^^
+
+warning: function `verify_sorted_order` is never used
+   --> tests\phase_3d_blelloch_scan.rs:291:8
+    |
+291 |     fn verify_sorted_order(keys: &[u32]) -> bool {
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: `twister` (test "phase_3d_blelloch_scan") generated 4 warnings (run `cargo fix --test "phase_3d_blelloch_scan" -p twister` to apply 1 suggestion)
+error[E0308]: mismatched types
+  --> examples\test_stft_pipeline.rs:81:40
+   |
+81 |       let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+   |  ____________________-------------------_^
+   | |                    |
+   | |                    arguments to this function are incorrect
+82 | |         backends: wgpu::Backends::VULKAN,
+83 | |         ..Default::default()
+84 | |     });
+   | |_____^ expected `&InstanceDescriptor`, found `InstanceDescriptor`
+   |
+note: associated function defined here
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\instance.rs:62:12
+   |
+62 |     pub fn new(desc: &InstanceDescriptor) -> Self {
+   |            ^^^
+help: consider borrowing here
+   |
+81 |     let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+   |                                        +
+
+error[E0063]: missing fields `experimental_features` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+  --> examples\test_stft_pipeline.rs:92:26
+   |
+92 |         .request_device(&wgpu::DeviceDescriptor {
+   |                          ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features` and `trace`
+
+error[E0308]: mismatched types
+  --> examples\test_iq_dispatch_loop.rs:87:40
+   |
+87 |       let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+   |  ____________________-------------------_^
+   | |                    |
+   | |                    arguments to this function are incorrect
+88 | |         backends: wgpu::Backends::VULKAN,
+89 | |         ..Default::default()
+90 | |     });
+   | |_____^ expected `&InstanceDescriptor`, found `InstanceDescriptor`
+   |
+note: associated function defined here
+  --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\instance.rs:62:12
+   |
+62 |     pub fn new(desc: &InstanceDescriptor) -> Self {
+   |            ^^^
+help: consider borrowing here
+   |
+87 |     let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+   |                                        +
+
+error[E0063]: missing fields `experimental_features` and `trace` in initializer of `DeviceDescriptor<Option<&str>>`
+  --> examples\test_iq_dispatch_loop.rs:99:14
+   |
+99 |             &wgpu::DeviceDescriptor {
+   |              ^^^^^^^^^^^^^^^^^^^^^^ missing `experimental_features` and `trace`
+
+error[E0432]: unresolved import `twister::ml::body_region_classifier`
+ --> tests\pose_integration_tests.rs:2:18
+  |
+2 | use twister::ml::body_region_classifier::BodyRegionClassifier;
+  |                  ^^^^^^^^^^^^^^^^^^^^^^ could not find `body_region_classifier` in `ml`
+
+error[E0432]: unresolved import `twister::ml::pose_materials`
+ --> tests\pose_integration_tests.rs:3:18
+  |
+3 | use twister::ml::pose_materials::{pose_frame_to_point_cloud, PointCloudWithMaterials};
+  |                  ^^^^^^^^^^^^^^ could not find `pose_materials` in `ml`
+
+error[E0432]: unresolved import `twister::ml::pose_mamba_trainer`
+ --> tests\pose_integration_tests.rs:5:18
+  |
+5 | use twister::ml::pose_mamba_trainer::{PoseMambaInput, PoseMambaTrainer};
+  |                  ^^^^^^^^^^^^^^^^^^ could not find `pose_mamba_trainer` in `ml`
+
+Some errors have detailed explanations: E0063, E0308, E0601.
+For more information about an error, try `rustc --explain E0063`.
+error[E0061]: this method takes 1 argument but 2 arguments were supplied
+   --> examples\test_iq_dispatch_loop.rs:98:10
+    |
+ 98 |         .request_device(
+    |          ^^^^^^^^^^^^^^
+...
+105 |             None,
+    |             ---- unexpected argument #2 of type `Option<_>`
+    |
+note: method defined here
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wgpu-28.0.0\src\api\adapter.rs:57:12
+    |
+ 57 |     pub fn request_device(
+    |            ^^^^^^^^^^^^^^
+help: remove the extra argument
+    |
+104 -             },
+105 -             None,
+104 +             },
+    |
+
+warning: unused variable: `beam_confidence`
+  --> tests\mamba_control_capture.rs:10:9
+   |
+10 |     let beam_confidence = 0.85;
+   |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_beam_confidence`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_beams`
+  --> tests\mamba_control_capture.rs:98:9
+   |
+98 |     let num_beams = 4;
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_beams`
+
+warning: unused variable: `memo_uuid`
+   --> tests\mamba_control_capture.rs:307:9
+    |
+307 |     let memo_uuid = "abc-def-123";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_memo_uuid`
+
+warning: unused variable: `timestamp`
+   --> tests\mamba_control_capture.rs:308:9
+    |
+308 |     let timestamp = "2026-03-07T14:25:30Z";
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
+
+warning: unused import: `std::collections::HashMap`
+  --> tests\timegnn_training.rs:14:9
+   |
+14 |     use std::collections::HashMap;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `train_timegnn`
+  --> tests\timegnn_training.rs:19:17
+   |
+19 |         kmeans, train_timegnn,
+   |                 ^^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0061, E0063, E0308, E0601, E0603.
+For more information about an error, try `rustc --explain E0061`.
+warning: variable does not need to be mutable
+  --> examples\alignment_comparison.rs:88:25
+   |
+88 |                     let mut times: Vec<f64> = Vec::new();
+   |                         ----^^^^^
+   |                         |
+   |                         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> examples\alignment_comparison.rs:138:25
+    |
+138 |                     let mut times: Vec<f64> = Vec::new();
+    |                         ----^^^^^
+    |                         |
+    |                         help: remove this `mut`
+
+warning: unused variable: `times`
+  --> examples\alignment_comparison.rs:88:25
+   |
+88 |                     let mut times: Vec<f64> = Vec::new();
+   |                         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_times`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `run`
+  --> examples\alignment_comparison.rs:89:25
+   |
+89 |                     for run in 1..=3 {
+   |                         ^^^ help: if this is intentional, prefix it with an underscore: `_run`
+
+warning: unused variable: `times`
+   --> examples\alignment_comparison.rs:138:25
+    |
+138 |                     let mut times: Vec<f64> = Vec::new();
+    |                         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_times`
+
+warning: unused variable: `run`
+   --> examples\alignment_comparison.rs:139:25
+    |
+139 |                     for run in 1..=3 {
+    |                         ^^^ help: if this is intentional, prefix it with an underscore: `_run`
+
+warning: `twister` (example "test_stft_pipeline") generated 3 warnings
+error: could not compile `twister` (example "test_stft_pipeline") due to 3 previous errors; 3 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+For more information about this error, try `rustc --explain E0432`.
+warning: unused import: `std::marker::PhantomData`
+ --> tests\timegnn_integration.rs:7:9
+  |
+7 |     use std::marker::PhantomData;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (example "test_iq_dispatch_loop") generated 6 warnings
+error: could not compile `twister` (example "test_iq_dispatch_loop") due to 6 previous errors; 6 warnings emitted
+error: could not compile `twister` (test "pose_integration_tests") due to 3 previous errors
+warning: `twister` (test "timegnn_integration") generated 1 warning (run `cargo fix --test "timegnn_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (example "alignment_comparison") generated 6 warnings (run `cargo fix --example "alignment_comparison" -p twister` to apply 6 suggestions)
+warning: unused variable: `audio`
+  --> tests\wav2vec2_integration.rs:71:13
+   |
+71 |         let audio: Vec<f32> = (0..16000)
+   |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_audio`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (test "mamba_control_capture") generated 4 warnings (run `cargo fix --test "mamba_control_capture" -p twister` to apply 4 suggestions)
+warning: unused variable: `loss_similar`
+  --> tests\timegnn_training.rs:47:13
+   |
+47 |         let loss_similar = compute_nt_xent_loss(&similar_embeddings, &similar_labels, 0.07);
+   |             ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_loss_similar`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `config`
+  --> tests\timegnn_training.rs:76:13
+   |
+76 |         let config = TimeGnnTrainingConfig {
+   |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+warning: `twister` (lib test) generated 41 warnings (37 duplicates) (run `cargo fix --lib -p twister --tests` to apply 3 suggestions)
+warning: `twister` (test "wav2vec2_integration") generated 1 warning (run `cargo fix --test "wav2vec2_integration" -p twister` to apply 1 suggestion)
+warning: `twister` (test "timegnn_training") generated 4 warnings (run `cargo fix --test "timegnn_training" -p twister` to apply 4 suggestions)
+warning: unused variable: `output`
+  --> tests\pdm_spike_rejection.rs:79:10
+   |
+79 |     let (output, spike_count) = twister::audio::reject_pdm_spikes(&input);
+   |          ^^^^^^ help: if this is intentional, prefix it with an underscore: `_output`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `twister` (test "pdm_spike_rejection") generated 1 warning (run `cargo fix --test "pdm_spike_rejection" -p twister` to apply 1 suggestion)
+warning: unused attribute `allow`
+  --> src\main.rs:19:1
+   |
+19 | #[allow(clippy::too_many_arguments)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the built-in attribute `allow` will be ignored, since it's applied to the macro invocation `slint::include_modules`
+  --> src\main.rs:21:1
+   |
+21 | slint::include_modules!();
+   | ^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `evidence_chain::*`
+ --> src\ai\mod.rs:7:9
+  |
+7 | pub use evidence_chain::*;
+  |         ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `query_tools::*`
+ --> src\ai\mod.rs:8:9
+  |
+8 | pub use query_tools::*;
+  |         ^^^^^^^^^^^^^^
+
+warning: unused import: `reasoning_engine::*`
+ --> src\ai\mod.rs:9:9
+  |
+9 | pub use reasoning_engine::*;
+  |         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `JoyConAction`, `JoyConState`, and `JoyconHandler`
+ --> src\input\mod.rs:5:26
+  |
+5 | pub use joycon_handler::{JoyconHandler, JoyConState, GestureMapping, JoyConAction, spawn_joycon_task};
+  |                          ^^^^^^^^^^^^^  ^^^^^^^^^^^                  ^^^^^^^^^^^^
+
+warning: unused import: `cognee_schema::*`
+ --> src\knowledge_graph\mod.rs:5:9
+  |
+5 | pub use cognee_schema::*;
+  |         ^^^^^^^^^^^^^^^^
+
+warning: unused import: `event_ingestion::*`
+ --> src\knowledge_graph\mod.rs:6:9
+  |
+6 | pub use event_ingestion::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `mamba_block::MambaBlock`
+  --> src\ml\mod.rs:41:9
+   |
+41 | pub use mamba_block::MambaBlock;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FeatureFlags`, `ModularFeatureEncoder`, `SignalFeaturePayload`, and `VideoFrame`
+  --> src\ml\mod.rs:42:28
+   |
+42 | pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+   |                            ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused imports: `ClusteringResult`, `Event`, `KMeansConfig`, `Pattern`, `compute_silhouette_score`, `compute_temporal_frequency`, `discover_patterns`, `generate_pattern_label`, and `kmeans`
+  --> src\ml\mod.rs:45:5
+   |
+45 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+46 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `CorpusStats`, `ForensicEventData`, and `prepare_event_corpus`
+  --> src\ml\mod.rs:49:24
+   |
+49 | pub use event_corpus::{CorpusStats, ForensicEventData, prepare_event_corpus};
+   |                        ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ModalityStats`, `compute_modality_stats`, and `fuse_multimodal`
+  --> src\ml\mod.rs:50:29
+   |
+50 | pub use multimodal_fusion::{ModalityStats, compute_modality_stats, fuse_multimodal};
+   |                             ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+
+warning: unused import: `point_decoder::PointDecoder`
+  --> src\ml\mod.rs:51:9
+   |
+51 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `point_mamba::PointMamba`
+  --> src\ml\mod.rs:52:9
+   |
+52 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
+  --> src\ml\mod.rs:53:31
+   |
+53 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pointnet_encoder::PointNetEncoder`
+  --> src\ml\mod.rs:54:9
+   |
+54 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `spectral_frame::SpectralFrame`
+  --> src\ml\mod.rs:55:9
+   |
+55 | pub use spectral_frame::SpectralFrame;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `timegnn::TimeGnnModel`
+  --> src\ml\mod.rs:56:9
+   |
+56 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
+  --> src\ml\mod.rs:58:5
+   |
+58 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+59 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `wav2vec2_loader::Wav2Vec2Model`
+  --> src\ml\mod.rs:61:9
+   |
+61 | pub use wav2vec2_loader::Wav2Vec2Model;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `copilot_handler::*`
+ --> src\ui\mod.rs:2:9
+  |
+2 | pub use copilot_handler::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `GaussianSplatRenderer` and `intensity_to_rgb`
+  --> src\visualization\mod.rs:12:30
+   |
+12 | pub use gaussian_splatting::{GaussianSplatRenderer, intensity_to_rgb};
+   |                              ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `gaussian_splatting_optimized::GaussianSplattingRenderer`
+  --> src\visualization\mod.rs:13:9
+   |
+13 | pub use gaussian_splatting_optimized::GaussianSplattingRenderer;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FFT_SIZE`, `FREQ_BINS`, `StftPipeline`, and `StftProcessor`
+  --> src\visualization\mod.rs:14:25
+   |
+14 | pub use stft_pipeline::{StftPipeline, StftProcessor, FFT_SIZE, FREQ_BINS};
+   |                         ^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `crossbeam_channel::bounded`
+  --> src\main.rs:76:5
+   |
+76 | use crossbeam_channel::bounded;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `frustum_culler::FrustumCuller` and `renderer::ParticleRenderer`
+   --> src\main.rs:112:9
+    |
+112 |         frustum_culler::FrustumCuller, renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> src\main.rs:744:37
+    |
+744 | ...                   let mut rx_cur =
+    |                           ----^^^^^^
+    |                           |
+    |                           help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> src\main.rs:831:33
+    |
+831 | ...                   let mut rx_cur = if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
+    |                           ----^^^^^^
+    |                           |
+    |                           help: remove this `mut`
+
+warning: unused variable: `feature_flags`
+   --> src\main.rs:341:17
+    |
+341 |             let feature_flags = state_disp.get_feature_flags();
+    |                 ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_feature_flags`
+
+warning: unused variable: `sdr_last_center_hz`
+   --> src\main.rs:391:33
+    |
+391 |             while let Ok((mags, sdr_last_center_hz, sdr_last_rate)) = sdr_rx.try_recv() {
+    |                                 ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sdr_last_center_hz`
+
+warning: unused variable: `pdm_chunk_snr`
+   --> src\main.rs:531:21
+    |
+531 |                 let pdm_chunk_snr = snr_db(&chunk, &decoded);
+    |                     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pdm_chunk_snr`
+
+warning: unused variable: `current_gain`
+    --> src\main.rs:1007:17
+     |
+1007 |             let current_gain = state_disp.get_master_gain();
+     |                 ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_current_gain`
+
+warning: unused variable: `mamba_ctrl`
+    --> src\main.rs:1012:17
+     |
+1012 |             let mamba_ctrl = crate::state::MambaControlState {
+     |                 ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_mamba_ctrl`
+
+warning: unused variable: `feature_rx`
+   --> src\main.rs:130:22
+    |
+130 |     let (feature_tx, feature_rx) = crossbeam_channel::bounded::<(
+    |                      ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_feature_rx`
+
+warning: unused variable: `impulse_rx`
+   --> src\main.rs:134:22
+    |
+134 |     let (impulse_tx, impulse_rx) =
+    |                      ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_impulse_rx`
+
+warning: unused variable: `parametric_manager`
+   --> src\main.rs:164:9
+    |
+164 |     let parametric_manager = ParametricManager::new(PARAMETRIC_CARRIER_HZ);
+    |         ^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parametric_manager`
+
+warning: unused variable: `sdr_thread_handle`
+   --> src\main.rs:214:9
+    |
+214 |     let sdr_thread_handle = sdr::spawn_sdr_thread(state.clone(), sdr_tx);
+    |         ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sdr_thread_handle`
+
+warning: unused variable: `mamba_trainer_handle`
+   --> src\main.rs:262:9
+    |
+262 |     let mamba_trainer_handle = training::spawn_background_training(
+    |         ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_mamba_trainer_handle`
+
+warning: unused variable: `impulse_tx`
+   --> src\main.rs:309:9
+    |
+309 |     let impulse_tx = impulse_tx.clone();
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_impulse_tx`
+
+warning: unused variable: `particle_renderer`
+    --> src\main.rs:1534:9
+     |
+1534 |     let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
+     |         ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_particle_renderer`
+
+warning: unused variable: `frustum_culler`
+    --> src\main.rs:1539:9
+     |
+1539 |     let frustum_culler =
+     |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_frustum_culler`
+
+warning: unused variable: `now_ms`
+    --> src\main.rs:1544:9
+     |
+1544 |     let now_ms = std::time::SystemTime::now()
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_now_ms`
+
+warning: struct `ChatMessage` is never constructed
+ --> src\ai\copilot_interface.rs:6:12
+  |
+6 | pub struct ChatMessage {
+  |            ^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `CopilotInterface` is never constructed
+  --> src\ai\copilot_interface.rs:14:12
+   |
+14 | pub struct CopilotInterface {
+   |            ^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `initialize`, `send_query`, and `get_history` are never used
+  --> src\ai\copilot_interface.rs:21:12
+   |
+20 | impl CopilotInterface {
+   | --------------------- associated items in this implementation
+21 |     pub fn new(graph: Arc<KnowledgeGraphClient>, endpoint_url: String) -> Self {
+   |            ^^^
+...
+30 |     pub fn initialize(&mut self) {
+   |            ^^^^^^^^^^
+...
+43 |     pub async fn send_query(&mut self, query: &str) -> String {
+   |                  ^^^^^^^^^^
+...
+73 |     pub fn get_history(&self) -> Vec<ChatMessage> {
+   |            ^^^^^^^^^^^
+
+warning: struct `ReasoningStep` is never constructed
+ --> src\ai\evidence_chain.rs:5:12
+  |
+5 | pub struct ReasoningStep {
+  |            ^^^^^^^^^^^^^
+
+warning: struct `EvidenceChain` is never constructed
+  --> src\ai\evidence_chain.rs:16:12
+   |
+16 | pub struct EvidenceChain {
+   |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `add_step`, and `finalize` are never used
+  --> src\ai\evidence_chain.rs:26:12
+   |
+25 | impl EvidenceChain {
+   | ------------------ associated items in this implementation
+26 |     pub fn new(query: String) -> Self {
+   |            ^^^
+...
+37 |     pub fn add_step(&mut self, step: ReasoningStep) {
+   |            ^^^^^^^^
+...
+41 |     pub fn finalize(&mut self, latency: Duration, final_confidence: f32, source_ids: Vec<u64>) {
+   |            ^^^^^^^^
+
+warning: trait `Tool` is never used
+ --> src\ai\query_tools.rs:8:11
+  |
+8 | pub trait Tool: Send + Sync {
+  |           ^^^^
+
+warning: struct `FindEventsByLocationTool` is never constructed
+  --> src\ai\query_tools.rs:20:12
+   |
+20 | pub struct FindEventsByLocationTool;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `FindPatternForFrequencyTool` is never constructed
+  --> src\ai\query_tools.rs:94:12
+   |
+94 | pub struct FindPatternForFrequencyTool;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `ReasoningEngine` is never constructed
+  --> src\ai\reasoning_engine.rs:10:12
+   |
+10 | pub struct ReasoningEngine {
+   |            ^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `process` are never used
+  --> src\ai\reasoning_engine.rs:16:12
+   |
+15 | impl ReasoningEngine {
+   | -------------------- associated items in this implementation
+16 |     pub fn new(graph: Arc<KnowledgeGraphClient>) -> Self {
+   |            ^^^
+...
+28 |     pub async fn process(&self, query: &str) -> (String, EvidenceChain) {
+   |                  ^^^^^^^
+
+warning: methods `power` and `weight_rms` are never used
+   --> src\anc.rs:478:12
+    |
+359 | impl LmsFilter {
+    | -------------- methods in this implementation
+...
+478 |     pub fn power(&self) -> f32 {
+    |            ^^^^^
+...
+483 |     pub fn weight_rms(&self) -> f32 {
+    |            ^^^^^^^^^^
+
+warning: methods `phase_for`, `update`, and `status` are never used
+   --> src\anc.rs:551:12
+    |
+518 | impl AncEngine {
+    | -------------- methods in this implementation
+...
+551 |     pub fn phase_for(&self, freq_hz: f32) -> f32 {
+    |            ^^^^^^^^^
+...
+557 |     pub fn update(&mut self, reference: &[f32], error: &[f32]) -> Vec<f32> {
+    |            ^^^^^^
+...
+611 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+
+warning: method `last_calibration` is never used
+   --> src\anc_calibration.rs:231:12
+    |
+ 40 | impl FullRangeCalibration {
+    | ------------------------- method in this implementation
+...
+231 |     pub fn last_calibration(&self) -> Option<&str> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: variant `Complete` is never constructed
+  --> src\anc_recording.rs:18:5
+   |
+14 | pub enum CalibrationState {
+   |          ---------------- variant in this enum
+...
+18 |     Complete,
+   |     ^^^^^^^^
+   |
+   = note: `CalibrationState` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `ref_sr` is never read
+  --> src\anc_recording.rs:29:9
+   |
+23 | pub struct RecordingBuffer {
+   |            --------------- field in this struct
+...
+29 |     pub ref_sr: f32,
+   |         ^^^^^^
+   |
+   = note: `RecordingBuffer` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: method `status` is never used
+   --> src\anc_recording.rs:115:12
+    |
+ 34 | impl RecordingBuffer {
+    | -------------------- method in this implementation
+...
+115 |     pub fn status(&self) -> String {
+    |            ^^^^^^
+
+warning: function `device_name` is never used
+   --> src\anc_recording.rs:157:8
+    |
+157 | pub fn device_name(idx: usize) -> &'static str {
+    |        ^^^^^^^^^^^
+
+warning: constant `BASEBAND_FFT_SIZE` is never used
+  --> src\audio.rs:23:11
+   |
+23 | pub const BASEBAND_FFT_SIZE: usize = 2048;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `MAX_INPUT_DEVICES` is never used
+  --> src\audio.rs:26:11
+   |
+26 | pub const MAX_INPUT_DEVICES: usize = 8;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: struct `SparsePdmSignature` is never constructed
+  --> src\audio.rs:43:12
+   |
+43 | pub struct SparsePdmSignature {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: function `linear_resample` is never used
+   --> src\audio.rs:161:8
+    |
+161 | pub fn linear_resample(input: &[f32], in_rate: f32, out_rate: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^^^
+
+warning: field `is_mouth_region` is never read
+   --> src\audio.rs:561:9
+    |
+554 | pub struct SpatialResult {
+    |            ------------- field in this struct
+...
+561 |     pub is_mouth_region: bool,
+    |         ^^^^^^^^^^^^^^^
+    |
+    = note: `SpatialResult` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `analyze_sparse_pdm` is never used
+   --> src\audio.rs:760:8
+    |
+760 | pub fn analyze_sparse_pdm(buffer: &[f32], sample_rate: f32) -> SparsePdmSignature {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `fft_to_mel_scale` is never used
+   --> src\audio.rs:859:8
+    |
+859 | pub fn fft_to_mel_scale(fft_512: &[f32; 512]) -> [f32; 128] {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: function `compute_bispectrum` is never used
+   --> src\audio.rs:872:8
+    |
+872 | pub fn compute_bispectrum(fft_512: &[f32; 512]) -> [f32; 64] {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: method `as_str` is never used
+  --> src\bispectrum.rs:59:12
+   |
+41 | impl FrequencyBand {
+   | ------------------ method in this implementation
+...
+59 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: method `as_str` is never used
+  --> src\detection.rs:15:12
+   |
+14 | impl ProductType {
+   | ---------------- method in this implementation
+15 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: method `as_str` is never used
+  --> src\detection.rs:83:12
+   |
+82 | impl HardwareLayer {
+   | ------------------ method in this implementation
+83 |     pub fn as_str(&self) -> &'static str {
+   |            ^^^^^^
+
+warning: function `export_correlation_json` is never used
+  --> src\evidence_export.rs:90:8
+   |
+90 | pub fn export_correlation_json(evidence: &CorrelationEvidence) -> String {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variant `ValidationError` is never constructed
+   --> src\forensic.rs:320:5
+    |
+316 | pub enum LogError {
+    |          -------- variant in this enum
+...
+320 |     ValidationError(String),
+    |     ^^^^^^^^^^^^^^^
+
+warning: methods `compute_confidence` and `classify_attack_vector` are never used
+   --> src\forensic.rs:530:12
+    |
+391 | impl ForensicLogger {
+    | ------------------- methods in this implementation
+...
+530 |     pub fn compute_confidence(&self, anomaly_db: f32) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+534 |     pub fn classify_attack_vector(
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_log_integrity` is never used
+   --> src\forensic.rs:752:14
+    |
+752 | pub async fn verify_log_integrity(log_file: &str) -> Result<(), String> {
+    |              ^^^^^^^^^^^^^^^^^^^^
+
+warning: field `bispectrum_method` is never read
+  --> src\forensic_queries.rs:27:9
+   |
+17 | pub struct DetectionWithContext {
+   |            -------------------- field in this struct
+...
+27 |     pub bispectrum_method: String,
+   |         ^^^^^^^^^^^^^^^^^
+   |
+   = note: `DetectionWithContext` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: multiple fields are never read
+  --> src\forensic_queries.rs:64:9
+   |
+62 | pub struct CorrelationEvidence {
+   |            ------------------- fields in this struct
+63 |     /// Event ID
+64 |     pub event_id: String,
+   |         ^^^^^^^^
+65 |     /// UTC timestamp
+66 |     pub timestamp_utc: DateTime<Utc>,
+   |         ^^^^^^^^^^^^^
+67 |     /// RF frequency detected
+68 |     pub rf_frequency_hz: f32,
+   |         ^^^^^^^^^^^^^^^
+69 |     /// RF confidence score
+70 |     pub rf_confidence: f32,
+   |         ^^^^^^^^^^^^^
+71 |     /// RF signal start time (ms since epoch)
+72 |     pub rf_start_timestamp_ms: i64,
+   |         ^^^^^^^^^^^^^^^^^^^^^
+73 |     /// Audio DC spike timestamp (ms since epoch)
+74 |     pub audio_dc_spike_timestamp_ms: Option<i64>,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+78 |     pub audio_dc_bias_v: Option<f32>,
+   |         ^^^^^^^^^^^^^^^
+79 |     /// SDR DC bias voltage
+80 |     pub sdr_dc_bias_v: f32,
+   |         ^^^^^^^^^^^^^
+81 |     /// Mamba anomaly score in dB
+82 |     pub mamba_anomaly_db: f32,
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: `CorrelationEvidence` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `events_in_timerange` is never used
+   --> src\forensic_queries.rs:106:14
+    |
+106 | pub async fn events_in_timerange(
+    |              ^^^^^^^^^^^^^^^^^^^
+
+warning: function `synchronized_attacks` is never used
+   --> src\forensic_queries.rs:145:14
+    |
+145 | pub async fn synchronized_attacks(
+    |              ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `attack_pattern_summary` is never used
+   --> src\forensic_queries.rs:181:14
+    |
+181 | pub async fn attack_pattern_summary(
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `correlation_evidence` is never used
+   --> src\forensic_queries.rs:235:14
+    |
+235 | pub async fn correlation_evidence(
+    |              ^^^^^^^^^^^^^^^^^^^^
+
+warning: field `pose` is never read
+  --> src\fusion\imu_pose_fusion.rs:12:9
+   |
+11 | pub struct FusedPoseFrame {
+   |            -------------- field in this struct
+12 |     pub pose: PoseFrame,
+   |         ^^^^
+   |
+   = note: `FusedPoseFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: struct `SignalProcessorGpu` is never constructed
+   --> src\gpu.rs:388:12
+    |
+388 | pub struct SignalProcessorGpu {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `process_frame` are never used
+   --> src\gpu.rs:396:12
+    |
+395 | impl SignalProcessorGpu {
+    | ----------------------- associated items in this implementation
+396 |     pub fn new(shared: Arc<GpuShared>) -> Self {
+    |            ^^^
+...
+471 |     pub fn process_frame(
+    |            ^^^^^^^^^^^^^
+
+warning: function `synthesize_heterodyned_chord` is never used
+  --> src\harmony.rs:95:8
+   |
+95 | pub fn synthesize_heterodyned_chord(chord_freqs: &[f32], carrier_hz: f32) -> Vec<f32> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `predict_next_attack_key` is never used
+   --> src\harmony.rs:104:8
+    |
+104 | pub fn predict_next_attack_key(attack_history: &[MusicalKey]) -> MusicalKey {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `yaw_sensitivity` is never read
+  --> src\input\joycon_handler.rs:31:9
+   |
+25 | pub struct GestureMapping {
+   |            -------------- field in this struct
+...
+31 |     pub yaw_sensitivity: f32,
+   |         ^^^^^^^^^^^^^^^
+   |
+   = note: `GestureMapping` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `ToggleSDR`, `IncreaseGain`, `DecreaseGain`, `NextMode`, `PreviousMode`, and `None` are never constructed
+  --> src\input\joycon_handler.rs:69:5
+   |
+64 | pub enum JoyConAction {
+   |          ------------ variants in this enum
+...
+69 |     ToggleSDR,
+   |     ^^^^^^^^^
+70 |     IncreaseGain,
+   |     ^^^^^^^^^^^^
+71 |     DecreaseGain,
+   |     ^^^^^^^^^^^^
+72 |     NextMode,
+   |     ^^^^^^^^
+73 |     PreviousMode,
+   |     ^^^^^^^^^^^^
+74 |     None,
+   |     ^^^^
+   |
+   = note: `JoyConAction` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: methods `get_state`, `is_connected`, and `stop` are never used
+   --> src\input\joycon_handler.rs:450:12
+    |
+171 | impl JoyconHandler {
+    | ------------------ methods in this implementation
+...
+450 |     pub fn get_state(&self) -> &JoyConState {
+    |            ^^^^^^^^^
+...
+455 |     pub fn is_connected(&self) -> bool {
+    |            ^^^^^^^^^^^^
+...
+460 |     pub fn stop(&mut self) {
+    |            ^^^^
+
+warning: enum `NodeType` is never used
+ --> src\knowledge_graph\cognee_schema.rs:7:10
+  |
+7 | pub enum NodeType {
+  |          ^^^^^^^^
+
+warning: enum `EdgeType` is never used
+  --> src\knowledge_graph\cognee_schema.rs:17:10
+   |
+17 | pub enum EdgeType {
+   |          ^^^^^^^^
+
+warning: struct `EventNode` is never constructed
+  --> src\knowledge_graph\cognee_schema.rs:32:12
+   |
+32 | pub struct EventNode {
+   |            ^^^^^^^^^
+
+warning: struct `PatternNode` is never constructed
+  --> src\knowledge_graph\cognee_schema.rs:46:12
+   |
+46 | pub struct PatternNode {
+   |            ^^^^^^^^^^^
+
+warning: struct `FrequencyNode` is never constructed
+  --> src\knowledge_graph\cognee_schema.rs:60:12
+   |
+60 | pub struct FrequencyNode {
+   |            ^^^^^^^^^^^^^
+
+warning: struct `SpatialLocationNode` is never constructed
+  --> src\knowledge_graph\cognee_schema.rs:71:12
+   |
+71 | pub struct SpatialLocationNode {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `DeviceNode` is never constructed
+  --> src\knowledge_graph\cognee_schema.rs:83:12
+   |
+83 | pub struct DeviceNode {
+   |            ^^^^^^^^^^
+
+warning: struct `GraphIngestionPipeline` is never constructed
+ --> src\knowledge_graph\event_ingestion.rs:9:12
+  |
+9 | pub struct GraphIngestionPipeline {
+  |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `ingest_stream` are never used
+  --> src\knowledge_graph\event_ingestion.rs:16:12
+   |
+14 | impl GraphIngestionPipeline {
+   | --------------------------- associated items in this implementation
+15 |     /// Initialize the pipeline with a Neo4j client and return the sender half.
+16 |     pub fn new(
+   |            ^^^
+...
+25 |     pub async fn ingest_stream(mut self) {
+   |                  ^^^^^^^^^^^^^
+
+warning: struct `PatternIngestionPipeline` is never constructed
+  --> src\knowledge_graph\event_ingestion.rs:60:12
+   |
+60 | pub struct PatternIngestionPipeline {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `ingest_pattern_batch` are never used
+  --> src\knowledge_graph\event_ingestion.rs:65:12
+   |
+64 | impl PatternIngestionPipeline {
+   | ----------------------------- associated items in this implementation
+65 |     pub fn new(neo4j_client: Arc<KnowledgeGraphClient>) -> Self {
+   |            ^^^
+...
+71 |     pub async fn ingest_pattern_batch(&self, patterns: Vec<PatternNode>) -> anyhow::Result<()> {
+   |                  ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run_mock_generator` is never used
+  --> src\knowledge_graph\event_ingestion.rs:86:14
+   |
+86 | pub async fn run_mock_generator(tx: mpsc::UnboundedSender<EventNode>, rate_hz: u64) {
+   |              ^^^^^^^^^^^^^^^^^^
+
+warning: struct `KnowledgeGraphClient` is never constructed
+  --> src\knowledge_graph\graph_builder.rs:10:12
+   |
+10 | pub struct KnowledgeGraphClient {
+   |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\knowledge_graph\graph_builder.rs:16:18
+    |
+ 14 | impl KnowledgeGraphClient {
+    | ------------------------- associated items in this implementation
+ 15 |     /// Initialize connection to Neo4j and create schema constraints.
+ 16 |     pub async fn new(uri: &str, user: &str, pass: &str) -> anyhow::Result<Self> {
+    |                  ^^^
+...
+ 26 |     async fn init_schema(&self) -> anyhow::Result<()> {
+    |              ^^^^^^^^^^^
+...
+ 44 |     pub async fn create_event_node(&self, event: &EventNode) -> anyhow::Result<()> {
+    |                  ^^^^^^^^^^^^^^^^^
+...
+ 74 |     pub async fn link_event_to_pattern(
+    |                  ^^^^^^^^^^^^^^^^^^^^^
+...
+ 94 |     pub async fn link_event_to_location(
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+...
+121 |     pub async fn link_event_to_frequency(
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^
+...
+146 |     pub async fn create_pattern_node(&self, pattern: &PatternNode) -> anyhow::Result<()> {
+    |                  ^^^^^^^^^^^^^^^^^^^
+...
+173 |     pub async fn find_matching_patterns(&self, event: &EventNode) -> anyhow::Result<Vec<usize>> {
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+...
+195 |     pub async fn backfill_pattern_links(&self, pattern: &PatternNode) -> anyhow::Result<()> {
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+...
+212 |     pub async fn execute_query(
+    |                  ^^^^^^^^^^^^^
+
+warning: function `extract_window_from_vbuf_snapshot` is never used
+   --> src\mamba.rs:549:8
+    |
+549 | pub fn extract_window_from_vbuf_snapshot(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `MaterialPoint` is never constructed
+  --> src\materials\material_library.rs:38:12
+   |
+38 | pub struct MaterialPoint {
+   |            ^^^^^^^^^^^^^
+
+warning: associated items `save_json`, `load_json`, and `create_material` are never used
+   --> src\materials\material_library.rs:196:12
+    |
+ 63 | impl MaterialLibrary {
+    | -------------------- associated items in this implementation
+...
+196 |     pub fn save_json(&self) -> Result<(), Box<dyn std::error::Error>> {
+    |            ^^^^^^^^^
+...
+204 |     pub fn load_json() -> Result<Self, Box<dyn std::error::Error>> {
+    |            ^^^^^^^^^
+...
+214 |     pub fn create_material(&mut self, name: &str, def: MaterialDef) {
+    |            ^^^^^^^^^^^^^^^
+
+warning: associated function `stub_reject` is never used
+  --> src\ml\anomaly_gate.rs:66:12
+   |
+29 | impl AnomalyGateDecision {
+   | ------------------------ associated function in this implementation
+...
+66 |     pub fn stub_reject() -> Self {
+   |            ^^^^^^^^^^^
+
+warning: struct `FieldParticle` is never constructed
+  --> src\ml\data_contracts.rs:10:12
+   |
+10 | pub struct FieldParticle {
+   |            ^^^^^^^^^^^^^
+
+warning: associated items `new` and `FLOATS_PER_PARTICLE` are never used
+  --> src\ml\data_contracts.rs:36:12
+   |
+34 | impl FieldParticle {
+   | ------------------ associated items in this implementation
+35 |     /// Create a neutral particle at voxel center
+36 |     pub fn new(position: [f32; 3]) -> Self {
+   |            ^^^
+...
+48 |     pub const FLOATS_PER_PARTICLE: usize = 9;
+   |               ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `PointMambaEncoderOutput` is never constructed
+  --> src\ml\data_contracts.rs:57:12
+   |
+57 | pub struct PointMambaEncoderOutput {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `RFDetection` is never constructed
+  --> src\ml\data_contracts.rs:63:12
+   |
+63 | pub struct RFDetection {
+   |            ^^^^^^^^^^^
+
+warning: struct `PointCloud` is never constructed
+  --> src\ml\data_contracts.rs:86:12
+   |
+86 | pub struct PointCloud {
+   |            ^^^^^^^^^^
+
+warning: associated items `new` and `num_points` are never used
+   --> src\ml\data_contracts.rs:94:12
+    |
+ 93 | impl PointCloud {
+    | --------------- associated items in this implementation
+ 94 |     pub fn new(num_points: usize) -> Self {
+    |            ^^^
+...
+101 |     pub fn num_points(&self) -> usize {
+    |            ^^^^^^^^^^
+
+warning: struct `FieldParticleCloud` is never constructed
+   --> src\ml\data_contracts.rs:108:12
+    |
+108 | pub struct FieldParticleCloud {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\ml\data_contracts.rs:118:12
+    |
+117 | impl FieldParticleCloud {
+    | ----------------------- associated items in this implementation
+118 |     pub fn new(capacity: usize) -> Self {
+    |            ^^^
+...
+126 |     pub fn push(&mut self, particle: FieldParticle, hilbert_idx: u32, timestamp: u64) {
+    |            ^^^^
+...
+132 |     pub fn len(&self) -> usize {
+    |            ^^^
+...
+136 |     pub fn is_empty(&self) -> bool {
+    |            ^^^^^^^^
+...
+140 |     pub fn clear(&mut self) {
+    |            ^^^^^
+...
+148 |     pub fn as_tensor(&self) -> Vec<f32> {
+    |            ^^^^^^^^^
+...
+165 |     pub fn from_tensor(data: &[f32]) -> Option<Self> {
+    |            ^^^^^^^^^^^
+
+warning: struct `EnergyGradientField` is never constructed
+   --> src\ml\data_contracts.rs:192:12
+    |
+192 | pub struct EnergyGradientField {
+    |            ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `ForensicEventData` is never constructed
+ --> src\ml\event_corpus.rs:8:12
+  |
+8 | pub struct ForensicEventData {
+  |            ^^^^^^^^^^^^^^^^^
+
+warning: struct `CorpusStats` is never constructed
+  --> src\ml\event_corpus.rs:17:12
+   |
+17 | pub struct CorpusStats {
+   |            ^^^^^^^^^^^
+
+warning: function `prepare_event_corpus` is never used
+   --> src\ml\event_corpus.rs:168:14
+    |
+168 | pub async fn prepare_event_corpus(
+    |              ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `load_forensic_events` is never used
+   --> src\ml\event_corpus.rs:176:8
+    |
+176 | pub fn load_forensic_events(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `FoldFrequencyAnalyzer` is never constructed
+ --> src\ml\fold_frequency_harmonics.rs:1:12
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `FoldFrequencyFeatures` is never constructed
+ --> src\ml\fold_frequency_harmonics.rs:7:12
+  |
+7 | pub struct FoldFrequencyFeatures {
+  |            ^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `compute_fold_maps`, `pulse_train_signature`, `fold_coherence`, and `extract` are never used
+   --> src\ml\fold_frequency_harmonics.rs:16:12
+    |
+ 15 | impl FoldFrequencyAnalyzer {
+    | -------------------------- associated items in this implementation
+ 16 |     pub fn new(sample_rate: u32) -> Self {
+    |            ^^^
+...
+ 24 |     pub fn compute_fold_maps(&self, detected_frequencies: &[f32]) -> Vec<Vec<f32>> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+ 60 |     pub fn pulse_train_signature(&self, baseband_harmonics: &[f32]) -> [f32; 16] {
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+ 87 |     pub fn fold_coherence(&self, baseband: &[f32], fold_maps: &[Vec<f32>]) -> f32 {
+    |            ^^^^^^^^^^^^^^
+...
+109 |     pub fn extract(
+    |            ^^^^^^^
+
+warning: struct `ImpulseCoherenceAnalyzer` is never constructed
+ --> src\ml\impulse_coherence.rs:4:12
+  |
+4 | pub struct ImpulseCoherenceAnalyzer {
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `ImpulseCoherenceMetrics` is never constructed
+ --> src\ml\impulse_coherence.rs:8:12
+  |
+8 | pub struct ImpulseCoherenceMetrics {
+  |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `CpuVBufferWindow` is never constructed
+  --> src\ml\impulse_coherence.rs:27:12
+   |
+27 | pub struct CpuVBufferWindow {
+   |            ^^^^^^^^^^^^^^^^
+
+warning: methods `num_frames` and `get_frame` are never used
+  --> src\ml\impulse_coherence.rs:32:12
+   |
+31 | impl CpuVBufferWindow {
+   | --------------------- methods in this implementation
+32 |     pub fn num_frames(&self) -> usize {
+   |            ^^^^^^^^^^
+...
+36 |     pub fn get_frame(&self, offset: i32) -> Option<&[f32]> {
+   |            ^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\ml\impulse_coherence.rs:47:12
+    |
+ 46 | impl ImpulseCoherenceAnalyzer {
+    | ----------------------------- associated items in this implementation
+ 47 |     pub fn new(window_frames: usize) -> Self {
+    |            ^^^
+...
+ 51 |     pub fn phase_lock_strength(&self, vbuffer: &CpuVBufferWindow) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+ 75 |     fn correlate_patterns(&self, pattern1: &[bool], pattern2: &[bool]) -> f32 {
+    |        ^^^^^^^^^^^^^^^^^^
+...
+ 88 |     pub fn timing_jitter(&self, impulse_times: &[usize]) -> f32 {
+    |            ^^^^^^^^^^^^^
+...
+108 |     pub fn cross_frame_coherence(&self, vbuffer: &CpuVBufferWindow) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn is_controlled_synthesis(&self, metrics: &ImpulseCoherenceMetrics) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^
+...
+136 |     fn detect_frame_impulses(&self, frame: &[f32]) -> Vec<bool> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+...
+141 |     pub fn extract(
+    |            ^^^^^^^
+
+warning: struct `ImpulseModulationAnalyzer` is never constructed
+ --> src\ml\impulse_modulation.rs:1:12
+  |
+1 | pub struct ImpulseModulationAnalyzer {
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `ModulationFeatures` is never constructed
+ --> src\ml\impulse_modulation.rs:6:12
+  |
+6 | pub struct ModulationFeatures {
+  |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\ml\impulse_modulation.rs:15:12
+    |
+ 14 | impl ImpulseModulationAnalyzer {
+    | ------------------------------ associated items in this implementation
+ 15 |     pub fn new(sample_rate: u32) -> Self {
+    |            ^^^
+...
+ 19 |     pub fn extract_impulse_amplitudes(&self, time_domain: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 33 |     pub fn modulation_envelope(&self, amplitudes: &[f32]) -> [f32; 64] {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+ 59 |     pub fn modulation_frequency(&self, amplitudes: &[f32], sample_rate: u32) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^^
+...
+ 74 |     pub fn modulation_entropy(&self, amplitudes: &[f32]) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+ 99 |     pub fn modulation_periodicity(&self, amplitudes: &[f32]) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+125 |     pub fn extract(&self, time_domain: &[f32]) -> ModulationFeatures {
+    |            ^^^^^^^
+
+warning: struct `MambaLearningMaterials` is never constructed
+ --> src\ml\material_learning.rs:9:12
+  |
+9 | pub struct MambaLearningMaterials<B: AutodiffBackend> {
+  |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `debye_permittivity_batch`, and `train_step` are never used
+  --> src\ml\material_learning.rs:19:12
+   |
+18 | impl<B: AutodiffBackend> MambaLearningMaterials<B> {
+   | -------------------------------------------------- associated items in this implementation
+19 |     pub fn new(device: &B::Device) -> Self {
+   |            ^^^
+...
+31 |     pub fn debye_permittivity_batch(&self) -> Tensor<B, 1> {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+35 |     pub fn train_step(&mut self, observed_loss: f32) -> f32 {
+   |            ^^^^^^^^^^
+
+warning: methods `total_audio_dim`, `total_visual_dim`, `total_dim`, and `to_audio_mask` are never used
+  --> src\ml\modular_features.rs:43:12
+   |
+41 | impl FeatureFlags {
+   | ----------------- methods in this implementation
+42 |     /// Total dimension based on active flags
+43 |     pub fn total_audio_dim(&self) -> usize {
+   |            ^^^^^^^^^^^^^^^
+...
+66 |     pub fn total_visual_dim(&self) -> usize {
+   |            ^^^^^^^^^^^^^^^^
+...
+78 |     pub fn total_dim(&self) -> usize {
+   |            ^^^^^^^^^
+...
+83 |     pub fn to_audio_mask(&self) -> Vec<f32> {
+   |            ^^^^^^^^^^^^^
+
+warning: fields `width`, `height`, `data`, and `timestamp_us` are never read
+   --> src\ml\modular_features.rs:128:9
+    |
+127 | pub struct VideoFrame {
+    |            ---------- fields in this struct
+128 |     pub width: u32,
+    |         ^^^^^
+129 |     pub height: u32,
+    |         ^^^^^^
+130 |     pub data: Vec<u8>, // RGB (3 bytes per pixel)
+    |         ^^^^
+131 |     pub timestamp_us: u64,
+    |         ^^^^^^^^^^^^
+    |
+    = note: `VideoFrame` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `freq_hz`, `impulse_detection`, `video_frame`, `video_frame_timestamp_us`, and `visual_features` are never read
+   --> src\ml\modular_features.rs:138:9
+    |
+136 | pub struct SignalFeaturePayload {
+    |            -------------------- fields in this struct
+137 |     pub audio_samples: Vec<f32>,              // Time-domain audio (196-D)
+138 |     pub freq_hz: f32,                         // Detected frequency
+    |         ^^^^^^^
+...
+144 |     pub impulse_detection: Option<[f32; 20]>, // Peak detection
+    |         ^^^^^^^^^^^^^^^^^
+...
+147 |     pub video_frame: Option<VideoFrame>, // RGB frame from C925e
+    |         ^^^^^^^^^^^
+148 |     pub video_frame_timestamp_us: u64,   // Timestamp synchronization
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+151 |     pub visual_features: Option<Vec<f32>>,
+    |         ^^^^^^^^^^^^^^^
+    |
+    = note: `SignalFeaturePayload` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: associated function `new` is never used
+   --> src\ml\modular_features.rs:155:12
+    |
+154 | impl SignalFeaturePayload {
+    | ------------------------- associated function in this implementation
+155 |     pub fn new(audio_samples: Vec<f32>, freq_hz: f32) -> Self {
+    |            ^^^
+
+warning: function `extract_visual_microphone_features` is never used
+   --> src\ml\modular_features.rs:174:8
+    |
+174 | pub fn extract_visual_microphone_features(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `FeatureImportance` is never constructed
+   --> src\ml\modular_features.rs:184:12
+    |
+184 | pub struct FeatureImportance {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: struct `ModularFeatureEncoder` is never constructed
+   --> src\ml\modular_features.rs:192:12
+    |
+192 | pub struct ModularFeatureEncoder<B: Backend> {
+    |            ^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `forward`, and `extract_tensor` are never used
+   --> src\ml\modular_features.rs:223:12
+    |
+222 | impl<B: Backend> ModularFeatureEncoder<B> {
+    | ----------------------------------------- associated items in this implementation
+223 |     pub fn new(flags: FeatureFlags, device: &B::Device) -> Self {
+    |            ^^^
+...
+273 |     pub fn forward(
+    |            ^^^^^^^
+...
+339 |     pub fn extract_tensor(
+    |            ^^^^^^^^^^^^^^
+
+warning: struct `ActiveDenialToggles` is never constructed
+   --> src\ml\modular_features.rs:526:12
+    |
+526 | pub struct ActiveDenialToggles {
+    |            ^^^^^^^^^^^^^^^^^^^
+
+warning: function `apply_active_denial_toggle` is never used
+   --> src\ml\modular_features.rs:532:8
+    |
+532 | pub fn apply_active_denial_toggle(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: fields `timestamp`, `impulse_times`, `spacing_hz`, `jitter`, `confidence`, and `source_device` are never read
+   --> src\ml\modular_features.rs:542:9
+    |
+541 | pub struct ImpulseTrainEvent {
+    |            ----------------- fields in this struct
+542 |     pub timestamp: f64,
+    |         ^^^^^^^^^
+543 |     pub impulse_times: Vec<f32>,
+    |         ^^^^^^^^^^^^^
+544 |     pub spacing_hz: f32,
+    |         ^^^^^^^^^^
+545 |     pub jitter: f32,
+    |         ^^^^^^
+546 |     pub confidence: f32,
+    |         ^^^^^^^^^^
+547 |     pub source_device: u32,
+    |         ^^^^^^^^^^^^^
+    |
+    = note: `ImpulseTrainEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: struct `ImpulsePatternModel` is never constructed
+   --> src\ml\modular_features.rs:550:12
+    |
+550 | pub struct ImpulsePatternModel;
+    |            ^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `extract_pattern`, and `score_anomaly` are never used
+   --> src\ml\modular_features.rs:553:12
+    |
+552 | impl ImpulsePatternModel {
+    | ------------------------ associated items in this implementation
+553 |     pub fn new() -> Self {
+    |            ^^^
+...
+557 |     pub fn extract_pattern(&self, _event: &ImpulseTrainEvent) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^
+...
+561 |     pub fn score_anomaly(&self, _pattern: &[f32]) -> f32 {
+    |            ^^^^^^^^^^^^^
+
+warning: function `detect_impulse_times` is never used
+   --> src\ml\modular_features.rs:566:8
+    |
+566 | pub fn detect_impulse_times(samples: &[f32], threshold: f32) -> Vec<f32> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `measure_pulse_train_coherence` is never used
+   --> src\ml\modular_features.rs:576:8
+    |
+576 | pub fn measure_pulse_train_coherence(_samples: &[f32], _sample_rate: u32) -> (f32, f32, f32) {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: fields `audio_features`, `ray_features`, and `wav2vec2_embedding` are never read
+ --> src\ml\multimodal_fusion.rs:5:9
+  |
+4 | pub struct MultimodalFeature {
+  |            ----------------- fields in this struct
+5 |     pub audio_features: [f32; 196], // From Track C (spectral extraction)
+  |         ^^^^^^^^^^^^^^
+6 |     pub ray_features: [f32; 128],   // From Track D (TDOA/beamforming)
+  |         ^^^^^^^^^^^^
+7 |     pub wav2vec2_embedding: [f32; 768], // From wav2vec2 (J.1)
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: struct `ModalityStats` is never constructed
+  --> src\ml\multimodal_fusion.rs:39:12
+   |
+39 | pub struct ModalityStats {
+   |            ^^^^^^^^^^^^^
+
+warning: function `compute_modality_stats` is never used
+  --> src\ml\multimodal_fusion.rs:48:8
+   |
+48 | pub fn compute_modality_stats(fused: &[f32]) -> ModalityStats {
+   |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `fuse_multimodal` is never used
+  --> src\ml\multimodal_fusion.rs:73:8
+   |
+73 | pub fn fuse_multimodal(
+   |        ^^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+  --> src\ml\pattern_discovery.rs:21:9
+   |
+19 | pub struct Pattern {
+   |            ------- fields in this struct
+20 |     /// Unique pattern identifier (0-22 for K=23)
+21 |     pub motif_id: usize,
+   |         ^^^^^^^^
+22 |     /// Human-readable pattern label (e.g., "Friday_3PM_Tone")
+23 |     pub label: String,
+   |         ^^^^^
+24 |     /// Recurrence period in hours (e.g., 168.0 for weekly)
+25 |     pub frequency_hours: f32,
+   |         ^^^^^^^^^^^^^^^
+26 |     /// Confidence score from silhouette analysis [0, 1]
+27 |     pub confidence: f32,
+   |         ^^^^^^^^^^
+...
+31 |     pub representative_embedding: Vec<f32>,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^
+32 |     /// First occurrence timestamp (ISO8601 format)
+33 |     pub first_occurrence_iso: String,
+   |         ^^^^^^^^^^^^^^^^^^^^
+34 |     /// Last occurrence timestamp (ISO8601 format)
+35 |     pub last_occurrence_iso: String,
+   |         ^^^^^^^^^^^^^^^^^^^
+36 |     /// Distribution of forensic tags in cluster
+37 |     pub tag_distribution: HashMap<String, f32>,
+   |         ^^^^^^^^^^^^^^^^
+38 |     /// Silhouette score for cluster quality [-1, 1]
+39 |     pub silhouette_score: f32,
+   |         ^^^^^^^^^^^^^^^^
+40 |     /// Average Mamba anomaly score for cluster
+41 |     pub avg_anomaly_score: f32,
+   |         ^^^^^^^^^^^^^^^^^
+42 |     /// Most common RF frequency in cluster (Hz)
+43 |     pub rf_frequency_hz_mode: f32,
+   |         ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `Pattern` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `id` and `embedding` are never read
+  --> src\ml\pattern_discovery.rs:50:9
+   |
+48 | pub struct Event {
+   |            ----- fields in this struct
+49 |     /// Unique event ID
+50 |     pub id: String,
+   |         ^^
+51 |     /// 128-D TimeGNN embedding
+52 |     pub embedding: Vec<f32>,
+   |         ^^^^^^^^^
+   |
+   = note: `Event` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `inertia` and `iterations_to_convergence` are never read
+  --> src\ml\pattern_discovery.rs:93:9
+   |
+87 | pub struct ClusteringResult {
+   |            ---------------- fields in this struct
+...
+93 |     pub inertia: f32,
+   |         ^^^^^^^
+94 |     /// Number of iterations until convergence
+95 |     pub iterations_to_convergence: u32,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `ClusteringResult` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: struct `PointMamba` is never constructed
+  --> src\ml\point_mamba.rs:40:12
+   |
+40 | pub struct PointMamba<B: Backend> {
+   |            ^^^^^^^^^^
+
+warning: associated items `new`, `forward`, `num_blocks`, `feature_dimension`, `estimated_param_count`, and `create_block` are never used
+   --> src\ml\point_mamba.rs:60:12
+    |
+ 49 | impl<B: Backend> PointMamba<B> {
+    | ------------------------------ associated items in this implementation
+...
+ 60 |     pub fn new(device: &B::Device) -> Self {
+    |            ^^^
+...
+ 96 |     pub fn forward(&self, input: Tensor<B, 3>) -> Tensor<B, 3> {
+    |            ^^^^^^^
+...
+115 |     pub fn num_blocks(&self) -> usize {
+    |            ^^^^^^^^^^
+...
+120 |     pub fn feature_dimension(&self) -> usize {
+    |            ^^^^^^^^^^^^^^^^^
+...
+136 |     pub fn estimated_param_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+145 |     fn create_block(device: &B::Device) -> MambaBlock<B> {
+    |        ^^^^^^^^^^^^
+
+warning: fields `learning_rate`, `huber_delta`, `num_epochs`, `weight_decay`, and `max_displacement` are never read
+  --> src\ml\point_mamba_trainer.rs:20:9
+   |
+17 | pub struct TrainerConfig {
+   |            ------------- fields in this struct
+...
+20 |     pub learning_rate: f32,
+   |         ^^^^^^^^^^^^^
+...
+23 |     pub huber_delta: f32,
+   |         ^^^^^^^^^^^
+24 |     pub huber_weight: f32,
+25 |     pub num_epochs: usize,
+   |         ^^^^^^^^^^
+26 |     pub weight_decay: f32,
+   |         ^^^^^^^^^^^^
+27 |     pub max_displacement: f32,
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: `TrainerConfig` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `chamfer_loss`, `huber_loss`, `epoch`, and `step` are never read
+  --> src\ml\point_mamba_trainer.rs:50:9
+   |
+49 | pub struct LossTelemetry {
+   |            ------------- fields in this struct
+50 |     pub chamfer_loss: f32,
+   |         ^^^^^^^^^^^^
+51 |     pub huber_loss: f32,
+   |         ^^^^^^^^^^
+52 |     pub total_loss: f32,
+53 |     pub epoch: usize,
+   |         ^^^^^
+54 |     pub step: usize,
+   |         ^^^^
+   |
+   = note: `LossTelemetry` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `grad_norm_after_encoder`, `grad_norm_after_mamba`, `grad_norm_after_decoder`, and `was_clipped` are never read
+  --> src\ml\point_mamba_trainer.rs:60:9
+   |
+59 | pub struct GradientTelemetry {
+   |            ----------------- fields in this struct
+60 |     pub grad_norm_after_encoder: f32,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+61 |     pub grad_norm_after_mamba: f32,
+   |         ^^^^^^^^^^^^^^^^^^^^^
+62 |     pub grad_norm_after_decoder: f32,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+63 |     pub was_clipped: bool,
+   |         ^^^^^^^^^^^
+   |
+   = note: `GradientTelemetry` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: field `validation_loss` is never read
+  --> src\ml\point_mamba_trainer.rs:69:9
+   |
+68 | pub struct Checkpoint {
+   |            ---------- field in this struct
+69 |     pub validation_loss: f32,
+   |         ^^^^^^^^^^^^^^^
+   |
+   = note: `Checkpoint` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: method `train_step_modular` is never used
+   --> src\ml\point_mamba_trainer.rs:238:12
+    |
+237 | impl PointMambaTrainer {
+    | ---------------------- method in this implementation
+238 |     pub fn train_step_modular(
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+  --> src\ml\spectral_frame.rs:59:12
+   |
+57 | impl SpectralFrame {
+   | ------------------ associated function in this implementation
+58 |     /// Create a new spectral frame from computed features
+59 |     pub fn new(
+   |            ^^^
+
+warning: field `temperature` is never read
+  --> src\ml\timegnn_trainer.rs:25:9
+   |
+23 | pub struct ContrastiveLossConfig {
+   |            --------------------- field in this struct
+24 |     /// Temperature parameter for loss scaling (sharper discrimination at lower values)
+25 |     pub temperature: f32,
+   |         ^^^^^^^^^^^
+
+warning: fields `weight_decay` and `loss_config` are never read
+  --> src\ml\timegnn_trainer.rs:43:9
+   |
+35 | pub struct TimeGnnTrainingConfig {
+   |            --------------------- fields in this struct
+...
+43 |     pub weight_decay: f32,
+   |         ^^^^^^^^^^^^
+...
+47 |     pub loss_config: ContrastiveLossConfig,
+   |         ^^^^^^^^^^^
+
+warning: fields `id`, `features`, `timestamp_micros`, `tag`, and `rf_frequency_hz` are never read
+  --> src\ml\timegnn_trainer.rs:67:9
+   |
+65 | pub struct TrainingEvent {
+   |            ------------- fields in this struct
+66 |     /// Unique event identifier
+67 |     pub id: String,
+   |         ^^
+68 |     /// 1297-D multimodal feature vector
+69 |     pub features: Vec<f32>,
+   |         ^^^^^^^^
+70 |     /// Unix timestamp (microseconds)
+71 |     pub timestamp_micros: i64,
+   |         ^^^^^^^^^^^^^^^^
+72 |     /// Forensic classification tag
+73 |     pub tag: String,
+   |         ^^^
+...
+77 |     pub rf_frequency_hz: f32,
+   |         ^^^^^^^^^^^^^^^
+   |
+   = note: `TrainingEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `epoch_losses` and `is_complete` are never read
+  --> src\ml\timegnn_trainer.rs:84:9
+   |
+82 | pub struct TrainingMetrics {
+   |            --------------- fields in this struct
+83 |     /// Loss value per epoch
+84 |     pub epoch_losses: Vec<f32>,
+   |         ^^^^^^^^^^^^
+85 |     /// Training completion status
+86 |     pub is_complete: bool,
+   |         ^^^^^^^^^^^
+   |
+   = note: `TrainingMetrics` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `load_corpus` is never used
+   --> src\ml\timegnn_trainer.rs:111:8
+    |
+111 | pub fn load_corpus(_corpus_path: &str) -> Result<Vec<TrainingEvent>, Box<dyn Error>> {
+    |        ^^^^^^^^^^^
+
+warning: function `train_timegnn` is never used
+   --> src\ml\timegnn_trainer.rs:231:14
+    |
+231 | pub async fn train_timegnn(
+    |              ^^^^^^^^^^^^^
+
+warning: method `forward` is never used
+  --> src\ml\wav2vec2_loader.rs:31:12
+   |
+20 | impl<B: Backend> PretrainedWav2Vec2<B> {
+   | -------------------------------------- method in this implementation
+...
+31 |     pub fn forward(&self, input_ids: Tensor<B, 3>) -> Tensor<B, 3> {
+   |            ^^^^^^^
+
+warning: struct `WidebandHarmonicAnalyzer` is never constructed
+ --> src\ml\wideband_harmonic_analysis.rs:1:12
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `WidebandHarmonicFeatures` is never constructed
+ --> src\ml\wideband_harmonic_analysis.rs:9:12
+  |
+9 | pub struct WidebandHarmonicFeatures {
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\ml\wideband_harmonic_analysis.rs:19:12
+    |
+ 18 | impl WidebandHarmonicAnalyzer {
+    | ----------------------------- associated items in this implementation
+ 19 |     pub fn new() -> Self {
+    |            ^^^
+...
+ 29 |     fn freq_to_bin(&self, freq: f32) -> f32 {
+    |        ^^^^^^^^^^^
+...
+ 38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+    |        ^^^^^^^^^^^
+...
+ 46 |     pub fn linear_to_log_spectrogram(&self, stft_magnitude: &[f32], sample_rate: u32) -> [f32; 96] {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 74 |     pub fn detect_fundamental_octave(&self, log_spec: &[f32; 96]) -> (u32, f32) {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 97 |     pub fn octave_pattern(&self, log_spec: &[f32; 96]) -> [f32; 12] {
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn harmonic_coherence(&self, log_spec: &[f32; 96]) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+140 |     pub fn extract(&self, stft_magnitude: &[f32], sample_rate: u32) -> WidebandHarmonicFeatures {
+    |            ^^^^^^^
+
+warning: struct `TargetConfig` is never constructed
+ --> src\parametric.rs:7:12
+  |
+7 | pub struct TargetConfig {
+  |            ^^^^^^^^^^^^
+
+warning: field `base_carrier_hz` is never read
+  --> src\parametric.rs:43:9
+   |
+42 | pub struct ParametricManager {
+   |            ----------------- field in this struct
+43 |     pub base_carrier_hz: f32,
+   |         ^^^^^^^^^^^^^^^
+
+warning: methods `generate_targets` and `beam_half_angle_deg` are never used
+  --> src\parametric.rs:51:12
+   |
+46 | impl ParametricManager {
+   | ---------------------- methods in this implementation
+...
+51 |     pub fn generate_targets(&self, base_freqs: &[f32], _pdm_active: bool) -> Vec<TargetConfig> {
+   |            ^^^^^^^^^^^^^^^^
+...
+73 |     pub fn beam_half_angle_deg(&self, diameter_m: f32) -> f32 {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: method `name` is never used
+  --> src\parameters.rs:66:12
+   |
+35 | impl FrequencyBand {
+   | ------------------ method in this implementation
+...
+66 |     pub fn name(self) -> &'static str {
+   |            ^^^^
+
+warning: associated items `from_u32` and `to_u32` are never used
+  --> src\parameters.rs:89:12
+   |
+88 | impl CameraResolution {
+   | --------------------- associated items in this implementation
+89 |     pub fn from_u32(v: u32) -> Self {
+   |            ^^^^^^^^
+...
+97 |     pub fn to_u32(self) -> u32 {
+   |            ^^^^^^
+
+warning: associated function `reset_to_defaults` is never used
+   --> src\parameters.rs:307:12
+    |
+252 | impl TwisterParameters {
+    | ---------------------- associated function in this implementation
+...
+307 |     pub fn reset_to_defaults() -> Self {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: fields `shared`, `frustum_buffer`, `cull_buffer`, `draw_indirect_buffer`, `cull_pipeline`, and `bind_group_layout` are never read
+  --> src\particle_system\frustum_culler.rs:6:5
+   |
+ 5 | pub struct FrustumCuller {
+   |            ------------- fields in this struct
+ 6 |     shared: Arc<GpuShared>,
+   |     ^^^^^^
+ 7 |     pub frustum_buffer: wgpu::Buffer,
+   |         ^^^^^^^^^^^^^^
+ 8 |     pub cull_buffer: wgpu::Buffer,
+   |         ^^^^^^^^^^^
+ 9 |     pub draw_indirect_buffer: wgpu::Buffer,
+   |         ^^^^^^^^^^^^^^^^^^^^
+10 |     cull_pipeline: wgpu::ComputePipeline,
+   |     ^^^^^^^^^^^^^
+11 |     bind_group_layout: wgpu::BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+
+warning: method `cull` is never used
+   --> src\particle_system\frustum_culler.rs:133:12
+    |
+ 22 | impl FrustumCuller {
+    | ------------------ method in this implementation
+...
+133 |     pub fn cull(
+    |            ^^^^
+
+warning: fields `shared`, `particle_buffer`, `mesh_shader_pipeline`, and `bind_group_layout` are never read
+  --> src\particle_system\renderer.rs:7:5
+   |
+ 6 | pub struct ParticleRenderer {
+   |            ---------------- fields in this struct
+ 7 |     shared: Arc<GpuShared>,
+   |     ^^^^^^
+ 8 |     pub particle_buffer: wgpu::Buffer,
+   |         ^^^^^^^^^^^^^^^
+ 9 |     mesh_shader_pipeline: wgpu::RenderPipeline,
+   |     ^^^^^^^^^^^^^^^^^^^^
+10 |     bind_group_layout: wgpu::BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+
+warning: method `render` is never used
+   --> src\particle_system\renderer.rs:117:12
+    |
+ 13 | impl ParticleRenderer {
+    | --------------------- method in this implementation
+...
+117 |     pub fn render<'a>(&'a self, render_pass: &mut wgpu::RenderPass<'a>, culler: &'a FrustumCuller) {
+    |            ^^^^^^
+
+warning: struct `EnergyDensityField` is never constructed
+  --> src\resonance\mod.rs:14:12
+   |
+14 | pub struct EnergyDensityField {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: function `solve_rf_field` is never used
+  --> src\resonance\mod.rs:19:8
+   |
+19 | pub fn solve_rf_field(
+   |        ^^^^^^^^^^^^^^
+
+warning: struct `VoxelGrid` is never constructed
+ --> src\resonance\voxel_grid.rs:6:12
+  |
+6 | pub struct VoxelGrid<T: Clone> {
+  |            ^^^^^^^^^
+
+warning: multiple associated items are never used
+  --> src\resonance\voxel_grid.rs:14:12
+   |
+13 | impl<T: Clone + Default> VoxelGrid<T> {
+   | ------------------------------------- associated items in this implementation
+14 |     pub fn new(size: usize) -> Self {
+   |            ^^^
+...
+23 |     pub fn with_dimensions_and_size(dim_x: usize, dim_y: usize, dim_z: usize, voxel_size_m: f32, origin: (f32, f32, f32)) -> Self {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+32 |     pub fn set(&mut self, x: usize, y: usize, z: usize, value: T) {
+   |            ^^^
+...
+39 |     pub fn get(&self, x: usize, y: usize, z: usize) -> T {
+   |            ^^^
+...
+48 |     pub fn get_mut(&mut self, x: usize, y: usize, z: usize) -> Option<&mut T> {
+   |            ^^^^^^^
+...
+57 |     pub fn get_ref(&self, x: usize, y: usize, z: usize) -> Option<&T> {
+   |            ^^^^^^^
+...
+66 |     pub fn index(&self, x: usize, y: usize, z: usize) -> usize {
+   |            ^^^^^
+...
+70 |     pub fn world_to_grid(&self, pos: (f32, f32, f32)) -> (f32, f32, f32) {
+   |            ^^^^^^^^^^^^^
+
+warning: method `sample` is never used
+  --> src\resonance\voxel_grid.rs:82:12
+   |
+81 | impl VoxelGrid<Complex<f32>> {
+   | ---------------------------- method in this implementation
+82 |     pub fn sample(&self, pos: (f32, f32, f32)) -> Complex<f32> {
+   |            ^^^^^^
+
+warning: methods `sample` and `average_along_path` are never used
+   --> src\resonance\voxel_grid.rs:130:12
+    |
+129 | impl VoxelGrid<f32> {
+    | ------------------- methods in this implementation
+130 |     pub fn sample(&self, pos: (f32, f32, f32)) -> f32 {
+    |            ^^^^^^
+...
+175 |     pub fn average_along_path(&self, distance: f32) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: struct `Material` is never constructed
+ --> src\resonance\material_absorption.rs:6:12
+  |
+6 | pub struct Material {
+  |            ^^^^^^^^
+
+warning: multiple associated items are never used
+  --> src\resonance\material_absorption.rs:18:12
+   |
+15 | impl Material {
+   | ------------- associated items in this implementation
+...
+18 |     pub fn attenuation_coeff(&self, frequency_hz: f32) -> f32 {
+   |            ^^^^^^^^^^^^^^^^^
+...
+36 |     pub fn reflection_coeff(&self, _frequency_hz: f32) -> f32 {
+   |            ^^^^^^^^^^^^^^^^
+...
+42 |     pub fn scattering_coeff(&self) -> f32 {
+   |            ^^^^^^^^^^^^^^^^
+...
+46 |     pub fn air() -> Self {
+   |            ^^^
+...
+57 |     pub fn drywall() -> Self {
+   |            ^^^^^^^
+...
+68 |     pub fn concrete() -> Self {
+   |            ^^^^^^^^
+...
+79 |     pub fn water() -> Self {
+   |            ^^^^^
+
+warning: struct `MaterialGrid` is never constructed
+  --> src\resonance\material_absorption.rs:91:12
+   |
+91 | pub struct MaterialGrid {
+   |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `from_room_geometry`, and `attenuate_wave` are never used
+   --> src\resonance\material_absorption.rs:97:12
+    |
+ 96 | impl MaterialGrid {
+    | ----------------- associated items in this implementation
+ 97 |     pub fn new(size: usize, freq: f32) -> Self {
+    |            ^^^
+...
+104 |     pub fn from_room_geometry(room: &RoomGeometry, frequency_hz: f32, voxel_size_m: f32) -> Self {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+156 |     pub fn attenuate_wave(&self, wave: Complex<f32>, distance: f32, material: &Material) -> Complex<f32> {
+    |            ^^^^^^^^^^^^^^
+
+warning: struct `HeterodyneMixer` is never constructed
+ --> src\resonance\heterodyne_mixer.rs:3:12
+  |
+3 | pub struct HeterodyneMixer {
+  |            ^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `mix_signals`, and `sideband_efficiency` are never used
+  --> src\resonance\heterodyne_mixer.rs:10:12
+   |
+ 9 | impl HeterodyneMixer {
+   | -------------------- associated items in this implementation
+10 |     pub fn new(primary_hz: f32, modulation_hz: f32) -> Self {
+   |            ^^^
+...
+21 |     pub fn mix_signals(
+   |            ^^^^^^^^^^^
+...
+39 |     pub fn sideband_efficiency(&self) -> f32 {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `HumanBody` is never constructed
+ --> src\resonance\body_interaction_model.rs:5:12
+  |
+5 | pub struct HumanBody {
+  |            ^^^^^^^^^
+
+warning: associated items `from_pose`, `attenuate_rf_field`, and `shielding_factor` are never used
+  --> src\resonance\body_interaction_model.rs:11:12
+   |
+10 | impl HumanBody {
+   | -------------- associated items in this implementation
+11 |     pub fn from_pose(pose: &PoseFrame, grid_size: usize, voxel_size_m: f32) -> Self {
+   |            ^^^^^^^^^
+...
+49 |     pub fn attenuate_rf_field(&self, field: Complex<f32>, distance: f32, _freq_hz: f32) -> Complex<f32> {
+   |            ^^^^^^^^^^^^^^^^^^
+...
+60 |     pub fn shielding_factor(&self, rf_azimuth: f32, body_facing: f32) -> f32 {
+   |            ^^^^^^^^^^^^^^^^
+
+warning: struct `RFWavePropagation` is never constructed
+ --> src\resonance\rf_propagation.rs:6:12
+  |
+6 | pub struct RFWavePropagation {
+  |            ^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `solve_wave_equation`, and `field_at` are never used
+   --> src\resonance\rf_propagation.rs:14:12
+    |
+ 13 | impl RFWavePropagation {
+    | ---------------------- associated items in this implementation
+ 14 |     pub fn new(grid_size: usize, freq_hz: f32) -> Self {
+    |            ^^^
+...
+ 27 |     pub fn solve_wave_equation(
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+114 |     pub fn field_at(&self, pos: (f32, f32, f32)) -> (f32, f32) {
+    |            ^^^^^^^^
+
+warning: constant `CIC_ORDER` is never used
+  --> src\pdm.rs:26:11
+   |
+26 | pub const CIC_ORDER: usize = 5;
+   |           ^^^^^^^^^
+
+warning: associated function `cic_decimate_cpu` is never used
+   --> src\pdm.rs:374:12
+    |
+166 | impl PdmEngine {
+    | -------------- associated function in this implementation
+...
+374 |     pub fn cic_decimate_cpu(pcm_1st_order: &[f32]) -> Vec<f32> {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: function `rms` is never used
+   --> src\pdm.rs:444:4
+    |
+444 | fn rms(samples: &[f32]) -> f32 {
+    |    ^^^
+
+warning: field `confidence` is never read
+ --> src\reconstruct.rs:9:9
+  |
+6 | pub struct TrueSignal {
+  |            ---------- field in this struct
+...
+9 |     pub confidence: f32,
+  |         ^^^^^^^^^^
+
+warning: field `baseband_rate` is never read
+  --> src\reconstruct.rs:13:5
+   |
+12 | pub struct CrystalBall {
+   |            ----------- field in this struct
+13 |     baseband_rate: f32,
+   |     ^^^^^^^^^^^^^
+
+warning: method `reset` is never used
+   --> src\resample.rs:215:12
+    |
+119 | impl SincResampler {
+    | ------------------ method in this implementation
+...
+215 |     pub fn reset(&mut self) {
+    |            ^^^^^
+
+warning: constant `RIDGE_ROWS` is never used
+  --> src\ridge_plot.rs:16:11
+   |
+16 | pub const RIDGE_ROWS: usize = 48;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_BINS` is never used
+  --> src\ridge_plot.rs:19:11
+   |
+19 | pub const RIDGE_BINS: usize = 256;
+   |           ^^^^^^^^^^
+
+warning: constant `RIDGE_W` is never used
+  --> src\ridge_plot.rs:22:11
+   |
+22 | pub const RIDGE_W: u32 = 640;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_H` is never used
+  --> src\ridge_plot.rs:23:11
+   |
+23 | pub const RIDGE_H: u32 = 420;
+   |           ^^^^^^^
+
+warning: constant `RIDGE_PIXELS` is never used
+  --> src\ridge_plot.rs:25:7
+   |
+25 | const RIDGE_PIXELS: usize = (RIDGE_W * RIDGE_H) as usize;
+   |       ^^^^^^^^^^^^
+
+warning: constant `HISTORY_FLOATS` is never used
+  --> src\ridge_plot.rs:26:7
+   |
+26 | const HISTORY_FLOATS: usize = RIDGE_ROWS * RIDGE_BINS;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `RIDGE_SHADER` is never used
+  --> src\ridge_plot.rs:46:7
+   |
+46 | const RIDGE_SHADER: &str = r#"
+   |       ^^^^^^^^^^^^
+
+warning: struct `RidgePlotGpu` is never constructed
+   --> src\ridge_plot.rs:177:12
+    |
+177 | pub struct RidgePlotGpu {
+    |            ^^^^^^^^^^^^
+
+warning: associated items `new`, `render`, `width`, and `height` are never used
+   --> src\ridge_plot.rs:190:12
+    |
+189 | impl RidgePlotGpu {
+    | ----------------- associated items in this implementation
+190 |     pub fn new(device: wgpu::Device, queue: wgpu::Queue) -> anyhow::Result<Self> {
+    |            ^^^
+...
+330 |     pub fn render(&mut self, history_flat: &[f32], n_rows: usize) -> Vec<u32> {
+    |            ^^^^^^
+...
+385 |     pub fn width(&self) -> u32 {
+    |            ^^^^^
+...
+388 |     pub fn height(&self) -> u32 {
+    |            ^^^^^^
+
+warning: methods `center_freq`, `sample_rate`, `gain`, `agc_enabled`, and `device_info` are never used
+   --> src\rtlsdr.rs:123:12
+    |
+ 39 | impl RtlSdrDevice {
+    | ----------------- methods in this implementation
+...
+123 |     pub fn center_freq(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+152 |     pub fn sample_rate(&self) -> u32 {
+    |            ^^^^^^^^^^^
+...
+176 |     pub fn gain(&self) -> f32 {
+    |            ^^^^
+...
+200 |     pub fn agc_enabled(&self) -> bool {
+    |            ^^^^^^^^^^^
+...
+284 |     pub fn device_info(&self) -> DeviceInfo {
+    |            ^^^^^^^^^^^
+
+warning: fields `index` and `name` are never read
+   --> src\rtlsdr.rs:319:9
+    |
+318 | pub struct DeviceInfo {
+    |            ---------- fields in this struct
+319 |     pub index: u32,
+    |         ^^^^^
+320 |     pub name: String,
+    |         ^^^^
+    |
+    = note: `DeviceInfo` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `running` is never read
+   --> src\rtlsdr.rs:327:5
+    |
+324 | pub struct RtlSdrEngine {
+    |            ------------ field in this struct
+...
+327 |     running: AtomicBool,
+    |     ^^^^^^^
+
+warning: methods `device`, `set_running`, and `is_running` are never used
+   --> src\rtlsdr.rs:395:12
+    |
+330 | impl RtlSdrEngine {
+    | ----------------- methods in this implementation
+...
+395 |     pub fn device(&self) -> &RtlSdrDevice {
+    |            ^^^^^^
+...
+400 |     pub fn set_running(&self, running: bool) {
+    |            ^^^^^^^^^^^
+...
+404 |     pub fn is_running(&self) -> bool {
+    |            ^^^^^^^^^^
+
+warning: type alias `rtlsdr_read_async_cb_t` is never used
+  --> src\rtlsdr_ffi.rs:38:10
+   |
+38 | pub type rtlsdr_read_async_cb_t =
+   |          ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `iio_context` is never used
+   --> src\rtlsdr_ffi.rs:179:10
+    |
+179 | pub type iio_context = c_void;
+    |          ^^^^^^^^^^^
+
+warning: type alias `iio_device` is never used
+   --> src\rtlsdr_ffi.rs:182:10
+    |
+182 | pub type iio_device = c_void;
+    |          ^^^^^^^^^^
+
+warning: function `iio_create_default_context` is never used
+   --> src\rtlsdr_ffi.rs:201:15
+    |
+201 | pub unsafe fn iio_create_default_context() -> *mut iio_context {
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `iio_context_destroy` is never used
+   --> src\rtlsdr_ffi.rs:205:15
+    |
+205 | pub unsafe fn iio_context_destroy(_ctx: *mut iio_context) {}
+    |               ^^^^^^^^^^^^^^^^^^^
+
+warning: function `iio_context_find_device` is never used
+   --> src\rtlsdr_ffi.rs:207:15
+    |
+207 | pub unsafe fn iio_context_find_device(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `iio_device_attr_write_longlong` is never used
+   --> src\rtlsdr_ffi.rs:214:15
+    |
+214 | pub unsafe fn iio_device_attr_write_longlong(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_center_freq` is never used
+  --> src\rtlsdr_ffi.rs:51:12
+   |
+51 |     pub fn rtlsdr_get_center_freq(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_get_sample_rate` is never used
+  --> src\rtlsdr_ffi.rs:53:12
+   |
+53 |     pub fn rtlsdr_get_sample_rate(dev: *mut rtlsdr_dev_t) -> u32;
+   |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_set_tuner_gain_mode` is never used
+  --> src\rtlsdr_ffi.rs:54:12
+   |
+54 |     pub fn rtlsdr_set_tuner_gain_mode(dev: *mut rtlsdr_dev_t, manual: c_int) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_read_async` is never used
+  --> src\rtlsdr_ffi.rs:64:12
+   |
+64 |     pub fn rtlsdr_read_async(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `rtlsdr_cancel_async` is never used
+  --> src\rtlsdr_ffi.rs:71:12
+   |
+71 |     pub fn rtlsdr_cancel_async(dev: *mut rtlsdr_dev_t) -> RtlSdrResult;
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_BLOCK_SAMPLES` is never used
+  --> src\sdr.rs:19:11
+   |
+19 | pub const SDR_BLOCK_SAMPLES: usize = 16384;
+   |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_RATE` is never used
+  --> src\sdr.rs:20:11
+   |
+20 | pub const SDR_DEFAULT_RATE: u32 = 2_048_000;
+   |           ^^^^^^^^^^^^^^^^
+
+warning: constant `SDR_DEFAULT_GAIN` is never used
+  --> src\sdr.rs:21:11
+   |
+21 | pub const SDR_DEFAULT_GAIN: f32 = 20.0; // dB; 0.0 = auto AGC
+   |           ^^^^^^^^^^^^^^^^
+
+warning: function `soundcard_harmonic_candidates` is never used
+  --> src\sdr.rs:24:8
+   |
+24 | pub fn soundcard_harmonic_candidates(audio_rate: f32) -> Vec<f32> {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `IqBlock` is never constructed
+  --> src\sdr.rs:40:12
+   |
+40 | pub struct IqBlock {
+   |            ^^^^^^^
+
+warning: function `list_devices` is never used
+   --> src\sdr.rs:248:8
+    |
+248 | pub fn list_devices() -> Vec<String> {
+    |        ^^^^^^^^^^^^
+
+warning: fields `enhanced_audio`, `sparse_pdm`, `coherence`, and `mamba_siren` are never read
+ --> src\state.rs:4:9
+  |
+3 | pub struct FeatureFlags {
+  |            ------------ fields in this struct
+4 |     pub enhanced_audio: bool,
+  |         ^^^^^^^^^^^^^^
+5 |     pub sparse_pdm: bool,
+  |         ^^^^^^^^^^
+6 |     pub coherence: bool,
+  |         ^^^^^^^^^
+7 |     pub mamba_siren: bool,
+  |         ^^^^^^^^^^^
+  |
+  = note: `FeatureFlags` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `total_iterations` and `loss_min` are never read
+  --> src\state.rs:57:9
+   |
+55 |     TrainingProgress {
+   |     ---------------- fields in this variant
+56 |         iteration: u32,
+57 |         total_iterations: u32,
+   |         ^^^^^^^^^^^^^^^^
+58 |         loss: f32,
+59 |         loss_min: f32,
+   |         ^^^^^^^^
+   |
+   = note: `UiEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `ClusteringStatus`, `SdrStatus`, `NeuralReconstruction`, and `GnnAnalysis` are never constructed
+  --> src\state.rs:62:5
+   |
+53 | pub enum UiEvent {
+   |          ------- variants in this enum
+...
+62 |     ClusteringStatus {
+   |     ^^^^^^^^^^^^^^^^
+...
+69 |     SdrStatus {
+   |     ^^^^^^^^^
+...
+75 |     NeuralReconstruction {
+   |     ^^^^^^^^^^^^^^^^^^^^
+...
+81 |     GnnAnalysis {
+   |     ^^^^^^^^^^^
+   |
+   = note: `UiEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: methods `update_timer_ms`, `add_samples`, `is_idle`, `is_saving`, `get_sample_count`, and `is_expired` are never used
+   --> src\state.rs:234:12
+    |
+208 | impl RecordingState {
+    | ------------------- methods in this implementation
+...
+234 |     pub fn update_timer_ms(&mut self, elapsed_ms: u32) {
+    |            ^^^^^^^^^^^^^^^
+...
+243 |     pub fn add_samples(&mut self, count: usize) {
+    |            ^^^^^^^^^^^
+...
+248 |     pub fn is_idle(&self) -> bool {
+    |            ^^^^^^^
+...
+258 |     pub fn is_saving(&self) -> bool {
+    |            ^^^^^^^^^
+...
+268 |     pub fn get_sample_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^^^^
+...
+273 |     pub fn is_expired(&self) -> bool {
+    |            ^^^^^^^^^^
+
+warning: enum `WaveshapeMode` is never used
+   --> src\state.rs:399:10
+    |
+399 | pub enum WaveshapeMode {
+    |          ^^^^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+   --> src\state.rs:408:12
+    |
+407 | impl WaveshapeMode {
+    | ------------------ associated function in this implementation
+408 |     pub fn from_u32(v: u32) -> Self {
+    |            ^^^^^^^^
+
+warning: enum `DenialMode` is never used
+   --> src\state.rs:421:10
+    |
+421 | pub enum DenialMode {
+    |          ^^^^^^^^^^
+
+warning: associated function `from_u32` is never used
+   --> src\state.rs:430:12
+    |
+429 | impl DenialMode {
+    | --------------- associated function in this implementation
+430 |     pub fn from_u32(v: u32) -> Self {
+    |            ^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\state.rs:457:9
+    |
+456 | pub struct AppState {
+    |            -------- fields in this struct
+457 |     pub material_library: std::sync::Arc<tokio::sync::Mutex<MaterialLibrary>>,
+    |         ^^^^^^^^^^^^^^^^
+...
+464 |     pub feature_confidence: AtomicF32,
+    |         ^^^^^^^^^^^^^^^^^^
+465 |     pub impulse_anomaly_score: AtomicF32,
+    |         ^^^^^^^^^^^^^^^^^^^^^
+466 |     pub harassment_detected: AtomicBool,
+    |         ^^^^^^^^^^^^^^^^^^^
+...
+472 |     pub wavefield_image: Mutex<Vec<u8>>,
+    |         ^^^^^^^^^^^^^^^
+...
+607 |     pub memo_input_text: Mutex<String>,
+    |         ^^^^^^^^^^^^^^^
+608 |     /// Current selected tag for new memos
+609 |     pub memo_input_tag: Mutex<String>,
+    |         ^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+    --> src\state.rs:826:12
+     |
+ 653 | impl AppState {
+     | ------------- associated items in this implementation
+...
+ 826 |     pub fn get_mode(&self) -> DenialMode {
+     |            ^^^^^^^^
+...
+ 830 |     pub fn set_mode(&self, m: DenialMode) {
+     |            ^^^^^^^^
+...
+ 871 |     pub fn get_waveshape_mode(&self) -> WaveshapeMode {
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 875 |     pub fn set_waveshape_mode(&self, m: WaveshapeMode) {
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 913 |     pub fn set_polarization_angle(&self, v: f32) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+1131 |     pub fn set_training_recording_enabled(&self, v: bool) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+1192 |     pub fn get_anc_ok(&self) -> bool {
+     |            ^^^^^^^^^^
+...
+1218 |     pub fn snap_to_nearest_note(freq_hz: f32) -> f32 {
+     |            ^^^^^^^^^^^^^^^^^^^^
+...
+1257 |     pub fn set_twister_active(&self, v: bool) {
+     |            ^^^^^^^^^^^^^^^^^^
+...
+1277 |     pub fn set_mamba_emergency_off(&self, v: bool) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1293 |     pub fn get_rtl_connected(&self) -> bool {
+     |            ^^^^^^^^^^^^^^^^^
+...
+1343 |     pub fn get_memo_count(&self) -> usize {
+     |            ^^^^^^^^^^^^^^
+...
+1348 |     pub fn get_max_memo_capacity(&self) -> usize {
+     |            ^^^^^^^^^^^^^^^^^^^^^
+...
+1353 |     pub fn add_memo(&self, tag: String, content: &str) -> anyhow::Result<()> {
+     |            ^^^^^^^^
+...
+1420 |     pub fn delete_memo(&self, index: usize) -> anyhow::Result<()> {
+     |            ^^^^^^^^^^^
+...
+1442 |     pub fn get_memos_all(&self) -> anyhow::Result<Vec<MemoEntry>> {
+     |            ^^^^^^^^^^^^^
+
+warning: methods `set_feature_flags`, `get_feature_confidence`, `set_feature_confidence`, `add_audio_device`, and `get_joycon_accel_magnitude` are never used
+    --> src\state.rs:1502:12
+     |
+1497 | impl AppState {
+     | ------------- methods in this implementation
+...
+1502 |     pub fn set_feature_flags(&self, flags: FeatureFlags) {
+     |            ^^^^^^^^^^^^^^^^^
+...
+1508 |     pub fn get_feature_confidence(&self) -> f32 {
+     |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+1512 |     pub fn set_feature_confidence(&self, val: f32) {
+     |            ^^^^^^^^^^^^^^^^^^^^^^
+...
+1542 |     pub fn add_audio_device(&self, device: AudioDevice) {
+     |            ^^^^^^^^^^^^^^^^
+...
+1793 |     pub fn get_joycon_accel_magnitude(&self) -> f32 {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated functions `new_harmonic`, `new_difference`, and `new_intermod` are never used
+  --> src\testing.rs:57:12
+   |
+48 | impl KnownSignal {
+   | ---------------- associated functions in this implementation
+...
+57 |     pub fn new_harmonic(f1: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+...
+65 |     pub fn new_difference(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^^^
+...
+73 |     pub fn new_intermod(f1: f32, f2: f32, amp: f32) -> Self {
+   |            ^^^^^^^^^^^^
+
+warning: field `detection_latency` is never read
+   --> src\testing.rs:251:9
+    |
+241 | pub struct DetectionValidator {
+    |            ------------------ field in this struct
+...
+251 |     pub detection_latency: Vec<u32>,
+    |         ^^^^^^^^^^^^^^^^^
+    |
+    = note: `DetectionValidator` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: methods `f1_score`, `false_positive_rate`, `mean_freq_error_hz`, and `report` are never used
+   --> src\testing.rs:331:12
+    |
+258 | impl DetectionValidator {
+    | ----------------------- methods in this implementation
+...
+331 |     pub fn f1_score(&self) -> f32 {
+    |            ^^^^^^^^
+...
+340 |     pub fn false_positive_rate(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+349 |     pub fn mean_freq_error_hz(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+356 |     pub fn report(&self) -> String {
+    |            ^^^^^^
+
+warning: function `benchmark_bispectrum` is never used
+   --> src\testing.rs:377:8
+    |
+377 | pub fn benchmark_bispectrum(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `run_self_test` is never used
+   --> src\testing.rs:411:8
+    |
+411 | pub fn run_self_test(
+    |        ^^^^^^^^^^^^^
+
+warning: struct `ValidationReport` is never constructed
+   --> src\testing.rs:503:12
+    |
+503 | pub struct ValidationReport {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: methods `passed` and `summary_line` are never used
+   --> src\testing.rs:513:12
+    |
+512 | impl ValidationReport {
+    | --------------------- methods in this implementation
+513 |     pub fn passed(&self) -> bool {
+    |            ^^^^^^
+...
+517 |     pub fn summary_line(&self) -> String {
+    |            ^^^^^^^^^^^^
+
+warning: constant `REPLAY_CAP` is never used
+  --> src\trainer.rs:27:11
+   |
+27 | pub const REPLAY_CAP: usize = 4096;
+   |           ^^^^^^^^^^
+
+warning: constant `MIN_WINDOWS` is never used
+  --> src\trainer.rs:28:11
+   |
+28 | pub const MIN_WINDOWS: usize = 32;
+   |           ^^^^^^^^^^^
+
+warning: constant `BATCH_SIZE` is never used
+  --> src\trainer.rs:29:11
+   |
+29 | pub const BATCH_SIZE: usize = 8;
+   |           ^^^^^^^^^^
+
+warning: constant `STEPS_PER_BATCH` is never used
+  --> src\trainer.rs:30:11
+   |
+30 | pub const STEPS_PER_BATCH: usize = 1;
+   |           ^^^^^^^^^^^^^^^
+
+warning: constant `TRAIN_SLEEP_MS` is never used
+  --> src\trainer.rs:31:11
+   |
+31 | pub const TRAIN_SLEEP_MS: u64 = 20;
+   |           ^^^^^^^^^^^^^^
+
+warning: constant `SAVE_INTERVAL_EPOCHS` is never used
+  --> src\trainer.rs:32:11
+   |
+32 | pub const SAVE_INTERVAL_EPOCHS: u32 = 50;
+   |           ^^^^^^^^^^^^^^^^^^^^
+
+warning: type alias `Window` is never used
+  --> src\trainer.rs:35:10
+   |
+35 | pub type Window = Vec<f32>;
+   |          ^^^^^^
+
+warning: enum `TrainerCmd` is never used
+  --> src\trainer.rs:38:10
+   |
+38 | pub enum TrainerCmd {
+   |          ^^^^^^^^^^
+
+warning: struct `TrainerThread` is never constructed
+  --> src\trainer.rs:51:12
+   |
+51 | pub struct TrainerThread {
+   |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `run`, and `ingest` are never used
+   --> src\trainer.rs:60:12
+    |
+ 59 | impl TrainerThread {
+    | ------------------ associated items in this implementation
+ 60 |     pub fn new(state: Arc<AppState>) -> anyhow::Result<Self> {
+    |            ^^^
+...
+ 72 |     pub fn run(&mut self, rx: Receiver<TrainerCmd>) {
+    |            ^^^
+...
+180 |     fn ingest(&mut self, w: Window) {
+    |        ^^^^^^
+
+warning: function `extract_window_from_vbuf_snapshot` is never used
+   --> src\trainer.rs:206:8
+    |
+206 | pub fn extract_window_from_vbuf_snapshot(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `get_metrics` is never used
+  --> src\training.rs:93:18
+   |
+41 | impl TrainingSession {
+   | -------------------- method in this implementation
+...
+93 |     pub async fn get_metrics(&self) -> TrainingMetrics {
+   |                  ^^^^^^^^^^^
+
+warning: constant `TX_DELTA_RMS_WARNING_DB` is never used
+   --> src\training.rs:421:11
+    |
+421 | pub const TX_DELTA_RMS_WARNING_DB: f32 = 10.0;
+    |           ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `RtlSdrTrainingScan` is never constructed
+   --> src\training.rs:525:12
+    |
+525 | pub struct RtlSdrTrainingScan {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `advance` are never used
+   --> src\training.rs:533:12
+    |
+532 | impl RtlSdrTrainingScan {
+    | ----------------------- associated items in this implementation
+533 |     pub fn new(start_hz: u32, stop_hz: u32, step_hz: u32) -> Self {
+    |            ^^^
+...
+542 |     pub fn advance(&mut self) -> bool {
+    |            ^^^^^^^
+
+warning: variants `Minor` and `Unison` are never constructed
+  --> src\twister.rs:30:5
+   |
+26 | pub enum ChordMode {
+   |          --------- variants in this enum
+...
+30 |     Minor,
+   |     ^^^^^
+31 |     /// Root only ΓÇö pure tone, most aggressive anti-phase
+32 |     Unison,
+   |     ^^^^^^
+   |
+   = note: `ChordMode` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `midi` is never read
+  --> src\twister.rs:51:9
+   |
+47 | pub struct NoteResult {
+   |            ---------- field in this struct
+...
+51 |     pub midi: i32,
+   |         ^^^^
+   |
+   = note: `NoteResult` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `snap_freq` is never used
+   --> src\twister.rs:153:8
+    |
+153 | pub fn snap_freq(freq_hz: f32) -> f32 {
+    |        ^^^^^^^^^
+
+warning: struct `CopilotUIHandler` is never constructed
+ --> src\ui\copilot_handler.rs:8:12
+  |
+8 | pub struct CopilotUIHandler {
+  |            ^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `setup_bindings` are never used
+  --> src\ui\copilot_handler.rs:13:12
+   |
+12 | impl CopilotUIHandler {
+   | --------------------- associated items in this implementation
+13 |     pub fn new(interface: Arc<Mutex<CopilotInterface>>) -> Self {
+   |            ^^^
+...
+19 |     pub fn setup_bindings(&self, _ui_handle: ()) {
+   |            ^^^^^^^^^^^^^^
+
+warning: struct `IqVBuffer` is never constructed
+  --> src\vbuffer.rs:59:12
+   |
+59 | pub struct IqVBuffer {
+   |            ^^^^^^^^^
+
+warning: associated items `new` and `push_frame` are never used
+  --> src\vbuffer.rs:65:12
+   |
+64 | impl IqVBuffer {
+   | -------------- associated items in this implementation
+65 |     pub fn new(device: &wgpu::Device) -> Self {
+   |            ^^^
+...
+83 |     pub fn push_frame(&self, queue: &wgpu::Queue, samples: &[[i8; 2]]) {
+   |            ^^^^^^^^^^
+
+warning: field `staging` is never read
+  --> src\vbuffer.rs:96:9
+   |
+92 | pub struct GpuVBuffer {
+   |            ---------- field in this struct
+...
+96 |     pub staging: wgpu::Buffer,
+   |         ^^^^^^^
+
+warning: methods `push_const` and `ready` are never used
+   --> src\vbuffer.rs:154:12
+    |
+100 | impl GpuVBuffer {
+    | --------------- methods in this implementation
+...
+154 |     pub fn push_const(&self, context_len: u32) -> VBufferPushConst {
+    |            ^^^^^^^^^^
+...
+169 |     pub fn ready(&self, context_len: u32) -> bool {
+    |            ^^^^^
+
+warning: struct `VBufferContextWindow` is never constructed
+   --> src\vbuffer.rs:187:12
+    |
+187 | pub struct VBufferContextWindow {
+    |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `get_context_window`, `read_frame_cpu`, `available_frames`, and `has_enough_frames` are never used
+   --> src\vbuffer.rs:212:12
+    |
+199 | impl GpuVBuffer {
+    | --------------- methods in this implementation
+...
+212 |     pub fn get_context_window(&self, n_frames: usize) -> VBufferContextWindow {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+262 |     fn read_frame_cpu(&self, slot: usize, base_offset: usize) -> Vec<[half::f16; 4]> {
+    |        ^^^^^^^^^^^^^^
+...
+274 |     pub fn available_frames(&self) -> u64 {
+    |            ^^^^^^^^^^^^^^^^
+...
+279 |     pub fn has_enough_frames(&self, required: usize) -> bool {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: methods `get_frame`, `get_frame_version`, and `frames` are never used
+   --> src\vbuffer.rs:292:12
+    |
+284 | impl VBufferContextWindow {
+    | ------------------------- methods in this implementation
+...
+292 |     pub fn get_frame(&self, frame_index: usize) -> Option<&[[half::f16; 4]]> {
+    |            ^^^^^^^^^
+...
+308 |     pub fn get_frame_version(&self, frame_index: usize) -> Option<u64> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+316 |     pub fn frames(&self) -> impl Iterator<Item = (usize, &[[half::f16; 4]])> {
+    |            ^^^^^^
+
+warning: constant `VBUF_WGSL_HELPERS` is never used
+   --> src\vbuffer.rs:341:11
+    |
+341 | pub const VBUF_WGSL_HELPERS: &str = r#"
+    |           ^^^^^^^^^^^^^^^^^
+
+warning: constant `WORKGROUP_SIZE` is never used
+  --> src\visualization\gaussian_splatting.rs:19:7
+   |
+19 | const WORKGROUP_SIZE: u32 = 16;
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `GAUSSIAN_SPLAT_WGSL` is never used
+  --> src\visualization\gaussian_splatting.rs:21:7
+   |
+21 | const GAUSSIAN_SPLAT_WGSL: &str = r#"
+   |       ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `GaussianSplatRenderer` is never constructed
+   --> src\visualization\gaussian_splatting.rs:134:12
+    |
+134 | pub struct GaussianSplatRenderer {
+    |            ^^^^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\visualization\gaussian_splatting.rs:160:12
+    |
+159 | impl GaussianSplatRenderer {
+    | -------------------------- associated items in this implementation
+160 |     pub fn new(
+    |            ^^^
+...
+274 |     pub fn render(&mut self, points: &[(f32, f32, f32, f32, f32, f32)]) -> Vec<u8> {
+    |            ^^^^^^
+...
+376 |     pub fn resize(&mut self, new_width: u32, new_height: u32) {
+    |            ^^^^^^
+...
+450 |     pub fn set_gaussian_sigma(&mut self, sigma: f32) {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+458 |     pub fn set_debug_mode(&mut self, enabled: bool) {
+    |            ^^^^^^^^^^^^^^
+...
+462 |     pub fn viewport_size(&self) -> (u32, u32) {
+    |            ^^^^^^^^^^^^^
+...
+466 |     pub fn gaussian_sigma(&self) -> f32 {
+    |            ^^^^^^^^^^^^^^
+
+warning: field `sigma` is never read
+  --> src\visualization\gaussian_splatting_optimized.rs:33:9
+   |
+25 | pub struct GaussianSplattingConfig {
+   |            ----------------------- field in this struct
+...
+33 |     pub sigma: f32,
+   |         ^^^^^
+   |
+   = note: `GaussianSplattingConfig` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: struct `GaussianSplattingRenderer` is never constructed
+  --> src\visualization\gaussian_splatting_optimized.rs:55:12
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `upload_particles`, `render`, `output_texture_view`, and `config` are never used
+   --> src\visualization\gaussian_splatting_optimized.rs:89:12
+    |
+ 87 | impl GaussianSplattingRenderer {
+    | ------------------------------ associated items in this implementation
+ 88 |     /// Create a new Gaussian splatting renderer
+ 89 |     pub fn new(
+    |            ^^^
+...
+357 |     pub fn upload_particles(
+    |            ^^^^^^^^^^^^^^^^
+...
+395 |     pub fn render(&self, particle_count: u32) -> Result<(), Box<dyn std::error::Error>> {
+    |            ^^^^^^
+...
+481 |     pub fn output_texture_view(&self) -> &TextureView {
+    |            ^^^^^^^^^^^^^^^^^^^
+...
+486 |     pub fn config(&self) -> &GaussianSplattingConfig {
+    |            ^^^^^^
+
+warning: fields `triangle_count` and `screen_coverage_pixels` are never read
+  --> src\visualization\mesh_shaders.rs:33:9
+   |
+25 | pub struct MeshLodLevel {
+   |            ------------ fields in this struct
+...
+33 |     pub triangle_count: u32,
+   |         ^^^^^^^^^^^^^^
+...
+37 |     pub screen_coverage_pixels: u32,
+   |         ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `MeshLodLevel` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: constant `MAX_ATTACK_SOURCES` is never used
+  --> src\visualization\mesh_shaders.rs:57:7
+   |
+57 | const MAX_ATTACK_SOURCES: usize = 32;
+   |       ^^^^^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:103:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+102 |     // Device and queue
+103 |     device: Device,
+    |     ^^^^^^
+104 |     queue: Queue,
+    |     ^^^^^
+...
+107 |     lod_levels: Vec<MeshLodLevel>,
+    |     ^^^^^^^^^^
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+115 |     pipeline: RenderPipeline,
+    |     ^^^^^^^^
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+117 |     bind_group: BindGroup,
+    |     ^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+126 |     output_view: TextureView,
+    |     ^^^^^^^^^^^
+...
+129 |     width: u32,
+    |     ^^^^^
+130 |     height: u32,
+    |     ^^^^^^
+...
+133 |     frame_count: u64,
+    |     ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\visualization\mesh_shaders.rs:144:12
+    |
+136 | impl MeshShaderPipeline {
+    | ----------------------- associated items in this implementation
+...
+144 |     pub fn new(device: &Device, queue: &Queue, width: u32, height: u32) -> Self {
+    |            ^^^
+...
+432 |     pub fn render(&mut self, attacks: &[(f32, f32, f32, f32)]) -> &TextureView {
+    |            ^^^^^^
+...
+504 |     pub fn num_lod_levels(&self) -> usize {
+    |            ^^^^^^^^^^^^^^
+...
+509 |     pub fn get_lod_level(&self, index: usize) -> Option<&MeshLodLevel> {
+    |            ^^^^^^^^^^^^^
+...
+514 |     pub fn frame_count(&self) -> u64 {
+    |            ^^^^^^^^^^^
+...
+519 |     pub fn output_texture(&self) -> &TextureView {
+    |            ^^^^^^^^^^^^^^
+...
+524 |     pub fn viewport(&self) -> (u32, u32) {
+    |            ^^^^^^^^
+
+warning: struct `RadixSortPipeline` is never constructed
+  --> src\visualization\radix_sort_pipeline.rs:35:12
+   |
+35 | pub struct RadixSortPipeline {
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: associated items `new`, `allocate_buffers`, `create_bind_group`, and `dispatch` are never used
+   --> src\visualization\radix_sort_pipeline.rs:51:12
+    |
+ 43 | impl RadixSortPipeline {
+    | ---------------------- associated items in this implementation
+...
+ 51 |     pub fn new(device: &Device, shader_module: &ShaderModule) -> Self {
+    |            ^^^
+...
+136 |     pub fn allocate_buffers(device: &Device, point_count: u32) -> (Buffer, Buffer, Buffer, Buffer) {
+    |            ^^^^^^^^^^^^^^^^
+...
+183 |     pub fn create_bind_group(
+    |            ^^^^^^^^^^^^^^^^^
+...
+225 |     pub fn dispatch(
+    |            ^^^^^^^^
+
+warning: struct `RayImage` is never constructed
+  --> src\visualization\ray_tracer.rs:11:12
+   |
+11 | pub struct RayImage {
+   |            ^^^^^^^^
+
+warning: struct `RayFeatures` is never constructed
+  --> src\visualization\ray_tracer.rs:24:12
+   |
+24 | pub struct RayFeatures {
+   |            ^^^^^^^^^^^
+
+warning: constant `MAX_REFLECTION_DELAY_MS` is never used
+  --> src\visualization\ray_tracer.rs:47:7
+   |
+47 | const MAX_REFLECTION_DELAY_MS: f32 = 100.0;
+   |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `DELAY_BIN_COUNT` is never used
+  --> src\visualization\ray_tracer.rs:48:7
+   |
+48 | const DELAY_BIN_COUNT: usize = 32;
+   |       ^^^^^^^^^^^^^^^
+
+warning: constant `AZIMUTH_BIN_COUNT` is never used
+  --> src\visualization\ray_tracer.rs:50:7
+   |
+50 | const AZIMUTH_BIN_COUNT: usize = 16;
+   |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `ELEVATION_BIN_COUNT` is never used
+  --> src\visualization\ray_tracer.rs:51:7
+   |
+51 | const ELEVATION_BIN_COUNT: usize = 16;
+   |       ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `DIFFUSE_BIN_COUNT` is never used
+  --> src\visualization\ray_tracer.rs:52:7
+   |
+52 | const DIFFUSE_BIN_COUNT: usize = 32;
+   |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `TEMPORAL_SPREAD_COUNT` is never used
+  --> src\visualization\ray_tracer.rs:54:7
+   |
+54 | const TEMPORAL_SPREAD_COUNT: usize = 8;
+   |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `reflect_azimuth_across_wall` is never used
+  --> src\visualization\ray_tracer.rs:75:4
+   |
+75 | fn reflect_azimuth_across_wall(azimuth: f32, wall_idx: usize) -> f32 {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `estimate_reflection_delay_ms` is never used
+  --> src\visualization\ray_tracer.rs:88:4
+   |
+88 | fn estimate_reflection_delay_ms(room_dim: &[f32; 3], wall_idx: usize) -> f32 {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `histogram_angles` is never used
+   --> src\visualization\ray_tracer.rs:120:4
+    |
+120 | fn histogram_angles(angles: &[f32], bin_count: usize, angle_range: (f32, f32)) -> Vec<f32> {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `histogram_delays` is never used
+   --> src\visualization\ray_tracer.rs:142:4
+    |
+142 | fn histogram_delays(delays_ms: &[f32], bin_count: usize) -> Vec<f32> {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `compute_temporal_spread` is never used
+   --> src\visualization\ray_tracer.rs:162:4
+    |
+162 | fn compute_temporal_spread(delays_ms: &[f32]) -> Vec<f32> {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `compute_ray_features` is never used
+   --> src\visualization\ray_tracer.rs:218:8
+    |
+218 | pub fn compute_ray_features(image: &RayImage) -> RayFeatures {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `WORKGROUP_SIZE` is never used
+  --> src\visualization\rt_attack_viz.rs:19:7
+   |
+19 | const WORKGROUP_SIZE: u32 = 8; // 8├ù8 = 256 threads per workgroup
+   |       ^^^^^^^^^^^^^^
+
+warning: constant `MAX_ATTACK_SOURCES` is never used
+  --> src\visualization\rt_attack_viz.rs:20:7
+   |
+20 | const MAX_ATTACK_SOURCES: usize = 32; // Maximum concurrent attack sources
+   |       ^^^^^^^^^^^^^^^^^^
+
+warning: constant `DEFAULT_CAMERA_DISTANCE` is never used
+  --> src\visualization\rt_attack_viz.rs:21:7
+   |
+21 | const DEFAULT_CAMERA_DISTANCE: f32 = 50.0; // Distance from origin
+   |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+  --> src\visualization\rt_attack_viz.rs:46:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+45 |     // Device and queue
+46 |     device: Device,
+   |     ^^^^^^
+47 |     queue: Queue,
+   |     ^^^^^
+...
+50 |     rt_pipeline: ComputePipeline,
+   |     ^^^^^^^^^^^
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+52 |     bind_group: BindGroup,
+   |     ^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+56 |     attack_positions_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+57 |     attack_intensities_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+58 |     params_buffer: Buffer,
+   |     ^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+62 |     output_view: TextureView,
+   |     ^^^^^^^^^^^
+...
+65 |     camera_pos: [f32; 3],
+   |     ^^^^^^^^^^
+66 |     camera_forward: [f32; 3],
+   |     ^^^^^^^^^^^^^^
+67 |     camera_right: [f32; 3],
+   |     ^^^^^^^^^^^^
+68 |     camera_up: [f32; 3],
+   |     ^^^^^^^^^
+69 |     camera_yaw: f32,   // Rotation angle around up vector
+   |     ^^^^^^^^^^
+70 |     camera_pitch: f32, // Rotation angle around right vector
+   |     ^^^^^^^^^^^^
+...
+73 |     width: u32,
+   |     ^^^^^
+74 |     height: u32,
+   |     ^^^^^^
+...
+77 |     frame_count: u64,
+   |     ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> src\visualization\rt_attack_viz.rs:86:12
+    |
+ 84 | impl RtAttackViz {
+    | ---------------- associated items in this implementation
+ 85 |     /// Create new RtAttackViz instance with given device and dimensions
+ 86 |     pub fn new(device: &Device, queue: &Queue, width: u32, height: u32) -> Self {
+    |            ^^^
+...
+282 |     pub fn render(&mut self, attacks: &[(f32, f32, f32, f32)]) -> TextureView {
+    |            ^^^^^^
+...
+381 |     pub fn render_embeddings(&mut self, embeddings: &[Vec<f32>]) -> TextureView {
+    |            ^^^^^^^^^^^^^^^^^
+...
+404 |     pub fn set_camera(&mut self, yaw: f32, pitch: f32, distance: f32) {
+    |            ^^^^^^^^^^
+...
+431 |     pub fn frame_count(&self) -> u64 {
+    |            ^^^^^^^^^^^
+...
+436 |     pub fn output_texture(&self) -> &TextureView {
+    |            ^^^^^^^^^^^^^^
+...
+441 |     pub fn viewport(&self) -> (u32, u32) {
+    |            ^^^^^^^^
+
+warning: struct `StftPipeline` is never constructed
+  --> src\visualization\stft_pipeline.rs:19:12
+   |
+19 | pub struct StftPipeline {
+   |            ^^^^^^^^^^^^
+
+warning: associated items `new` and `dispatch` are never used
+   --> src\visualization\stft_pipeline.rs:35:12
+    |
+ 26 | impl StftPipeline {
+    | ----------------- associated items in this implementation
+...
+ 35 |     pub fn new(device: Arc<wgpu::Device>, queue: Arc<wgpu::Queue>) -> Result<Self, String> {
+    |            ^^^
+...
+107 |     pub fn dispatch(
+    |            ^^^^^^^^
+
+warning: struct `StftProcessor` is never constructed
+   --> src\visualization\stft_pipeline.rs:155:12
+    |
+155 | pub struct StftProcessor {
+    |            ^^^^^^^^^^^^^
+
+warning: associated items `new`, `process_frame`, `vbuffer`, and `vbuffer_mut` are never used
+   --> src\visualization\stft_pipeline.rs:170:12
+    |
+161 | impl StftProcessor {
+    | ------------------ associated items in this implementation
+...
+170 |     pub fn new(device: Arc<wgpu::Device>, queue: Arc<wgpu::Queue>) -> Result<Self, String> {
+    |            ^^^
+...
+201 |     pub fn process_frame(&mut self, iq_samples: &[[i8; 2]]) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^
+...
+215 |     pub fn vbuffer(&self) -> &GpuVBuffer {
+    |            ^^^^^^^
+...
+220 |     pub fn vbuffer_mut(&mut self) -> &mut GpuVBuffer {
+    |            ^^^^^^^^^^^
+
+warning: struct `PoseFrame` is never constructed
+ --> src\visualization\data_contracts.rs:5:12
+  |
+5 | pub struct PoseFrame {
+  |            ^^^^^^^^^
+
+warning: struct `RoomGeometry` is never constructed
+  --> src\visualization\data_contracts.rs:10:12
+   |
+10 | pub struct RoomGeometry {
+   |            ^^^^^^^^^^^^
+
+warning: struct `VoxelGrid` is never constructed
+  --> src\visualization\data_contracts.rs:32:12
+   |
+32 | pub struct VoxelGrid {
+   |            ^^^^^^^^^
+
+warning: associated items `new`, `get`, `sample`, and `iter_voxels` are never used
+  --> src\visualization\data_contracts.rs:38:12
+   |
+37 | impl VoxelGrid {
+   | -------------- associated items in this implementation
+38 |     pub fn new(dim_x: u32, dim_y: u32, dim_z: u32) -> Self {
+   |            ^^^
+...
+45 |     pub fn get(&self, x: u32, y: u32, z: u32) -> VoxelGridData {
+   |            ^^^
+...
+54 |     pub fn sample(&self, pos: (f32, f32, f32)) -> f32 {
+   |            ^^^^^^
+...
+61 |     pub fn iter_voxels(&self) -> impl Iterator<Item = (u32, u32, u32)> + '_ {
+   |            ^^^^^^^^^^^
+
+warning: `twister` (bin "twister" test) generated 351 warnings (29 duplicates) (run `cargo fix --bin "twister" -p twister --tests` to apply 42 suggestions)

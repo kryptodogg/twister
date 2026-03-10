@@ -1,0 +1,94 @@
+import {
+    VerticalBox,
+    HorizontalBox,
+    ComboBox,
+    Button,
+    Slider,
+} from "std-widgets.slint";
+
+export global PlutoBackend {
+    in-out property <string> active-modulation: "PWM";
+    in-out property <float> target-freq-hz: 2400000000.0;
+    in-out property <float> tx-power: 0.5;
+    callback set_modulation(string);
+    callback trigger_tx();
+}
+
+export component PlutoWidget inherits Window {
+    title: "AG-UI: Pluto+ Modulator";
+    width: 450px;
+    height: 250px;
+    background: #111;
+    VerticalBox {
+        Text {
+            text: "Pluto+ 70 MHz - 6 GHz";
+            color: #f0f;
+            font-weight: 700;
+        } // Supported device range
+        
+        HorizontalBox {
+            Text {
+                text: "Modulation:";
+                color: #aaa;
+                vertical-alignment: center;
+            }
+
+            ComboBox {
+                model: ["PWM", "PDM", "Impulse (UWB)", "CW"];
+                current-value: PlutoBackend.active-modulation;
+                selected(val) => {
+                    PlutoBackend.set_modulation(val);
+                }
+            }
+        }
+
+        HorizontalBox {
+            Text {
+                text: "TX Power:";
+                color: #aaa;
+                vertical-alignment: center;
+            }
+
+            Slider {
+                minimum: 0.0;
+                maximum: 1.0;
+                value <=> PlutoBackend.tx-power;
+            }
+
+            Text {
+                text: round(PlutoBackend.tx-power * 100) + "%";
+                color: #0f0;
+            }
+        }
+
+        HorizontalBox {
+            Text {
+                text: "Frequency (Hz):";
+                color: #aaa;
+                vertical-alignment: center;
+            }
+
+            TextInput {
+                text: PlutoBackend.target-freq-hz;
+                width: 150px;
+            } // Manual frequency entry
+        }
+
+        Rectangle {
+            height: 40px;
+            background: #900;
+            border-radius: 4px;
+            Text {
+                text: "FIRE TX BURST";
+                color: white;
+                font-weight: 700;
+            }
+
+            TouchArea {
+                clicked => {
+                    PlutoBackend.trigger_tx();
+                }
+            }
+        }
+    }
+}

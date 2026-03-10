@@ -136,17 +136,20 @@ fn test_vbuffer_constants() {
 
 /// Helper to create test frame data
 fn create_test_frame(value: f32) -> Vec<[half::f16; 4]> {
-    vec![[
-        half::f16::from_f32(value),
-        half::f16::from_f32(0.0),
-        half::f16::from_f32(0.0),
-        half::f16::from_f32(0.0),
-    ]; V_FREQ_BINS]
+    vec![
+        [
+            half::f16::from_f32(value),
+            half::f16::from_f32(0.0),
+            half::f16::from_f32(0.0),
+            half::f16::from_f32(0.0),
+        ];
+        V_FREQ_BINS
+    ]
 }
 
 /// Helper to create a wgpu device for testing
 async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
-    let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+    let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
         backends: wgpu::Backends::VULKAN,
         ..Default::default()
     });
@@ -157,17 +160,18 @@ async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
         .expect("Failed to find an appropriate adapter");
 
     let (device, queue) = adapter
-        .request_device(
-            &wgpu::DeviceDescriptor {
-                label: Some("Test Device"),
-                required_features: wgpu::Features::empty(),
-                required_limits: wgpu::Limits::default(),
-                memory_hints: wgpu::MemoryHints::Performance,
-            },
-            None,
-        )
+        .request_device(&wgpu::DeviceDescriptor {
+            label: Some("Test Device"),
+            required_features: wgpu::Features::empty(),
+            required_limits: wgpu::Limits::default(),
+            memory_hints: wgpu::MemoryHints::Performance,
+        })
         .await
         .expect("Failed to create device");
 
     (device, queue)
+}
+
+fn main() {
+    println!("Run with: cargo test --example test_vbuffer_context_window");
 }

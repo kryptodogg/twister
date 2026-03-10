@@ -1,0 +1,41 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+error: rustc 1.86.0-nightly is not supported by the following packages:
+  burn@0.21.0-pre.2 requires rustc 1.92
+  cubecl-zspace@0.10.0-pre.2 requires rustc 1.92
+  darling@0.23.0 requires rustc 1.88.0
+  darling_core@0.23.0 requires rustc 1.88.0
+  darling_macro@0.23.0 requires rustc 1.88.0
+  femtovg@0.20.4 requires rustc 1.88
+  home@0.5.12 requires rustc 1.88
+  i-slint-backend-selector@1.15.1 requires rustc 1.88
+  i-slint-backend-selector@1.15.1 requires rustc 1.88
+  i-slint-backend-selector@1.15.1 requires rustc 1.88
+  i-slint-backend-winit@1.15.1 requires rustc 1.88
+  i-slint-backend-winit@1.15.1 requires rustc 1.88
+  i-slint-backend-winit@1.15.1 requires rustc 1.88
+  i-slint-common@1.15.1 requires rustc 1.88
+  i-slint-common@1.15.1 requires rustc 1.88
+  i-slint-compiler@1.15.1 requires rustc 1.88
+  i-slint-compiler@1.15.1 requires rustc 1.88
+  i-slint-compiler@1.15.1 requires rustc 1.88
+  i-slint-core@1.15.1 requires rustc 1.88
+  i-slint-core-macros@1.15.1 requires rustc 1.88
+  i-slint-renderer-femtovg@1.15.1 requires rustc 1.88
+  resvg@0.46.0 requires rustc 1.87.0
+  resvg@0.46.0 requires rustc 1.87.0
+  slint@1.15.1 requires rustc 1.88
+  slint-build@1.15.1 requires rustc 1.88
+  slint-macros@1.15.1 requires rustc 1.88
+  smol_str@0.3.6 requires rustc 1.89
+  typed-index-collections@3.5.0 requires rustc 1.90.0
+  usvg@0.46.0 requires rustc 1.87.0
+  usvg@0.46.0 requires rustc 1.87.0
+  wgpu@28.0.0 requires rustc 1.92
+  wgpu@28.0.0 requires rustc 1.92
+  wgpu@28.0.0 requires rustc 1.92
+Either upgrade rustc or select compatible dependency versions with
+`cargo update <name>@<current-ver> --precise <compatible-ver>`
+where `<compatible-ver>` is the latest version supporting rustc 1.86.0-nightly
+

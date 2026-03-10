@@ -78,7 +78,7 @@ async fn test_vbuffer_integration() {
 
 /// Helper to create a wgpu device for testing
 async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
-    let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+    let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
         backends: wgpu::Backends::VULKAN,
         ..Default::default()
     });
@@ -99,4 +99,8 @@ async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
         .expect("Failed to create device");
 
     (device, queue)
+}
+
+fn main() {
+    println!("Run with: cargo test --example test_stft_pipeline");
 }

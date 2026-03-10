@@ -1,0 +1,101 @@
+import { HorizontalBox, VerticalBox } from "std-widgets.slint";
+
+component JoyconHBar inherits Rectangle {
+    in property <float> value: 0.0;
+    height: 6px;
+    border-radius: 3px;
+    background: #333;
+    Rectangle {
+        x: 0px;
+        width: parent.width * clamp(value, 0.0, 1.0);
+        height: parent.height;
+        background: #00d4ff;
+        border-radius: 3px;
+    }
+}
+
+export global JoyconBackend {
+    in-out property <bool> connected;
+    in-out property <float> accel-x;
+    in-out property <float> accel-y;
+    in-out property <float> accel-z;
+    in-out property <float> gyro-roll;
+    in-out property <float> gyro-pitch;
+    in-out property <float> gyro-yaw;
+    in-out property <[float]> imu-history; // Array for waveform
+}
+
+export component JoyconWidget inherits Window {
+    title: "AG-UI: Joycon Telemetry";
+    width: 400px;
+    height: 350px;
+    background: #111;
+    VerticalBox {
+        Text {
+            text: JoyconBackend.connected ? "WAND CONNECTED" : "SEARCHING...";
+            color: JoyconBackend.connected ? #0f0 : #f00;
+            font-weight: 700;
+        }
+
+        HorizontalBox {
+            VerticalBox {
+                Text {
+                    text: "Attitude (Gyro)";
+                    color: #aaa;
+                }
+
+                Text {
+                    text: "Roll: " + round(JoyconBackend.gyro-roll) + "°";
+                    color: #0ff;
+                }
+
+                Text {
+                    text: "Pitch: " + round(JoyconBackend.gyro-pitch) + "°";
+                    color: #0ff;
+                }
+
+                Text {
+                    text: "Yaw: " + round(JoyconBackend.gyro-yaw) + "°";
+                    color: #0ff;
+                }
+            }
+
+            VerticalBox {
+                Text {
+                    text: "Force (Accel)";
+                    color: #aaa;
+                }
+
+                JoyconHBar {
+                    value: (JoyconBackend.accel-x + 8.0) / 16.0;
+                } // ±8G range
+                JoyconHBar {
+                    value: (JoyconBackend.accel-y + 8.0) / 16.0;
+                }
+
+                JoyconHBar {
+                    value: (JoyconBackend.accel-z + 8.0) / 16.0;
+                }
+            }
+        }
+
+        // Simplified IMU Waveform visualization
+        Rectangle {
+            height: 100px;
+            background: #222;
+            border-color: #444;
+            border-width: 1px;
+            Text {
+                text: "IMU Waveform";
+                color: #555;
+                x: 5px;
+                y: 5px;
+            }
+            // Note: Data-driven paths in Slint require a helper or manual Path generation in the backend
+            // For now, we use a placeholder or simply display text while the Path logic is refined.
+            Rectangle {
+                background: #0f0.with-alpha(0.2);
+            }
+        }
+    }
+}

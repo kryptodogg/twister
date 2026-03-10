@@ -1,0 +1,79 @@
+import {
+    VerticalBox,
+    HorizontalBox,
+    Switch,
+    Slider,
+    ComboBox,
+} from "std-widgets.slint";
+
+export global RtlSdrBackend {
+    in-out property <float> gain-multiplier: 1.0; // Multiplier from 0.0 to 1.0
+    in-out property <bool> agc-enabled: true; // AGC state
+    in-out property <bool> rf-data-available: false; // Dirty flag state
+    callback select_antenna(string);
+}
+
+export component RtlSdrWidget inherits Window {
+    title: "AG-UI: RTL-SDR Receiver";
+    width: 400px;
+    height: 250px;
+    background: #111;
+    VerticalBox {
+        HorizontalBox {
+            Text {
+                text: "RTL-SDR Receiver";
+                color: #0cf;
+                font-weight: 700;
+            }
+
+            Rectangle {
+                width: 15px;
+                height: 15px;
+                border-radius: 7px;
+                background: RtlSdrBackend.rf-data-available ? #0f0 : #333; // Blinks when dispatch loop sets flag
+            }
+        }
+
+        HorizontalBox {
+            Text {
+                text: "Antenna:";
+                color: #aaa;
+                vertical-alignment: center;
+            }
+
+            ComboBox {
+                model: ["Standard Dipole", "YouLoop (Magnetic)", "Phased Array Feed"];
+                selected(val) => {
+                    RtlSdrBackend.select_antenna(val);
+                }
+            }
+        }
+
+        HorizontalBox {
+            Text {
+                text: "Auto Gain (AGC):";
+                color: #aaa;
+                vertical-alignment: center;
+            }
+
+            Switch {
+                checked <=> RtlSdrBackend.agc-enabled;
+            } // Toggles AGC
+        }
+
+        HorizontalBox {
+            Text {
+                text: "Manual Gain:";
+                color: #aaa;
+                vertical-alignment: center;
+            }
+
+            Slider {
+                enabled: !RtlSdrBackend.agc-enabled; // Disabled if AGC is on
+                minimum: 0.0;
+                maximum: 1.0;
+                value <=> RtlSdrBackend.gain-multiplier;
+            }
+        }
+    }
+}

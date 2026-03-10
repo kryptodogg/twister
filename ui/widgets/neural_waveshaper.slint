@@ -1,0 +1,196 @@
+// ui/widgets/neural_waveshaper.slint
+// Neural Waveshaping Defense Widget
+//
+// Purpose: Demonstrates how Unified Mamba latent embeddings are projected
+// into harmonic synthesis parameters (Drive, Foldback, Asymmetry) for
+// real-time defense against air-hacker RF signals via Super-Nyquist aliasing.
+//
+// UI Behavior:
+// - Neural Auto-Steer ON: Sliders are locked read-only, driven by Mamba at 100Hz
+// - Neural Auto-Steer OFF: Sliders are editable for manual testing
+
+import { VerticalBox, HorizontalBox, Slider, Switch, ComboBox, Text } from "std-widgets.slint";
+
+export global WaveshaperBackend {
+    /// Neural Auto-Steer: When true, Mamba controls parameters; when false, manual editing allowed
+    in-out property <bool> neural-auto-steer: true;
+
+    /// Drive: Amplitude scaling before distortion (0.0 = bypass, 1.0 = max)
+    in-out property <float> drive-amount: 0.0;
+
+    /// Foldback: Controls Super-Nyquist harmonic spread (alias intensity)
+    in-out property <float> foldback-ratio: 0.0;
+
+    /// Asymmetry: Shifts DC offset to create even-order harmonics
+    in-out property <float> asymmetry: 0.0;
+
+    /// Transfer function: Determines the type of harmonic synthesis
+    in-out property <string> transfer-function: "Sinc-Smear";
+
+    /// Mamba confidence in this prediction
+    in-out property <float> mamba-confidence: 0.0;
+
+    /// Anomaly score that triggered activation
+    in-out property <float> anomaly-score: 0.0;
+
+    /// Callback when manual params change
+    callback update_manual_params();
+}
+
+export component NeuralWaveshaperWidget inherits Window {
+    title: "AG-UI: Neural Waveshaping Defense";
+    width: 500px;
+    height: 500px;
+    background: #111111;
+
+    VerticalBox {
+        spacing: 12px;
+        padding: 15px;
+
+        // HEADER: Title + Auto-Steer Toggle
+        HorizontalBox {
+            spacing: 10px;
+            Text {
+                text: "⚡ Non-Linear Harmonic Synthesizer";
+                color: #bb00ff;
+                font-weight: 700;
+                font-size: 16px;
+            }
+            Rectangle { width: 1px; } // Spacer
+            Switch {
+                text: "Neural Auto-Steer";
+                checked <=> WaveshaperBackend.neural-auto-steer;
+                width: 180px;
+            }
+        }
+
+        // STATUS: Anomaly Score + Confidence
+        HorizontalBox {
+            spacing: 20px;
+            Text {
+                text: "Anomaly: " + round(WaveshaperBackend.anomaly-score * 1000.0) / 1000.0;
+                color: #ff5555;
+                font-size: 11px;
+            }
+            Text {
+                text: "Confidence: " + round(WaveshaperBackend.mamba-confidence * 100.0) + "%";
+                color: #00ff88;
+                font-size: 11px;
+            }
+        }
+
+        // Transfer Function Selection
+        HorizontalBox {
+            spacing: 10px;
+            Text {
+                text: "Transfer Function:";
+                color: #aaaaaa;
+                vertical-alignment: center;
+                width: 140px;
+            }
+            ComboBox {
+                enabled: !WaveshaperBackend.neural-auto-steer;
+                model: ["Sinc-Smear", "Chebyshev-Fold", "Dirac-Impulse", "Phase-Null"];
+                current-value <=> WaveshaperBackend.transfer-function;
+                selected(v) => {
+                    WaveshaperBackend.update_manual_params();
+                }
+            }
+        }
+
+        // DRIVE: Amplitude scaling before distortion
+        VerticalBox {
+            spacing: 4px;
+            Text {
+                text: "Drive (Gain into Distortion): " + round(WaveshaperBackend.drive-amount * 100.0) + "%";
+                color: #00ccff;
+                font-size: 12px;
+            }
+            Slider {
+                enabled: !WaveshaperBackend.neural-auto-steer;
+                minimum: 0.0;
+                maximum: 1.0;
+                value <=> WaveshaperBackend.drive-amount;
+                changed => {
+                    WaveshaperBackend.update_manual_params();
+                }
+            }
+            Text {
+                text: "Higher drive = stronger signal distortion; used to create harmonic spread";
+                color: #666666;
+                font-size: 10px;
+            }
+        }
+
+        // FOLDBACK: Nyquist Alias Spread
+        VerticalBox {
+            spacing: 4px;
+            Text {
+                text: "Foldback (Nyquist Alias Spread): " + round(WaveshaperBackend.foldback-ratio * 100.0) + "%";
+                color: #00ccff;
+                font-size: 12px;
+            }
+            Slider {
+                enabled: !WaveshaperBackend.neural-auto-steer;
+                minimum: 0.0;
+                maximum: 1.0;
+                value <=> WaveshaperBackend.foldback-ratio;
+                changed => {
+                    WaveshaperBackend.update_manual_params();
+                }
+            }
+            Text {
+                text: "Controls aliasing intensity; higher values = more harmonic bleed";
+                color: #666666;
+                font-size: 10px;
+            }
+        }
+
+        // ASYMMETRY: Even-Order Harmonics
+        VerticalBox {
+            spacing: 4px;
+            Text {
+                text: "Asymmetry (Even Harmonics): " + round(WaveshaperBackend.asymmetry * 100.0) + "%";
+                color: #00ccff;
+                font-size: 12px;
+            }
+            Slider {
+                enabled: !WaveshaperBackend.neural-auto-steer;
+                minimum: -1.0;
+                maximum: 1.0;
+                value <=> WaveshaperBackend.asymmetry;
+                changed => {
+                    WaveshaperBackend.update_manual_params();
+                }
+            }
+            Text {
+                text: "Negative = even harmonics only; positive = odd bias; creates harmonic shaping";
+                color: #666666;
+                font-size: 10px;
+            }
+        }
+
+        // INFO BOX
+        Rectangle {
+            background: #1a1a2e;
+            border-radius: 4px;
+
+            VerticalBox {
+                padding: 8px;
+                spacing: 4px;
+                Text {
+                    text: "🤖 Unified Mamba Control";
+                    color: #bb00ff;
+                    font-weight: 700;
+                    font-size: 11px;
+                }
+                Text {
+                    text: "When Auto-Steer is active, these parameters are continuously updated by Mamba's 128D latent embedding. The system projects latent dimensions [0..31] → Drive, [32..63] → Foldback, [64..95] → Asymmetry to optimally fight detected anomalies.";
+                    color: #aaaaaa;
+                    font-size: 10px;
+                    wrap: word-wrap;
+                }
+            }
+        }
+    }
+}

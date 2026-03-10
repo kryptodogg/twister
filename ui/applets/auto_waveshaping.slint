@@ -1,0 +1,349 @@
+// ui/applets/auto_waveshaping.slint
+// Live Neural Waveshaping Micro-App
+//
+// Real-time visualization of:
+// 1. Mamba 128D latent activation (progress bars)
+// 2. Waveform oscilloscope (super-Nyquist smear)
+// 3. Threat metric (reconstruction loss / anomaly score)
+
+import { VerticalBox, HorizontalBox, Slider, Switch, ProgressBar } from "std-widgets.slint";
+
+export global WaveshapeEngine {
+    /// Neural Auto-Steer: true = AI controls, false = manual sliders
+    in-out property <bool> auto-steer: true;
+
+    /// Live Mamba Reconstruction Loss (anomaly score, 0.0 = normal, 1.0 = max threat)
+    in-out property <float> anomaly-score: 0.0;
+
+    /// Projected waveshaping parameters from latent embedding
+    in-out property <float> drive: 0.0;
+    in-out property <float> foldback: 0.0;
+    in-out property <float> asymmetry: 0.5;
+
+    /// Live waveform array for oscilloscope rendering (100 samples)
+    in-out property <[float]> live-waveform: [];
+
+    /// 128D latent activity pooled into thirds (Drive/Foldback/Asymmetry chunks)
+    in-out property <[float]> latent-activity: [];
+
+    /// System diagnostics
+    in-out property <string> frame-info: "Frame 0 | 0 samples";
+    in-out property <string> status: "Idle";
+}
+
+export component AutoWaveshapingApplet inherits Window {
+    title: "🎛️ Live Neural Waveshaper (UnifiedFieldMamba)";
+    width: 750px;
+    height: 650px;
+    background: #0a0a0a;
+
+    VerticalBox {
+        padding: 20px;
+        spacing: 15px;
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // HEADER: AI Status + Auto-Steer Toggle
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        HorizontalBox {
+            spacing: 10px;
+
+            Text {
+                text: "🤖 UNIFIED MAMBA INFERENCE LOOP";
+                color: #00ccff;
+                font-weight: 800;
+                font-size: 16px;
+            }
+
+            Rectangle { width: 1px; } // Spacer
+
+            Switch {
+                text: "Neural Auto-Steer";
+                checked <=> WaveshapeEngine.auto-steer;
+            }
+        }
+
+        Text {
+            text: WaveshapeEngine.status;
+            color: #888;
+            font-size: 11px;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // THREAT METRIC: Large Anomaly Score Display
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        HorizontalBox {
+            spacing: 15px;
+
+            Rectangle {
+                width: 200px;
+                height: 80px;
+                background: #111;
+                border-color: WaveshapeEngine.anomaly-score > 0.5 ? #500 : #050;
+                border-width: 3px;
+
+                VerticalBox {
+                    alignment: center;
+                    padding: 10px;
+
+                    Text {
+                        text: "Threat Level";
+                        color: #888;
+                        font-size: 10px;
+                    }
+
+                    Text {
+                        text: round(WaveshapeEngine.anomaly-score * 100) / 100;
+                        color: WaveshapeEngine.anomaly-score > 0.5 ? #ff3333 : #33ff33;
+                        font-weight: 900;
+                        font-size: 32px;
+                    }
+                }
+            }
+
+            Text {
+                text: WaveshapeEngine.frame-info;
+                color: #888;
+                font-size: 10px;
+                vertical-alignment: center;
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // OSCILLOSCOPE: Live Waveform (Super-Nyquist Smear)
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        Rectangle {
+            height: 150px;
+            background: #111;
+            border-color: WaveshapeEngine.anomaly-score > 0.5 ? #500 : #050;
+            border-width: 2px;
+
+            HorizontalBox {
+                padding: 10px;
+
+                VerticalBox {
+                    width: 50px;
+                    alignment: center;
+
+                    Text {
+                        text: "Waveform";
+                        color: #888;
+                        font-size: 10px;
+                    }
+                }
+
+                Canvas {
+                    width: 100%;
+                    height: 100%;
+
+                    draw_frame_callback(size) => {
+                        // Draw center line
+                        draw_line(
+                            0, size.height / 2,
+                            size.width, size.height / 2,
+                            #333
+                        );
+
+                        // Draw waveform samples
+                        if WaveshapeEngine.live-waveform.length > 1 {
+                            for i in 0..WaveshapeEngine.live-waveform.length - 1 {
+                                let x1 = (i as f32 / WaveshapeEngine.live-waveform.length as f32) * size.width;
+                                let y1 = (0.5 - WaveshapeEngine.live-waveform[i] * 0.4) * size.height;
+
+                                let x2 = ((i + 1) as f32 / WaveshapeEngine.live-waveform.length as f32) * size.width;
+                                let y2 = (0.5 - WaveshapeEngine.live-waveform[i + 1] * 0.4) * size.height;
+
+                                draw_line(x1, y1, x2, y2, #bb00ff);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // LATENT ACTIVITY: 128D Latent Visualization (3-bar chunking)
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        Rectangle {
+            background: #111;
+            border-color: #333;
+            border-width: 1px;
+            height: 100px;
+
+            VerticalBox {
+                padding: 10px;
+                spacing: 8px;
+
+                Text {
+                    text: "128D Latent Embedding Activity";
+                    color: #888;
+                    font-size: 11px;
+                }
+
+                // Drive: Dims [0..31]
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Drive [0..31]";
+                        color: #888;
+                        min-width: 80px;
+                        font-size: 10px;
+                    }
+                    ProgressBar {
+                        width: 100%;
+                        value: WaveshapeEngine.latent-activity.length > 0 ? WaveshapeEngine.latent-activity[0] : 0.0;
+                    }
+                }
+
+                // Foldback: Dims [32..63]
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Foldback [32..63]";
+                        color: #888;
+                        min-width: 80px;
+                        font-size: 10px;
+                    }
+                    ProgressBar {
+                        width: 100%;
+                        value: WaveshapeEngine.latent-activity.length > 1 ? WaveshapeEngine.latent-activity[1] : 0.0;
+                    }
+                }
+
+                // Asymmetry: Dims [64..95]
+                HorizontalBox {
+                    spacing: 10px;
+                    Text {
+                        text: "Asymmetry [64..95]";
+                        color: #888;
+                        min-width: 80px;
+                        font-size: 10px;
+                    }
+                    ProgressBar {
+                        width: 100%;
+                        value: WaveshapeEngine.latent-activity.length > 2 ? WaveshapeEngine.latent-activity[2] : 0.0;
+                    }
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // PARAMETER CONTROLS: Drive, Foldback, Asymmetry
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        HorizontalBox {
+            spacing: 10px;
+
+            // Drive
+            VerticalBox {
+                width: 33%;
+                spacing: 5px;
+
+                Text {
+                    text: "Drive";
+                    color: #888;
+                    font-size: 10px;
+                }
+
+                Slider {
+                    enabled: !WaveshapeEngine.auto-steer;
+                    value <=> WaveshapeEngine.drive;
+                    minimum: 0.0;
+                    maximum: 1.0;
+                }
+
+                Text {
+                    text: round(WaveshapeEngine.drive * 100) + "%";
+                    color: #00ff88;
+                    font-size: 12px;
+                    font-weight: 700;
+                }
+            }
+
+            // Foldback
+            VerticalBox {
+                width: 33%;
+                spacing: 5px;
+
+                Text {
+                    text: "Foldback";
+                    color: #888;
+                    font-size: 10px;
+                }
+
+                Slider {
+                    enabled: !WaveshapeEngine.auto-steer;
+                    value <=> WaveshapeEngine.foldback;
+                    minimum: 0.0;
+                    maximum: 1.0;
+                }
+
+                Text {
+                    text: round(WaveshapeEngine.foldback * 100) + "%";
+                    color: #00ff88;
+                    font-size: 12px;
+                    font-weight: 700;
+                }
+            }
+
+            // Asymmetry
+            VerticalBox {
+                width: 33%;
+                spacing: 5px;
+
+                Text {
+                    text: "Asymmetry";
+                    color: #888;
+                    font-size: 10px;
+                }
+
+                Slider {
+                    enabled: !WaveshapeEngine.auto-steer;
+                    value <=> WaveshapeEngine.asymmetry;
+                    minimum: 0.0;
+                    maximum: 1.0;
+                }
+
+                Text {
+                    text: round((WaveshapeEngine.asymmetry - 0.5) * 200) + "%";
+                    color: #00ff88;
+                    font-size: 12px;
+                    font-weight: 700;
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // FOOTER: Architecture Info
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        Rectangle {
+            background: #111;
+            border-color: #333;
+            border-width: 1px;
+            height: 60px;
+
+            VerticalBox {
+                padding: 8px;
+                spacing: 4px;
+
+                Text {
+                    text: "Multi-Rate Signal Fusion (Native $\\Delta t$)";
+                    color: #00ccff;
+                    font-weight: 700;
+                    font-size: 10px;
+                }
+
+                Text {
+                    text: "Mamba SSM integrates disparate streams (C925e @ 32kHz, SDR @ 6.144MHz) via continuous differential equations. No upsampling hallucination.";
+                    color: #888;
+                    font-size: 9px;
+                    wrap: word-wrap;
+                }
+            }
+        }
+    }
+}

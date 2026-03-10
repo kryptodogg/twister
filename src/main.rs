@@ -30,6 +30,7 @@ mod audio;
 mod bispectrum;
 mod computer_vision;
 mod detection;
+mod dispatch;
 mod embeddings;
 mod evidence_export;
 mod forensic;
@@ -44,13 +45,13 @@ mod knowledge_graph;
 mod mamba;
 mod materials;
 mod ml;
-mod parametric;
 mod parameters;
+mod parametric;
 mod particle_system;
-mod resonance;
 mod pdm;
 mod reconstruct;
 mod resample;
+mod resonance;
 mod ridge_plot;
 mod rtlsdr;
 mod rtlsdr_ffi;
@@ -109,7 +110,8 @@ async fn main() -> anyhow::Result<()> {
         &format!("[Twister v0.5] Session: {}", session_identity),
     );
     use crate::particle_system::{
-        frustum_culler::FrustumCuller, renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
+        frustum_culler::FrustumCuller,
+        renderer::ParticleRenderer, // streaming::ParticleStreamLoader, // Temporarily disabled
     };
     let ui = AppWindow::new().context("Slint window creation failed")?;
 
@@ -784,7 +786,13 @@ async fn main() -> anyhow::Result<()> {
                         let fdc2 = forensic_disp.clone();
                         let reason = gate.reason.clone();
                         tokio::spawn(async move {
-                            let _ = fdc2.log_gate_decision(anomaly, gate.confidence, 2.0, gate.forward_to_trainer, &reason);
+                            let _ = fdc2.log_gate_decision(
+                                anomaly,
+                                gate.confidence,
+                                2.0,
+                                gate.forward_to_trainer,
+                                &reason,
+                            );
                         });
                         state_disp.set_latent_embedding(latent.clone());
 
@@ -1573,14 +1581,16 @@ async fn main() -> anyhow::Result<()> {
         let epoch = state.train_epoch.load(Ordering::Relaxed);
         let loss_avg = state.train_loss.load(Ordering::Relaxed);
         let metadata = crate::state::CheckpointMetadata::new(
-            epoch,
-            loss_avg,
-            loss_avg,  // loss_min = current (will be improved on next training session)
-            loss_avg,  // loss_max = current
+            epoch, loss_avg,
+            loss_avg, // loss_min = current (will be improved on next training session)
+            loss_avg, // loss_max = current
         );
 
         match mamba_trainer.save(&ckpt, Some(metadata)).await {
-            Ok(_) => println!("[Mamba] Final checkpoint: {} (epoch {}, loss {:.6})", ckpt, epoch, loss_avg),
+            Ok(_) => println!(
+                "[Mamba] Final checkpoint: {} (epoch {}, loss {:.6})",
+                ckpt, epoch, loss_avg
+            ),
             Err(e) => eprintln!("[Mamba] Final save failed: {e}"),
         }
     }
@@ -1833,7 +1843,9 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
     ui.on_save_parameters(move || {
         let params = crate::parameters::TwisterParameters {
             audio_device_idx: s.get_audio_device_idx(),
-            audio_devices: s.get_audio_devices().iter()
+            audio_devices: s
+                .get_audio_devices()
+                .iter()
                 .map(|d| crate::parameters::audio_device_to_config(d))
                 .collect(),
             master_gain_db: s.get_master_gain() * 120.0, // Convert 0-1 to dB
@@ -1868,36 +1880,42 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
     });
 
     let s = state.clone();
-    ui.on_load_parameters(move || {
-        match crate::parameters::TwisterParameters::load() {
-            Ok(params) => {
-                s.set_audio_device_idx(params.audio_device_idx);
-                s.set_audio_devices(params.audio_devices.iter()
+    ui.on_load_parameters(move || match crate::parameters::TwisterParameters::load() {
+        Ok(params) => {
+            s.set_audio_device_idx(params.audio_device_idx);
+            s.set_audio_devices(
+                params
+                    .audio_devices
+                    .iter()
                     .map(|d| crate::parameters::config_to_audio_device(d))
-                    .collect());
-                s.set_master_gain((params.master_gain_db / 120.0).clamp(0.0, 1.0));
-                s.set_camera_resolution(params.camera_resolution);
-                s.set_camera_fps(params.camera_fps);
-                s.set_camera_active(params.camera_active);
-                s.set_freq_band_index(params.freq_band_index);
-                s.set_freq_manual_hz(params.freq_manual_hz);
-                s.pdm_active.store(params.pdm_active, Ordering::Relaxed);
-                s.set_pdm_clock_mhz(params.pdm_clock_mhz);
-                s.oversample_ratio.store(params.oversample_ratio, Ordering::Relaxed);
-                s.waveshape_mode.store(params.waveshape_mode, Ordering::Relaxed);
-                s.set_waveshape_drive(params.waveshape_drive);
-                s.set_beam_azimuth_deg(params.beam_azimuth_deg);
-                s.beam_elevation_rad.store(params.beam_elevation_deg.to_radians(), Ordering::Relaxed);
-                s.set_beam_focus_deg(params.beam_focus_deg);
-                s.set_smart_anc_blend(params.smart_anc_blend);
-                s.anc_calibrated.store(params.anc_calibrated, Ordering::Relaxed);
-                s.set_sdr_center_hz(params.sdr_center_hz);
-                s.set_sdr_gain_db(params.sdr_gain_db);
-                s.set_sdr_active(params.sdr_active);
-                println!("[Parameters] Loaded from ~/.twister/parameters.json");
-            }
-            Err(e) => eprintln!("[Parameters] Load failed: {}", e),
+                    .collect(),
+            );
+            s.set_master_gain((params.master_gain_db / 120.0).clamp(0.0, 1.0));
+            s.set_camera_resolution(params.camera_resolution);
+            s.set_camera_fps(params.camera_fps);
+            s.set_camera_active(params.camera_active);
+            s.set_freq_band_index(params.freq_band_index);
+            s.set_freq_manual_hz(params.freq_manual_hz);
+            s.pdm_active.store(params.pdm_active, Ordering::Relaxed);
+            s.set_pdm_clock_mhz(params.pdm_clock_mhz);
+            s.oversample_ratio
+                .store(params.oversample_ratio, Ordering::Relaxed);
+            s.waveshape_mode
+                .store(params.waveshape_mode, Ordering::Relaxed);
+            s.set_waveshape_drive(params.waveshape_drive);
+            s.set_beam_azimuth_deg(params.beam_azimuth_deg);
+            s.beam_elevation_rad
+                .store(params.beam_elevation_deg.to_radians(), Ordering::Relaxed);
+            s.set_beam_focus_deg(params.beam_focus_deg);
+            s.set_smart_anc_blend(params.smart_anc_blend);
+            s.anc_calibrated
+                .store(params.anc_calibrated, Ordering::Relaxed);
+            s.set_sdr_center_hz(params.sdr_center_hz);
+            s.set_sdr_gain_db(params.sdr_gain_db);
+            s.set_sdr_active(params.sdr_active);
+            println!("[Parameters] Loaded from ~/.twister/parameters.json");
         }
+        Err(e) => eprintln!("[Parameters] Load failed: {}", e),
     });
 
     let s = state.clone();
@@ -1911,14 +1929,18 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
         s.set_freq_manual_hz(params.freq_manual_hz);
         s.pdm_active.store(params.pdm_active, Ordering::Relaxed);
         s.set_pdm_clock_mhz(params.pdm_clock_mhz);
-        s.oversample_ratio.store(params.oversample_ratio, Ordering::Relaxed);
-        s.waveshape_mode.store(params.waveshape_mode, Ordering::Relaxed);
+        s.oversample_ratio
+            .store(params.oversample_ratio, Ordering::Relaxed);
+        s.waveshape_mode
+            .store(params.waveshape_mode, Ordering::Relaxed);
         s.set_waveshape_drive(params.waveshape_drive);
         s.set_beam_azimuth_deg(params.beam_azimuth_deg);
-        s.beam_elevation_rad.store(params.beam_elevation_deg.to_radians(), Ordering::Relaxed);
+        s.beam_elevation_rad
+            .store(params.beam_elevation_deg.to_radians(), Ordering::Relaxed);
         s.set_beam_focus_deg(params.beam_focus_deg);
         s.set_smart_anc_blend(params.smart_anc_blend);
-        s.anc_calibrated.store(params.anc_calibrated, Ordering::Relaxed);
+        s.anc_calibrated
+            .store(params.anc_calibrated, Ordering::Relaxed);
         s.set_sdr_center_hz(params.sdr_center_hz);
         s.set_sdr_gain_db(params.sdr_gain_db);
         s.set_sdr_active(params.sdr_active);
@@ -1932,7 +1954,11 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
         let current = s.get_audio_device_idx();
         let devices = s.get_audio_devices();
         if !devices.is_empty() {
-            let new_idx = if current > 0 { current - 1 } else { (devices.len() - 1) as u32 };
+            let new_idx = if current > 0 {
+                current - 1
+            } else {
+                (devices.len() - 1) as u32
+            };
             s.set_audio_device_idx(new_idx);
             if let Some(ui) = ui_weak_cb.upgrade() {
                 ui.set_audio_device_idx(new_idx as i32);
@@ -1978,7 +2004,10 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
     ui.on_toggle_camera(move || {
         let current = s.get_camera_active();
         s.set_camera_active(!current);
-        println!("[Camera] {}", if !current { "Activated" } else { "Deactivated" });
+        println!(
+            "[Camera] {}",
+            if !current { "Activated" } else { "Deactivated" }
+        );
     });
 
     // Frequency Control
@@ -1986,24 +2015,24 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
     let ui_weak_cb = ui_weak.clone();
     ui.on_set_freq_band(move |band| {
         s.set_freq_band_index(band as u32);
-        
+
         // Update actual frequency based on band
         let actual_hz = match band {
-            0 => 15_000.0,       // VLF
-            1 => 150_000.0,      // LF
-            2 => 1_500_000.0,    // MF
-            3 => 15_000_000.0,   // HF
-            4 => 150_000_000.0,  // VHF
-            5 => 1_500_000_000.0, // UHF
+            0 => 15_000.0,               // VLF
+            1 => 150_000.0,              // LF
+            2 => 1_500_000.0,            // MF
+            3 => 15_000_000.0,           // HF
+            4 => 150_000_000.0,          // VHF
+            5 => 1_500_000_000.0,        // UHF
             6 => s.get_freq_manual_hz(), // Manual
             _ => 150_000_000.0,
         };
         s.set_freq_actual_hz(actual_hz);
-        
+
         if let Some(ui) = ui_weak_cb.upgrade() {
             ui.set_freq_actual_mhz(actual_hz / 1_000_000.0);
         }
-        
+
         let band_name = match band {
             0 => "VLF (3-30 kHz)",
             1 => "LF (30-300 kHz)",
@@ -2035,7 +2064,10 @@ fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak
     ui.on_toggle_joycon(move || {
         let current = s.get_joycon_active();
         s.set_joycon_active(!current);
-        println!("[JoyCon] Gesture control {}", if !current { "enabled" } else { "disabled" });
+        println!(
+            "[JoyCon] Gesture control {}",
+            if !current { "enabled" } else { "disabled" }
+        );
     });
 }
 

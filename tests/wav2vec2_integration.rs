@@ -239,8 +239,8 @@ mod wav2vec2_integration {
     /// Test 8: Event corpus generation from forensic logs
     /// Purpose: Parse JSONL → multimodal corpus generation
     /// Expected: Corpus created with N events, valid timestamps, tag distribution
-    #[test]
-    fn test_event_corpus_generation() {
+    #[tokio::test]
+    async fn test_event_corpus_generation() {
         eprintln!("[TEST 8] Event corpus generation");
 
         // Create dummy forensic log JSONL
@@ -267,8 +267,9 @@ mod wav2vec2_integration {
         eprintln!("  Created test JSONL with 10 events");
 
         // Generate corpus
-        let stats =
-            prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+        let stats = prepare_event_corpus(test_jsonl, test_h5, 192000)
+            .await
+            .expect("Corpus generation failed");
 
         assert_eq!(stats.total_events, 10, "Should have 10 events");
         eprintln!("  Total events: {}", stats.total_events);
@@ -291,8 +292,8 @@ mod wav2vec2_integration {
     /// Test 9: Corpus metadata accuracy
     /// Purpose: Verify metadata reflects event distribution
     /// Expected: total_events, time_range_days, tag counts all correct
-    #[test]
-    fn test_event_corpus_metadata() {
+    #[tokio::test]
+    async fn test_event_corpus_metadata() {
         eprintln!("[TEST 9] Corpus metadata accuracy");
 
         // Create test JSONL with mixed tags
@@ -320,8 +321,9 @@ mod wav2vec2_integration {
 
         std::fs::write(test_jsonl, &jsonl_content).expect("Failed to write test JSONL");
 
-        let stats =
-            prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+        let stats = prepare_event_corpus(test_jsonl, test_h5, 192000)
+            .await
+            .expect("Corpus generation failed");
 
         assert_eq!(stats.total_events, 20, "Should have 20 events");
         assert_eq!(stats.tag_distribution.len(), 4, "Should have 4 unique tags");
@@ -350,8 +352,8 @@ mod wav2vec2_integration {
     /// Test 10: Corpus feature bounds validation
     /// Purpose: All features in valid range (no NaN/Inf/outliers)
     /// Expected: Multimodal features satisfy [-∞, +∞] (finite) and normalized
-    #[test]
-    fn test_corpus_feature_bounds() {
+    #[tokio::test]
+    async fn test_corpus_feature_bounds() {
         eprintln!("[TEST 10] Corpus feature bounds validation");
 
         let test_jsonl = "test_forensic_events_bounds.jsonl";
@@ -376,8 +378,9 @@ mod wav2vec2_integration {
 
         std::fs::write(test_jsonl, &jsonl_content).expect("Failed to write test JSONL");
 
-        let stats =
-            prepare_event_corpus(test_jsonl, test_h5, 192000).expect("Corpus generation failed");
+        let stats = prepare_event_corpus(test_jsonl, test_h5, 192000)
+            .await
+            .expect("Corpus generation failed");
 
         // Verify stats are valid
         assert!(stats.total_events > 0, "Total events should be positive");

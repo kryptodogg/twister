@@ -10,14 +10,14 @@
 // - Vulkan-capable GPU (AMD RX 6700 XT or equivalent)
 
 use std::sync::Arc;
-use tokio::time::{timeout, Duration};
+use tokio::time::{Duration, timeout};
 
 use twister::app_state::DirtyFlags;
 use twister::dispatch::iq_dispatch::IqDispatchLoop;
 use twister::hardware_io::device_manager::DeviceManager;
 use twister::hardware_io::dma_vbuffer::IqDmaGateway;
-use twister::visualization::stft_pipeline::StftProcessor;
 use twister::vbuffer::GpuVBuffer;
+use twister::visualization::stft_pipeline::StftProcessor;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -37,16 +37,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Step 3: Create DMA gateway
     println!("[3/5] Creating DMA gateway...");
-    let dma_gateway = Arc::new(std::sync::Mutex::new(
-        IqDmaGateway::new(Arc::clone(&device_arc), Arc::clone(&queue_arc), 64)
-    ));
+    let dma_gateway = Arc::new(std::sync::Mutex::new(IqDmaGateway::new(
+        Arc::clone(&device_arc),
+        Arc::clone(&queue_arc),
+        64,
+    )));
 
     // Step 4: Create STFT processor
     println!("[4/5] Creating STFT processor...");
-    let mut stft_processor = StftProcessor::new(
-        Arc::clone(&device_arc),
-        Arc::clone(&queue_arc),
-    )?;
+    let mut stft_processor = StftProcessor::new(Arc::clone(&device_arc), Arc::clone(&queue_arc))?;
 
     println!("✅ Pipeline initialized");
     println!("   - FFT size: 512 complex samples");
@@ -55,22 +54,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Step 5: Run demo (mock mode if no device)
     println!("\n[5/5] Running signal ingestion demo (10 seconds)...");
-    
-    let mut dispatch = IqDispatchLoop::new(
-        Arc::clone(&device_manager),
-        Arc::clone(&dma_gateway),
-    );
+
+    let mut dispatch = IqDispatchLoop::new(Arc::clone(&device_manager), Arc::clone(&dma_gateway));
 
     // Run for 10 seconds with timeout
     let demo_result = timeout(Duration::from_secs(10), dispatch.run()).await;
 
     match demo_result {
-        Ok(result) => {
-            match result {
-                Ok(_) => println!("✅ Demo completed successfully"),
-                Err(e) => println!("⚠️ Demo ended with error: {}", e),
-            }
-        }
+        Ok(result) => match result {
+            Ok(_) => println!("✅ Demo completed successfully"),
+            Err(e) => println!("⚠️ Demo ended with error: {}", e),
+        },
         Err(_) => {
             println!("⏱️ Demo timeout (10s reached)");
         }
@@ -82,7 +76,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("\n📊 Statistics:");
     println!("   Frames processed: {}", dispatch.frame_count());
     println!("   Frames dropped: {}", dispatch.dropped_frames());
-    println!("   DMA offset: {} bytes", dma_gateway.lock().unwrap().write_offset());
+    println!(
+        "   DMA offset: {} bytes",
+        dma_gateway.lock().unwrap().write_offset()
+    );
 
     // Test V-Buffer context window
     println!("\n🧪 Testing V-Buffer context window...");
@@ -98,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 /// Helper to create a wgpu device
 async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
-    let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+    let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
         backends: wgpu::Backends::VULKAN,
         ..Default::default()
     });
@@ -111,15 +108,12 @@ async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
     println!("   Adapter: {:?}", adapter.get_info().name);
 
     let (device, queue) = adapter
-        .request_device(
-            &wgpu::DeviceDescriptor {
-                label: Some("Signal Ingestion Demo Device"),
-                required_features: wgpu::Features::empty(),
-                required_limits: wgpu::Limits::default(),
-                memory_hints: wgpu::MemoryHints::Performance,
-            },
-            None,
-        )
+        .request_device(&wgpu::DeviceDescriptor {
+            label: Some("Signal Ingestion Demo Device"),
+            required_features: wgpu::Features::empty(),
+            required_limits: wgpu::Limits::default(),
+            memory_hints: wgpu::MemoryHints::Performance,
+        })
         .await
         .expect("Failed to create device");
 

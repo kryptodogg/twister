@@ -1,4 +1,3 @@
-
 #[derive(Clone)]
 pub struct FeatureFlags {
     pub enhanced_audio: bool,
@@ -16,7 +15,6 @@ impl Default for FeatureFlags {
         }
     }
 }
-
 
 // src/state.rs — Shared Atomic State  (v0.4)
 //
@@ -599,6 +597,14 @@ pub struct AppState {
     pub note_cents: AtomicF32,
     /// Whether Twister musical auto-tuning is active for synthesis targets.
     pub twister_active: AtomicBool,
+    /// Whether Twister musical auto-tuning is active for synthesis targets.
+    pub auto_tune_target: AtomicBool,
+
+    // ── Track B Dirty Flags ──────────────────────────────────────────────────
+    pub audio_dirty: AtomicBool,
+    pub rf_dirty: AtomicBool,
+    pub visual_dirty: AtomicBool,
+    pub feature_dirty: AtomicBool,
 
     // ── Memo System (Phase 1) ──────────────────────────────────────────────────
     /// Forensic memo storage (max 10,000 entries, FIFO when full)
@@ -620,30 +626,30 @@ pub struct AppState {
     pub audio_devices: Mutex<Vec<AudioDevice>>,
 
     /// Camera configuration
-    pub camera_resolution: AtomicU32,  // 0=480p, 1=720p, 2=1080p
+    pub camera_resolution: AtomicU32, // 0=480p, 1=720p, 2=1080p
     pub camera_fps: AtomicF32,
     pub camera_active: AtomicBool,
 
     /// Frequency selection
-    pub freq_band_index: AtomicU32,  // 0=VLF, 1=LF, 2=MF, 3=HF, 4=VHF, 5=UHF, 6=Manual
+    pub freq_band_index: AtomicU32, // 0=VLF, 1=LF, 2=MF, 3=HF, 4=VHF, 5=UHF, 6=Manual
     pub freq_manual_hz: AtomicF32,
     pub freq_actual_hz: AtomicF32,
 
     /// Joy-Con gesture control
     pub joycon_connected: AtomicBool,
     pub joycon_active: AtomicBool,
-    pub joycon_gyro_roll: AtomicF32,      // degrees
-    pub joycon_gyro_pitch: AtomicF32,     // degrees
-    pub joycon_gyro_yaw: AtomicF32,       // degrees
-    pub joycon_accel_x: AtomicF32,        // G
-    pub joycon_accel_y: AtomicF32,        // G
-    pub joycon_accel_z: AtomicF32,        // G
-    pub joycon_stick_left_x: AtomicF32,   // [-1, 1]
-    pub joycon_stick_left_y: AtomicF32,   // [-1, 1]
-    pub joycon_stick_right_x: AtomicF32,  // [-1, 1]
-    pub joycon_stick_right_y: AtomicF32,  // [-1, 1]
-    pub joycon_trigger_l: AtomicF32,      // [0, 1]
-    pub joycon_trigger_r: AtomicF32,      // [0, 1]
+    pub joycon_gyro_roll: AtomicF32,     // degrees
+    pub joycon_gyro_pitch: AtomicF32,    // degrees
+    pub joycon_gyro_yaw: AtomicF32,      // degrees
+    pub joycon_accel_x: AtomicF32,       // G
+    pub joycon_accel_y: AtomicF32,       // G
+    pub joycon_accel_z: AtomicF32,       // G
+    pub joycon_stick_left_x: AtomicF32,  // [-1, 1]
+    pub joycon_stick_left_y: AtomicF32,  // [-1, 1]
+    pub joycon_stick_right_x: AtomicF32, // [-1, 1]
+    pub joycon_stick_right_y: AtomicF32, // [-1, 1]
+    pub joycon_trigger_l: AtomicF32,     // [0, 1]
+    pub joycon_trigger_r: AtomicF32,     // [0, 1]
     pub joycon_button_a: AtomicBool,
     pub joycon_button_b: AtomicBool,
     pub joycon_button_x: AtomicBool,
@@ -654,7 +660,7 @@ impl AppState {
     pub fn new() -> Arc<Self> {
         Arc::new(Self {
             material_library: std::sync::Arc::new(tokio::sync::Mutex::new(
-                crate::materials::material_library::MaterialLibrary::default()
+                crate::materials::material_library::MaterialLibrary::default(),
             )),
             detected_freq: AtomicF32::new(440.0),
             denial_freq_override: AtomicF32::new(0.0),
@@ -751,6 +757,12 @@ impl AppState {
             note_name: Mutex::new("---".to_string()),
             note_cents: AtomicF32::new(0.0),
             twister_active: AtomicBool::new(true),
+            auto_tune_target: AtomicBool::new(false), // Default to inactive
+
+            audio_dirty: AtomicBool::new(false),
+            rf_dirty: AtomicBool::new(false),
+            visual_dirty: AtomicBool::new(false),
+            feature_dirty: AtomicBool::new(false),
 
             memos: Mutex::new(std::collections::VecDeque::with_capacity(10_000)),
             memo_input_text: Mutex::new(String::new()),
@@ -999,6 +1011,39 @@ impl AppState {
             }
             buffer.push_back(msg);
         }
+    }
+
+    #[inline]
+    pub fn get_audio_dirty(&self) -> bool {
+        self.audio_dirty.load(Ordering::Relaxed)
+    }
+    #[inline]
+    pub fn set_audio_dirty(&self, v: bool) {
+        self.audio_dirty.store(v, Ordering::Relaxed);
+    }
+    #[inline]
+    pub fn get_rf_dirty(&self) -> bool {
+        self.rf_dirty.load(Ordering::Relaxed)
+    }
+    #[inline]
+    pub fn set_rf_dirty(&self, v: bool) {
+        self.rf_dirty.store(v, Ordering::Relaxed);
+    }
+    #[inline]
+    pub fn get_visual_dirty(&self) -> bool {
+        self.visual_dirty.load(Ordering::Relaxed)
+    }
+    #[inline]
+    pub fn set_visual_dirty(&self, v: bool) {
+        self.visual_dirty.store(v, Ordering::Relaxed);
+    }
+    #[inline]
+    pub fn get_feature_dirty(&self) -> bool {
+        self.feature_dirty.load(Ordering::Relaxed)
+    }
+    #[inline]
+    pub fn set_feature_dirty(&self, v: bool) {
+        self.feature_dirty.store(v, Ordering::Relaxed);
     }
 
     pub fn get_logs_all(&self) -> Vec<LogMessage> {
@@ -1314,19 +1359,11 @@ impl AppState {
     pub fn enrich_event_forensics(&self, event: &mut crate::detection::DetectionEvent) {
         event.audio_dc_bias_v = {
             let v = self.get_audio_dc_bias();
-            if v > 0.0 {
-                Some(v)
-            } else {
-                None
-            }
+            if v > 0.0 { Some(v) } else { None }
         };
         event.sdr_dc_bias_v = {
             let v = self.get_sdr_dc_bias();
-            if v > 0.0 {
-                Some(v)
-            } else {
-                None
-            }
+            if v > 0.0 { Some(v) } else { None }
         };
         event.mamba_anomaly_db = self.get_mamba_anomaly();
 
@@ -1695,7 +1732,8 @@ impl AppState {
 
     #[inline]
     pub fn set_joycon_stick_left_x(&self, v: f32) {
-        self.joycon_stick_left_x.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+        self.joycon_stick_left_x
+            .store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
     }
 
     #[inline]
@@ -1705,7 +1743,8 @@ impl AppState {
 
     #[inline]
     pub fn set_joycon_stick_left_y(&self, v: f32) {
-        self.joycon_stick_left_y.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+        self.joycon_stick_left_y
+            .store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
     }
 
     #[inline]
@@ -1715,7 +1754,8 @@ impl AppState {
 
     #[inline]
     pub fn set_joycon_stick_right_x(&self, v: f32) {
-        self.joycon_stick_right_x.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+        self.joycon_stick_right_x
+            .store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
     }
 
     #[inline]
@@ -1725,7 +1765,8 @@ impl AppState {
 
     #[inline]
     pub fn set_joycon_stick_right_y(&self, v: f32) {
-        self.joycon_stick_right_y.store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
+        self.joycon_stick_right_y
+            .store(v.clamp(-1.0, 1.0), Ordering::Relaxed);
     }
 
     #[inline]
@@ -1735,7 +1776,8 @@ impl AppState {
 
     #[inline]
     pub fn set_joycon_trigger_l(&self, v: f32) {
-        self.joycon_trigger_l.store(v.clamp(0.0, 1.0), Ordering::Relaxed);
+        self.joycon_trigger_l
+            .store(v.clamp(0.0, 1.0), Ordering::Relaxed);
     }
 
     #[inline]
@@ -1745,7 +1787,8 @@ impl AppState {
 
     #[inline]
     pub fn set_joycon_trigger_r(&self, v: f32) {
-        self.joycon_trigger_r.store(v.clamp(0.0, 1.0), Ordering::Relaxed);
+        self.joycon_trigger_r
+            .store(v.clamp(0.0, 1.0), Ordering::Relaxed);
     }
 
     #[inline]

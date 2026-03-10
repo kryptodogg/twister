@@ -6,13 +6,13 @@
 // Run with: cargo test --example test_iq_dispatch_loop
 
 use std::sync::Arc;
-use tokio::time::{timeout, Duration};
+use tokio::time::{Duration, timeout};
 
 // Import twister modules
 use twister::app_state::DirtyFlags;
-use twister::dispatch::iq_dispatch::{IqDispatchLoop, BYTES_PER_FRAME, SAMPLES_PER_FRAME};
+use twister::dispatch::iq_dispatch::{BYTES_PER_FRAME, IqDispatchLoop, SAMPLES_PER_FRAME};
 use twister::hardware_io::device_manager::DeviceManager;
-use twister::hardware_io::dma_vbuffer::{IqDmaGateway, DMA_CHUNK_SAMPLES};
+use twister::hardware_io::dma_vbuffer::{DMA_CHUNK_SAMPLES, IqDmaGateway};
 
 #[tokio::test]
 async fn test_dispatch_loop_creation() {
@@ -22,9 +22,11 @@ async fn test_dispatch_loop_creation() {
 
     // Create DMA gateway (requires wgpu device)
     let (device, queue) = create_wgpu_device().await;
-    let dma_gateway = Arc::new(std::sync::Mutex::new(
-        IqDmaGateway::new(Arc::new(device), Arc::new(queue), 64)
-    ));
+    let dma_gateway = Arc::new(std::sync::Mutex::new(IqDmaGateway::new(
+        Arc::new(device),
+        Arc::new(queue),
+        64,
+    )));
 
     // Create dispatch loop
     let mut dispatch = IqDispatchLoop::new(device_manager, dma_gateway);
@@ -43,9 +45,11 @@ async fn test_dispatch_loop_no_devices() {
     let device_manager = Arc::new(DeviceManager::new(dirty_flags));
 
     let (device, queue) = create_wgpu_device().await;
-    let dma_gateway = Arc::new(std::sync::Mutex::new(
-        IqDmaGateway::new(Arc::new(device), Arc::new(queue), 64)
-    ));
+    let dma_gateway = Arc::new(std::sync::Mutex::new(IqDmaGateway::new(
+        Arc::new(device),
+        Arc::new(queue),
+        64,
+    )));
 
     let mut dispatch = IqDispatchLoop::new(device_manager, dma_gateway);
 
@@ -82,9 +86,9 @@ fn test_iq_buffer_layout() {
     assert_eq!(frame_buffer.len() / 2, SAMPLES_PER_FRAME); // Complex samples
 }
 
-/// Helper to create a wgpu device for testing
+/// Helper to create a wgpu device
 async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
-    let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+    let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
         backends: wgpu::Backends::VULKAN,
         ..Default::default()
     });
@@ -94,18 +98,21 @@ async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
         .await
         .expect("Failed to find an appropriate adapter");
 
+    println!("   Adapter: {:?}", adapter.get_info().name);
+
     let (device, queue) = adapter
-        .request_device(
-            &wgpu::DeviceDescriptor {
-                label: Some("Test Device"),
-                required_features: wgpu::Features::empty(),
-                required_limits: wgpu::Limits::default(),
-                memory_hints: wgpu::MemoryHints::Performance,
-            },
-            None,
-        )
+        .request_device(&wgpu::DeviceDescriptor {
+            label: Some("Signal Ingestion Demo Device"),
+            required_features: wgpu::Features::empty(),
+            required_limits: wgpu::Limits::default(),
+            memory_hints: wgpu::MemoryHints::Performance,
+        })
         .await
         .expect("Failed to create device");
 
     (device, queue)
+}
+
+fn main() {
+    println!("Run with: cargo test --example test_iq_dispatch_loop");
 }

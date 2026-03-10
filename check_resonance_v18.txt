@@ -1,0 +1,31 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling libm v0.2.16
+   Compiling serde v1.0.228
+   Compiling autocfg v1.5.0
+    Checking cfg-if v1.0.4
+    Checking windows-link v0.2.1
+   Compiling zerocopy v0.8.42
+   Compiling portable-atomic v1.13.1
+    Checking critical-section v1.2.0
+   Compiling crossbeam-utils v0.8.21
+    Checking memchr v2.8.0
+    Checking pin-project-lite v0.2.17
+    Checking log v0.4.29
+   Compiling getrandom v0.3.4
+error: could not write output to C:\Users\pixel\Downloads\twister\target\debug\build\libm-05fbb8d237ce3f83\build_script_build-05fbb8d237ce3f83.build_script_build.43d8876e929d5924-cgu.0.rcgu.o: The requested operation cannot be performed on a file with a user-mapped section open.
+
+error: could not compile `libm` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not write output to C:\Users\pixel\Downloads\twister\target\debug\build\serde-5be762ca26d4ebae\build_script_build-5be762ca26d4ebae.build_script_build.61e63c64d32ba3e5-cgu.0.rcgu.o: The requested operation cannot be performed on a file with a user-mapped section open.
+
+error: could not write output to C:\Users\pixel\Downloads\twister\target\debug\build\crossbeam-utils-8cf790205587a1d6\build_script_build-8cf790205587a1d6.build_script_build.490de4524510a9f7-cgu.2.rcgu.o: The requested operation cannot be performed on a file with a user-mapped section open.
+
+error: could not compile `serde` (build script) due to 1 previous error
+error: could not compile `crossbeam-utils` (build script) due to 1 previous error
+error: failed to link or copy `C:\Users\pixel\Downloads\twister\target\debug\build\zerocopy-7116b31bbd396016\build_script_build-7116b31bbd396016.exe` to `C:\Users\pixel\Downloads\twister\target\debug\build\zerocopy-7116b31bbd396016\build-script-build.exe`
+
+Caused by:
+  The process cannot access the file because it is being used by another process. (os error 32)

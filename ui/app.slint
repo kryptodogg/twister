@@ -10,6 +10,11 @@
 
 import { CopilotPanel, ChatMessage } from "copilot_panel.slint";
 import { Slider } from "std-widgets.slint";
+import { JoyconWidget, JoyconBackend } from "widgets/joycon_imu.slint";
+import { PlutoWidget, PlutoBackend } from "widgets/pluto_tuner.slint";
+import { RtlSdrWidget, RtlSdrBackend } from "widgets/rtlsdr_tuner.slint";
+
+export { JoyconWidget, JoyconBackend, PlutoWidget, PlutoBackend, RtlSdrWidget, RtlSdrBackend }
 
 // ─── Colour palette ───────────────────────────────────────────────────────────
 global Pal {
@@ -64,11 +69,9 @@ component HBar inherits Rectangle {
     in property <float> frac:    0.0;
     in property <color> bar-color:     Pal.cyan;
     in property <float> warn_at: 0.90;
-
     height: 6px;
     border-radius: 3px;
     background: Pal.border;
-
     Rectangle {
         x: 0px;
         y: 0px;
@@ -86,9 +89,7 @@ component HBar inherits Rectangle {
 component VBar inherits Rectangle {
     in property <float> frac:      0.0;
     in property <color> bar-color: Pal.cyan;
-
     background: Pal.border.with-alpha(0.18);
-
     Rectangle {
         property <length> fill-h: max(parent.height * clamp(frac, 0.0, 1.0), 1px);
         x: 0px;
@@ -105,7 +106,6 @@ component Chip inherits Rectangle {
     in property <bool> active;
     in property <color> accent: Pal.cyan;
     callback clicked;
-
     height: 26px;
     border-radius: 5px;
     background: active ? accent.with-alpha(0.16) : Pal.border.with-alpha(0.6);
@@ -113,7 +113,6 @@ component Chip inherits Rectangle {
     border-color: active ? accent : Pal.border;
     animate background { duration: 80ms; }
     animate border-color { duration: 80ms; }
-
     Text {
         text: label;
         color: active ? accent : Pal.lo;
@@ -136,13 +135,11 @@ component Toggle inherits Rectangle {
     in property <bool> on;
     in property <color> accent: Pal.cyan;
     callback toggled;
-
     width: 36px;
     height: 20px;
     border-radius: 10px;
     background: on ? accent.with-alpha(0.9) : Pal.border;
     animate background { duration: 120ms; }
-
     Rectangle {
         width: 16px;
         height: 16px;
@@ -167,7 +164,6 @@ component MemoCard inherits Card {
     in property <string> content;       // Main text (80 chars max)
     in property <bool> show-delete:    false;
     callback delete-clicked;
-
     property <color> tag-color:
         tag == "EVIDENCE" ? Pal.cyan : tag == "MANUAL-REC" ? Pal.green : tag == "ANALYSIS" ? Pal.amber : Pal.purple;  // NOTE
 
@@ -175,7 +171,6 @@ component MemoCard inherits Card {
     VerticalLayout {
         spacing: 2px;
         padding: 8px;
-
         HorizontalLayout {
             Mon {
                 text: "[" + timestamp + " UTC]";
@@ -328,6 +323,14 @@ export component AppWindow inherits Window {
     in property <[float]> latent-embedding: [];  // 32-dim latent vector from Mamba
     in-out property <bool> mamba-emergency-off: false;
     in-out property <float> smart-anc-blend:   0.3;
+
+    // ── Neural Waveshaper (latent projection) ──────────────────────────────────
+    in-out property <float> waveshaper-anomaly: 0.0;      // Reconstruction MSE score
+    in-out property <float> waveshaper-confidence: 0.0;   // Projection confidence
+    in-out property <float> waveshaper-drive: 0.0;        // Distortion amplitude [0, 1]
+    in-out property <float> waveshaper-foldback: 0.0;     // Alias spread [0, 1]
+    in-out property <float> waveshaper-asymmetry: 0.5;    // Harmonic bias [0, 1] (mapped from [-1, 1])
+    in-out property <string> waveshaper-status: "🟢 MONITORING";
 
     // SDR tab
     in property <float> sdr-center-mhz:       100.0;
@@ -503,10 +506,8 @@ export component AppWindow inherits Window {
     // ── Derived display ───────────────────────────────────────────────────────
     property <string> mode-name:
         current-mode == 1 ? "ANTI-\u{03C6}" : current-mode == 2 ? "NOISE" : current-mode == 3 ? "TONE" : current-mode == 4 ? "SWEEP" : current-mode == 5 ? "ANC-\u{03C6}" : "OFF";
-
     property <color> mode-color:
         current-mode == 0 ? Pal.lo : current-mode == 2 ? Pal.amber : current-mode == 4 ? Pal.orange : current-mode == 5 ? Pal.green : Pal.cyan;
-
     property <bool> anc-ok: anc-status != "ANC uncalibrated";
 
     // ─── Root layout: header / body / footer ──────────────────────────────────
@@ -634,7 +635,6 @@ export component AppWindow inherits Window {
                 HorizontalLayout {
                     spacing: 14px;
                     alignment: center;
-
                     VerticalLayout {
                         alignment: center;
                         Lbl {
@@ -908,7 +908,6 @@ export component AppWindow inherits Window {
                         padding: 10px;
                         spacing: 6px;
                         alignment: space-between;
-
                         HorizontalLayout {
                             alignment: center;
                             spacing: 4px;
@@ -1421,7 +1420,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 8px;
                         spacing: 4px;
-
                         HorizontalLayout {
                             Lbl {
                                 text: "OSCILLOSCOPE WAVEFORM  ·  INVESTIGATION";
@@ -1445,7 +1443,6 @@ export component AppWindow inherits Window {
                             vertical-stretch: 1;
                             background: Pal.border.with-alpha(0.12);
                             clip: true;
-
                             Path {
                                 width: parent.width;
                                 height: parent.height;
@@ -1736,7 +1733,6 @@ export component AppWindow inherits Window {
                                 bar-color: Pal.purple;
                                 horizontal-stretch: 1;
                             }
-
                             VBar {
                                 frac: 0.0;
                                 bar-color: Pal.purple;
@@ -1957,7 +1953,6 @@ export component AppWindow inherits Window {
                 VerticalLayout {
                     padding: 12px;
                     spacing: 10px;
-
                     Text {
                         text: "RTL-SDR";
                         color: Pal.cyan;
@@ -2028,7 +2023,6 @@ export component AppWindow inherits Window {
 
                     HorizontalLayout {
                         spacing: 8px;
-
                         Chip {
                             label: rtl-scanning ? "■ STOP" : "▸ SCAN";
                             active: rtl-scanning;
@@ -2106,7 +2100,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 8px;
                         spacing: 4px;
-
                         HorizontalLayout {
                             spacing: 8px;
                             Lbl {
@@ -2129,7 +2122,6 @@ export component AppWindow inherits Window {
                             background: Pal.bg;
                             border-radius: 4px;
                             clip: true;
-
                             Path {
                                 width: parent.width;
                                 height: parent.height;
@@ -2165,7 +2157,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 8px;
                         spacing: 4px;
-
                         HorizontalLayout {
                             spacing: 8px;
                             Lbl {
@@ -2188,7 +2179,6 @@ export component AppWindow inherits Window {
                             background: Pal.bg;
                             border-radius: 4px;
                             clip: true;
-
                             Path {
                                 width: parent.width;
                                 height: parent.height;
@@ -2212,7 +2202,6 @@ export component AppWindow inherits Window {
                 VerticalLayout {
                     padding: 12px;
                     spacing: 10px;
-
                     Text {
                         text: "MAMBA";
                         color: Pal.purple;
@@ -2355,7 +2344,10 @@ export component AppWindow inherits Window {
                     }
 
                     // GATE STATUS
-                    Lbl { text: "GATE STATUS"; }
+                    Lbl {
+                        text: "GATE STATUS";
+                    }
+
                     HorizontalLayout {
                         spacing: 8px;
                         Mon {
@@ -2364,6 +2356,7 @@ export component AppWindow inherits Window {
                             font-size: 14px;
                         }
                     }
+
                     Mon {
                         text: last-gate-reason;
                         color: Pal.lo;
@@ -2371,25 +2364,56 @@ export component AppWindow inherits Window {
                         wrap: word-wrap;
                     }
 
-                    Rectangle { height: 8px; }
+                    Rectangle {
+                        height: 8px;
+                    }
 
-                    Lbl { text: "QUEUE DIAGNOSTICS"; }
+                    Lbl {
+                        text: "QUEUE DIAGNOSTICS";
+                    }
+
                     HorizontalLayout {
                         spacing: 8px;
                         VerticalLayout {
-                            Lbl { text: "DROPPED"; }
-                            Mon { text: training-pairs-dropped; color: training-pairs-dropped > 0 ? Pal.red : Pal.lo; font-size: 10px; }
+                            Lbl {
+                                text: "DROPPED";
+                            }
+
+                            Mon {
+                                text: training-pairs-dropped;
+                                color: training-pairs-dropped > 0 ? Pal.red : Pal.lo;
+                                font-size: 10px;
+                            }
                         }
+
                         VerticalLayout {
-                            Lbl { text: "REJ(ANOM)"; }
-                            Mon { text: gate-rejections-low-anomaly; color: Pal.lo; font-size: 10px; }
+                            Lbl {
+                                text: "REJ(ANOM)";
+                            }
+
+                            Mon {
+                                text: gate-rejections-low-anomaly;
+                                color: Pal.lo;
+                                font-size: 10px;
+                            }
                         }
+
                         VerticalLayout {
-                            Lbl { text: "REJ(CONF)"; }
-                            Mon { text: gate-rejections-low-confidence; color: Pal.lo; font-size: 10px; }
+                            Lbl {
+                                text: "REJ(CONF)";
+                            }
+
+                            Mon {
+                                text: gate-rejections-low-confidence;
+                                color: Pal.lo;
+                                font-size: 10px;
+                            }
                         }
                     }
-                    Rectangle { height: 8px; }
+
+                    Rectangle {
+                        height: 8px;
+                    }
                     // Pairs indicator
                     Lbl {
                         text: "TRAINING PAIRS";
@@ -2427,7 +2451,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 10px;
                         spacing: 6px;
-
                         Lbl {
                             text: "NEW MEMO";
                         }
@@ -2534,7 +2557,6 @@ export component AppWindow inherits Window {
                             horizontal-alignment: center;
                             vertical-alignment: center;
                         }
-
                         if memo-timestamps.length > 0: VerticalLayout {
                             spacing: 4px;
                             for i in memo-timestamps.length: MemoCard {
@@ -2773,7 +2795,6 @@ export component AppWindow inherits Window {
                     border-radius: 3px;
                     border-width: 1px;
                     animate background { duration: 80ms; }
-
                     Text {
                         text: "EXPORT";
                         color: Pal.amber;
@@ -2816,7 +2837,6 @@ export component AppWindow inherits Window {
                         VerticalLayout {
                             padding: 12px;
                             spacing: 8px;
-
                             Text {
                                 text: "TEMPORAL EVENTS";
                                 color: Pal.cyan;
@@ -2902,7 +2922,6 @@ export component AppWindow inherits Window {
                         VerticalLayout {
                             padding: 12px;
                             spacing: 8px;
-
                             Text {
                                 text: "CLUSTER HIERARCHY";
                                 color: Pal.green;
@@ -2926,12 +2945,10 @@ export component AppWindow inherits Window {
                                 border-width: 1px;
                                 border-radius: 4px;
                                 clip: true;
-
                                 VerticalLayout {
                                     alignment: center;
                                     padding: 12px;
                                     spacing: 8px;
-
                                     Text {
                                         text: analysis-clusters-names.length + " cluster nodes";
                                         font-size: 13px;
@@ -2949,7 +2966,6 @@ export component AppWindow inherits Window {
                                         VerticalLayout {
                                         alignment: center;
                                         spacing: 4px;
-
                                         Text {
                                             text: analysis-clusters-names[0];
                                             font-size: 11px;
@@ -2965,7 +2981,6 @@ export component AppWindow inherits Window {
                                             horizontal-alignment: center;
                                         }
                                     }
-
                                     Rectangle {
                                         vertical-stretch: 1;
                                     }
@@ -2994,7 +3009,6 @@ export component AppWindow inherits Window {
                         VerticalLayout {
                             padding: 12px;
                             spacing: 8px;
-
                             Text {
                                 text: "PATTERN LIBRARY";
                                 color: Pal.orange;
@@ -3018,12 +3032,10 @@ export component AppWindow inherits Window {
                                 border-width: 1px;
                                 border-radius: 4px;
                                 clip: true;
-
                                 VerticalLayout {
                                     alignment: center;
                                     padding: 12px;
                                     spacing: 8px;
-
                                     Text {
                                         text: analysis-signatures-names.length + " signatures";
                                         font-size: 14px;
@@ -3041,7 +3053,6 @@ export component AppWindow inherits Window {
                                         VerticalLayout {
                                         alignment: center;
                                         spacing: 4px;
-
                                         Text {
                                             text: "Most Frequent:";
                                             font-size: 10px;
@@ -3064,7 +3075,6 @@ export component AppWindow inherits Window {
                                             horizontal-alignment: center;
                                         }
                                     }
-
                                     Rectangle {
                                         vertical-stretch: 1;
                                     }
@@ -3080,7 +3090,6 @@ export component AppWindow inherits Window {
                                     HorizontalLayout {
                                         alignment: center;
                                         spacing: 10px;
-
                                         HorizontalLayout {
                                             spacing: 3px;
                                             Rectangle {
@@ -3156,7 +3165,6 @@ export component AppWindow inherits Window {
                         VerticalLayout {
                             padding: 12px;
                             spacing: 8px;
-
                             Text {
                                 text: "CORRELATION NETWORK";
                                 color: Pal.purple;
@@ -3185,7 +3193,6 @@ export component AppWindow inherits Window {
                                 VerticalLayout {
                                     alignment: center;
                                     padding: 20px;
-
                                     Text {
                                         text: analysis-events-time.length + " events";
                                         font-size: 18px;
@@ -3213,7 +3220,6 @@ export component AppWindow inherits Window {
                                     HorizontalLayout {
                                         alignment: center;
                                         spacing: 10px;
-
                                         HorizontalLayout {
                                             spacing: 4px;
                                             Rectangle {
@@ -3275,7 +3281,6 @@ export component AppWindow inherits Window {
             padding: 12px;
             spacing: 8px;
             vertical-stretch: 1;
-
             Text {
                 text: "SYSTEM CONSOLE";
                 color: Pal.amber;
@@ -3329,7 +3334,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 12px;
                         spacing: 8px;
-
                         Lbl {
                             text: "AUDIO INPUT DEVICE";
                         }
@@ -3337,7 +3341,6 @@ export component AppWindow inherits Window {
                         HorizontalLayout {
                             spacing: 8px;
                             alignment: center;
-
                             Chip {
                                 label: "◀ PREV";
                                 active: false;
@@ -3349,9 +3352,7 @@ export component AppWindow inherits Window {
                             }
 
                             Mon {
-                                text: audio-device-idx >= 0 && audio-device-idx < audio-device-names.length 
-                                    ? audio-device-names[audio-device-idx] 
-                                    : "No devices";
+                                text: audio-device-idx >= 0 && audio-device-idx < audio-device-names.length ? audio-device-names[audio-device-idx] : "No devices";
                                 font-size: 14px;
                                 horizontal-stretch: 1;
                             }
@@ -3370,7 +3371,6 @@ export component AppWindow inherits Window {
                         HorizontalLayout {
                             spacing: 8px;
                             alignment: center;
-
                             Lbl {
                                 text: "GAIN";
                                 width: 60px;
@@ -3399,15 +3399,16 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 12px;
                         spacing: 8px;
-
                         HorizontalLayout {
                             alignment: center;
                             Lbl {
                                 text: "CAMERA";
                             }
+
                             Rectangle {
                                 horizontal-stretch: 1;
                             }
+
                             Toggle {
                                 on: camera-active;
                                 accent: Pal.green;
@@ -3420,7 +3421,6 @@ export component AppWindow inherits Window {
                         HorizontalLayout {
                             spacing: 8px;
                             alignment: center;
-
                             Lbl {
                                 text: "RESOLUTION:";
                                 width: 80px;
@@ -3471,7 +3471,6 @@ export component AppWindow inherits Window {
                 VerticalLayout {
                     padding: 12px;
                     spacing: 8px;
-
                     Lbl {
                         text: "FREQUENCY BAND";
                     }
@@ -3488,6 +3487,7 @@ export component AppWindow inherits Window {
                                 set-freq-band(0);
                             }
                         }
+
                         Chip {
                             label: "LF";
                             active: freq-band-index == 1;
@@ -3497,6 +3497,7 @@ export component AppWindow inherits Window {
                                 set-freq-band(1);
                             }
                         }
+
                         Chip {
                             label: "MF";
                             active: freq-band-index == 2;
@@ -3506,6 +3507,7 @@ export component AppWindow inherits Window {
                                 set-freq-band(2);
                             }
                         }
+
                         Chip {
                             label: "HF";
                             active: freq-band-index == 3;
@@ -3515,6 +3517,7 @@ export component AppWindow inherits Window {
                                 set-freq-band(3);
                             }
                         }
+
                         Chip {
                             label: "VHF";
                             active: freq-band-index == 4;
@@ -3524,6 +3527,7 @@ export component AppWindow inherits Window {
                                 set-freq-band(4);
                             }
                         }
+
                         Chip {
                             label: "UHF";
                             active: freq-band-index == 5;
@@ -3533,6 +3537,7 @@ export component AppWindow inherits Window {
                                 set-freq-band(5);
                             }
                         }
+
                         Chip {
                             label: "MANUAL";
                             active: freq-band-index == 6;
@@ -3548,7 +3553,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         spacing: 12px;
                         padding-top: 12px;
-
                         HorizontalLayout {
                             spacing: 8px;
                             alignment: center;
@@ -3556,13 +3560,9 @@ export component AppWindow inherits Window {
                                 text: "BAND:";
                                 width: 60px;
                             }
+
                             Mon {
-                                text: freq-band-index == 0 ? "3-30 kHz" : 
-                                      freq-band-index == 1 ? "30-300 kHz" : 
-                                      freq-band-index == 2 ? "300k-3 MHz" : 
-                                      freq-band-index == 3 ? "3-30 MHz" : 
-                                      freq-band-index == 4 ? "30-300 MHz" : 
-                                      freq-band-index == 5 ? "300M-3 GHz" : "MANUAL";
+                                text: freq-band-index == 0 ? "3-30 kHz" : freq-band-index == 1 ? "30-300 kHz" : freq-band-index == 2 ? "300k-3 MHz" : freq-band-index == 3 ? "3-30 MHz" : freq-band-index == 4 ? "30-300 MHz" : freq-band-index == 5 ? "300M-3 GHz" : "MANUAL";
                                 color: Pal.cyan;
                                 font-size: 14px;
                                 horizontal-stretch: 1;
@@ -3576,6 +3576,7 @@ export component AppWindow inherits Window {
                                 text: "ACTUAL:";
                                 width: 60px;
                             }
+
                             Mon {
                                 text: round(freq-actual-mhz * 100.0) / 100.0 + " MHz";
                                 color: Pal.green;
@@ -3590,6 +3591,7 @@ export component AppWindow inherits Window {
                             Lbl {
                                 text: "MANUAL FREQUENCY (MHz)";
                             }
+
                             TextInput {
                                 text: freq-manual-mhz + "";
                                 color: Pal.hi;
@@ -3609,7 +3611,6 @@ export component AppWindow inherits Window {
                 VerticalLayout {
                     padding: 12px;
                     spacing: 8px;
-
                     Lbl {
                         text: "PARAMETER PRESETS";
                     }
@@ -3658,6 +3659,7 @@ export component AppWindow inherits Window {
                         text: "Settings stored in:";
                         font-size: 8px;
                     }
+
                     Mon {
                         text: "~/.twister/parameters.json";
                         font-size: 9px;
@@ -3683,11 +3685,9 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 12px;
                         spacing: 8px;
-
                         HorizontalLayout {
                             alignment: center;
                             spacing: 8px;
-
                             Rectangle {
                                 width: 16px;
                                 height: 16px;
@@ -3707,7 +3707,6 @@ export component AppWindow inherits Window {
                         HorizontalLayout {
                             alignment: center;
                             spacing: 8px;
-
                             Lbl {
                                 text: "GESTURE CONTROL:";
                             }
@@ -3733,7 +3732,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 12px;
                         spacing: 8px;
-
                         Lbl {
                             text: "BUTTON STATE";
                         }
@@ -3742,7 +3740,6 @@ export component AppWindow inherits Window {
                         HorizontalLayout {
                             spacing: 8px;
                             alignment: center;
-
                             Rectangle {
                                 width: 60px;
                                 height: 60px;
@@ -3785,7 +3782,6 @@ export component AppWindow inherits Window {
                         HorizontalLayout {
                             spacing: 8px;
                             alignment: center;
-
                             Rectangle {
                                 width: 60px;
                                 height: 60px;
@@ -3834,7 +3830,6 @@ export component AppWindow inherits Window {
                 VerticalLayout {
                     padding: 12px;
                     spacing: 8px;
-
                     Lbl {
                         text: "GYROSCOPE (degrees)";
                     }
@@ -3847,11 +3842,13 @@ export component AppWindow inherits Window {
                                 text: "ROLL";
                                 width: 60px;
                             }
+
                             HBar {
                                 frac: (joycon-gyro-roll + 180.0) / 360.0;
                                 bar-color: Pal.cyan;
                                 horizontal-stretch: 1;
                             }
+
                             Mon {
                                 text: round(joycon-gyro-roll * 10.0) / 10.0 + "°";
                                 width: 70px;
@@ -3867,11 +3864,13 @@ export component AppWindow inherits Window {
                                 text: "PITCH";
                                 width: 60px;
                             }
+
                             HBar {
                                 frac: (joycon-gyro-pitch + 180.0) / 360.0;
                                 bar-color: Pal.green;
                                 horizontal-stretch: 1;
                             }
+
                             Mon {
                                 text: round(joycon-gyro-pitch * 10.0) / 10.0 + "°";
                                 width: 70px;
@@ -3887,11 +3886,13 @@ export component AppWindow inherits Window {
                                 text: "YAW";
                                 width: 60px;
                             }
+
                             HBar {
                                 frac: (joycon-gyro-yaw + 180.0) / 360.0;
                                 bar-color: Pal.purple;
                                 horizontal-stretch: 1;
                             }
+
                             Mon {
                                 text: round(joycon-gyro-yaw * 10.0) / 10.0 + "°";
                                 width: 70px;
@@ -3912,7 +3913,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 12px;
                         spacing: 8px;
-
                         Lbl {
                             text: "ACCELEROMETER (G)";
                         }
@@ -3925,11 +3925,13 @@ export component AppWindow inherits Window {
                                     text: "X";
                                     width: 40px;
                                 }
+
                                 HBar {
                                     frac: (joycon-accel-x + 2.0) / 4.0;
                                     bar-color: Pal.cyan;
                                     horizontal-stretch: 1;
                                 }
+
                                 Mon {
                                     text: round(joycon-accel-x * 100.0) / 100.0;
                                     width: 50px;
@@ -3945,11 +3947,13 @@ export component AppWindow inherits Window {
                                     text: "Y";
                                     width: 40px;
                                 }
+
                                 HBar {
                                     frac: (joycon-accel-y + 2.0) / 4.0;
                                     bar-color: Pal.green;
                                     horizontal-stretch: 1;
                                 }
+
                                 Mon {
                                     text: round(joycon-accel-y * 100.0) / 100.0;
                                     width: 50px;
@@ -3965,11 +3969,13 @@ export component AppWindow inherits Window {
                                     text: "Z";
                                     width: 40px;
                                 }
+
                                 HBar {
                                     frac: (joycon-accel-z + 2.0) / 4.0;
                                     bar-color: Pal.purple;
                                     horizontal-stretch: 1;
                                 }
+
                                 Mon {
                                     text: round(joycon-accel-z * 100.0) / 100.0;
                                     width: 50px;
@@ -3985,7 +3991,6 @@ export component AppWindow inherits Window {
                     VerticalLayout {
                         padding: 12px;
                         spacing: 8px;
-
                         Lbl {
                             text: "TRIGGERS";
                         }
@@ -3998,11 +4003,13 @@ export component AppWindow inherits Window {
                                     text: "L";
                                     width: 40px;
                                 }
+
                                 HBar {
                                     frac: joycon-trigger-l;
                                     bar-color: Pal.amber;
                                     horizontal-stretch: 1;
                                 }
+
                                 Mon {
                                     text: round(joycon-trigger-l * 100.0) + "%";
                                     width: 50px;
@@ -4018,11 +4025,13 @@ export component AppWindow inherits Window {
                                     text: "R";
                                     width: 40px;
                                 }
+
                                 HBar {
                                     frac: joycon-trigger-r;
                                     bar-color: Pal.orange;
                                     horizontal-stretch: 1;
                                 }
+
                                 Mon {
                                     text: round(joycon-trigger-r * 100.0) + "%";
                                     width: 50px;
@@ -4039,7 +4048,6 @@ export component AppWindow inherits Window {
                 VerticalLayout {
                     padding: 12px;
                     spacing: 6px;
-
                     Lbl {
                         text: "GESTURE MAPPINGS";
                     }
@@ -4057,49 +4065,58 @@ export component AppWindow inherits Window {
                             color: Pal.mid;
                             font-size: 10px;
                         }
+
                         Text {
                             text: "🎮 Pitch/Yaw → Heterodyne Steering";
                             color: Pal.mid;
                             font-size: 10px;
                         }
+
                         Text {
                             text: "🕹️ L Stick → Fine AZ/EL Control";
                             color: Pal.mid;
                             font-size: 10px;
                         }
+
                         Text {
                             text: "🕹️ R Stick → Frequency Modulation";
                             color: Pal.mid;
                             font-size: 10px;
                         }
+
                         Text {
                             text: "📐 Accelerometer → Heterodyne Strength";
                             color: Pal.mid;
                             font-size: 10px;
                         }
+
                         Text {
                             text: "🔴 R Trigger → Carrier Freq Offset";
                             color: Pal.mid;
                             font-size: 10px;
                         }
+
                         Text {
                             text: "🔘 A → Toggle PDM";
                             color: Pal.cyan;
                             font-size: 10px;
                             font-weight: 700;
                         }
+
                         Text {
                             text: "🔘 B → Toggle ANC";
                             color: Pal.green;
                             font-size: 10px;
                             font-weight: 700;
                         }
+
                         Text {
                             text: "🔘 X → Toggle Auto-Tune";
                             color: Pal.purple;
                             font-size: 10px;
                             font-weight: 700;
                         }
+
                         Text {
                             text: "🔘 Y → Toggle Recording";
                             color: Pal.amber;

@@ -33,6 +33,7 @@ pub mod parametric;
 pub mod particle_system;
 pub mod pdm;
 pub mod resample;
+pub mod reconstruct;
 pub mod resonance;
 pub mod ridge_plot;
 pub mod rtlsdr;
