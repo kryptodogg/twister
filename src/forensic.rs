@@ -214,13 +214,7 @@ pub enum ForensicEvent {
         product_hz: f32,
         magnitude: f32,
         coherence_frames: u32,
-    },
-    AnomalyGateDecision {
-        anomaly_score: f32,
         confidence: f32,
-        threshold_used: f32,
-        forward_to_trainer: bool,
-        reason: String,
     },
 }
 
@@ -492,62 +486,33 @@ impl ForensicLogger {
         Ok(Self { sender, log_path })
     }
 
+    pub fn log(&self, event: ForensicEvent) -> Result<(), LogError> {
+        self.sender
+            .send(event)
+            .map_err(|e| LogError::IOError(e.to_string()))
+    }
+
     pub fn log_gate_decision(
-        &mut self,
+        &self,
         score: f32,
         confidence: f32,
         threshold: f32,
         forward: bool,
         reason: &str,
-    ) -> anyhow::Result<()> {
-        let now = std::time::SystemTime::now();
-        let unix_ts = now
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap_or_default()
-            .as_secs_f64();
-        let utc_ts = chrono::DateTime::from_timestamp(unix_ts as i64, 0)
-            .unwrap_or_default()
-            .to_rfc3339();
-
-        let event = ForensicEvent {
-            id: format!("gate_{}", unix_ts),
-            timestamp_utc: utc_ts,
-            timestamp_unix: unix_ts,
-            session_id: self.session_id.clone(),
-            event_type: ForensicEventType::AnomalyGateDecision {
-                anomaly_score: score,
-                confidence,
-                threshold_used: threshold,
-                forward_to_trainer: forward,
-                reason: reason.to_string(),
-            },
+    ) -> Result<(), LogError> {
+        let event = ForensicEvent::AnomalyGateDecision {
+            timestamp_micros: get_current_micros(),
+            anomaly_score: score,
             confidence,
-            duration_seconds: 0.0,
-            equipment: self.equipment.clone(),
-            metadata: std::collections::HashMap::new(),
+            threshold_used: threshold,
+            forward_to_trainer: forward,
+            reason: reason.to_string(),
         };
 
-        let record = serde_json::to_string(&event)?;
-        writeln!(self.writer, "{}", record)?;
-        self.writer.flush()?;
-        Ok(())
+        self.log(event)
     }
 
-    pub fn log_detection(&mut self, event: &DetectionEvent) -> anyhow::Result<()> {
-        self.event_count += 1;
-
-        // Create forensic event with full metadata
-        let forensic_event =
-            ForensicEvent::from_detection(event, &self.session_id, self.equipment.clone());
-
-        // Log as forensic event
-        let record = serde_json::to_string(&forensic_event)?;
-        writeln!(self.writer, "{}", record)?;
-        self.writer.flush()?;
-        Ok(())
-    }
-
-    pub fn log_detection_v2(&self, event: &DetectionEvent) -> Result<(), LogError> {
+    pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
         // Map old DetectionEvent to ForensicEvent V2
         let confidence = (event.magnitude * event.coherence_frames as f32).min(1.0);
         let fe = ForensicEvent::Bispectrum {
