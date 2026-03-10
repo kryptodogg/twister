@@ -64,6 +64,8 @@ safetensors = "*"
 tokio = { version = "*", features = ["full"] }
 rand = "*"
 hdf5 = "*"
+tray-icon = "0.21.3"
+noise = { version = "0.9.0", features = ["std"] }
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]

@@ -6,4 +6,5 @@ fn main() {
 
     slint_build::compile("ui/app.slint").expect("Slint build failed");
     slint_build::compile("ui/applets/auto_waveshaping.slint").expect("Slint build failed");
+    slint_build::compile("ui/applets/spectral_ingester.slint").expect("Slint build failed");
 }
