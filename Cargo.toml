@@ -64,6 +64,9 @@ safetensors = "*"
 tokio = { version = "*", features = ["full"] }
 rand = "*"
 hdf5 = "*"
+dualsense-rs = "0.6.0"
+raw-window-handle = "0.6"
+hidapi = "2.6.5"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]
@@ -86,3 +89,6 @@ opt-level = 2
 opt-level = 3
 lto = "thin"
 codegen-units = 1
+
+[target."cfg(windows)".dependencies]
+windows = { version = "0.58.0", features = ["Win32_Graphics_Dwm", "Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_Graphics_Gdi"] }
