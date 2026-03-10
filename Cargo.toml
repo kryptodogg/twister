@@ -100,3 +100,7 @@ windows = { version = "*", features = ["Win32_Graphics_Dwm", "Win32_Foundation",
 [[example]]
 name = "applet_toto_core"
 path = "examples/applet_toto_core.rs"
+
+[[example]]
+name = "toto"
+path = "examples/toto.rs"
