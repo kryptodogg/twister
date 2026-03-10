@@ -1,4 +1,6 @@
 use crate::detection::{DetectionEvent, HardwareLayer, ProductType};
+use burn::backend::Wgpu;
+use burn::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::path::{Path, PathBuf};
@@ -90,6 +92,7 @@ impl EventValidator {
     }
 }
 
+#[derive(Clone)]
 pub struct ForensicLogger {
     pub sender: mpsc::UnboundedSender<ForensicEvent>,
     pub log_path: PathBuf,
@@ -436,8 +439,4 @@ pub async fn verify_log_integrity(_: &str) -> Result<(), String> {
     Ok(())
 }
 
-impl Clone for ForensicLogger {
-    fn clone(&self) -> Self {
-        Self {}
-    }
-}
+// No manual Clone needed, derived instead

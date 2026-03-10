@@ -1,0 +1,204 @@
+   Compiling twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: failed to run custom build command for `twister v0.5.0 (C:\Users\pixel\Downloads\twister)`
+
+Caused by:
+  process didn't exit successfully: `C:\Users\pixel\Downloads\twister\target\debug\build\twister-1c8bac9cb34324e9\build-script-build` (exit code: 101)
+  --- stdout
+  cargo:rustc-link-search=native=.
+  cargo:rustc-link-lib=static=rtlsdr
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui\copilot_panel.slint
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/app.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\app.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/auto_waveshaping.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\auto_waveshaping.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/spectral_ingester.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\spectral_ingester.rs
+  cargo:warning=warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+  cargo:warning=  --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+  cargo:warning=   |
+  cargo:warning=18 | export component HapticTestButton {
+  cargo:warning=   |                  ^^^^^^^^^^^^^^^^
+  cargo:warning=   |
+  cargo:warning=warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+  cargo:warning=  --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+  cargo:warning=   |
+  cargo:warning=81 | export component RingMeter {
+  cargo:warning=   |                  ^^^^^^^^^
+  cargo:warning=warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+  cargo:warning=  --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+  cargo:warning=   |
+  cargo:warning=47 | export component ValueBar {
+  cargo:warning=   |                  ^^^^^^^^
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/ps5_deck.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\ps5_deck.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/joycon_wand.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\joycon_wand.rs
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\target\debug\build\SLINT_DEFAULT_STYLE.txt
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui\standards.slint
+  cargo:rerun-if-changed=C:\Users\pixel\Downloads\twister\ui/applets/toto_hud.slint
+  cargo:rerun-if-env-changed=SLINT_STYLE
+  cargo:rerun-if-env-changed=SLINT_FONT_SIZES
+  cargo:rerun-if-env-changed=SLINT_SCALE_FACTOR
+  cargo:rerun-if-env-changed=SLINT_ASSET_SECTION
+  cargo:rerun-if-env-changed=SLINT_EMBED_RESOURCES
+  cargo:rerun-if-env-changed=SLINT_EMIT_DEBUG_INFO
+  cargo:rerun-if-env-changed=SLINT_LIVE_PREVIEW
+  cargo:rustc-env=SLINT_INCLUDE_GENERATED=C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\toto_hud.rs
+
+  --- stderr
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:63:39
+      |
+   63 |     in property <color> accent-color: ForensicPalette.ag_cyan;
+      |                                       ^^^^^^^^^^^^^^^^^^^^^^^
+      |
+  error: Cannot access id 'ForensicMaterials'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:65:17
+      |
+   65 |     background: ForensicMaterials.surface_panel;
+      |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicMaterials'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:109:25
+      |
+  109 |             background: ForensicMaterials.surface_panel;
+      |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:111:27
+      |
+  111 |             border-color: ForensicPalette.ag_cyan;
+      |                           ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:126:68
+      |
+  126 |                         color: MambaBrainStatus.inference-active ? ForensicPalette.ag_cyan : #ff8800;
+      |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:153:79
+      |
+  153 | ...                   color: MambaBrainStatus.anomaly-score > 0.5 ? ForensicPalette.ag_red : ForensicPalette.ag_cyan;
+      |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:153:104
+      |
+  153 | ...                   color: MambaBrainStatus.anomaly-score > 0.5 ? ForensicPalette.ag_red : ForensicPalette.ag_cyan;
+      |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:165:40
+      |
+  165 | ...                   color: ForensicPalette.ag_cyan;
+      |                              ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:180:39
+      |
+  180 |                         border-color: ForensicPalette.ag_cyan;
+      |                                       ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicMaterials'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:211:29
+      |
+  211 |                 background: ForensicMaterials.surface_panel;
+      |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:212:31
+      |
+  212 |                 border-color: ForensicPalette.ag_violet;
+      |                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:223:32
+      |
+  223 |                         color: ForensicPalette.ag_violet;
+      |                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicMaterials'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:325:29
+      |
+  325 |                 background: ForensicMaterials.surface_panel;
+      |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:326:31
+      |
+  326 |                 border-color: ForensicPalette.ag_cyan;
+      |                               ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:340:32
+      |
+  340 |                         color: ForensicPalette.ag_cyan;
+      |                                ^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:350:39
+      |
+  350 |                         accent-color: ForensicPalette.ag_red;
+      |                                       ^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:357:39
+      |
+  357 |                         accent-color: ForensicPalette.hue-e;
+      |                                       ^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:364:39
+      |
+  364 |                         accent-color: ForensicPalette.ag_violet;
+      |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  error: Cannot access id 'ForensicPalette'
+     --> C:\Users\pixel\Downloads\twister\ui\applets\mamba_brain.slint:371:39
+      |
+  371 |                         accent-color: ForensicPalette.ag_cyan;
+      |                                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+  thread 'main' (55132) panicked at build.rs:13:58:
+  Slint build failed: CompileError(["C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:63: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:65: Cannot access id 'ForensicMaterials'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:109: Cannot access id 'ForensicMaterials'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:111: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:126: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:153: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:153: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:165: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:180: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:211: Cannot access id 'ForensicMaterials'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:212: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:223: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:325: Cannot access id 'ForensicMaterials'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:326: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:340: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:350: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:357: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:364: Cannot access id 'ForensicPalette'", "C:\\Users\\pixel\\Downloads\\twister\\ui\\applets\\mamba_brain.slint:371: Cannot access id 'ForensicPalette'"])
+  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

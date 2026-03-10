@@ -61,6 +61,7 @@ mod vector;
 mod waterfall;
 
 use crate::forensic::ForensicLogger;
+use crate::twister::computer_vision::pose_estimator::PoseFrame;
 use std::sync::Arc;
 use std::sync::atomic::Ordering;
 use std::time::{SystemTime, UNIX_EPOCH};

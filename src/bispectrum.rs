@@ -12,7 +12,6 @@
 
 use crate::detection::{DetectionEvent, HardwareLayer, MIN_COHERENCE_FRAMES, ProductType};
 use crate::gpu_shared::GpuShared;
-use crate::twister::computer_vision::pose_estimator::PoseFrame;
 use bytemuck::{Pod, Zeroable};
 use std::sync::Arc;
 
@@ -278,7 +277,7 @@ impl BispectrumEngine {
             label: Some("bispec-enc"),
         });
         {
-            let mut rng = rand::thread_rng();
+            let mut _rng = rand::rng();
             let mut pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
                 label: Some("bispec-pass"),
                 timestamp_writes: None,

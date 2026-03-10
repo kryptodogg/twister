@@ -1,3 +1,4 @@
+use burn::backend::Wgpu;
 use burn::module::Module;
 use burn::nn::{Linear, LinearConfig};
 use burn::prelude::*;
@@ -32,11 +33,10 @@ impl<B: Backend> PretrainedWav2Vec2<B> {
     }
 }
 
-
 pub struct Wav2Vec2Model<B: Backend> {
     device: burn::tensor::Device<B>,
-    model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
-    cached_embeddings: Arc<Mutex<HashMap<u64, Vec<f32>>>>,  // timestamp → 768-D
+    model: PretrainedWav2Vec2<B>, // From HF: facebook/wav2vec2-base-960h
+    cached_embeddings: Arc<Mutex<HashMap<u64, Vec<f32>>>>, // timestamp → 768-D
 }
 
 impl<B: Backend> Wav2Vec2Model<B> {
@@ -86,7 +86,10 @@ impl<B: Backend> Wav2Vec2Model<B> {
             *v /= norm.max(1e-7);
         }
 
-        self.cached_embeddings.lock().unwrap().insert(hash, output.clone());
+        self.cached_embeddings
+            .lock()
+            .unwrap()
+            .insert(hash, output.clone());
 
         Ok(output)
     }

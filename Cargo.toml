@@ -64,7 +64,7 @@ wgpu = { version = "*", features = ["vulkan"] }
 hf-hub = "*"
 safetensors = "*"
 tokio = { version = "*", features = ["full"] }
-rand = "*"
+rand = { version = "*", features = ["std", "std_rng"] }
 thiserror = "*"
 uuid = { version = "*", features = ["v4"] }
 hdf5 = { version = "*", optional = true }
@@ -72,6 +72,7 @@ tray-icon = "*"
 noise = { version = "*", features = ["std"] }
 # dualsense-rs = "*"
 raw-window-handle = "*"
+windows-sys = { version = "0.48", features = ["Win32_Graphics_Dwm", "Win32_Foundation"], optional = true }
 hidapi = "*"
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 

@@ -18,14 +18,15 @@ use std::sync::Arc;
 use slint::{ComponentHandle, VecModel, ModelRc};
 use noise::{NoiseFn, Perlin};
 
+// Use transparency module for window blur effects
+use twister::ui::enable_acrylic_blur;
+
 slint::include_modules!();
 
-// Windows Acrylic/Frosted Glass Setup (Pattern: PS5 applet)
-// Note: Simplified - Slint UI handles frosted glass via @linear-gradient in applet.slint
-#[allow(dead_code)]
-fn apply_acrylic(_window: &slint::Window) {
-    // Frosted glass effect is handled in Slint UI definition
-    // via gradient backgrounds - no additional platform code needed
+// Windows Acrylic/Frosted Glass Setup (DWM Compositor)
+// Enables blur behind the transparent window on Windows 11
+fn apply_acrylic(window: &slint::Window) {
+    enable_acrylic_blur(window);
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,71 @@
+   Compiling twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error[E0425]: cannot find function `thread_rng` in crate `rand`
+   --> src\bispectrum.rs:281:34
+    |
+281 |             let mut _rng = rand::thread_rng();
+    |                                  ^^^^^^^^^^ not found in `rand`
+
+warning: unused import: `crate::computer_vision::pose_estimator::PoseKeypoint`
+  --> src\bispectrum.rs:13:5
+   |
+13 | use crate::computer_vision::pose_estimator::PoseKeypoint;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `SignalType`
+ --> src\dispatch\audio_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\rf_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0425`.
+warning: `twister` (lib) generated 4 warnings
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: could not compile `twister` (lib) due to 1 previous error; 4 warnings emitted
