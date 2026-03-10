@@ -1,4 +1,2 @@
-#!/bin/bash
-
-# A more focused sed script to cleanly patch the struct fields issue.
-sed -i 's/flags_audio_dim: audio_dim, flags_visual_dim: visual_dim,/flags_audio_dim: audio_dim, flags_visual_dim: visual_dim,/' src/ml/modular_features.rs
+sed -i 's/\.request_device(\.request_device(&wgpu::DeviceDescriptor::default())(&wgpu::DeviceDescriptor::default()))/.request_device(\&wgpu::DeviceDescriptor::default(), None)/g' examples/chronos_slate.rs
+sed -i 's/wgpu::Maintain::Wait/wgpu::Maintain::wait()/g' examples/chronos_slate.rs

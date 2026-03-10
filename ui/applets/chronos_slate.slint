@@ -1,0 +1,109 @@
+import { VerticalBox, HorizontalBox } from "std-widgets.slint";
+
+export global ChronosBus {
+    in-out property <bool> timeline_open: false;
+    in-out property <bool> is_live: true;
+    in-out property <float> floor_height: 0.0;
+    in-out property <float> scrub_progress: 0.0; // 0.0 to 1.0 (97 days)
+}
+
+export component ChronosSlate inherits Window {
+    background: #000000aa;
+
+    // Transparent area for Wgpu to render into
+    // Using Slint's built-in image handling to composite Wgpu texture
+    in property <image> viewport_texture;
+
+    Image {
+        width: parent.width;
+        height: parent.height;
+        source: viewport_texture;
+        image-fit: fill;
+    }
+
+    // 1. DCC Orientation Gizmo (Bottom Left)
+    // NOTE: This space is reserved, WGPU will render the actual 3D gizmo here
+    // as per Brawn and Brain requirements, under the Slint HUD.
+    // Slint path was conceptually weak, real 3D is used.
+
+    // 2. Live/Playback Indicator
+    Rectangle {
+        x: 20px; y: 20px;
+        width: 120px; height: 40px;
+        background: ChronosBus.is_live ? #0cf3 : #3333;
+        border-color: ChronosBus.is_live ? #0cf : #666;
+        border-width: 1px;
+
+        Text {
+            text: ChronosBus.is_live ? "● LIVE" : "PAUSED";
+            color: ChronosBus.is_live ? #0cf : #666;
+            opacity: ChronosBus.timeline_open ? 0.4 : 1.0; // Dims when scrubbing
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        TouchArea {
+            clicked => { ChronosBus.is_live = !ChronosBus.is_live; }
+        }
+    }
+
+    // 3. Rollout Timeline
+    Rectangle {
+        y: parent.height - (ChronosBus.timeline_open ? 100px : 20px);
+        width: parent.width - 40px;
+        x: 20px;
+        height: 80px;
+        background: #050505cc;
+        animate y { duration: 250ms; easing: ease-in-out; }
+        border-radius: 4px;
+
+        TouchArea {
+            // Click to toggle rollout if it's closed, or if clicking top part
+            clicked => {
+                if (!ChronosBus.timeline_open) {
+                    ChronosBus.timeline_open = true;
+                    ChronosBus.is_live = false; // Auto pause when opening timeline
+                } else if (self.mouse-y < 20px) {
+                    ChronosBus.timeline_open = false;
+                }
+            }
+
+            // Scrubbing interactions
+            moved => {
+                if (ChronosBus.timeline_open && self.pressed && self.mouse-y >= 20px) {
+                    ChronosBus.scrub_progress = max(0.0, min(1.0, self.mouse-x / parent.width));
+                    ChronosBus.is_live = false; // Ensure paused when scrubbing
+                }
+            }
+        }
+
+        // Scrubbing Bar
+        Rectangle {
+            y: 40px;
+            width: parent.width - 40px;
+            height: 4px;
+            background: #333;
+            x: 20px;
+
+            Rectangle { // The "Violet" Playhead
+                x: ChronosBus.scrub_progress * parent.width - 1px;
+                width: 2px; height: 20px;
+                y: -8px; // Center vertically on the bar
+                background: #b0f;
+            }
+        }
+
+        // Tab handle to hint at interaction
+        Rectangle {
+            y: 0px;
+            width: 40px;
+            height: 4px;
+            background: #555;
+            x: (parent.width - self.width) / 2;
+            border-radius: 2px;
+
+        }
+    }
+}
