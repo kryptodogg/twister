@@ -2,6 +2,16 @@ import { VerticalBox, HorizontalBox } from "std-widgets.slint";
 import { Colors, Spacing, Typography } from "../tokens.slint";
 
 export global MambaBrainStatus {
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // RESPONSIVE SIZING — AR/VR Deployment
+    // unit-size = height of golden-ratio credit card (1.585:1)
+    // Scales responsively: phone (212pt) → widget (54pt) → display (540pt)
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    in property <length> unit-size: 100px;
+
+    // Canvas dimension for particle sizing (computed from visualization rectangle)
+    in property <length> canvas-dimension: 100px;
+
     // Scalar latent metrics from 128D → 4D projection
     in-out property <float> frequency-tracker: 0.0;
     in-out property <float> harmonic-smear: 0.0;
@@ -61,12 +71,17 @@ export global MambaBrainStatus {
     }
 
 // Helper component: Particle dot with energy-based opacity
+// Responsive sizing: dot-radius = min(canvas_width, canvas_height) * 0.015
 component ParticleDot inherits Rectangle {
         in property <float> energy: 0.5;      // [0, 1]
     in property <color> dot-color: Colors.primary;
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
+    in property <length> canvas-dimension: 400px;  // Canvas shorter dimension for scaling
+
+    property <length> dot-size: max(3px, canvas-dimension * 0.015);  // 1.5% of canvas, min 3px
+
+    width: dot-size;
+    height: dot-size;
+    border-radius: dot-size * 0.5;
         background: dot-color;
         opacity: 0.2 + 0.8 * energy;
 
@@ -111,28 +126,38 @@ component MetricCard inherits Rectangle {
 
     export component MambaBrainApplet inherits Window {
         title: "AG-Brain: Unified Field Inference";
-    // Resizable window - no fixed dimensions
-    width: 1200px;
-        height: 700px;
+    // Resizable window - responsive sizing
+    // Default: 1200x700px (12x unit-size), scales with unit-size property
+    width: MambaBrainStatus.unit-size * 12.0;
+        height: MambaBrainStatus.unit-size * 7.0;
     // Transparent window background — DWM Acrylic/KWin blur shows through
     // Fallback to solid if compositor not available is handled in Rust
     background: transparent;
+
+    // Update canvas-dimension based on visualization rectangle size
+    // This drives responsive particle sizing
+    property <length> canvas-rect-width: self.width * 0.65;  // Particle canvas is ~65% of total width
+    property <length> canvas-rect-height: self.height * 0.75; // Particle canvas is ~75% of total height
+
+    init => {
+        MambaBrainStatus.canvas-dimension = (canvas-rect-width < canvas-rect-height) ? canvas-rect-width : canvas-rect-height;
+    }
         VerticalBox {
-            spacing: 12px;
-            padding: 16px;
+            spacing: Spacing.md;
+            padding: Spacing.md;
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // HEADER: Inference Status with Material Controls
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         Rectangle {
                 background: Colors.surface-container;
-                border-radius: 8px;
+                border-radius: Spacing.md * 0.5;
                 border-color: Colors.primary;
                 border-width: 1px;
-                height: 60px;
+                height: MambaBrainStatus.unit-size * 0.6;
                 HorizontalBox {
-                    padding: 12px;
-                    spacing: 16px;
+                    padding: Spacing.sm;
+                    spacing: Spacing.lg;
                     alignment: space-between;
 
                 // Left side: Status indicator
@@ -142,7 +167,7 @@ component MetricCard inherits Rectangle {
                             text: MambaBrainStatus.inference-active ? "🧠 MAMBA BRAIN ACTIVE" : "🧠 STANDBY";
                             color: MambaBrainStatus.inference-active ? Colors.primary : Colors.harm-1;
                             font-weight: 800;
-                            font-size: 13px;
+                            font-size: Typography.label-large;
                             font-family: "monospace";
                         }
 
@@ -150,7 +175,7 @@ component MetricCard inherits Rectangle {
                             text: "Unified Field Inference @ " + MambaBrainStatus.inference-fps + " FPS";
                             color: Colors.on-surface-variant;
                             font-family: "monospace";
-                            font-size: 9px;
+                            font-size: Typography.label-small;
                         }
                     }
 
@@ -161,13 +186,13 @@ component MetricCard inherits Rectangle {
 
                     // Quick metric displays
                     HorizontalBox {
-                            spacing: 24px;
+                            spacing: Spacing.lg;
                             VerticalBox {
-                                spacing: 1px;
+                                spacing: Spacing.xs;
                                 Text {
                                     text: "Anomaly";
                                     color: Colors.on-surface-variant;
-                                    font-size: 8px;
+                                    font-size: Typography.label-small;
                                     font-family: "monospace";
                                 }
 
@@ -176,16 +201,16 @@ component MetricCard inherits Rectangle {
                                     color: MambaBrainStatus.anomaly-score > 0.5 ? Colors.error : Colors.primary;
                                     font-family: "monospace";
                                     font-weight: 700;
-                                    font-size: 11px;
+                                    font-size: Typography.mono-label;
                                 }
                             }
 
                             VerticalBox {
-                                spacing: 1px;
+                                spacing: Spacing.xs;
                                 Text {
                                     text: "Confidence";
                                     color: Colors.on-surface-variant;
-                                    font-size: 8px;
+                                    font-size: Typography.label-small;
                                     font-family: "monospace";
                                 }
 
@@ -194,22 +219,22 @@ component MetricCard inherits Rectangle {
                                     color: Colors.primary;
                                     font-family: "monospace";
                                     font-weight: 700;
-                                    font-size: 11px;
+                                    font-size: Typography.mono-label;
                                 }
                             }
                         }
 
                     // Material Design toggle button (gear icon)
                     Rectangle {
-                            width: 36px;
-                            height: 36px;
-                            border-radius: 4px;
+                            width: MambaBrainStatus.unit-size * 0.36;
+                            height: MambaBrainStatus.unit-size * 0.36;
+                            border-radius: Spacing.sm * 0.5;
                             background: transparent;
                             border-width: 1px;
                             border-color: Colors.primary;
                             Text {
                                 text: MambaBrainStatus.metrics-panel-visible ? "⚙️" : "📊";
-                                font-size: 18px;
+                                font-size: Typography.headline-small;
                                 horizontal-alignment: center;
                                 vertical-alignment: center;
                                 width: 100%;
@@ -239,16 +264,16 @@ component MetricCard inherits Rectangle {
                     background: Colors.surface-container;
                     border-color: Colors.secondary;
                     border-width: 2px;
-                    border-radius: 8px;
+                    border-radius: Spacing.md * 0.5;
                     horizontal-stretch: 1;
                     VerticalBox {
-                        padding: 12px;
-                        spacing: 8px;
+                        padding: Spacing.sm;
+                        spacing: Spacing.sm;
                         Text {
                             text: "128D Latent → 2D PCA | " + MambaBrainStatus.inference-fps + " Hz update";
                             color: Colors.secondary;
                             font-weight: 700;
-                            font-size: 10px;
+                            font-size: Typography.label-small;
                             font-family: "monospace";
                         }
 
@@ -257,48 +282,55 @@ component MetricCard inherits Rectangle {
                             width: 100%;
                             height: 100%;
                             background: @linear-gradient(135deg, Colors.canvas-background 0%, Colors.surface-dim 100%);
-                            border-radius: 4px;
+                            border-radius: Spacing.sm;
+
                             HorizontalBox {
-                                padding: 20px;
-                                spacing: 15px;
+                                padding: Spacing.lg;
+                                spacing: Spacing.md;
 
                             // Left column: Particle dots (6 particles)
                             VerticalBox {
-                                    spacing: 12px;
+                                    spacing: Spacing.md;
                                     ParticleDot {
                                         dot-color: Colors.harm-0;
                                         energy: MambaBrainStatus.particle-data[2];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-8;
                                         energy: MambaBrainStatus.particle-data[5];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-11;
                                         energy: MambaBrainStatus.particle-data[8];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-3;
                                         energy: MambaBrainStatus.particle-data[11];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-9;
                                         energy: MambaBrainStatus.particle-data[14];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-1;
                                         energy: MambaBrainStatus.particle-data[17];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
                                 }
 
                             // Center: Energy visualization (animated bars)
                             VerticalBox {
-                                    spacing: 8px;
+                                    spacing: Spacing.sm;
                                     horizontal-stretch: 1;
                                     Rectangle {
                                         height: 4px;
@@ -367,35 +399,41 @@ component MetricCard inherits Rectangle {
 
                             // Right column: Remaining particles (6 particles)
                             VerticalBox {
-                                    spacing: 12px;
+                                    spacing: Spacing.md;
                                     ParticleDot {
                                         dot-color: Colors.harm-7;
                                         energy: MambaBrainStatus.particle-data[20];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-11;
                                         energy: MambaBrainStatus.particle-data[23];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-9;
                                         energy: MambaBrainStatus.particle-data[26];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-1;
                                         energy: MambaBrainStatus.particle-data[29];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-3;
                                         energy: MambaBrainStatus.particle-data[32];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
 
                                     ParticleDot {
                                         dot-color: Colors.harm-7;
                                         energy: MambaBrainStatus.particle-data[35];
+                                        canvas-dimension: MambaBrainStatus.canvas-dimension;
                                     }
                                 }
                             }
@@ -405,12 +443,12 @@ component MetricCard inherits Rectangle {
 
             // Right side: Metrics panel (togglable via gear icon)
             Rectangle {
-                    width: MambaBrainStatus.metrics-panel-visible ? 240px : 0px;
+                    width: MambaBrainStatus.metrics-panel-visible ? MambaBrainStatus.unit-size * 2.4 : 0px;
                     height: 100%;
                     background: Colors.surface-container;
                     border-color: Colors.primary;
                     border-width: 1px;
-                    border-radius: 8px;
+                    border-radius: Spacing.md * 0.5;
                     opacity: MambaBrainStatus.metrics-panel-visible ? 1.0 : 0.0;
                     animate width {
                         duration: 200ms;
@@ -418,13 +456,13 @@ component MetricCard inherits Rectangle {
                     }
                     animate opacity { duration: 200ms; }
                     VerticalBox {
-                        padding: 12px;
-                        spacing: 10px;
+                        padding: Spacing.sm;
+                        spacing: Spacing.md;
                         Text {
                             text: "METRICS";
                             color: Colors.primary;
                             font-weight: 700;
-                            font-size: 10px;
+                            font-size: Typography.label-small;
                             font-family: "monospace";
                         }
 
@@ -458,18 +496,18 @@ component MetricCard inherits Rectangle {
 
                     // Status bar
                     Rectangle {
-                            height: 24px;
+                            height: Typography.body-medium * 1.5;
                             background: transparent;
                             border-color: Colors.outline-variant;
                             border-width: 1px;
-                            border-radius: 4px;
+                            border-radius: Spacing.sm * 0.5;
                             Text {
                                 text: MambaBrainStatus.inference-active ? "✓ Running" : "⊘ Waiting";
                                 color: MambaBrainStatus.inference-active ? Colors.harm-9 : Colors.harm-1;
                                 font-family: "monospace";
-                                font-size: 8px;
+                                font-size: Typography.label-small;
                                 vertical-alignment: center;
-                                x: 6px;
+                                x: Spacing.sm;
                             }
                         }
                     }
