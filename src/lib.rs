@@ -1,3 +1,6 @@
+// Increase recursion limit for complex generic types (Autodiff<Wgpu> trait resolution)
+#![recursion_limit = "256"]
+
 pub mod active_denial;
 pub mod physics;
 pub mod spatial;

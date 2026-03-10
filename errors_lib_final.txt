@@ -1,0 +1,227 @@
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+warning: unused imports: `HardwareLayer` and `ProductType`
+ --> src\forensic.rs:1:40
+  |
+1 | use crate::detection::{DetectionEvent, HardwareLayer, ProductType};
+  |                                        ^^^^^^^^^^^^^  ^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\forensic.rs:2:5
+  |
+2 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::prelude::*`
+ --> src\forensic.rs:3:5
+  |
+3 | use burn::prelude::*;
+  |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `Path`
+ --> src\forensic.rs:6:17
+  |
+6 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:2:17
+  |
+2 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused import: `crate::gpu_shared::GpuShared`
+ --> src\ai\copilot_interface.rs:1:5
+  |
+1 | use crate::gpu_shared::GpuShared;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `AutodiffModule`
+ --> src\ml\timegnn_trainer.rs:6:20
+  |
+6 | use burn::module::{AutodiffModule, Module};
+  |                    ^^^^^^^^^^^^^^
+
+warning: unused import: `burn::optim::decay::WeightDecayConfig`
+ --> src\ml\timegnn_trainer.rs:7:5
+  |
+7 | use burn::optim::decay::WeightDecayConfig;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `burn::backend::Wgpu`
+ --> src\ml\wav2vec2_loader.rs:1:5
+  |
+1 | use burn::backend::Wgpu;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\audio_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: unused import: `SignalType`
+ --> src\dispatch\rf_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: variable does not need to be mutable
+  --> src\particle_system\streaming.rs:47:21
+   |
+47 |                 let mut pos = [
+   |                     ----^^^
+   |                     |
+   |                     help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: the trait bound `TensorData: From<Vec<f32>>` is not satisfied
+   --> src\ml\timegnn_trainer.rs:542:37
+    |
+542 |                 Tensor::from_floats(batch_features_flat, &device)
+    |                 ------------------- ^^^^^^^^^^^^^^^^^^^ the trait `From<Vec<f32>>` is not implemented for `TensorData`
+    |                 |
+    |                 required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `From<T>`:
+              `TensorData` implements `From<&[E]>`
+              `TensorData` implements `From<&[usize]>`
+              `TensorData` implements `From<[E; A]>`
+              `TensorData` implements `From<[[E; B]; A]>`
+              `TensorData` implements `From<[[[E; C]; B]; A]>`
+              `TensorData` implements `From<[[[[E; D]; C]; B]; A]>`
+              `TensorData` implements `From<[[[[[Elem; E]; D]; C]; B]; A]>`
+              `TensorData` implements `From<[usize; A]>`
+    = note: required for `Vec<f32>` to implement `Into<TensorData>`
+note: required by a bound in `burn_tensor::tensor::api::float::<impl burn::Tensor<B, D>>::from_floats`
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-tensor-0.21.0-pre.2\src\tensor\api\float.rs:434:27
+    |
+434 |     pub fn from_floats<A: Into<TensorData>>(floats: A, device: &B::Device) -> Self {
+    |                           ^^^^^^^^^^^^^^^^ required by this bound in `burn_tensor::tensor::api::float::<impl Tensor<B, D>>::from_floats`
+
+error[E0308]: mismatched types
+   --> src\ml\timegnn_trainer.rs:556:72
+    |
+556 |             model = optimizer.step(config.learning_rate as f64, model, grads);
+    |                               ----                                     ^^^^^ expected `GradientsParams`, found `Gradients`
+    |                               |
+    |                               arguments to this method are incorrect
+    |
+note: method defined here
+   --> C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\burn-optim-0.21.0-pre.2\src\optim\base.rs:77:8
+    |
+ 77 |     fn step(&mut self, lr: LearningRate, module: M, grads: GradientsParams) -> M;
+    |        ^^^^
+
+warning: unused import: `Module`
+ --> src\ml\timegnn_trainer.rs:6:36
+  |
+6 | use burn::module::{AutodiffModule, Module};
+  |                                    ^^^^^^
+
+warning: unused import: `burn::tensor::backend::AutodiffBackend`
+  --> src\ml\timegnn_trainer.rs:11:5
+   |
+11 | use burn::tensor::backend::AutodiffBackend;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable `event_count` is assigned to, but never used
+   --> src\forensic.rs:134:17
+    |
+134 |             let mut event_count: u64 = 0;
+    |                 ^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_event_count` instead
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `event_count` is never read
+   --> src\forensic.rs:139:25
+    |
+139 |                         event_count += 1;
+    |                         ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `start_date`
+   --> src\forensic.rs:260:9
+    |
+260 |         start_date: Option<&str>,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_start_date`
+
+warning: unused variable: `end_date`
+   --> src\forensic.rs:261:9
+    |
+261 |         end_date: Option<&str>,
+    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_end_date`
+
+warning: unused variable: `duration`
+  --> src\particle_system\streaming.rs:39:17
+   |
+39 |             let duration = end_ms.saturating_sub(start_ms) as f32;
+   |                 ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_duration`
+
+warning: unused variable: `time_factor`
+  --> src\particle_system\streaming.rs:40:17
+   |
+40 |             let time_factor = (start_ms as f64 % 1000000.0) as f32 / 100000.0;
+   |                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_time_factor`
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+Some errors have detailed explanations: E0277, E0308.
+For more information about an error, try `rustc --explain E0277`.
+warning: `twister` (lib) generated 23 warnings
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar inherits Rectangle {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: could not compile `twister` (lib) due to 2 previous errors; 23 warnings emitted

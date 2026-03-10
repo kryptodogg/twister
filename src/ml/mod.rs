@@ -1,4 +1,5 @@
 pub mod anomaly_gate;
+pub mod chronos_bridge;
 pub mod event_corpus;
 pub mod fold_frequency_harmonics;
 pub mod impulse_coherence;
@@ -14,6 +15,7 @@ pub mod point_mamba_trainer;
 pub mod pointnet_encoder;
 pub mod timegnn;
 pub mod timegnn_trainer;
+pub mod timegnn_ui_bridge;
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
 

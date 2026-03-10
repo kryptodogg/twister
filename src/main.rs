@@ -16,8 +16,11 @@
 //   sdr_loop      — tokio::spawn: RTL-SDR IQ capture + Twister auto-tune
 
 #[allow(clippy::too_many_arguments)]
-slint::include_modules!();
+pub mod slint_generated {
+    slint::include_modules!();
+}
 use slint_generated::AppWindow;
+use twister::gpu::GpuContext;
 
 // Twister library imports
 use anyhow::Context;
@@ -35,7 +38,6 @@ use twister::detection::{DetectionEvent, HardwareLayer, ProductType};
 use twister::embeddings::EmbeddingStore;
 use twister::forensic::{ForensicEvent, ForensicLogger};
 use twister::fusion::FusionEngine;
-use twister::gpu::GpuContext;
 use twister::gpu_shared::GpuShared;
 use twister::knowledge_graph::KnowledgeGraphClient;
 use twister::mamba::TrainingPair;
@@ -744,7 +746,7 @@ async fn main() -> anyhow::Result<()> {
                                         r
                                     };
 
-                                let pair = mamba::TrainingPair::new(
+                                let pair = TrainingPair::new(
                                     state_disp.get_sdr_center_hz() as u32,
                                     tx_cur,
                                     rx_cur,
@@ -843,7 +845,7 @@ async fn main() -> anyhow::Result<()> {
                             rx_frame_acc.extend_from_slice(&rx_cur);
                             frame_count += 1;
                             if frame_count >= 64 {
-                                let pair = mamba::TrainingPair::new(
+                                let pair = TrainingPair::new(
                                     state_disp.get_sdr_center_hz() as u32,
                                     tx_frame_acc[..(512 * 64)].to_vec(),
                                     rx_frame_acc[..(512 * 64)].to_vec(),
@@ -1892,4 +1894,3 @@ fn _start_trainer_loop(
         }
     });
 }
-pub mod particle_system;
