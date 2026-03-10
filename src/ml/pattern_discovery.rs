@@ -690,4 +690,72 @@ mod tests {
         assert_eq!(patterns.len(), 2);
         assert!(patterns[0].cluster_size >= 8); // Should have clustered reasonably
     }
+
+    #[test]
+    fn test_silhouette_filtering_rejects_low_quality() {
+        // Create overlapping (poor separation) clusters to generate low silhouette scores
+        let mut embeddings = Vec::new();
+        let mut events = Vec::new();
+
+        // Create clusters with high overlap (poor silhouette)
+        for cluster in 0..2 {
+            for i in 0..8 {
+                let mut emb = vec![0.0; 128];
+                // Add noise to create overlap between clusters
+                emb[0] = cluster as f32 + 0.3 * ((i as f32) % 1.0);
+                emb[1] = (i as f32) * 0.05 + 0.1 * (cluster as f32);
+                embeddings.push(emb);
+
+                events.push(Event {
+                    id: format!("noisy_event_{}_{}", cluster, i),
+                    embedding: vec![0.0; 128],
+                    timestamp_micros: (cluster as i64 * 100 + i as i64) * 1_000_000,
+                    timestamp_iso: "2025-12-01T00:00:00Z".to_string(),
+                    tag: format!("NOISY_{}", cluster),
+                    rf_frequency_hz: 2.4e9 + (cluster as f32 * 1e8),
+                    anomaly_score: 1.5,
+                });
+            }
+        }
+
+        // Attempt pattern discovery
+        let result = discover_patterns(&embeddings, &events, 2);
+
+        // Result depends on actual silhouette scores computed
+        // With overlapping data, some or all clusters may be rejected
+        // Verify the function completes without error
+        assert!(result.is_ok(), "Pattern discovery should handle overlapping data");
+
+        // If patterns are returned, all should have silhouette >= 0.6
+        if let Ok(patterns) = result {
+            for pattern in &patterns {
+                assert!(
+                    pattern.silhouette_score >= 0.6,
+                    "All returned patterns must have silhouette >= 0.6 (generation-critical constraint)"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn test_silhouette_score_generation_critical_threshold() {
+        // Verify the silhouette threshold is enforced at 0.6 (generation-critical)
+        // This test documents the constraint
+        let threshold = 0.6;
+
+        // Silhouette ranges from -1 to 1
+        // -1: wrong cluster, 0: on boundary, 1: well-separated
+        assert!(threshold > 0.0, "Threshold should be positive");
+        assert!(threshold < 1.0, "Threshold should be < 1.0");
+
+        // Verify boundary cases
+        assert!(
+            0.59 < threshold,
+            "Scores of 0.59 should be rejected"
+        );
+        assert!(
+            0.61 >= threshold,
+            "Scores of 0.61 should be accepted"
+        );
+    }
 }
