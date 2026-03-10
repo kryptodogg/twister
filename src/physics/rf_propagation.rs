@@ -31,7 +31,7 @@ impl RFWavePropagation {
         material_grid: &VoxelGrid<Material>,
     ) -> Result<(), Box<dyn Error>> {
         let k = 2.0 * std::f32::consts::PI / self.wavelength_m;  // Wave number
-        let k2 = k * k;
+        let _k2 = k * k;
         let h = self.grid.voxel_size_m;
         let h2 = h * h;
 
@@ -66,7 +66,7 @@ impl RFWavePropagation {
 
                         // Local wave number taking material permittivity into account
                         let local_k = k * material.permittivity.sqrt();
-                        let local_k2 = local_k * local_k;
+                        let _local_k2 = local_k * local_k;
 
                         // Attenuation term (absorption)
                         let alpha = material.attenuation_coeff(self.frequency_hz);

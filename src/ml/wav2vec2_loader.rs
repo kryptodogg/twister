@@ -1,4 +1,3 @@
-use burn::backend::Wgpu;
 use burn::module::Module;
 use burn::nn::{Linear, LinearConfig};
 use burn::prelude::*;

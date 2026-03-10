@@ -1,0 +1,160 @@
+warning: value assigned to `response` is never read
+  --> src/ai/reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `interface` is never read
+ --> src/ui/copilot_handler.rs:9:5
+  |
+8 | pub struct CopilotUIHandler {
+  |            ---------------- field in this struct
+9 |     interface: Arc<Mutex<CopilotInterface>>,
+  |     ^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src/pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: field `device_id` is never read
+  --> src/safe_sdr_wrapper.rs:15:5
+   |
+13 | pub struct RadioDevice {
+   |            ----------- field in this struct
+14 |     device_type: RadioDeviceType,
+15 |     device_id: u32,
+   |     ^^^^^^^^^
+
+warning: field `last_save` is never read
+  --> src/trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src/visualization/gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src/visualization/mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src/visualization/radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src/visualization/rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: field `sample_rate` is never read
+ --> src/ml/fold_frequency_harmonics.rs:2:5
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            --------------------- field in this struct
+2 |     sample_rate: u32,
+  |     ^^^^^^^^^^^
+
+warning: fields `device` and `model` are never read
+  --> src/ml/wav2vec2_loader.rs:37:5
+   |
+36 | pub struct Wav2Vec2Model<B: Backend> {
+   |            ------------- fields in this struct
+37 |     device: burn::tensor::Device<B>,
+   |     ^^^^^^
+38 |     model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
+   |     ^^^^^
+
+warning: field `bins_per_octave` is never read
+ --> src/ml/wideband_harmonic_analysis.rs:4:5
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ------------------------ field in this struct
+...
+4 |     bins_per_octave: u32, // 8 (96 total bins = 12 octaves × 8)
+  |     ^^^^^^^^^^^^^^^
+
+warning: method `bin_to_freq` is never used
+  --> src/ml/wideband_harmonic_analysis.rs:38:8
+   |
+18 | impl WidebandHarmonicAnalyzer {
+   | ----------------------------- method in this implementation
+...
+38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+   |        ^^^^^^^^^^^
+
+warning: `twister` (lib) generated 13 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.82s
+     Running `target/debug/examples/joycon_wand`
+Error: Could not initialize backend.
+Error from Winit backend: Error initializing winit event loop: os error at /home/jules/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winit-0.30.13/src/platform_impl/linux/mod.rs:765: neither WAYLAND_DISPLAY nor WAYLAND_SOCKET nor DISPLAY is set.
+No backends configured.

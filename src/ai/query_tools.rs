@@ -1,7 +1,6 @@
 use crate::knowledge_graph::KnowledgeGraphClient;
 use std::sync::Arc;
 use neo4rs::*;
-use serde_json::Value;
 
 /// Represents a query tool that the LLM can invoke to fetch data from Neo4j.
 #[async_trait::async_trait]
@@ -25,7 +24,7 @@ impl Tool for FindEventsByLocationTool {
         "Find forensic events near a specific spatial azimuth (0-360 degrees). Args: {\"azimuth\": 45.0, \"tolerance\": 5.0, \"day\": \"Friday\"}"
     }
 
-    async fn execute(&self, args: &str, graph: &Arc<KnowledgeGraphClient>) -> Result<(String, Vec<u64>), String> {
+    async fn execute(&self, _args: &str, graph: &Arc<KnowledgeGraphClient>) -> Result<(String, Vec<u64>), String> {
         // Dummy arg parsing: expecting azimuth and an optional tolerance.
         let target_azimuth = 45.0_f64; // In degrees, converting to radians inside cypher if needed
         let day = "Friday";
@@ -40,7 +39,7 @@ impl Tool for FindEventsByLocationTool {
             RETURN e.event_id as event_id, p.name as pattern_name, p.confidence as pattern_conf
         ")
         .param("day", day)
-        .param("target_rad", (target_azimuth * std::f64::consts::PI / 180.0));
+        .param("target_rad", target_azimuth * std::f64::consts::PI / 180.0 );
 
         let (mut txn, mut stream) = graph.execute_query(q).await.map_err(|e| e.to_string())?;
 
