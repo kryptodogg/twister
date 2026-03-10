@@ -1,0 +1,168 @@
+import { VerticalBox, HorizontalBox, Slider, Switch, ProgressIndicator } from "std-widgets.slint";
+import { Standards, IconButton } from "../standards.slint";
+
+export global TotoEngine {
+    in-out property <bool> always-learning: true;
+    in-out property <float> anomaly-score: 0.150;
+
+    // The 12 spectral hues (Flutopedia Scale)
+    in-out property <string> path-c: "M 0 60 L 600 60";
+    in-out property <string> path-cs: "M 0 60 L 600 60";
+    in-out property <string> path-d: "M 0 60 L 600 60";
+    in-out property <string> path-ds: "M 0 60 L 600 60";
+    in-out property <string> path-e: "M 0 60 L 600 60";
+    in-out property <string> path-f: "M 0 60 L 600 60";
+    in-out property <string> path-fs: "M 0 60 L 600 60"; // Cyan
+    in-out property <string> path-g: "M 0 60 L 600 60";
+    in-out property <string> path-gs: "M 0 60 L 600 60";
+    in-out property <string> path-a: "M 0 60 L 600 60";
+    in-out property <string> path-as: "M 0 60 L 600 60"; // Violet
+    in-out property <string> path-b: "M 0 60 L 600 60";
+
+    // Mamba Projections
+    in-out property <float> drive: 0.250;
+    in-out property <float> fold: 0.700;
+    in-out property <float> asym: 0.150;
+
+    // UI State
+    in-out property <bool> metrics-expanded: false;
+}
+
+export component TotoApplet inherits Window {
+    title: "AG-HUD: Unified Mamba BSS";
+    width: 800px;
+    height: 600px;
+    background: Standards.background;
+
+    // Apply transparent windowing properties
+    no-frame: true;
+
+    VerticalBox {
+        spacing: 15px;
+        padding: 20px;
+
+        // Header
+        HorizontalBox {
+            VerticalBox {
+                Text { text: "UNIFIED MAMBA INFERENCE LOOP"; color: Standards.primary; font-weight: 800; font-size: Standards.font-size-large; font-family: Standards.font-family; }
+                HorizontalBox {
+                    Text { text: "Anomaly Score:"; color: Standards.on-surface; font-family: Standards.font-family; }
+                    Text {
+                        text: round(TotoEngine.anomaly-score * 1000) / 1000;
+                        color: TotoEngine.anomaly-score > 0.5 ? Standards.error : Standards.secondary;
+                        font-weight: 800;
+                        font-family: Standards.font-family;
+                    }
+                }
+            }
+            HorizontalBox {
+                alignment: end;
+                Text { text: "Always Learning: Active"; color: Standards.on-surface; font-family: Standards.font-family; vertical-alignment: center; }
+                Switch { checked <=> TotoEngine.always-learning; }
+            }
+        }
+
+        // Main Visualization: Universal Rainbow Harmonic Smear
+        Rectangle {
+            height: 300px;
+            background: Standards.surface;
+            border-color: Standards.surface-variant;
+            border-width: 2px;
+            border-radius: 8px;
+
+            HorizontalBox {
+                padding: 10px;
+                Text { text: "Oscilloscope"; color: Standards.on-surface; font-family: Standards.font-family; }
+                Text { text: "Universal Rainbow Harmonic Smear"; color: Standards.secondary; font-family: Standards.font-family; horizontal-alignment: right; }
+            }
+
+            // The 12 overlapping signal layers demonstrating BSS
+            Path { commands: TotoEngine.path-c; stroke: Standards.hue-c; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-cs; stroke: Standards.hue-cs; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-d; stroke: Standards.hue-d; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-ds; stroke: Standards.hue-ds; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-e; stroke: Standards.hue-e; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-f; stroke: Standards.hue-f; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-fs; stroke: Standards.hue-fs; stroke-width: 2px; } // Cyan
+            Path { commands: TotoEngine.path-g; stroke: Standards.hue-g; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-gs; stroke: Standards.hue-gs; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-a; stroke: Standards.hue-a; stroke-width: 2px; }
+            Path { commands: TotoEngine.path-as; stroke: Standards.hue-as; stroke-width: 2px; } // Violet
+            Path { commands: TotoEngine.path-b; stroke: Standards.hue-b; stroke-width: 2px; }
+
+            Text { text: "Amplitude"; color: Standards.on-surface; font-family: Standards.font-family; x: 10px; y: 140px; transform-rotation: -90deg; }
+            Text { text: "Time (10ms)"; color: Standards.on-surface; font-family: Standards.font-family; y: parent.height - 20px; x: (parent.width - self.width) / 2; }
+
+            // Grid lines
+            Path { stroke: Standards.surface-variant; stroke-width: 1px; commands: "M 0 150 L 800 150 M 100 0 L 100 300 M 200 0 L 200 300 M 300 0 L 300 300 M 400 0 L 400 300 M 500 0 L 500 300 M 600 0 L 600 300 M 700 0 L 700 300"; }
+        }
+
+        // Mamba Projections
+        HorizontalBox {
+            spacing: 15px;
+            Rectangle {
+                background: Standards.surface; border-color: Standards.surface-variant; border-width: 2px; border-radius: 8px;
+                VerticalBox {
+                    padding: 10px;
+                    Text { text: "Mamba Projections"; color: Standards.on-surface; font-family: Standards.font-family; }
+                    HorizontalBox {
+                        Text { text: "Drive: " + round(TotoEngine.drive * 1000) / 1000; color: Standards.primary; font-family: Standards.font-family; }
+                        Text { text: "0.250"; color: Standards.on-surface; font-family: Standards.font-family; horizontal-alignment: right; }
+                    }
+                    ProgressIndicator { width: 100%; progress: TotoEngine.drive; }
+                }
+            }
+            Rectangle {
+                background: Standards.surface; border-color: Standards.surface-variant; border-width: 2px; border-radius: 8px;
+                VerticalBox {
+                    padding: 10px;
+                    Text { text: "Mamba Projections"; color: Standards.on-surface; font-family: Standards.font-family; }
+                    HorizontalBox {
+                        Text { text: "Fold: " + round(TotoEngine.fold * 1000) / 1000; color: Standards.hue-e; font-family: Standards.font-family; }
+                        Text { text: "0.700"; color: Standards.on-surface; font-family: Standards.font-family; horizontal-alignment: right; }
+                    }
+                    ProgressIndicator { width: 100%; progress: TotoEngine.fold; }
+                }
+            }
+            Rectangle {
+                background: Standards.surface; border-color: Standards.surface-variant; border-width: 2px; border-radius: 8px;
+                VerticalBox {
+                    padding: 10px;
+                    Text { text: "Mamba Projections"; color: Standards.on-surface; font-family: Standards.font-family; }
+                    HorizontalBox {
+                        Text { text: "Asym: " + round(TotoEngine.asym * 1000) / 1000; color: Standards.secondary; font-family: Standards.font-family; }
+                        Text { text: "0.150"; color: Standards.on-surface; font-family: Standards.font-family; horizontal-alignment: right; }
+                    }
+                    ProgressIndicator { width: 100%; progress: TotoEngine.asym; }
+                }
+            }
+        }
+
+        // Collapsable Slate Pane (Raw Metrics)
+        if TotoEngine.metrics-expanded: Rectangle {
+            background: Standards.surface-variant;
+            border-radius: 8px;
+            height: 80px;
+            VerticalBox {
+                padding: 10px;
+                Text { text: "Raw Telemetry Active: BSS Engine Running at 10ms Latency"; color: Standards.primary; font-family: Standards.font-family; }
+                Text { text: "Channels Extracted: 60Hz (Red), 10.625kHz (Cyan), 85kHz (Cyan)"; color: Standards.on-surface; font-family: Standards.font-family; }
+            }
+        }
+
+        // Material Bottom App Bar
+        Rectangle {
+            height: 48px;
+            background: Standards.surface;
+            border-radius: 24px;
+            HorizontalBox {
+                padding: 8px;
+                alignment: center;
+                IconButton {
+                    icon: "⚙"; // Gear Icon
+                    clicked => { TotoEngine.metrics-expanded = !TotoEngine.metrics-expanded; }
+                }
+            }
+        }
+    }
+}

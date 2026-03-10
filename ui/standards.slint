@@ -1,0 +1,102 @@
+export global ForensicPalette {
+    // Neural Activity (Brawn, Raw telemetry, Blue side of the track)
+    out property <color> ag_teal: #0cf; // Active telemetry, raw field grid
+    out property <color> ag_cyan: #00f6ff; // BSS unmixing/octave-folded channels (e.g., 85kHz pirate radio)
+
+    // Aether Resonance (Brain, Mutation logic, Violet side of the track)
+    out property <color> ag_violet: #b0f; // Waveshaping parameters, harmonic smear
+
+    // Physical Baseline (The Kansas house floor)
+    out property <color> ag_red: #f00; // 60Hz Power Grid Anomaly (Flutopedia Deep Red)
+    out property <color> ag_black_glass: #000000aa; // Semi-transparent "Glass" base for floating tablets
+
+    // Additional palette colors for Flutopedia mapping
+    out property <color> hue-c:  #ff0000; // Deep Red
+    out property <color> hue-cs: #ff8000;
+    out property <color> hue-d:  #ffff00;
+    out property <color> hue-ds: #80ff00;
+    out property <color> hue-e:  #00ff00;
+    out property <color> hue-f:  #00ff80;
+    out property <color> hue-fs: #00ffff; // Cyan
+    out property <color> hue-g:  #0080ff;
+    out property <color> hue-gs: #0000ff;
+    out property <color> hue-a:  #8000ff;
+    out property <color> hue-as: #ff00ff; // Violet
+    out property <color> hue-b:  #ff0080;
+}
+
+export global ForensicMaterials {
+    // 1. Transparent Glass Base (referencing slint::LinearGradient reference)
+    // Vertical gradient with slight darkening at the top
+    out property <brush> glass_tablet_background: @linear-gradient(180deg, #050505ff 0%, #000000aa 100%);
+
+    // 2. Violet Cloak Harmonic Smear (Violet -> Teal)
+    out property <brush> violet_cloak_smear: @linear-gradient(90deg, #b0f 0%, #0cf 100%);
+
+    // 3. Surface Panel Base
+    out property <brush> surface_panel: #111111aa;
+    out property <brush> surface_variant: #222222;
+}
+
+export global Standards {
+    out property <color> background: ForensicPalette.ag_black_glass;
+    out property <color> surface: #111111aa;
+    out property <color> surface-variant: #222222;
+    out property <color> primary: ForensicPalette.ag_cyan;
+    out property <color> secondary: ForensicPalette.ag_violet;
+    out property <color> error: ForensicPalette.ag_red;
+    out property <color> on-background: #ffffff;
+    out property <color> on-surface: #dddddd;
+
+    // Technical typography
+    out property <string> font-family: "monospace";
+    out property <length> font-size-small: 10px;
+    out property <length> font-size-normal: 12px;
+    out property <length> font-size-large: 16px;
+
+    // Legacy support for older definitions
+    out property <color> hue-c:  ForensicPalette.hue-c;
+    out property <color> hue-cs: ForensicPalette.hue-cs;
+    out property <color> hue-d:  ForensicPalette.hue-d;
+    out property <color> hue-ds: ForensicPalette.hue-ds;
+    out property <color> hue-e:  ForensicPalette.hue-e;
+    out property <color> hue-f:  ForensicPalette.hue-f;
+    out property <color> hue-fs: ForensicPalette.hue-fs;
+    out property <color> hue-g:  ForensicPalette.hue-g;
+    out property <color> hue-gs: ForensicPalette.hue-gs;
+    out property <color> hue-a:  ForensicPalette.hue-a;
+    out property <color> hue-as: ForensicPalette.hue-as;
+    out property <color> hue-b:  ForensicPalette.hue-b;
+}
+
+export component IconButton inherits Rectangle {
+    in property <string> icon;
+    in property <color> icon-color: Standards.on-surface;
+    callback clicked;
+
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+
+    states [
+        pressed when touch.pressed: {
+            background: Standards.surface-variant;
+        }
+        hover when touch.has-hover: {
+            background: Standards.surface;
+        }
+    ]
+
+    Text {
+        text: root.icon;
+        color: root.icon-color;
+        font-family: Standards.font-family;
+        font-size: 16px;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    touch := TouchArea {
+        clicked => { root.clicked(); }
+    }
+}
