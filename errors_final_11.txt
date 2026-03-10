@@ -1,0 +1,779 @@
+    Blocking waiting for file lock on build directory
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+warning: unused import: `SignalType`
+ --> src\dispatch\audio_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `SignalType`
+ --> src\dispatch\rf_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `interface` is never read
+ --> src\ui\copilot_handler.rs:9:5
+  |
+8 | pub struct CopilotUIHandler {
+  |            ---------------- field in this struct
+9 |     interface: Arc<Mutex<CopilotInterface>>,
+  |     ^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: field `device_id` is never read
+  --> src\safe_sdr_wrapper.rs:15:5
+   |
+13 | pub struct RadioDevice {
+   |            ----------- field in this struct
+14 |     device_type: RadioDeviceType,
+15 |     device_id: u32,
+   |     ^^^^^^^^^
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src\visualization\radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: field `sample_rate` is never read
+ --> src\ml\fold_frequency_harmonics.rs:2:5
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            --------------------- field in this struct
+2 |     sample_rate: u32,
+  |     ^^^^^^^^^^^
+
+warning: fields `device` and `model` are never read
+  --> src\ml\wav2vec2_loader.rs:37:5
+   |
+36 | pub struct Wav2Vec2Model<B: Backend> {
+   |            ------------- fields in this struct
+37 |     device: burn::tensor::Device<B>,
+   |     ^^^^^^
+38 |     model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
+   |     ^^^^^
+
+warning: field `bins_per_octave` is never read
+ --> src\ml\wideband_harmonic_analysis.rs:4:5
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ------------------------ field in this struct
+...
+4 |     bins_per_octave: u32, // 8 (96 total bins = 12 octaves ├ù 8)
+  |     ^^^^^^^^^^^^^^^
+
+warning: method `bin_to_freq` is never used
+  --> src\ml\wideband_harmonic_analysis.rs:38:8
+   |
+18 | impl WidebandHarmonicAnalyzer {
+   | ----------------------------- method in this implementation
+...
+38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+   |        ^^^^^^^^^^^
+
+warning: `twister` (lib) generated 15 warnings (run `cargo fix --lib -p twister` to apply 2 suggestions)
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+error[E0433]: cannot find `computer_vision` in `crate`
+ --> src\fusion\imu_pose_fusion.rs:1:12
+  |
+1 | use crate::computer_vision::pose_estimator::PoseFrame;
+  |            ^^^^^^^^^^^^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+1 | use crate::twister::computer_vision::pose_estimator::PoseFrame;
+  |            +++++++++
+
+error[E0433]: cannot find `computer_vision` in `crate`
+ --> src\ml\pose_materials.rs:1:12
+  |
+1 | use crate::computer_vision::pose_estimator::PoseFrame;
+  |            ^^^^^^^^^^^^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+1 | use crate::twister::computer_vision::pose_estimator::PoseFrame;
+  |            +++++++++
+
+error[E0433]: cannot find `anomaly_gate` in `ml`
+   --> src\main.rs:697:47
+    |
+697 |                         let gate = crate::ml::anomaly_gate::evaluate_gate(&frame, anomaly, 2.0);
+    |                                               ^^^^^^^^^^^^ could not find `anomaly_gate` in `ml`
+
+error[E0425]: cannot find type `LogError` in this scope
+  --> src\forensic.rs:17:56
+   |
+17 |     pub async fn new(session_id: &str) -> Result<Self, LogError> {
+   |                                                        ^^^^^^^^ not found in this scope
+   |
+help: you might be missing a type parameter
+   |
+16 | impl<LogError> ForensicLogger {
+   |     ++++++++++
+
+error[E0433]: cannot find type `PathBuf` in this scope
+  --> src\forensic.rs:18:19
+   |
+18 |         let dir = PathBuf::from("forensic_log");
+   |                   ^^^^^^^ use of undeclared type `PathBuf`
+   |
+help: consider importing this struct
+   |
+ 2 + use std::path::PathBuf;
+   |
+
+error[E0433]: cannot find module or crate `mpsc` in this scope
+  --> src\forensic.rs:28:38
+   |
+28 |         let (sender, mut receiver) = mpsc::unbounded_channel();
+   |                                      ^^^^ use of unresolved module or unlinked crate `mpsc`
+   |
+   = help: if you wanted to use a crate named `mpsc`, use `cargo add mpsc` to add it to your `Cargo.toml`
+help: consider importing this module
+   |
+ 2 + use tokio::sync::mpsc;
+   |
+
+error[E0425]: cannot find type `DetectionEvent` in this scope
+   --> src\forensic.rs:101:41
+    |
+101 |     pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
+    |                                         ^^^^^^^^^^^^^^ not found in this scope
+    |
+help: consider importing one of these structs
+    |
+  2 + use crate::DetectionEvent;
+    |
+  2 + use twister::detection::DetectionEvent;
+    |
+
+error[E0425]: cannot find type `LogError` in this scope
+   --> src\forensic.rs:101:71
+    |
+101 |     pub fn log_detection(&self, event: &DetectionEvent) -> Result<(), LogError> {
+    |                                                                       ^^^^^^^^ not found in this scope
+    |
+help: you might be missing a type parameter
+    |
+ 16 | impl<LogError> ForensicLogger {
+    |     ++++++++++
+
+error[E0425]: cannot find type `PathBuf` in this scope
+   --> src\forensic.rs:127:32
+    |
+127 |     pub fn log_path(&self) -> &PathBuf {
+    |                                ^^^^^^^ not found in this scope
+    |
+help: consider importing this struct
+    |
+  2 + use std::path::PathBuf;
+    |
+
+error[E0433]: cannot find type `File` in this scope
+   --> src\forensic.rs:143:20
+    |
+143 |         let file = File::open(&self.log_path)?;
+    |                    ^^^^ use of undeclared type `File`
+    |
+help: consider importing one of these structs
+    |
+  2 + use std::fs::File;
+    |
+  2 + use tokio::fs::File;
+    |
+
+error[E0425]: cannot find function `get_current_micros` in module `crate::forensic`
+   --> src\main.rs:190:44
+    |
+190 |         timestamp_micros: crate::forensic::get_current_micros(),
+    |                                            ^^^^^^^^^^^^^^^^^^ not found in `crate::forensic`
+
+error[E0425]: cannot find type `AppWindow` in this scope
+    --> src\main.rs:1520:27
+     |
+1520 | fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+     |                           ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `AppWindow` in this scope
+    --> src\main.rs:1520:82
+     |
+1520 | fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+     |                                                                                  ^^^^^^^^^ not found in this scope
+     |
+help: you might be missing a type parameter
+     |
+1520 | fn wire_ui_callbacks<AppWindow>(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+     |                     +++++++++++
+
+error[E0425]: cannot find value `OsRng` in module `rand::rngs`
+  --> src\particle_system\streaming.rs:36:39
+   |
+36 |             let mut rng = rand::rngs::OsRng;
+   |                                       ^^^^^ not found in `rand::rngs`
+
+warning: unused attribute `allow`
+  --> src\main.rs:19:1
+   |
+19 | #[allow(clippy::too_many_arguments)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the built-in attribute `allow` will be ignored, since it's applied to the macro invocation `slint::include_modules`
+  --> src\main.rs:21:1
+   |
+21 | slint::include_modules!();
+   | ^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `cognee_schema::*`
+ --> src\knowledge_graph\mod.rs:6:9
+  |
+6 | pub use cognee_schema::*;
+  |         ^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `event_ingestion::*`
+ --> src\knowledge_graph\mod.rs:8:9
+  |
+8 | pub use event_ingestion::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `evidence_chain::*`
+ --> src\ai\mod.rs:7:9
+  |
+7 | pub use evidence_chain::*;
+  |         ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `query_tools::*`
+ --> src\ai\mod.rs:8:9
+  |
+8 | pub use query_tools::*;
+  |         ^^^^^^^^^^^^^^
+
+warning: unused import: `reasoning_engine::*`
+ --> src\ai\mod.rs:9:9
+  |
+9 | pub use reasoning_engine::*;
+  |         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `copilot_handler::*`
+ --> src\ui\mod.rs:2:9
+  |
+2 | pub use copilot_handler::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\losses\mod.rs:14:28
+   |
+14 | pub use chamfer_distance::{ChamferDistance, HuberLoss};
+   |                            ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `FeatureFlags`, `ModularFeatureEncoder`, `SignalFeaturePayload`, and `VideoFrame`
+  --> src\ml\mod.rs:20:28
+   |
+20 | pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+   |                            ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\mod.rs:21:36
+   |
+21 | pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
+   |                                    ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `mamba_block::MambaBlock`
+  --> src\ml\mod.rs:22:9
+   |
+22 | pub use mamba_block::MambaBlock;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ClusteringResult`, `Event`, `KMeansConfig`, `Pattern`, `compute_silhouette_score`, `compute_temporal_frequency`, `discover_patterns`, `generate_pattern_label`, and `kmeans`
+  --> src\ml\mod.rs:25:5
+   |
+25 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+26 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+
+warning: unused import: `point_decoder::PointDecoder`
+  --> src\ml\mod.rs:29:9
+   |
+29 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `point_mamba::PointMamba`
+  --> src\ml\mod.rs:30:9
+   |
+30 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
+  --> src\ml\mod.rs:31:31
+   |
+31 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pointnet_encoder::PointNetEncoder`
+  --> src\ml\mod.rs:32:9
+   |
+32 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `timegnn::TimeGnnModel`
+  --> src\ml\mod.rs:33:9
+   |
+33 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
+  --> src\ml\mod.rs:35:5
+   |
+35 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+36 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `spectral_frame::SpectralFrame`
+  --> src\ml\mod.rs:39:9
+   |
+39 | pub use spectral_frame::SpectralFrame;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `unified_field_mamba::UnifiedFieldMamba`
+  --> src\ml\mod.rs:48:9
+   |
+48 | pub use unified_field_mamba::UnifiedFieldMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `NeuralWaveshapeParams` and `project_latent_to_waveshape`
+  --> src\ml\mod.rs:50:32
+   |
+50 | pub use waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
+   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `field_particle::FieldParticle`
+  --> src\ml\mod.rs:54:9
+   |
+54 | pub use field_particle::FieldParticle;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crossbeam_channel::bounded`
+  --> src\main.rs:69:5
+   |
+69 | use crossbeam_channel::bounded;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `frustum_culler::FrustumCuller`, `renderer::ParticleRenderer`, and `streaming::ParticleStreamLoader`
+   --> src\main.rs:104:34
+    |
+104 |     use crate::particle_system::{renderer::ParticleRenderer, frustum_culler::FrustumCuller, streaming::ParticleStreamLoader};
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `rand::Rng`
+ --> src\particle_system\streaming.rs:2:5
+  |
+2 | use rand::Rng;
+  |     ^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:4:17
+  |
+4 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+error[E0433]: cannot find type `LogError` in this scope
+  --> src\forensic.rs:19:59
+   |
+19 |         tokio::fs::create_dir_all(&dir).await.map_err(|e| LogError::IOError(e.to_string()))?;
+   |                                                           ^^^^^^^^ use of undeclared type `LogError`
+
+error[E0433]: cannot find type `LogError` in this scope
+  --> src\forensic.rs:25:66
+   |
+25 |             tokio::fs::File::create(&log_path).await.map_err(|e| LogError::IOError(e.to_string()))?;
+   |                                                                  ^^^^^^^^ use of undeclared type `LogError`
+
+error[E0433]: cannot find type `EventValidator` in this scope
+  --> src\forensic.rs:45:41
+   |
+45 |                         if let Err(e) = EventValidator::validate(&event) {
+   |                                         ^^^^^^^^^^^^^^ use of undeclared type `EventValidator`
+
+error[E0599]: no variant named `EventValidationError` found for enum `ForensicEvent`
+  --> src\forensic.rs:47:67
+   |
+ 5 | pub enum ForensicEvent {
+   | ---------------------- variant `EventValidationError` not found here
+...
+47 |                             let validation_event = ForensicEvent::EventValidationError {
+   |                                                                   ^^^^^^^^^^^^^^^^^^^^ variant not found in `ForensicEvent`
+
+error[E0425]: cannot find function `get_current_micros` in this scope
+  --> src\forensic.rs:48:51
+   |
+48 | ...                   timestamp_micros: get_current_micros(),
+   |                                         ^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0433]: cannot find type `LogRecoveryStrategy` in this scope
+  --> src\forensic.rs:63:39
+   |
+63 | ...                   match LogRecoveryStrategy::handle_error(LogError::DiskFull, &event, log_path_clone.to_str().unwrap()).await {
+   |                             ^^^^^^^^^^^^^^^^^^^ use of undeclared type `LogRecoveryStrategy`
+
+error[E0433]: cannot find type `LogError` in this scope
+  --> src\forensic.rs:63:73
+   |
+63 | ...                   match LogRecoveryStrategy::handle_error(LogError::DiskFull, &event, log_path_clone.to_str().unwrap()).await {
+   |                                                               ^^^^^^^^ use of undeclared type `LogError`
+
+error[E0433]: cannot find type `LogRecoveryStrategy` in this scope
+  --> src\forensic.rs:74:39
+   |
+74 | ...   match LogRecoveryStrategy::handle_error(LogError::PermissionDenied, &event, log_path_clone.to_str().unwrap()).await {
+   |             ^^^^^^^^^^^^^^^^^^^ use of undeclared type `LogRecoveryStrategy`
+
+error[E0433]: cannot find type `LogError` in this scope
+  --> src\forensic.rs:74:73
+   |
+74 | ...   match LogRecoveryStrategy::handle_error(LogError::PermissionDenied, &event, log_path_clone.to_str().unwrap()).await {
+   |                                               ^^^^^^^^ use of undeclared type `LogError`
+
+error[E0560]: struct `ForensicLogger` has no field named `sender`
+  --> src\forensic.rs:90:13
+   |
+90 |             sender,
+   |             ^^^^^^ `ForensicLogger` does not have this field
+   |
+   = note: all struct fields are already assigned
+
+error[E0560]: struct `ForensicLogger` has no field named `log_path`
+  --> src\forensic.rs:91:13
+   |
+91 |             log_path,
+   |             ^^^^^^^^ `ForensicLogger` does not have this field
+   |
+   = note: all struct fields are already assigned
+
+error[E0425]: cannot find function `get_current_micros` in this scope
+   --> src\forensic.rs:105:31
+    |
+105 |             timestamp_micros: get_current_micros(),
+    |                               ^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0559]: variant `ForensicEvent::Bispectrum` has no field named `f1_hz`
+   --> src\forensic.rs:106:13
+    |
+106 |             f1_hz: event.f1_hz,
+    |             ^^^^^ `ForensicEvent::Bispectrum` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0559]: variant `ForensicEvent::Bispectrum` has no field named `f2_hz`
+   --> src\forensic.rs:107:13
+    |
+107 |             f2_hz: event.f2_hz,
+    |             ^^^^^ `ForensicEvent::Bispectrum` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0559]: variant `ForensicEvent::Bispectrum` has no field named `product_hz`
+   --> src\forensic.rs:108:13
+    |
+108 |             product_hz: event.product_hz,
+    |             ^^^^^^^^^^ `ForensicEvent::Bispectrum` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0559]: variant `ForensicEvent::Bispectrum` has no field named `magnitude`
+   --> src\forensic.rs:109:13
+    |
+109 |             magnitude: event.magnitude,
+    |             ^^^^^^^^^ `ForensicEvent::Bispectrum` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0559]: variant `ForensicEvent::Bispectrum` has no field named `coherence_frames`
+   --> src\forensic.rs:110:13
+    |
+110 |             coherence_frames: event.coherence_frames,
+    |             ^^^^^^^^^^^^^^^^ `ForensicEvent::Bispectrum` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0559]: variant `ForensicEvent::Bispectrum` has no field named `confidence`
+   --> src\forensic.rs:111:13
+    |
+111 |             confidence,
+    |             ^^^^^^^^^^ `ForensicEvent::Bispectrum` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0615]: attempted to take value of method `log_path` on type `&ForensicLogger`
+   --> src\forensic.rs:128:15
+    |
+128 |         &self.log_path
+    |               ^^^^^^^^ method, not a field
+    |
+help: use parentheses to call the method
+    |
+128 |         &self.log_path()
+    |                       ++
+
+error[E0615]: attempted to take value of method `log_path` on type `&ForensicLogger`
+   --> src\forensic.rs:143:37
+    |
+143 |         let file = File::open(&self.log_path)?;
+    |                                     ^^^^^^^^ method, not a field
+    |
+help: use parentheses to call the method
+    |
+143 |         let file = File::open(&self.log_path())?;
+    |                                             ++
+
+error[E0277]: the size for values of type `str` cannot be known at compilation time
+   --> src\forensic.rs:149:17
+    |
+149 |             let line = line?;
+    |                 ^^^^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `str`
+    = note: all local variables must have a statically known size
+
+error[E0277]: the size for values of type `str` cannot be known at compilation time
+   --> src\forensic.rs:149:24
+    |
+149 |             let line = line?;
+    |                        ^^^^^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `str`
+    = note: all local variables must have a statically known size
+
+error[E0277]: the size for values of type `str` cannot be known at compilation time
+   --> src\forensic.rs:149:28
+    |
+149 |             let line = line?;
+    |                            ^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `str`
+note: required by an implicit `Sized` bound in `ControlFlow`
+   --> C:\Users\pixel\.rustup\toolchains\nightly-2026-03-02-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\ops\control_flow.rs:89:25
+    |
+ 89 | pub enum ControlFlow<B, C = ()> {
+    |                         ^^^^^^ required by the implicit `Sized` requirement on this type parameter in `ControlFlow`
+
+error[E0277]: the size for values of type `str` cannot be known at compilation time
+   --> src\forensic.rs:149:24
+    |
+149 |             let line = line?;
+    |                        ^^^^^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `str`
+note: required by an implicit `Sized` bound in `ControlFlow`
+   --> C:\Users\pixel\.rustup\toolchains\nightly-2026-03-02-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\ops\control_flow.rs:89:25
+    |
+ 89 | pub enum ControlFlow<B, C = ()> {
+    |                         ^^^^^^ required by the implicit `Sized` requirement on this type parameter in `ControlFlow`
+
+error[E0615]: attempted to take value of method `log_path` on type `&ForensicLogger`
+   --> src\forensic.rs:201:18
+    |
+201 |             self.log_path.display()
+    |                  ^^^^^^^^ method, not a field
+    |
+help: use parentheses to call the method
+    |
+201 |             self.log_path().display()
+    |                          ++
+
+error[E0433]: cannot find type `AppWindow` in this scope
+   --> src\main.rs:105:26
+    |
+105 |                 let ui = AppWindow::new().context("Slint window creation failed")?;
+    |                          ^^^^^^^^^ use of undeclared type `AppWindow`
+
+error[E0559]: variant `ForensicEvent::SessionStart` has no field named `app_version`
+   --> src\main.rs:191:9
+    |
+191 |         app_version: env!("CARGO_PKG_VERSION").to_string(),
+    |         ^^^^^^^^^^^ `ForensicEvent::SessionStart` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0559]: variant `ForensicEvent::SessionStart` has no field named `total_events_prior`
+   --> src\main.rs:192:9
+    |
+192 |         total_events_prior: 0,
+    |         ^^^^^^^^^^^^^^^^^^ `ForensicEvent::SessionStart` does not have this field
+    |
+    = note: all struct fields are already assigned
+
+error[E0308]: mismatched types
+   --> src\main.rs:690:44
+    |
+690 | ...                   fft_magnitude: fft_mag,
+    |                                      ^^^^^^^ expected `Vec<f32>`, found `[f32; 128]`
+    |
+    = note: expected struct `Vec<f32>`
+                found array `[f32; 128]`
+help: try using a conversion method
+    |
+690 |                             fft_magnitude: fft_mag.to_vec(),
+    |                                                   +++++++++
+
+error[E0308]: mismatched types
+   --> src\main.rs:691:41
+    |
+691 | ...                   bispectrum: [0.0; 64], // Populated later if needed
+    |                                   ^^^^^^^^^ expected `Vec<f32>`, found `[{float}; 64]`
+    |
+    = note: expected struct `Vec<f32>`
+                found array `[{float}; 64]`
+help: try using a conversion method
+    |
+691 |                             bispectrum: [0.0; 64].to_vec(), // Populated later if needed
+    |                                                  +++++++++
+
+Some errors have detailed explanations: E0277, E0308, E0425, E0433, E0559, E0560, E0599, E0615.
+For more information about an error, try `rustc --explain E0277`.
+warning: `twister` (bin "twister") generated 29 warnings (1 duplicate)
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: could not compile `twister` (bin "twister") due to 44 previous errors; 29 warnings emitted

@@ -1,0 +1,720 @@
+    Blocking waiting for file lock on build directory
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+warning: unused import: `SignalType`
+ --> src\dispatch\audio_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `SignalType`
+ --> src\dispatch\rf_ingester.rs:1:86
+  |
+1 | use crate::dispatch::signal_ingester::{SignalIngester, SignalMetadata, SampleFormat, SignalType};
+  |                                                                                      ^^^^^^^^^^
+
+warning: value assigned to `response` is never read
+  --> src\ai\reasoning_engine.rs:33:28
+   |
+33 |         let mut response = String::new();
+   |                            ^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `interface` is never read
+ --> src\ui\copilot_handler.rs:9:5
+  |
+8 | pub struct CopilotUIHandler {
+  |            ---------------- field in this struct
+9 |     interface: Arc<Mutex<CopilotInterface>>,
+  |     ^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `readback_pcm`, `readback_pdm`, `readback_wide`, and `readback_carry` are never read
+   --> src\pdm.rs:158:5
+    |
+147 | pub struct PdmEngine {
+    |            --------- fields in this struct
+...
+158 |     readback_pcm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+159 |     readback_pdm: wgpu::Buffer,
+    |     ^^^^^^^^^^^^
+160 |     readback_wide: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^
+161 |     readback_carry: wgpu::Buffer,
+    |     ^^^^^^^^^^^^^^
+
+warning: field `device_id` is never read
+  --> src\safe_sdr_wrapper.rs:15:5
+   |
+13 | pub struct RadioDevice {
+   |            ----------- field in this struct
+14 |     device_type: RadioDeviceType,
+15 |     device_id: u32,
+   |     ^^^^^^^^^
+
+warning: field `last_save` is never read
+  --> src\trainer.rs:56:5
+   |
+51 | pub struct TrainerThread {
+   |            ------------- field in this struct
+...
+56 |     last_save: Instant,
+   |     ^^^^^^^^^
+
+warning: fields `grid_hash_buffer`, `sorted_idx_buffer`, `bind_group_layout`, `output_texture`, and `staging_buffer` are never read
+  --> src\visualization\gaussian_splatting_optimized.rs:64:5
+   |
+55 | pub struct GaussianSplattingRenderer {
+   |            ------------------------- fields in this struct
+...
+64 |     grid_hash_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^
+65 |     sorted_idx_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+68 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+75 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+...
+79 |     staging_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+   --> src\visualization\mesh_shaders.rs:110:5
+    |
+101 | pub struct MeshShaderPipeline {
+    |            ------------------ fields in this struct
+...
+110 |     task_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+111 |     mesh_shader: ShaderModule,
+    |     ^^^^^^^^^^^
+112 |     fragment_shader: ShaderModule,
+    |     ^^^^^^^^^^^^^^^
+...
+116 |     bind_group_layout: BindGroupLayout,
+    |     ^^^^^^^^^^^^^^^^^
+...
+120 |     camera_buffer: Buffer,
+    |     ^^^^^^^^^^^^^
+121 |     instance_buffer: Buffer,
+122 |     lod_decisions_buffer: Buffer,
+    |     ^^^^^^^^^^^^^^^^^^^^
+...
+125 |     output_texture: Texture,
+    |     ^^^^^^^^^^^^^^
+
+warning: constant `WAVE_SIZE` is never used
+  --> src\visualization\radix_sort_pipeline.rs:32:7
+   |
+32 | const WAVE_SIZE: u32 = 64;
+   |       ^^^^^^^^^
+
+warning: fields `bind_group_layout`, `embeddings_buffer`, and `output_texture` are never read
+  --> src\visualization\rt_attack_viz.rs:51:5
+   |
+44 | pub struct RtAttackViz {
+   |            ----------- fields in this struct
+...
+51 |     bind_group_layout: BindGroupLayout,
+   |     ^^^^^^^^^^^^^^^^^
+...
+55 |     embeddings_buffer: Buffer,
+   |     ^^^^^^^^^^^^^^^^^
+...
+61 |     output_texture: Texture,
+   |     ^^^^^^^^^^^^^^
+
+warning: field `sample_rate` is never read
+ --> src\ml\fold_frequency_harmonics.rs:2:5
+  |
+1 | pub struct FoldFrequencyAnalyzer {
+  |            --------------------- field in this struct
+2 |     sample_rate: u32,
+  |     ^^^^^^^^^^^
+
+warning: fields `device` and `model` are never read
+  --> src\ml\wav2vec2_loader.rs:37:5
+   |
+36 | pub struct Wav2Vec2Model<B: Backend> {
+   |            ------------- fields in this struct
+37 |     device: burn::tensor::Device<B>,
+   |     ^^^^^^
+38 |     model: PretrainedWav2Vec2<B>,  // From HF: facebook/wav2vec2-base-960h
+   |     ^^^^^
+
+warning: field `bins_per_octave` is never read
+ --> src\ml\wideband_harmonic_analysis.rs:4:5
+  |
+1 | pub struct WidebandHarmonicAnalyzer {
+  |            ------------------------ field in this struct
+...
+4 |     bins_per_octave: u32, // 8 (96 total bins = 12 octaves ├ù 8)
+  |     ^^^^^^^^^^^^^^^
+
+warning: method `bin_to_freq` is never used
+  --> src\ml\wideband_harmonic_analysis.rs:38:8
+   |
+18 | impl WidebandHarmonicAnalyzer {
+   | ----------------------------- method in this implementation
+...
+38 |     fn bin_to_freq(&self, bin: f32) -> f32 {
+   |        ^^^^^^^^^^^
+
+warning: `twister` (lib) generated 15 warnings (run `cargo fix --lib -p twister` to apply 2 suggestions)
+    Checking twister v0.5.0 (C:\Users\pixel\Downloads\twister)
+error[E0433]: cannot find `computer_vision` in `crate`
+ --> src\fusion\imu_pose_fusion.rs:1:12
+  |
+1 | use crate::computer_vision::pose_estimator::PoseFrame;
+  |            ^^^^^^^^^^^^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+1 | use crate::twister::computer_vision::pose_estimator::PoseFrame;
+  |            +++++++++
+
+error[E0433]: cannot find `computer_vision` in `crate`
+ --> src\ml\pose_materials.rs:1:12
+  |
+1 | use crate::computer_vision::pose_estimator::PoseFrame;
+  |            ^^^^^^^^^^^^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+1 | use crate::twister::computer_vision::pose_estimator::PoseFrame;
+  |            +++++++++
+
+error[E0433]: cannot find module or crate `thiserror` in this scope
+ --> src\forensic.rs:9:17
+  |
+9 | #[derive(Debug, thiserror::Error)]
+  |                 ^^^^^^^^^ use of unresolved module or unlinked crate `thiserror`
+
+error: cannot find attribute `error` in this scope
+  --> src\forensic.rs:11:7
+   |
+11 |     #[error("IO error: {0}")]
+   |       ^^^^^
+   |
+help: `error` is an attribute that can be used by the derive macro `Error`, you might be missing a `derive` attribute
+   |
+10 + #[derive(Error)]
+11 | pub enum LogError {
+   |
+
+error: cannot find attribute `error` in this scope
+  --> src\forensic.rs:13:7
+   |
+13 |     #[error("Disk full")]
+   |       ^^^^^
+   |
+help: `error` is an attribute that can be used by the derive macro `Error`, you might be missing a `derive` attribute
+   |
+10 + #[derive(Error)]
+11 | pub enum LogError {
+   |
+
+error: cannot find attribute `error` in this scope
+  --> src\forensic.rs:15:7
+   |
+15 |     #[error("Permission denied")]
+   |       ^^^^^
+   |
+help: `error` is an attribute that can be used by the derive macro `Error`, you might be missing a `derive` attribute
+   |
+10 + #[derive(Error)]
+11 | pub enum LogError {
+   |
+
+error[E0433]: cannot find module or crate `uuid` in this scope
+   --> src\main.rs:712:33
+    |
+712 | ...                   id: uuid::Uuid::new_v4().to_string(),
+    |                           ^^^^ use of unresolved module or unlinked crate `uuid`
+    |
+    = help: if you wanted to use a crate named `uuid`, use `cargo add uuid` to add it to your `Cargo.toml`
+help: there is an enum variant `qdrant_client::qdrant::FieldType::Uuid` and 3 others; try using the variant's enum
+    |
+712 -                             id: uuid::Uuid::new_v4().to_string(),
+712 +                             id: qdrant_client::qdrant::FieldType::new_v4().to_string(),
+    |
+712 -                             id: uuid::Uuid::new_v4().to_string(),
+712 +                             id: qdrant_client::qdrant::PayloadSchemaType::new_v4().to_string(),
+    |
+712 -                             id: uuid::Uuid::new_v4().to_string(),
+712 +                             id: qdrant_client::qdrant::point_id::PointIdOptions::new_v4().to_string(),
+    |
+
+error[E0425]: cannot find function `get_current_micros` in this scope
+    --> src\main.rs:704:47
+     |
+ 704 | ...                   timestamp_micros: get_current_micros(),
+     |                                         ^^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+help: consider importing this function
+    -->  C:\Users\pixel\Downloads\twister\target\debug\build\twister-852d1b060f04d4e8\out\mamba_brain.rs:7117:2
+     |
+7117 +  use crate::forensic::get_current_micros;
+     |
+
+error[E0425]: cannot find function `evaluate_gate` in module `crate::ml`
+   --> src\main.rs:728:47
+    |
+728 |                         let gate = crate::ml::evaluate_gate(&frame, anomaly, 2.0);
+    |                                               ^^^^^^^^^^^^^ not found in `crate::ml`
+
+error[E0425]: cannot find type `AppWindow` in this scope
+    --> src\main.rs:1592:27
+     |
+1592 | fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+     |                           ^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find type `AppWindow` in this scope
+    --> src\main.rs:1592:82
+     |
+1592 | fn wire_ui_callbacks(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+     |                                                                                  ^^^^^^^^^ not found in this scope
+     |
+help: you might be missing a type parameter
+     |
+1592 | fn wire_ui_callbacks<AppWindow>(ui: &AppWindow, state: &Arc<AppState>, ui_weak: slint::Weak<AppWindow>) {
+     |                     +++++++++++
+
+error[E0425]: cannot find value `OsRng` in module `rand::rngs`
+  --> src\particle_system\streaming.rs:36:39
+   |
+36 |             let mut rng = rand::rngs::OsRng;
+   |                                       ^^^^^ not found in `rand::rngs`
+
+warning: unused attribute `allow`
+  --> src\main.rs:19:1
+   |
+19 | #[allow(clippy::too_many_arguments)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the built-in attribute `allow` will be ignored, since it's applied to the macro invocation `slint::include_modules`
+  --> src\main.rs:21:1
+   |
+21 | slint::include_modules!();
+   | ^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `evidence_chain::*`
+ --> src\ai\mod.rs:7:9
+  |
+7 | pub use evidence_chain::*;
+  |         ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `query_tools::*`
+ --> src\ai\mod.rs:8:9
+  |
+8 | pub use query_tools::*;
+  |         ^^^^^^^^^^^^^^
+
+warning: unused import: `reasoning_engine::*`
+ --> src\ai\mod.rs:9:9
+  |
+9 | pub use reasoning_engine::*;
+  |         ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `BufRead`
+ --> src\forensic.rs:4:15
+  |
+4 | use std::io::{BufRead, Write};
+  |               ^^^^^^^
+
+warning: unused import: `Path`
+ --> src\forensic.rs:5:17
+  |
+5 | use std::path::{Path, PathBuf};
+  |                 ^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+ --> src\forensic.rs:6:5
+  |
+6 | use tokio::sync::Mutex;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `frustum_culler::FrustumCuller`, `renderer::ParticleRenderer`, and `streaming::ParticleStreamLoader`
+   --> src\forensic.rs:257:17
+    |
+257 |                 frustum_culler::FrustumCuller, renderer::ParticleRenderer,
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+258 |                 streaming::ParticleStreamLoader,
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `cognee_schema::*`
+ --> src\knowledge_graph\mod.rs:6:9
+  |
+6 | pub use cognee_schema::*;
+  |         ^^^^^^^^^^^^^^^^
+
+warning: unused import: `event_ingestion::*`
+ --> src\knowledge_graph\mod.rs:8:9
+  |
+8 | pub use event_ingestion::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\losses\mod.rs:14:28
+   |
+14 | pub use chamfer_distance::{ChamferDistance, HuberLoss};
+   |                            ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `FeatureFlags`, `ModularFeatureEncoder`, `SignalFeaturePayload`, and `VideoFrame`
+  --> src\ml\mod.rs:20:28
+   |
+20 | pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
+   |                            ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+
+warning: unused imports: `ChamferDistance` and `HuberLoss`
+  --> src\ml\mod.rs:21:36
+   |
+21 | pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
+   |                                    ^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `mamba_block::MambaBlock`
+  --> src\ml\mod.rs:22:9
+   |
+22 | pub use mamba_block::MambaBlock;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ClusteringResult`, `Event`, `KMeansConfig`, `Pattern`, `compute_silhouette_score`, `compute_temporal_frequency`, `discover_patterns`, `generate_pattern_label`, and `kmeans`
+  --> src\ml\mod.rs:25:5
+   |
+25 |     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+26 |     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+
+warning: unused import: `point_decoder::PointDecoder`
+  --> src\ml\mod.rs:29:9
+   |
+29 | pub use point_decoder::PointDecoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `point_mamba::PointMamba`
+  --> src\ml\mod.rs:30:9
+   |
+30 | pub use point_mamba::PointMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `PointMambaTrainer` and `TrainerConfig as PointMambaTrainingConfig`
+  --> src\ml\mod.rs:31:31
+   |
+31 | pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
+   |                               ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pointnet_encoder::PointNetEncoder`
+  --> src\ml\mod.rs:32:9
+   |
+32 | pub use pointnet_encoder::PointNetEncoder;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `timegnn::TimeGnnModel`
+  --> src\ml\mod.rs:33:9
+   |
+33 | pub use timegnn::TimeGnnModel;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `ContrastiveLossConfig`, `TimeGnnTrainingConfig`, `TrainingEvent`, `TrainingMetrics`, `compute_nt_xent_loss`, `cosine_similarity`, and `train_timegnn`
+  --> src\ml\mod.rs:35:5
+   |
+35 |     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+36 |     compute_nt_xent_loss, cosine_similarity, train_timegnn,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+
+warning: unused import: `spectral_frame::SpectralFrame`
+  --> src\ml\mod.rs:39:9
+   |
+39 | pub use spectral_frame::SpectralFrame;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `unified_field_mamba::UnifiedFieldMamba`
+  --> src\ml\mod.rs:48:9
+   |
+48 | pub use unified_field_mamba::UnifiedFieldMamba;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `NeuralWaveshapeParams` and `project_latent_to_waveshape`
+  --> src\ml\mod.rs:50:32
+   |
+50 | pub use waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
+   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `field_particle::FieldParticle`
+  --> src\ml\mod.rs:54:9
+   |
+54 | pub use field_particle::FieldParticle;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `copilot_handler::*`
+ --> src\ui\mod.rs:2:9
+  |
+2 | pub use copilot_handler::*;
+  |         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crossbeam_channel::bounded`
+  --> src\main.rs:69:5
+   |
+69 | use crossbeam_channel::bounded;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `frustum_culler::FrustumCuller`, `renderer::ParticleRenderer`, and `streaming::ParticleStreamLoader`
+   --> src\main.rs:105:9
+    |
+105 |         frustum_culler::FrustumCuller, renderer::ParticleRenderer, streaming::ParticleStreamLoader,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\renderer.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `wgpu::util::DeviceExt`
+ --> src\particle_system\frustum_culler.rs:2:5
+  |
+2 | use wgpu::util::DeviceExt;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `rand::Rng`
+ --> src\particle_system\streaming.rs:2:5
+  |
+2 | use rand::Rng;
+  |     ^^^^^^^^^
+
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+ --> src\particle_system\streaming.rs:4:17
+  |
+4 | use std::time::{SystemTime, UNIX_EPOCH};
+  |                 ^^^^^^^^^^  ^^^^^^^^^^
+
+error[E0599]: no method named `write_all` found for struct `tokio::fs::File` in the current scope
+   --> src\forensic.rs:134:42
+    |
+134 | ...                   let _ = file.write_all(line.as_bytes()).await;
+    |                                    ^^^^^^^^^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tokio-1.50.0\src\io\util\async_write_ext.rs:387:12
+    |
+387 |         fn write_all<'a>(&'a mut self, src: &'a [u8]) -> WriteAll<'a, Self>
+    |            --------- the method is available for `tokio::fs::File` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `AsyncWriteExt` which provides `write_all` is implemented but not in scope; perhaps you want to import it
+    |
+  1 + use tokio::io::AsyncWriteExt;
+    |
+help: there is a method `write` with a similar name
+    |
+134 -                             let _ = file.write_all(line.as_bytes()).await;
+134 +                             let _ = file.write(line.as_bytes()).await;
+    |
+
+error[E0599]: no method named `write_all` found for struct `tokio::fs::File` in the current scope
+   --> src\forensic.rs:139:36
+    |
+139 |                         match file.write_all(line.as_bytes()).await {
+    |                                    ^^^^^^^^^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tokio-1.50.0\src\io\util\async_write_ext.rs:387:12
+    |
+387 |         fn write_all<'a>(&'a mut self, src: &'a [u8]) -> WriteAll<'a, Self>
+    |            --------- the method is available for `tokio::fs::File` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `AsyncWriteExt` which provides `write_all` is implemented but not in scope; perhaps you want to import it
+    |
+  1 + use tokio::io::AsyncWriteExt;
+    |
+help: there is a method `write` with a similar name
+    |
+139 -                         match file.write_all(line.as_bytes()).await {
+139 +                         match file.write(line.as_bytes()).await {
+    |
+
+error[E0599]: no method named `write_all` found for struct `tokio::fs::File` in the current scope
+   --> src\forensic.rs:154:54
+    |
+154 | ...                   let _ = file.write_all(line.as_bytes()).await;
+    |                                    ^^^^^^^^^
+    |
+   ::: C:\Users\pixel\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tokio-1.50.0\src\io\util\async_write_ext.rs:387:12
+    |
+387 |         fn write_all<'a>(&'a mut self, src: &'a [u8]) -> WriteAll<'a, Self>
+    |            --------- the method is available for `tokio::fs::File` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `AsyncWriteExt` which provides `write_all` is implemented but not in scope; perhaps you want to import it
+    |
+  1 + use tokio::io::AsyncWriteExt;
+    |
+help: there is a method `write` with a similar name
+    |
+154 -                                         let _ = file.write_all(line.as_bytes()).await;
+154 +                                         let _ = file.write(line.as_bytes()).await;
+    |
+
+error[E0433]: cannot find type `AppWindow` in this scope
+   --> src\forensic.rs:262:22
+    |
+262 |             let ui = AppWindow::new().context("Slint window creation failed")?;
+    |                      ^^^^^^^^^ use of undeclared type `AppWindow`
+
+error[E0063]: missing fields `log_path` and `sender` in initializer of `ForensicLogger`
+   --> src\forensic.rs:424:9
+    |
+424 |         Self {}
+    |         ^^^^ missing `log_path` and `sender`
+
+error[E0433]: cannot find type `AppWindow` in this scope
+   --> src\main.rs:107:14
+    |
+107 |     let ui = AppWindow::new().context("Slint window creation failed")?;
+    |              ^^^^^^^^^ use of undeclared type `AppWindow`
+
+error[E0560]: struct `DetectionEvent` has no field named `timestamp_micros`
+   --> src\main.rs:704:29
+    |
+704 | ...                   timestamp_micros: get_current_micros(),
+    |                       ^^^^^^^^^^^^^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+704 -                             timestamp_micros: get_current_micros(),
+704 +                             timestamp_sync_ms: get_current_micros(),
+    |
+
+error[E0560]: struct `DetectionEvent` has no field named `fft_magnitude`
+   --> src\main.rs:710:29
+    |
+710 | ...                   fft_magnitude: fft_mag_arr.to_vec(),
+    |                       ^^^^^^^^^^^^^ `DetectionEvent` does not have this field
+    |
+    = note: available fields are: `timestamp`, `product_type`, `phase_angle`, `spl_db`, `session_id` ... and 9 others
+
+error[E0560]: struct `DetectionEvent` has no field named `bispectrum`
+   --> src\main.rs:711:29
+    |
+711 | ...                   bispectrum: vec![0.0; 64], // Populated later if needed
+    |                       ^^^^^^^^^^ `DetectionEvent` does not have this field
+    |
+    = note: available fields are: `timestamp`, `product_type`, `phase_angle`, `spl_db`, `session_id` ... and 9 others
+
+error[E0560]: struct `DetectionEvent` has no field named `source`
+   --> src\main.rs:713:29
+    |
+713 | ...                   source: "Mamba".to_string(),
+    |                       ^^^^^^ `DetectionEvent` does not have this field
+    |
+    = note: available fields are: `timestamp`, `product_type`, `phase_angle`, `spl_db`, `session_id` ... and 9 others
+
+error[E0560]: struct `DetectionEvent` has no field named `confidence`
+   --> src\main.rs:714:29
+    |
+714 | ...                   confidence: 1.0,
+    |                       ^^^^^^^^^^ `DetectionEvent` does not have this field
+    |
+    = note: available fields are: `timestamp`, `product_type`, `phase_angle`, `spl_db`, `session_id` ... and 9 others
+
+error[E0560]: struct `DetectionEvent` has no field named `itd_ild`
+   --> src\main.rs:715:29
+    |
+715 | ...                   itd_ild: [0.0; 4],
+    |                       ^^^^^^^ `DetectionEvent` does not have this field
+    |
+    = note: available fields are: `timestamp`, `product_type`, `phase_angle`, `spl_db`, `session_id` ... and 9 others
+
+error[E0560]: struct `DetectionEvent` has no field named `beamformer_outputs`
+   --> src\main.rs:716:29
+    |
+716 | ...                   beamformer_outputs: [0.0; 3],
+    |                       ^^^^^^^^^^^^^^^^^^ `DetectionEvent` does not have this field
+    |
+    = note: available fields are: `timestamp`, `product_type`, `phase_angle`, `spl_db`, `session_id` ... and 9 others
+
+error[E0609]: no field `timestamp_micros` on type `DetectionEvent`
+   --> src\main.rs:720:53
+    |
+720 | ...                   timestamp_micros: event.timestamp_micros,
+    |                                               ^^^^^^^^^^^^^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+720 -                             timestamp_micros: event.timestamp_micros,
+720 +                             timestamp_micros: event.timestamp_sync_ms,
+    |
+
+error[E0308]: mismatched types
+   --> src\main.rs:721:44
+    |
+721 | ...                   fft_magnitude: fft_mag_arr,
+    |                                      ^^^^^^^^^^^ expected `Vec<f32>`, found `[f32; 128]`
+    |
+    = note: expected struct `Vec<f32>`
+                found array `[f32; 128]`
+help: try using a conversion method
+    |
+721 |                             fft_magnitude: fft_mag_arr.to_vec(),
+    |                                                       +++++++++
+
+error[E0308]: mismatched types
+   --> src\main.rs:722:41
+    |
+722 | ...                   bispectrum: [0.0; 64], // Populated later if needed
+    |                                   ^^^^^^^^^ expected `Vec<f32>`, found `[{float}; 64]`
+    |
+    = note: expected struct `Vec<f32>`
+                found array `[{float}; 64]`
+help: try using a conversion method
+    |
+722 |                             bispectrum: [0.0; 64].to_vec(), // Populated later if needed
+    |                                                  +++++++++
+
+Some errors have detailed explanations: E0063, E0308, E0425, E0433, E0560, E0599, E0609.
+For more information about an error, try `rustc --explain E0063`.
+warning: `twister` (bin "twister") generated 33 warnings (1 duplicate)
+warning: twister@0.5.0: warning: Exported component 'HapticTestButton' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:18:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 18 | export component HapticTestButton {
+warning: twister@0.5.0:    |                  ^^^^^^^^^^^^^^^^
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: warning: Exported component 'RingMeter' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:81:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 81 | export component RingMeter {
+warning: twister@0.5.0:    |                  ^^^^^^^^^
+warning: twister@0.5.0: warning: Exported component 'ValueBar' doesn't inherit Window. No code will be generated for it
+warning: twister@0.5.0:   --> C:\Users\pixel\Downloads\twister\ui\applets\ps5_deck.slint:47:18
+warning: twister@0.5.0:    |
+warning: twister@0.5.0: 47 | export component ValueBar {
+warning: twister@0.5.0:    |                  ^^^^^^^^
+error: could not compile `twister` (bin "twister") due to 28 previous errors; 33 warnings emitted

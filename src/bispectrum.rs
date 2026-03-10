@@ -12,6 +12,7 @@
 
 use crate::detection::{DetectionEvent, HardwareLayer, MIN_COHERENCE_FRAMES, ProductType};
 use crate::gpu_shared::GpuShared;
+use crate::twister::computer_vision::pose_estimator::PoseFrame;
 use bytemuck::{Pod, Zeroable};
 use std::sync::Arc;
 
@@ -29,6 +30,7 @@ const COHERENCE_THRESHOLD: f32 = 3.0;
 
 #[derive(Debug, Clone, Copy, PartialEq, serde::Serialize, serde::Deserialize)]
 pub enum FrequencyBand {
+    Vlf,
     Infrasound,
     Audio,
     Ultrasonic,
@@ -40,7 +42,9 @@ pub enum FrequencyBand {
 
 impl FrequencyBand {
     pub fn classify(hz: f32) -> Self {
-        if hz < 20.0 {
+        if hz < 3.0 {
+            Self::Vlf
+        } else if hz < 20.0 {
             Self::Infrasound
         } else if hz < 20_000.0 {
             Self::Audio
@@ -58,6 +62,7 @@ impl FrequencyBand {
     }
     pub fn as_str(&self) -> &'static str {
         match self {
+            Self::Vlf => "Vlf",
             Self::Infrasound => "Infrasound",
             Self::Audio => "Audio",
             Self::Ultrasonic => "Ultrasonic",
@@ -78,6 +83,7 @@ fn band_coherence_threshold(f1_hz: f32, f2_hz: f32, mamba_scaler: f32) -> f32 {
         FrequencyBand::LowerRF => 5.0,
         FrequencyBand::MidRF => 7.0,
         FrequencyBand::UpperRF => 9.0,
+        FrequencyBand::Vlf => 1.0, // Added Vlf case
     };
     // Adaptive threshold learned from Mamba environment monitoring,
     // defaults to 1.0 (no scaling)
@@ -272,6 +278,7 @@ impl BispectrumEngine {
             label: Some("bispec-enc"),
         });
         {
+            let mut rng = rand::thread_rng();
             let mut pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
                 label: Some("bispec-pass"),
                 timestamp_writes: None,

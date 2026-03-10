@@ -65,6 +65,8 @@ hf-hub = "*"
 safetensors = "*"
 tokio = { version = "*", features = ["full"] }
 rand = "*"
+thiserror = "*"
+uuid = { version = "*", features = ["v4"] }
 hdf5 = { version = "*", optional = true }
 tray-icon = "*"
 noise = { version = "*", features = ["std"] }

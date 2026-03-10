@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GpaOpenContext &mdash; GPUPerfAPI 4.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GpaRegisterLoggingCallback" href="gpa_registerloggingcallback.html" />
+    <link rel="prev" title="GpaIsSessionComplete" href="gpa_issessioncomplete.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GPUPerfAPI
+          </a>
+              <div class="version">
+                4.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../counters.html">Performance Counters</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../main_api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../main_api.html#functions">Functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gpa_begincommandlist.html">GpaBeginCommandList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_beginsample.html">GpaBeginSample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_beginsession.html">GpaBeginSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_closecontext.html">GpaCloseContext</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_continuesampleoncommandlist.html">GpaContinueSampleOnCommandList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_copysecondarysamples.html">GpaCopySecondarySamples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_createsession.html">GpaCreateSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_deletesession.html">GpaDeleteSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_destroy.html">GpaDestroy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_disableallcounters.html">GpaDisableAllCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_disablecounter.html">GpaDisableCounter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_disablecounterbyname.html">GpaDisableCounterByName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_enableallcounters.html">GpaEnableAllCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_enablecounter.html">GpaEnableCounter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_enablecounterbyname.html">GpaEnableCounterByName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_endcommandlist.html">GpaEndCommandList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_endsample.html">GpaEndSample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_endsession.html">GpaEndSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcounterdatatype.html">GpaGetCounterDataType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcounterdescription.html">GpaGetCounterDescription</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcountergroup.html">GpaGetCounterGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcounterindex.html">GpaGetCounterIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcountername.html">GpaGetCounterName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcountersampletype.html">GpaGetCounterSampleType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcounterusagetype.html">GpaGetCounterUsageType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getcounteruuid.html">GpaGetCounterUuid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getdatatypeasstr.html">GpaGetDataTypeAsStr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getdeviceandrevisionid.html">GpaGetDeviceAndRevisionId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getdevicegeneration.html">GpaGetDeviceGeneration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getdevicemaxwaveslots.html">GpaGetDeviceMaxWaveSlots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getdevicename.html">GpaGetDeviceName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getenabledindex.html">GpaGetEnabledIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getfunctable.html">GpaGetFuncTable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getnumcounters.html">GpaGetNumCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getnumenabledcounters.html">GpaGetNumEnabledCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getpasscount.html">GpaGetPassCount</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getsamplecount.html">GpaGetSampleCount</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getsampleid.html">GpaGetSampleId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getsampleresult.html">GpaGetSampleResult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getsampleresultsize.html">GpaGetSampleResultSize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getstatusasstr.html">GpaGetStatusAsStr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getsupportedsampletypes.html">GpaGetSupportedSampleTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getusagetypeasstr.html">GpaGetUsageTypeAsStr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_getversion.html">GpaGetVersion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_gpagetdevicemaxvgprs.html">GpaGetDeviceMaxVgprs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_initialize.html">GpaInitialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_iscounterenabled.html">GpaIsCounterEnabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_ispasscomplete.html">GpaIsPassComplete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_issessioncomplete.html">GpaIsSessionComplete</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">GpaOpenContext</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#syntax">Syntax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-value">Return value</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gpa_registerloggingcallback.html">GpaRegisterLoggingCallback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../main_api.html#types">Types</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GPUPerfAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../main_api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">GpaOpenContext</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gpaopencontext">
+<h1>GpaOpenContext<a class="headerlink" href="#gpaopencontext" title="Permalink to this heading"></a></h1>
+<section id="syntax">
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this heading"></a></h2>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">GpaStatus</span><span class="w"> </span><span class="nf">GpaOpenContext</span><span class="p">(</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">context</span><span class="p">,</span>
+<span class="w">    </span><span class="n">GpaOpenContextFlags</span><span class="w"> </span><span class="n">flags</span><span class="p">,</span>
+<span class="w">    </span><span class="n">GpaContextId</span><span class="o">*</span><span class="w"> </span><span class="n">context_id</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p>Opens the specified context, which provides access to GPU performance counters.
+This function must be called after GpaInitialize and before any other GPUPerfAPI
+functions.</p>
+<p>The type of the supplied <code class="docutils literal notranslate"><span class="pre">context</span></code> is different depending on which API is
+being used. See the table below for the required type which should be passed to
+GpaOpenContext:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>API</p></th>
+<th class="head"><p>GpaOpenContext <code class="docutils literal notranslate"><span class="pre">context</span></code> Parameter Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Vulkan</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">GpaVkContextOpenInfo*</span></code></div>
+<div class="line">(defined in gpu_perf_api_vk.h)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>DirectX 12</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ID3D12Device*</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>DirectX 11</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ID3D11Device*</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>OpenGL</p></td>
+<td><div class="line-block">
+<div class="line">Windows: <code class="docutils literal notranslate"><span class="pre">HGLRC</span></code></div>
+<div class="line">Linux: <code class="docutils literal notranslate"><span class="pre">GLXContext</span></code></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">context</span></code></p></td>
+<td><p>The context to open counters for. The specific type for this parameter depends on which API GPUPerfAPI is being used with. Refer to the table above for the specific type to be used.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td><p>Flags used to initialize the context. This should be a combination of GpaOpenContext.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">context_id</span></code></p></td>
+<td><p>On successful execution of this function, this parameter will be set to a GPA-generated unique context identifier. This value can subsequently passed to any GPA function taking a GpaContextId as an input parameter.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="return-value">
+<h2>Return value<a class="headerlink" href="#return-value" title="Permalink to this heading"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Return value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>kGpaStatusOk</p></td>
+<td><p>The context was successfully opened.</p></td>
+</tr>
+<tr class="row-odd"><td><p>kGpaStatusErrorGpaNotInitialized</p></td>
+<td><p>GPA was not initialized. Call GpaInitialize before all other entrypoints.</p></td>
+</tr>
+<tr class="row-even"><td><p>kGpaStatusErrorNullPointer</p></td>
+<td><p>The supplied <code class="docutils literal notranslate"><span class="pre">pContext</span></code> parameter is NULL.</p></td>
+</tr>
+<tr class="row-odd"><td><p>kGpaStatusErrorInvalidParameter</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">flags</span></code> parameter has an invalid value.</p></td>
+</tr>
+<tr class="row-even"><td><p>kGpaStatusErrorHardwareNotSupported</p></td>
+<td><p>The current GPU hardware is not supported.</p></td>
+</tr>
+<tr class="row-odd"><td><p>kGpaStatusErrorDriverNotSupported</p></td>
+<td><p>The currently-installed GPU driver is not supported.</p></td>
+</tr>
+<tr class="row-even"><td><p>kGpaStatusErrorContextAlreadyOpen</p></td>
+<td><p>The supplied context has already been opened.</p></td>
+</tr>
+<tr class="row-odd"><td><p>kGpaStatusErrorFailed</p></td>
+<td><p>The context could not be opened.</p></td>
+</tr>
+<tr class="row-even"><td><p>kGpaStatusErrorException</p></td>
+<td><p>Exception occurred.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="a-note-about-gpu-clock-modes">
+<h3>A Note about GPU Clock Modes<a class="headerlink" href="#a-note-about-gpu-clock-modes" title="Permalink to this heading"></a></h3>
+<p>Due to the desire to operate within reasonable power envelopes, modern GPUs
+employ techniques which alter the frequencies of their clocks dynamically.
+This can make tuning for performance difficult, as there is no single clock
+frequency which can be assumed. By default, GPA uses a clock mode known as
+“Profiling Clocks”. Under this mode, the clocks will be fixed at frequencies
+which may be lower than the normal operating frequencies. This mode should help
+to ensure consistent results between different runs of the application.
+However, the observed performance of the application (especially using the
+GPUTime counter) may be lower than expected or lower than the application can
+achieve during normal operation. Using the <code class="docutils literal notranslate"><span class="pre">flags</span></code> parameter when calling
+GpaOpenContext, you can alter the GPU clock frequencies used while profiling.
+The table below explains the stable clock modes that can be specified via the
+<code class="docutils literal notranslate"><span class="pre">flags</span></code> parameter.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Clock mode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">kGpaOpenContextDefaultBit</span></code></div>
+<div class="line">(or any combination of GpaOpenContextBits which doesn’t include any of the <code class="docutils literal notranslate"><span class="pre">kGpaOpenContextClockMode*</span></code> bits)</div>
+</div>
+</td>
+<td><p>Clocks are set to stable frequencies which are known to be power and thermal sustainable. The ratio between the engine and memory clock frequencies will be kept the same as much as possible.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kGpaOpenContextClockModeNoneBit</span></code></p></td>
+<td><p>Clock frequencies are not altered and may vary widely during profiling based on GPU usage and other factors.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kGpaOpenContextClockModePeakBit</span></code></p></td>
+<td><p>Clocks are set to peak frequencies. In most cases this is safe to do for short periods of time while profiling. However, the GPU clock frequencies could still be reduced from peak level under power and thermal constraints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kGpaOpenContextClockModeMinMemoryBit</span></code></p></td>
+<td><p>The memory clock frequency is set to the minimum level, whiles the engine clock is set to a power and thermal sustainable level.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kGpaOpenContextClockModeMinEngineBit</span></code></p></td>
+<td><p>The engine clock frequency is set to the minimum level, whiles the memory clock is set to a power and thermal sustainable level.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="a-note-about-raw-hardware-counters">
+<h3>A Note about Raw Hardware Counters<a class="headerlink" href="#a-note-about-raw-hardware-counters" title="Permalink to this heading"></a></h3>
+<p>By default, GPA exposes a set of derived counters that are computed from one or
+more raw hardware counters. GPA can also be configured to expose the raw
+hardware counters directly. In order to do this, the <code class="docutils literal notranslate"><span class="pre">flags</span></code> parameter
+specified when calling GpaOpenContext should include the
+<code class="docutils literal notranslate"><span class="pre">kGpaOpenContextEnableHardwareCountersBit</span></code> bit.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gpa_issessioncomplete.html" class="btn btn-neutral float-left" title="GpaIsSessionComplete" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gpa_registerloggingcallback.html" class="btn btn-neutral float-right" title="GpaRegisterLoggingCallback" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-2025 Advanced Micro Devices, Inc. All rights reserved.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; GPUPerfAPI 4.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Performance Counters" href="counters.html" />
+    <link rel="prev" title="The AMD GPU Performance API (GPA)" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GPUPerfAPI
+          </a>
+              <div class="version">
+                4.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#transitioning-from-gpa-3-x-to-4-0">Transitioning from GPA 3.x to 4.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-of-gpa-3-x-usage">Example of GPA 3.x Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-of-similar-gpa-4-0-usage">Example of Similar GPA 4.0 Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-the-gpuperfapi-library">Loading the GPUPerfAPI Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registering-a-logging-callback">Registering a Logging Callback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initializing-and-destroying-a-gpuperfapi-instance">Initializing and Destroying a GPUPerfAPI Instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#opening-and-closing-a-context">Opening and Closing a Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-a-context-and-sample-types">Querying a Context and Sample Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-and-using-a-session">Creating and Using a Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-counters-on-a-session">Enabling Counters on a Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-enabled-counters-and-counter-scheduling">Querying Enabled Counters and Counter Scheduling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-and-managing-samples">Creating and Managing Samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-results">Querying Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#displaying-status-error">Displaying Status/Error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-pass-counter-collection">Multi-pass Counter Collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specific-usage-note-for-vulkan">Specific Usage Note for Vulkan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specific-usage-note-for-bundles-directx-12-and-secondary-command-buffers-vulkan">Specific Usage Note for Bundles (DirectX 12) and Secondary Command Buffers (Vulkan)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specific-usage-note-for-samples-that-start-and-end-on-different-command-lists">Specific Usage Note for Samples that Start and End on Different Command Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-gpuperfapi">Deploying GPUPerfAPI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="counters.html">Performance Counters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main_api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GPUPerfAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
+<p>This page provides an overview of the GPUPerfAPI library. Please refer to
+<a class="reference internal" href="main_api.html#gpa-api-reference"><span class="std std-ref">the API Reference Page</span></a> for more information.</p>
+<section id="transitioning-from-gpa-3-x-to-4-0">
+<h2>Transitioning from GPA 3.x to 4.0<a class="headerlink" href="#transitioning-from-gpa-3-x-to-4-0" title="Permalink to this heading"></a></h2>
+<section id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this heading"></a></h3>
+<p>The main change in GPA 4.0 is that the counters are no longer exposed via the GpaContext and are now exposed by the GpaSession. There are now two different sets of counters, depending on the <code class="docutils literal notranslate"><span class="pre">GpaSessionSampleType</span></code> that is passed in when creating the session.
+Not all hardware and not all rendering APIs support all the <code class="docutils literal notranslate"><span class="pre">GpaSessionSampleTypes</span></code>, so after creating the GpaContext you should call <code class="docutils literal notranslate"><span class="pre">GpaGetSupportedSampleTypes(..)</span></code> to query which GpaSessionSampleTypes are supported on the given configuration.
+Users of the GPU Performance API should still only be looking for the <code class="docutils literal notranslate"><span class="pre">kGpaSessionSampleTypeDiscreteCounter</span></code> sample type. No support will be provided for the other sample types. Once the GpaSession is created, you can then use <code class="docutils literal notranslate"><span class="pre">GpaGetNumCounters(..)</span></code> and all
+of the <code class="docutils literal notranslate"><span class="pre">GpaGetCounter*(..)</span></code> entrypoints to query information about the available counters.</p>
+<p>Below you will find an example of a likely subset of GPA 3.x series of API calls, and then a similar series of calls using the modified GPA 4.0 entrypoints. Note that no error checking is being done here for sake of clarity.</p>
+</section>
+<section id="example-of-gpa-3-x-usage">
+<h3>Example of GPA 3.x Usage<a class="headerlink" href="#example-of-gpa-3-x-usage" title="Permalink to this heading"></a></h3>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">GpaContextId</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">GpaOpenContext</span><span class="p">(</span><span class="n">api_context</span><span class="p">,</span><span class="w"> </span><span class="n">kGpaOpenContextDefaultBit</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
+<span class="n">GpaUInt32</span><span class="w"> </span><span class="n">num_counters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">GpaGetNumCounters</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">num_counters</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">GpaUInt32</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_counters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaUInt32</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaDataType</span><span class="w"> </span><span class="n">data_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaDataTypeLast</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaUsageType</span><span class="w"> </span><span class="n">usage_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaUsageTypeList</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaUuid</span><span class="w"> </span><span class="n">uuid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">GpaCounterSampleType</span><span class="w"> </span><span class="n">sample_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaCounterSampleTypeDiscrete</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">GpaGetCounterName</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">name</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaGetCounterIndex</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaGetCounterDescription</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">description</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaGetCounterDataType</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data_type</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaGetCounterUsageType</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">usage_type</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaGetCounterUuid</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">uuid</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaGetCounterSampleType</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sample_type</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">sample_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">kGpaCounterSampleTypeDiscrete</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">GpaSessionId</span><span class="w"> </span><span class="n">session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">GpaCreateSession</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">kGpaContextSampleTypeDiscreteCounter</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">session</span><span class="p">);</span>
+<span class="n">GpaUInt32</span><span class="w"> </span><span class="n">desired_counter_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">GpaEnableCounter</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">desired_counter_index</span><span class="p">);</span>
+<span class="n">GpaBeginSession</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</section>
+<section id="example-of-similar-gpa-4-0-usage">
+<h3>Example of Similar GPA 4.0 Usage<a class="headerlink" href="#example-of-similar-gpa-4-0-usage" title="Permalink to this heading"></a></h3>
+<p>Comments are added in the code below to explain the new code changes.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">GpaContextId</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">GpaOpenContext</span><span class="p">(</span><span class="n">api_context</span><span class="p">,</span><span class="w"> </span><span class="n">kGpaOpenContextDefaultBit</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
+
+<span class="c1">// These next two lines and the following conditional ensure that discrete counters are supported</span>
+<span class="c1">// by the GpaContext for the current hardware and driver. In general the GpaOpenContext call above</span>
+<span class="c1">// will report an error if the hardware and driver are not supported at all, but in some rare cases</span>
+<span class="c1">// the discrete counters may not be supported while other sample types are supported.</span>
+<span class="n">GpaContextSampleTypeFlags</span><span class="w"> </span><span class="n">supported_sample_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaSessionSampleTypeLast</span><span class="p">;</span>
+<span class="n">GpaGetSupportedSampleTypes</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">supported_sample_types</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">supported_sample_types</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">kGpaSessionSampleTypeDiscreteCounter</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// The set of available counters are now dependent on the SampleType being collected within</span>
+<span class="w">    </span><span class="c1">// the session, so the session must now be created prior to querying for the available counters.</span>
+<span class="w">    </span><span class="n">GpaSessionId</span><span class="w"> </span><span class="n">session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaCreateSession</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">kGpaContextSampleTypeDiscreteCounter</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">session</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// The GpaSessionId is now supplied into GpaGetNumCounters() to get the number</span>
+<span class="w">    </span><span class="c1">// of discrete counters that are available.</span>
+<span class="w">    </span><span class="n">GpaUInt32</span><span class="w"> </span><span class="n">num_counters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaGetNumCounters</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">num_counters</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">GpaUInt32</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_counters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">GpaUInt32</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">GpaDataType</span><span class="w"> </span><span class="n">data_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaDataTypeLast</span><span class="p">;</span>
+<span class="w">        </span><span class="n">GpaUsageType</span><span class="w"> </span><span class="n">usage_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaUsageTypeList</span><span class="p">;</span>
+<span class="w">        </span><span class="n">GpaUuid</span><span class="w"> </span><span class="n">uuid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="n">GpaCounterSampleType</span><span class="w"> </span><span class="n">sample_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaCounterSampleTypeDiscrete</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// These next set of counter querying entrypoints now take in a GpaSessionId</span>
+<span class="w">        </span><span class="c1">// rather than the GpaContextId.</span>
+<span class="w">        </span><span class="n">GpaGetCounterName</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">name</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GpaGetCounterIndex</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GpaGetCounterDescription</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">description</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GpaGetCounterDataType</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data_type</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GpaGetCounterUsageType</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">usage_type</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GpaGetCounterUuid</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">uuid</span><span class="p">);</span>
+<span class="w">        </span><span class="n">GpaGetCounterSampleType</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sample_type</span><span class="p">);</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">sample_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">kGpaCounterSampleTypeDiscrete</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">GpaUInt32</span><span class="w"> </span><span class="n">desired_counter_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">GpaEnableCounter</span><span class="p">(</span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">desired_counter_index</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GpaBeginSession</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="loading-the-gpuperfapi-library">
+<h2>Loading the GPUPerfAPI Library<a class="headerlink" href="#loading-the-gpuperfapi-library" title="Permalink to this heading"></a></h2>
+<p>GPUPerfAPI binary releases include separate library files for each
+supported API. The following table shows the name of the library files
+for each API</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>API</p></th>
+<th class="head"><p>Library Names</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Vulkan</p></td>
+<td><div class="line-block">
+<div class="line">64-bit Windows: GPUPerfAPIVK-x64.dll</div>
+<div class="line">64-bit Linux: libGPUPerfAPIVK.so</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>DirectX 12</p></td>
+<td><div class="line-block">
+<div class="line">64-bit Windows: GPUPerfAPIDX12-x64.dll</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>DirectX 11</p></td>
+<td><div class="line-block">
+<div class="line">64-bit Windows: GPUPerfAPIDX11-x64.dll</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>OpenGL</p></td>
+<td><div class="line-block">
+<div class="line">64-bit Windows: GPUPerfAPIGL-x64.dll</div>
+<div class="line">64-bit Linux: libGPUPerfAPIGL.so</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>To use the GPUPerfAPI library:</p>
+<ul class="simple">
+<li><p>Include the header file gpu_performance_api/gpu_perf_api.h. For Vulkan, include gpu_performance_api/gpu_perf_api_vk.h.</p></li>
+<li><p>Declare a variable of type GpaGetFuncTablePtrType</p></li>
+<li><p>Load the GPUPerfAPI library</p>
+<ul>
+<li><p>On Windows, use <code class="docutils literal notranslate"><span class="pre">LoadLibrary</span></code> on the GPUPerfAPI DLL for your chosen API (see
+above table)</p></li>
+<li><p>On Linux, use <code class="docutils literal notranslate"><span class="pre">dlopen</span></code> on the GPUPerfAPI shared library for your chosen API
+(see above table)</p></li>
+</ul>
+</li>
+<li><p>Get the address of the <code class="docutils literal notranslate"><span class="pre">GpaGetFuncTable</span></code> function</p>
+<ul>
+<li><p>On Windows, use <code class="docutils literal notranslate"><span class="pre">GetProcAddres</span></code></p></li>
+<li><p>On Linux, use <code class="docutils literal notranslate"><span class="pre">dlsym</span></code></p></li>
+</ul>
+</li>
+<li><p>Call GpaGetFuncTable to get a table of function pointers for each API.</p></li>
+</ul>
+<p>All of the above can be simplified using the gpu_perf_api_interface_loader.h C++ header
+file. This header file simplifies the loading and initialization of the GPA
+entrypoints. The following code shows how to use this header file to load and
+initialize the DirectX 12 version of GPA:</p>
+<div class="highlight-c++ notranslate" id="gpa-load-and-init-sample"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;gpu_performance_api/gpu_perf_api_interface_loader.h&quot;</span>
+
+<span class="cp">#ifdef __cplusplus</span>
+<span class="n">GpaApiManager</span><span class="o">*</span><span class="w"> </span><span class="n">GpaApiManager</span><span class="o">::</span><span class="n">gpa_api_manager_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="cp">#endif</span>
+<span class="n">GpaFuncTableInfo</span><span class="o">*</span><span class="w"> </span><span class="n">gpa_function_table_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">GpaFunctionTable</span><span class="o">*</span><span class="w"> </span><span class="n">gpa_function_table</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">InitializeGpa</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">ret_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">kGpaStatusOk</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">GpaApiManager</span><span class="o">::</span><span class="n">Instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">LoadApi</span><span class="p">(</span><span class="n">kGpaApiDirectx12</span><span class="p">))</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">gpa_function_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GpaApiManager</span><span class="o">::</span><span class="n">Instance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFunctionTable</span><span class="p">(</span><span class="n">kGpaApiDirectx12</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">nullptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">gpa_function_table</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">ret_val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kGpaStatusOk</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">gpa_function_table</span><span class="o">-&gt;</span><span class="n">GpaInitialize</span><span class="p">(</span><span class="n">kGpaInitializeDefaultBit</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ret_val</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="registering-a-logging-callback">
+<h2>Registering a Logging Callback<a class="headerlink" href="#registering-a-logging-callback" title="Permalink to this heading"></a></h2>
+<p>An entrypoint is available for registering a callback function which GPUPerfAPI
+will use to report back additional information about errors and general API
+usage. It is recommended that all GPUPerfAPI clients register a logging
+callback for error messages at a minimum. Any time a GPUPerfAPI function
+returns an error, it will output a log message with more information about the
+condition that caused the error.</p>
+<p>In order to use this feature, you must define a static function with the
+following signature:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="n">MyLoggingFunction</span><span class="p">(</span><span class="n">GpaLoggingType</span><span class="w"> </span><span class="n">message_type</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The function is registered using the GpaRegisterLoggingCallback entrypoint.</p>
+<p>The function registered will receive callbacks for message types registered.
+The message type is passed into the logging function so that different message
+types can be handled differently if desired. For instance, errors could be
+output to <code class="docutils literal notranslate"><span class="pre">stderr</span></code> or be used to raise an assert, while messages and trace
+information could be output to an application’s or tool’s normal log file. A
+tool may also want to prefix log messages with a string representation of the
+log type before writing the message. The messages passed into the logging
+function will not have a newline at the end, allowing for more flexible
+handling of the message.</p>
+</section>
+<section id="initializing-and-destroying-a-gpuperfapi-instance">
+<h2>Initializing and Destroying a GPUPerfAPI Instance<a class="headerlink" href="#initializing-and-destroying-a-gpuperfapi-instance" title="Permalink to this heading"></a></h2>
+<p>GPUPerfAPI must be initialized before the rendering context or device is
+created, so that the driver can be prepared for accessing hardware data.
+In the case of DirectX 12 or Vulkan, initialization must be done before
+a queue is created. Once you are done using GPUPerfAPI, you should
+destroy the GPUPerfAPI instance. In the case of DirectX 12, destruction
+must be done before the device is destroyed.</p>
+<p>The following methods can be used to initialize and destroy GPUPerfAPI:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPA Initialization/Destruction Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaInitialize</p></td>
+<td><p>Initializes the driver so that counters are exposed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaDestroy</p></td>
+<td><p>Undoes any initialization to ensure proper behavior in applications that are not being profiled.</p></td>
+</tr>
+</tbody>
+</table>
+<p>An example of the code used to initialize a GPUPerfAPI instance can be seen
+above in <a class="reference internal" href="#gpa-load-and-init-sample"><span class="std std-ref">the GpaInterfaceLoader sample code</span></a></p>
+</section>
+<section id="opening-and-closing-a-context">
+<h2>Opening and Closing a Context<a class="headerlink" href="#opening-and-closing-a-context" title="Permalink to this heading"></a></h2>
+<p>After initializing a GPUPerfAPI instance and after the necessary API-specific
+construct has been created, a context can be opened using the GpaOpenContext
+function. Once a context is open you can query information about the hardware
+device, including the supported sample types, and create and begin a session.
+After you are done using GPUPerfAPI, you should close the context.</p>
+<p>The following methods can be used to open and close contexts:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Context Handling Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaOpenContext</p></td>
+<td><p>Opens the counters in the specified context for reading.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaCloseContext</p></td>
+<td><p>Closes the counters in the specified context.</p></td>
+</tr>
+</tbody>
+</table>
+<p>When calling GpaOpenContext, the type of the supplied <code class="docutils literal notranslate"><span class="pre">context</span></code> is
+different depending on which API is being used. See the table below for the
+required type which should be passed to GpaOpenContext:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>API</p></th>
+<th class="head"><p>GpaOpenContext <code class="docutils literal notranslate"><span class="pre">context</span></code> Parameter Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Vulkan</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">GpaVkContextOpenInfo*</span></code></div>
+<div class="line">(defined in gpu_perf_api_vk.h)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>DirectX 12</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ID3D12Device*</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>DirectX 11</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ID3D11Device*</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>OpenGL</p></td>
+<td><div class="line-block">
+<div class="line">Windows: <code class="docutils literal notranslate"><span class="pre">HGLRC</span></code></div>
+<div class="line">Linux: <code class="docutils literal notranslate"><span class="pre">GLXContext</span></code></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="querying-a-context-and-sample-types">
+<h2>Querying a Context and Sample Types<a class="headerlink" href="#querying-a-context-and-sample-types" title="Permalink to this heading"></a></h2>
+<p>After creating a context, you can use the returned GpaContextId to query information
+about the hardware and the types of performance counter samples available.</p>
+<p>The following methods can be used to query information about the context:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Context Query Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaGetSupportedSampleTypes</p></td>
+<td><p>Gets a mask of the sample types supported by the specified context.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetDeviceAndRevisionId</p></td>
+<td><p>Gets the GPU device and revision id associated with the specified context.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetDeviceName</p></td>
+<td><p>Gets the device name of the GPU associated with the specified context.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetDeviceGeneration</p></td>
+<td><p>Gets the device generation of the GPU associated with the specified context.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetDeviceMaxWaveSlots</p></td>
+<td><p>Gets the max wave slots of the GPU associated with the specified context.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetDeviceMaxVgprs</p></td>
+<td><p>Gets the max number of VGPRs of the GPU associated with the specified context.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="creating-and-using-a-session">
+<h2>Creating and Using a Session<a class="headerlink" href="#creating-and-using-a-session" title="Permalink to this heading"></a></h2>
+<p>After creating a context, a session can be created. A session is specific to a type of performance
+counter samples, exposes the available counters, and is also the container for enabling counters,
+sampling GPU workloads, and storing/retrieving the results.</p>
+<p>The following methods can be used to manage sessions:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Session Handling Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaCreateSession</p></td>
+<td><p>Creates a session.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaDeleteSession</p></td>
+<td><p>Deletes a session object.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaBeginSession</p></td>
+<td><p>Begins sampling with the currently enabled set of counters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaEndSession</p></td>
+<td><p>Ends sampling with the currently enabled set of counters.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following methods can be used to query information about performance counters:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Counter Query Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaGetNumCounters</p></td>
+<td><p>Gets the number of counters available.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetCounterName</p></td>
+<td><p>Gets the name of the specified counter.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetCounterIndex</p></td>
+<td><p>Gets index of a counter given its name (case insensitive).</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetCounterGroup</p></td>
+<td><p>Gets the group of the specified counter.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetCounterDescription</p></td>
+<td><p>Gets the description of the specified counter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetCounterDataType</p></td>
+<td><p>Gets the data type of the specified counter.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetCounterUsageType</p></td>
+<td><p>Gets the usage type of the specified counter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetCounterUuid</p></td>
+<td><p>Gets the UUID of the specified counter.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetCounterSampleType</p></td>
+<td><p>Gets the supported sample type of the specified counter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetDataTypeAsStr</p></td>
+<td><p>Gets a string with the name of the specified counter data type.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetUsageTypeAsStr</p></td>
+<td><p>Gets a string with the name of the specified counter usage type.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="enabling-counters-on-a-session">
+<h2>Enabling Counters on a Session<a class="headerlink" href="#enabling-counters-on-a-session" title="Permalink to this heading"></a></h2>
+<p>After creating a session but before sampling on that session, counters should
+be enabled. This must be done after GpaCreateSession is called, but before
+GpaBeginSession is called.</p>
+<p>The following methods can be used to enable/disable counters on a session:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Counter Enable/Disable Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaEnableCounter</p></td>
+<td><p>Enables a specified counter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaDisableCounter</p></td>
+<td><p>Disables a specified counter.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaEnableCounterByName</p></td>
+<td><p>Enables a specified counter using the counter name (case insensitive).</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaDisableCounterByName</p></td>
+<td><p>Disables a specified counter using the counter name (case insensitive).</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaEnableAllCounters</p></td>
+<td><p>Enables all counters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaDisableAllCounters</p></td>
+<td><p>Disables all counters.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="querying-enabled-counters-and-counter-scheduling">
+<h2>Querying Enabled Counters and Counter Scheduling<a class="headerlink" href="#querying-enabled-counters-and-counter-scheduling" title="Permalink to this heading"></a></h2>
+<p>A session can be also queried for information about which counters are enabled
+as well as information on the number of passes required for the current set of
+enabled counters.</p>
+<p>The following methods can be used to query enabled counters and counter
+scheduling on a session:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Counter Scheduling Query Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaGetPassCount</p></td>
+<td><p>Gets the number of passes required for the currently enabled set of counters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetNumEnabledCounters</p></td>
+<td><p>Gets the number of enabled counters.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetEnabledIndex</p></td>
+<td><p>Gets the counter index for an enabled counter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaIsCounterEnabled</p></td>
+<td><p>Checks whether or not a counter is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="creating-and-managing-samples">
+<h2>Creating and Managing Samples<a class="headerlink" href="#creating-and-managing-samples" title="Permalink to this heading"></a></h2>
+<p>After counters are enabled on a session and the session has been started, GPA
+command lists and samples can be created. A sample is the GPU workload for
+which performance counters are to be collected. All enabled counters will be
+collected for each sample. For DirectX 12 and Vulkan, <a class="reference internal" href="#specific-usage-multiple-command-lists"><span class="std std-ref">samples can start
+on one command list and end on another</span></a>.
+There is also <a class="reference internal" href="#specific-usage-bundles"><span class="std std-ref">special handling</span></a> needed for
+DirectX 12 bundles and Vulkan secondary command buffers.</p>
+<p>The following methods can be used to create and manage samples on a session:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Sample Handling Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaBeginCommandList</p></td>
+<td><p>Begins command list for sampling.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaEndCommandList</p></td>
+<td><p>Ends command list for sampling.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaBeginSample</p></td>
+<td><p>Begins a sample in a command list.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaEndSample</p></td>
+<td><p>Ends a sample in a command list.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaContinueSampleOnCommandList</p></td>
+<td><p>Continues a primary command list sample on another primary command list.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaCopySecondarySamples</p></td>
+<td><p>Copies a set of samples from a secondary command list back to the primary command list that executed the secondary command list.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetSampleCount</p></td>
+<td><p>Returns the number of samples created for the specified session.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="querying-results">
+<h2>Querying Results<a class="headerlink" href="#querying-results" title="Permalink to this heading"></a></h2>
+<p>Once sampling is complete and the session has been ended, the sample results
+can be read. For DirectX 12 and Vulkan, the command list or command buffer
+which contains the samples must have been fully executed before results will be
+available.</p>
+<p>The following methods can be used to check if results are available and to read
+the results for samples:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Results Querying Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaIsPassComplete</p></td>
+<td><p>Checks whether or not a pass has finished.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaIsSessionComplete</p></td>
+<td><p>Checks if results for all samples within a session are available.</p></td>
+</tr>
+<tr class="row-even"><td><p>GpaGetSampleResultSize</p></td>
+<td><p>Gets the result size for a given sample.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GpaGetSampleResult</p></td>
+<td><p>Gets the result data for a given sample.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="displaying-status-error">
+<h2>Displaying Status/Error<a class="headerlink" href="#displaying-status-error" title="Permalink to this heading"></a></h2>
+<p>All GPUPerfAPI functions return a GpaStatus code to indicate success or
+failure. A simple string representation of the status or error codes can be
+retrieved using the following method:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status/Error Helper Method</p></th>
+<th class="head"><p>Brief Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GpaGetStatusAsStr</p></td>
+<td><p>Gets a string representation of a GpaStatus value.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="multi-pass-counter-collection">
+<h2>Multi-pass Counter Collection<a class="headerlink" href="#multi-pass-counter-collection" title="Permalink to this heading"></a></h2>
+<p>Collection of some individual counters and some combinations of counters will
+require more than one pass. After enabling counters, you can query the number
+of passes required. If the number of passes is greater than one, you will need
+to execute an identical GPU workload once for each pass. For DirectX 12 and
+Vulkan, this typically means recording the same command list or command buffer
+more than once, calling GpaBeginCommandList on each command list for each
+pass, and beginning and ending samples for the same workloads within the
+command lists. For other graphics and compute APIs, this means making the same
+draw calls or dispatching the same kernels in the same sequence multiple times.
+The same sample id must be found in every pass, and that sample id must be used
+for the same workload within each pass. If it is impossible or impractical to
+repeat the operations to be profiled, select a counter set requiring only a
+single pass. For sets requiring more than one pass, results are available only
+after all passes are complete.</p>
+</section>
+<section id="specific-usage-note-for-vulkan">
+<h2>Specific Usage Note for Vulkan<a class="headerlink" href="#specific-usage-note-for-vulkan" title="Permalink to this heading"></a></h2>
+<p>In order to enable counter collection in the Vulkan driver, several Vulkan
+extensions are required. The application being profiled with GPUPerfAPI will
+need to request those extensions as part of the Vulkan instance and device
+initialization. GPUPerfAPI simplifies this by defining three macros in the
+gpu_performance_api/gpu_perf_api_vk.h header file: <code class="docutils literal notranslate"><span class="pre">AMD_GPA_REQUIRED_INSTANCE_EXTENSION_NAME_LIST</span></code>
+for the required instance extensions,
+<code class="docutils literal notranslate"><span class="pre">AMD_GPA_REQUIRED_DEVICE_EXTENSION_NAME_LIST</span></code> for the required device
+extensions and <code class="docutils literal notranslate"><span class="pre">AMD_GPA_OPTIONAL_DEVICE_EXTENSION_NAME_LIST</span></code> for optional,
+but recommended, device extensions. The extensions defined in
+<code class="docutils literal notranslate"><span class="pre">AMD_GPA_REQUIRED_INSTANCE_EXTENSION_NAME_LIST</span></code> should be included in the
+<code class="docutils literal notranslate"><span class="pre">VkInstanceCreateInfo</span></code> structure that is passed to the <code class="docutils literal notranslate"><span class="pre">vkCreateInstance</span></code>
+function. Similarly, the extensions defined in
+<code class="docutils literal notranslate"><span class="pre">AMD_GPA_REQUIRED_DEVICE_EXTENSION_NAME_LIST</span></code> and
+<code class="docutils literal notranslate"><span class="pre">AMD_GPA_OPTIONAL_DEVICE_EXTENSION_NAME_LIST</span></code> should be included in the
+<code class="docutils literal notranslate"><span class="pre">VkDeviceCreateInfo</span></code> structure that is passed to <code class="docutils literal notranslate"><span class="pre">VkCreateDevice</span></code> function.</p>
+</section>
+<section id="specific-usage-note-for-bundles-directx-12-and-secondary-command-buffers-vulkan">
+<span id="specific-usage-bundles"></span><h2>Specific Usage Note for Bundles (DirectX 12) and Secondary Command Buffers (Vulkan)<a class="headerlink" href="#specific-usage-note-for-bundles-directx-12-and-secondary-command-buffers-vulkan" title="Permalink to this heading"></a></h2>
+<p>While samples within a Bundle or Secondary Command Buffer (both referred to
+here as “secondary command lists”) are supported by GPUPerfAPI, they require
+special handling. Both the primary and secondary command list must be started
+using GpaBeginCommandList. Samples can be created on both types of command
+lists; however, the samples on the secondary command list must be copied back
+to the primary command list. This is done using the GpaCopySecondarySamples
+function. Once samples are copied back to the primary command list, results
+will be available after the primary command list has been executed. Bundles or
+secondary command buffers must be re-recorded for each counter pass. This also
+means that extra GpaCommandListId instances must be created (one per pass for
+each bundle or secondary command buffer) in order to support copying the
+results from the bundles or secondary command buffers after execution.</p>
+</section>
+<section id="specific-usage-note-for-samples-that-start-and-end-on-different-command-lists">
+<span id="specific-usage-multiple-command-lists"></span><h2>Specific Usage Note for Samples that Start and End on Different Command Lists<a class="headerlink" href="#specific-usage-note-for-samples-that-start-and-end-on-different-command-lists" title="Permalink to this heading"></a></h2>
+<p>For DirectX 12 and Vulkan, GPUPerfAPI supports starting a sample on one command
+list and ending it on another. For this to work properly, the command lists
+must be executed in the correct order by the application – the command list
+which ends the sample must be executed after the command list which begins the
+sample. Both the command list where the sample starts and the command list
+where the sample ends must be started using GpaBeginCommandList. After the
+sample has been started on the first command list using GpaBeginSample, it can
+be continued on another command list by calling
+GpaContinueSampleOnCommandList. After it has been continued, the sample can be
+ended using GpaEndSample and specifying the second command list.</p>
+</section>
+<section id="deploying-gpuperfapi">
+<h2>Deploying GPUPerfAPI<a class="headerlink" href="#deploying-gpuperfapi" title="Permalink to this heading"></a></h2>
+<p>To deploy an application that uses GPUPerfAPI, simply make sure that the
+necessary GPUPerfAPI library is available and can be loaded using the normal
+library search mechanism for the host operating system (i.e. in the PATH on
+Windows and LD_LIBRARY_PATH on Linux).</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="The AMD GPU Performance API (GPA)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="counters.html" class="btn btn-neutral float-right" title="Performance Counters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-2025 Advanced Micro Devices, Inc. All rights reserved.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

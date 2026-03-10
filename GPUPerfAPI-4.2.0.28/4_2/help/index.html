@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AMD GPU Performance API (GPA) &mdash; GPUPerfAPI 4.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            GPUPerfAPI
+          </a>
+              <div class="version">
+                4.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="counters.html">Performance Counters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main_api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">GPUPerfAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The AMD GPU Performance API (GPA)</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-amd-gpu-performance-api-gpa">
+<h1>The AMD GPU Performance API (GPA)<a class="headerlink" href="#the-amd-gpu-performance-api-gpa" title="Permalink to this heading"></a></h1>
+<p>The AMD GPU Performance API (aka: GPUPerfAPI, or GPA) is a powerful library to help
+analyze the performance and execution characteristics of applications using
+AMD Radeon™ GPUs and APUs.</p>
+<p>This API is designed to:</p>
+<ul class="simple">
+<li><p>Support Vulkan™, DirectX™ 12, DirectX™ 11, and OpenGL™ on
+RDNA, RDNA2, RDNA3, and RDNA4-based Radeon™ graphics cards and APUs.</p></li>
+<li><p>Support Microsoft Windows® and Linux®.</p></li>
+<li><p>Provide derived counters based on raw hardware performance counters.</p></li>
+<li><p>Provide a fine-grained way to collect performance data for an application.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#transitioning-from-gpa-3-x-to-4-0">Transitioning from GPA 3.x to 4.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#example-of-gpa-3-x-usage">Example of GPA 3.x Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#example-of-similar-gpa-4-0-usage">Example of Similar GPA 4.0 Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#loading-the-gpuperfapi-library">Loading the GPUPerfAPI Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#registering-a-logging-callback">Registering a Logging Callback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#initializing-and-destroying-a-gpuperfapi-instance">Initializing and Destroying a GPUPerfAPI Instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#opening-and-closing-a-context">Opening and Closing a Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#querying-a-context-and-sample-types">Querying a Context and Sample Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#creating-and-using-a-session">Creating and Using a Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#enabling-counters-on-a-session">Enabling Counters on a Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#querying-enabled-counters-and-counter-scheduling">Querying Enabled Counters and Counter Scheduling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#creating-and-managing-samples">Creating and Managing Samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#querying-results">Querying Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#displaying-status-error">Displaying Status/Error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#multi-pass-counter-collection">Multi-pass Counter Collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#specific-usage-note-for-vulkan">Specific Usage Note for Vulkan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#specific-usage-note-for-bundles-directx-12-and-secondary-command-buffers-vulkan">Specific Usage Note for Bundles (DirectX 12) and Secondary Command Buffers (Vulkan)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#specific-usage-note-for-samples-that-start-and-end-on-different-command-lists">Specific Usage Note for Samples that Start and End on Different Command Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#deploying-gpuperfapi">Deploying GPUPerfAPI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="counters.html">Performance Counters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="counters.html#pipeline-based-counter-groups">Pipeline-Based Counter Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html#a-note-about-third-party-applications">A Note About Third-Party Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html#counters-exposed-for-graphics-performance-analysis">Counters Exposed for Graphics Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="counters.html#rdna4-counters">RDNA4 Counters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="counters.html#rdna3-counters">RDNA3 Counters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="counters.html#rdna2-counters">RDNA2 Counters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="counters.html#rdna-counters">RDNA Counters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="main_api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="main_api.html#functions">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_begincommandlist.html">GpaBeginCommandList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_beginsample.html">GpaBeginSample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_beginsession.html">GpaBeginSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_closecontext.html">GpaCloseContext</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_continuesampleoncommandlist.html">GpaContinueSampleOnCommandList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_copysecondarysamples.html">GpaCopySecondarySamples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_createsession.html">GpaCreateSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_deletesession.html">GpaDeleteSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_destroy.html">GpaDestroy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_disableallcounters.html">GpaDisableAllCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_disablecounter.html">GpaDisableCounter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_disablecounterbyname.html">GpaDisableCounterByName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_enableallcounters.html">GpaEnableAllCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_enablecounter.html">GpaEnableCounter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_enablecounterbyname.html">GpaEnableCounterByName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_endcommandlist.html">GpaEndCommandList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_endsample.html">GpaEndSample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_endsession.html">GpaEndSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcounterdatatype.html">GpaGetCounterDataType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcounterdescription.html">GpaGetCounterDescription</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcountergroup.html">GpaGetCounterGroup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcounterindex.html">GpaGetCounterIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcountername.html">GpaGetCounterName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcountersampletype.html">GpaGetCounterSampleType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcounterusagetype.html">GpaGetCounterUsageType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getcounteruuid.html">GpaGetCounterUuid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getdatatypeasstr.html">GpaGetDataTypeAsStr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getdeviceandrevisionid.html">GpaGetDeviceAndRevisionId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getdevicegeneration.html">GpaGetDeviceGeneration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getdevicemaxwaveslots.html">GpaGetDeviceMaxWaveSlots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getdevicename.html">GpaGetDeviceName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getenabledindex.html">GpaGetEnabledIndex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getfunctable.html">GpaGetFuncTable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getnumcounters.html">GpaGetNumCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getnumenabledcounters.html">GpaGetNumEnabledCounters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getpasscount.html">GpaGetPassCount</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getsamplecount.html">GpaGetSampleCount</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getsampleid.html">GpaGetSampleId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getsampleresult.html">GpaGetSampleResult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getsampleresultsize.html">GpaGetSampleResultSize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getstatusasstr.html">GpaGetStatusAsStr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getsupportedsampletypes.html">GpaGetSupportedSampleTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getusagetypeasstr.html">GpaGetUsageTypeAsStr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_getversion.html">GpaGetVersion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_gpagetdevicemaxvgprs.html">GpaGetDeviceMaxVgprs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_initialize.html">GpaInitialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_iscounterenabled.html">GpaIsCounterEnabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_ispasscomplete.html">GpaIsPassComplete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_issessioncomplete.html">GpaIsSessionComplete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_opencontext.html">GpaOpenContext</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_functions/gpa_registerloggingcallback.html">GpaRegisterLoggingCallback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="main_api.html#types">Types</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-2025 Advanced Micro Devices, Inc. All rights reserved.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

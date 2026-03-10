@@ -1,28 +1,121 @@
-
+use crate::detection::{DetectionEvent, HardwareLayer, ProductType};
 use serde::{Deserialize, Serialize};
+use std::fs::File;
+use std::path::{Path, PathBuf};
+use tokio::io::AsyncWriteExt;
+use tokio::sync::mpsc;
+
+#[derive(Debug, thiserror::Error)]
+pub enum LogError {
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
+    #[error("Serialization error: {0}")]
+    Serde(#[from] serde_json::Error),
+    #[error("Forensic error: {0}")]
+    Other(String),
+}
+
+slint::include_modules!();
+
+pub fn get_current_micros() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_micros() as u64
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum ForensicEvent {
-    SessionStart { timestamp_micros: u64 },
-    SessionEnd { timestamp_micros: u64 },
-    AudioFrameProcessed { timestamp_micros: u64 },
-    RFDetection { timestamp_micros: u64 },
-    MambaInference { timestamp_micros: u64 },
-    Bispectrum { timestamp_micros: u64 },
-    AnomalyGateDecision { timestamp_micros: u64 },
+    SessionStart {
+        timestamp_micros: u64,
+        app_version: String,
+        total_events_prior: u64,
+    },
+    SessionEnd {
+        timestamp_micros: u64,
+    },
+    AudioFrameProcessed {
+        timestamp_micros: u64,
+    },
+    RFDetection {
+        timestamp_micros: u64,
+    },
+    MambaInference {
+        timestamp_micros: u64,
+    },
+    Bispectrum {
+        timestamp_micros: u64,
+        f1_hz: f32,
+        f2_hz: f32,
+        product_hz: f32,
+        magnitude: f32,
+        coherence_frames: u32,
+        confidence: f32,
+    },
+    AnomalyGateDecision {
+        timestamp_micros: u64,
+        anomaly_score: f32,
+        reason: String,
+        confidence: f32,
+    },
+    EventValidationError {
+        timestamp_micros: u64,
+        error_msg: String,
+        fft_magnitude: Vec<f32>,
+        bispectrum: Vec<f32>,
+    },
+    TDOAEstimation {
+        azimuth_degrees: f32,
+        elevation_degrees: f32,
+        correlation_quality: f32,
+    },
 }
 
-pub struct ForensicLogger {}
+pub struct LogRecoveryStrategy;
+impl LogRecoveryStrategy {
+    pub async fn handle_error(
+        _err: LogError,
+        _event: &ForensicEvent,
+        _path: &str,
+    ) -> Result<tokio::fs::File, LogError> {
+        // Placeholder for actual recovery logic
+        Err(LogError::Other("Recovery not implemented".to_string()))
+    }
+}
+
+pub struct EventValidator;
+impl EventValidator {
+    pub fn validate(_event: &ForensicEvent) -> Result<(), String> {
+        Ok(())
+    }
+}
+
+pub struct ForensicLogger {
+    pub sender: mpsc::UnboundedSender<ForensicEvent>,
+    pub log_path: PathBuf,
+}
 impl ForensicLogger {
-    pub async fn new(session_id: &str) -> Result<Self, LogError> {
+    pub fn new(_log_path: &str) -> Self {
+        let (tx, _rx) = mpsc::unbounded_channel(); // Changed to unbounded_channel to match original sender type
+        Self {
+            sender: tx,
+            log_path: PathBuf::from(_log_path), // Convert &str to PathBuf
+        }
+    }
+
+    pub async fn init_logger(session_id: &str) -> Result<Self, LogError> {
         let dir = PathBuf::from("forensic_log");
-        tokio::fs::create_dir_all(&dir).await.map_err(|e| LogError::IOError(e.to_string()))?;
+        tokio::fs::create_dir_all(&dir)
+            .await
+            .map_err(|e| LogError::Other(e.to_string()))?;
 
         let filename = format!("{}.jsonl", session_id.replace(':', "-"));
         let log_path = dir.join(&filename);
 
         if !log_path.exists() {
-            tokio::fs::File::create(&log_path).await.map_err(|e| LogError::IOError(e.to_string()))?;
+            tokio::fs::File::create(&log_path)
+                .await
+                .map_err(|e| LogError::Other(e.to_string()))?;
         }
 
         let (sender, mut receiver) = mpsc::unbounded_channel();
@@ -46,8 +139,9 @@ impl ForensicLogger {
                             eprintln!("[Forensic] Validation error: {}", e);
                             let validation_event = ForensicEvent::EventValidationError {
                                 timestamp_micros: get_current_micros(),
-                                original_event: serde_json::to_string(&event).unwrap_or_default(),
-                                error_reason: e,
+                                error_msg: e,
+                                fft_magnitude: vec![], // Default empty
+                                bispectrum: vec![],    // Default empty
                             };
                             let line = serde_json::to_string(&validation_event).unwrap() + "\n";
                             let _ = file.write_all(line.as_bytes()).await;
@@ -59,8 +153,15 @@ impl ForensicLogger {
                             Ok(_) => {
                                 let _ = file.sync_all().await;
                             }
-                            Err(e) if e.kind() == std::io::ErrorKind::OutOfMemory => { // Approximation of ENOSPC
-                                match LogRecoveryStrategy::handle_error(LogError::DiskFull, &event, log_path_clone.to_str().unwrap()).await {
+                            Err(e) if e.kind() == std::io::ErrorKind::OutOfMemory => {
+                                // Approximation of ENOSPC
+                                match LogRecoveryStrategy::handle_error(
+                                    LogError::Other("Disk full".to_string()),
+                                    &event,
+                                    log_path_clone.to_str().unwrap(),
+                                )
+                                .await
+                                {
                                     Ok(new_file) => {
                                         file = new_file;
                                         let _ = file.write_all(line.as_bytes()).await;
@@ -71,9 +172,20 @@ impl ForensicLogger {
                                 }
                             }
                             Err(e) if e.kind() == std::io::ErrorKind::PermissionDenied => {
-                                match LogRecoveryStrategy::handle_error(LogError::PermissionDenied, &event, log_path_clone.to_str().unwrap()).await {
-                                    Ok(new_file) => { file = new_file; }
-                                    Err(err) => eprintln!("[Forensic] Permission recovery failed: {:?}", err),
+                                match LogRecoveryStrategy::handle_error(
+                                    LogError::Other("Permission denied".to_string()),
+                                    &event,
+                                    log_path_clone.to_str().unwrap(),
+                                )
+                                .await
+                                {
+                                    Ok(new_file) => {
+                                        file = new_file;
+                                    }
+                                    Err(err) => eprintln!(
+                                        "[Forensic] Permission recovery failed: {:?}",
+                                        err
+                                    ),
                                 }
                             }
                             Err(e) => {
@@ -86,13 +198,17 @@ impl ForensicLogger {
             }
         });
 
-        Ok(Self {
-            sender,
-            log_path,
-        })
+        Ok(Self { sender, log_path })
     }
 
-    pub fn log_gate_decision(&self, _score: f32, _confidence: f32, _threshold: f32, _forward: bool, _reason: &str) -> anyhow::Result<()> {
+    pub fn log_gate_decision(
+        &self,
+        _score: f32,
+        _confidence: f32,
+        _threshold: f32,
+        _forward: bool,
+        _reason: &str,
+    ) -> anyhow::Result<()> {
         // STUB: V3 Node.js WebSocket migration.
         // Rust no longer logs cognitive decisions locally.
         Ok(())
@@ -102,7 +218,11 @@ impl ForensicLogger {
         // Map old DetectionEvent to ForensicEvent V2
         let confidence = (event.magnitude * event.coherence_frames as f32).min(1.0);
         let fe = ForensicEvent::Bispectrum {
-            timestamp_micros: get_current_micros(),
+            timestamp_micros: event
+                .timestamp
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_micros() as u64,
             f1_hz: event.f1_hz,
             f2_hz: event.f2_hz,
             product_hz: event.product_hz,
@@ -110,12 +230,12 @@ impl ForensicLogger {
             coherence_frames: event.coherence_frames,
             confidence,
         };
-        self.log(fe)
+        let _ = self.sender.send(fe);
+        Ok(())
     }
 
-
-    pub fn log(&self, _event: ForensicEvent) -> anyhow::Result<()> {
-        // STUB: V3 Node.js WebSocket migration.
+    pub fn log(&self, event: ForensicEvent) -> anyhow::Result<()> {
+        let _ = self.sender.send(event);
         Ok(())
     }
 
@@ -139,7 +259,10 @@ impl ForensicLogger {
     ) -> anyhow::Result<()> {
         use std::io::BufReader;
 
-        println!("[Forensic] Generating evidence report for case: {}", case_number);
+        println!(
+            "[Forensic] Generating evidence report for case: {}",
+            case_number
+        );
         let file = File::open(&self.log_path)?;
         let reader = BufReader::new(file);
 
@@ -147,6 +270,13 @@ impl ForensicLogger {
 
         for line in std::io::BufRead::lines(reader) {
             let line = line?;
+            use crate::particle_system::{
+                frustum_culler::FrustumCuller, renderer::ParticleRenderer,
+                streaming::ParticleStreamLoader,
+            };
+            // Slint's include_modules! generates AppWindow by default in typical Slint setups,
+            // but we need to ensure it's available. Usually it's in the root namespace.
+            let ui = AppWindow::new().context("Slint window creation failed")?;
             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&line) {
                 // In new format, we check timestamp_micros roughly to mimic date ranges if needed
                 events.push(json);
@@ -215,10 +345,23 @@ impl ForensicLogger {
         );
 
         for event in &events {
-            let event_type = event.get("event_type").and_then(|v| v.as_str()).unwrap_or("Unknown");
-            let timestamp = event.get("timestamp_micros").and_then(|v| v.as_u64()).unwrap_or(0);
-            let freq = event.get("f1_hz").or_else(|| event.get("frequency_hz")).and_then(|v| v.as_f64()).unwrap_or(0.0);
-            let confidence = event.get("confidence").and_then(|v| v.as_f64()).unwrap_or(0.0);
+            let event_type = event
+                .get("event_type")
+                .and_then(|v| v.as_str())
+                .unwrap_or("Unknown");
+            let timestamp = event
+                .get("timestamp_micros")
+                .and_then(|v| v.as_u64())
+                .unwrap_or(0);
+            let freq = event
+                .get("f1_hz")
+                .or_else(|| event.get("frequency_hz"))
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
+            let confidence = event
+                .get("confidence")
+                .and_then(|v| v.as_f64())
+                .unwrap_or(0.0);
 
             html.push_str(&format!(
                 r#"
@@ -233,7 +376,8 @@ impl ForensicLogger {
             ));
         }
 
-        html.push_str(&format!(r#"
+        html.push_str(&format!(
+            r#"
     </table>
     <div class="footer">
         <p>Generated: {} | Case: {} | Events: {}</p>
@@ -246,16 +390,35 @@ impl ForensicLogger {
         ));
 
         std::fs::write(output_path, html)?;
-        println!("[Forensic] Evidence report exported: {} ({} events)", output_path, events.len());
+        println!(
+            "[Forensic] Evidence report exported: {} ({} events)",
+            output_path,
+            events.len()
+        );
 
         let csv_path = output_path.replace(".html", ".csv");
         let mut csv_writer = csv::Writer::from_path(&csv_path)?;
-        csv_writer.write_record(&["timestamp_micros", "event_type", "frequency_hz", "confidence"])?;
+        csv_writer.write_record(&[
+            "timestamp_micros",
+            "event_type",
+            "frequency_hz",
+            "confidence",
+        ])?;
         for event in events {
             if let Some(event_type) = event.get("event_type").and_then(|v| v.as_str()) {
-                let ts = event.get("timestamp_micros").and_then(|v| v.as_u64()).unwrap_or(0);
-                let freq = event.get("f1_hz").or_else(|| event.get("frequency_hz")).and_then(|v| v.as_f64()).unwrap_or(0.0);
-                let conf = event.get("confidence").and_then(|v| v.as_f64()).unwrap_or(0.0);
+                let ts = event
+                    .get("timestamp_micros")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0);
+                let freq = event
+                    .get("f1_hz")
+                    .or_else(|| event.get("frequency_hz"))
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0);
+                let conf = event
+                    .get("confidence")
+                    .and_then(|v| v.as_f64())
+                    .unwrap_or(0.0);
                 csv_writer.write_record(&[
                     ts.to_string(),
                     event_type.to_string(),
@@ -269,8 +432,12 @@ impl ForensicLogger {
     }
 }
 
-pub async fn verify_log_integrity(_: &str) -> Result<(), String> { Ok(()) }
+pub async fn verify_log_integrity(_: &str) -> Result<(), String> {
+    Ok(())
+}
 
 impl Clone for ForensicLogger {
-    fn clone(&self) -> Self { Self {} }
+    fn clone(&self) -> Self {
+        Self {}
+    }
 }

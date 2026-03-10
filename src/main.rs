@@ -22,6 +22,7 @@ slint::include_modules!();
 
 // ── Modules ───────────────────────────────────────────────────────────────────
 mod af32;
+mod ai;
 mod anc;
 mod anc_calibration;
 mod anc_recording;
@@ -38,8 +39,6 @@ mod gpu_shared;
 mod graph;
 mod harmony;
 mod knowledge_graph;
-mod ai;
-mod ui;
 mod mamba;
 mod ml;
 mod parametric;
@@ -56,6 +55,7 @@ mod trainer;
 mod training;
 mod training_tests;
 mod twister;
+mod ui;
 mod vbuffer;
 mod vector;
 mod waterfall;
@@ -101,8 +101,10 @@ async fn main() -> anyhow::Result<()> {
         "System",
         &format!("[Twister v0.5] Session: {}", session_identity),
     );
-    use crate::particle_system::{renderer::ParticleRenderer, frustum_culler::FrustumCuller, streaming::ParticleStreamLoader};
-                let ui = AppWindow::new().context("Slint window creation failed")?;
+    use crate::particle_system::{
+        frustum_culler::FrustumCuller, renderer::ParticleRenderer, streaming::ParticleStreamLoader,
+    };
+    let ui = AppWindow::new().context("Slint window creation failed")?;
 
     let gpu_shared = GpuShared::new().context("GPU init failed")?;
     state.log(
@@ -183,7 +185,10 @@ async fn main() -> anyhow::Result<()> {
         },
     ));
 
-    let forensic = ForensicLogger::new(session_identity.as_str()).await.map_err(|e| anyhow::anyhow!("{:?}", e)).context("Forensic log init")?;
+    let forensic = ForensicLogger::new(session_identity.as_str())
+        .await
+        .map_err(|e| anyhow::anyhow!("{:?}", e))
+        .context("Forensic log init")?;
 
     // Log SessionStart
     let start_ev = crate::forensic::ForensicEvent::SessionStart {
@@ -681,24 +686,65 @@ async fn main() -> anyhow::Result<()> {
                         latent.push(state_disp.get_sdr_dc_bias());
                         state_disp.set_mamba_anomaly(anomaly);
                         // --- Track C.2/C.4 Real-time Anomaly Gate ---
-                        let mut fft_mag = [0.0f32; 128];
+                        let mut fft_mag_arr = [0.0f32; 128];
                         for i in 0..128 {
-                            fft_mag[i] = if i < mags.len() { mags[i] } else { 0.0 };
+                            fft_mag_arr[i] = if i < mags.len() { mags[i] } else { 0.0 };
                         }
+                        let peak_freq = mags
+                            .iter()
+                            .enumerate()
+                            .max_by(|(_, a), (_, b)| {
+                                a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal)
+                            })
+                            .map(|(i, _)| i as f32 * (sample_rate as f32 / mags.len() as f32))
+                            .unwrap_or(0.0);
+                        let max_mag = mags.iter().cloned().fold(0.0f32, f32::max);
+
+                        let mut event = DetectionEvent {
+                            id: uuid::Uuid::new_v4().to_string(),
+                            timestamp: std::time::SystemTime::now(),
+                            f1_hz: peak_freq,
+                            f2_hz: 0.0,
+                            product_hz: 0.0,
+                            product_type: crate::detection::ProductType::Harmonic,
+                            magnitude: max_mag,
+                            phase_angle: 0.0,
+                            coherence_frames: 1,
+                            spl_db: 20.0 * max_mag.log10(),
+                            session_id: session_identity.clone(),
+                            hardware: crate::detection::HardwareLayer::Microphone,
+                            embedding: vec![0.0; 128],
+                            frequency_band: crate::bispectrum::FrequencyBand::Vlf,
+                            audio_dc_bias_v: Some(state_disp.get_audio_dc_bias()),
+                            sdr_dc_bias_v: Some(state_disp.get_sdr_dc_bias()),
+                            mamba_anomaly_db: 20.0 * anomaly.log10(),
+                            timestamp_sync_ms: None,
+                            is_coordinated: false,
+                            detection_method: "Mamba".to_string(),
+                        };
+
                         let frame = crate::ml::spectral_frame::SpectralFrame {
-                            timestamp_micros: chrono::Utc::now().timestamp_micros() as u64,
-                            fft_magnitude: fft_mag,
+                            timestamp_micros: event
+                                .timestamp
+                                .duration_since(std::time::UNIX_EPOCH)
+                                .unwrap_or_default()
+                                .as_micros() as u64,
+                            fft_magnitude: fft_mag_arr,
                             bispectrum: [0.0; 64], // Populated later if needed
                             itd_ild: [0.0; 4],
                             beamformer_outputs: [0.0; 3],
                             mamba_anomaly_score: anomaly,
                             confidence: 1.0,
                         };
-                        let gate = crate::ml::anomaly_gate::evaluate_gate(&frame, anomaly, 2.0);
+                        let gate = crate::ml::evaluate_gate(&frame, anomaly, 2.0);
 
                         // Sync to UI
                         if let Ok(mut gs) = state_disp.gate_status.lock() {
-                            *gs = if gate.forward_to_trainer { "FORWARD".to_string() } else { "REJECTED".to_string() };
+                            *gs = if gate.forward_to_trainer {
+                                "FORWARD".to_string()
+                            } else {
+                                "REJECTED".to_string()
+                            };
                         }
                         if let Ok(mut gr) = state_disp.last_gate_reason.lock() {
                             *gr = gate.reason.clone();
@@ -706,16 +752,26 @@ async fn main() -> anyhow::Result<()> {
 
                         if gate.forward_to_trainer {
                             // High anomaly, check for training data
-                            if state_disp.get_training_recording_enabled() && gate.confidence > 0.8 {
+                            if state_disp.get_training_recording_enabled() && gate.confidence > 0.8
+                            {
                                 let tx_cur = if let Ok(tx) = state_disp.tx_mags.lock() {
-                                    let mut t = tx.clone(); t.resize(512, 0.0); t
-                                } else { vec![0.0; 512] };
-
-                                let mut rx_cur = if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
-                                    let mut r = sdr_mags.clone(); r.resize(512, 0.0); r
+                                    let mut t = tx.clone();
+                                    t.resize(512, 0.0);
+                                    t
                                 } else {
-                                    let mut r = mags.clone(); r.resize(512, 0.0); r
+                                    vec![0.0; 512]
                                 };
+
+                                let mut rx_cur =
+                                    if let Ok(sdr_mags) = state_disp.sdr_mags.try_lock() {
+                                        let mut r = sdr_mags.clone();
+                                        r.resize(512, 0.0);
+                                        r
+                                    } else {
+                                        let mut r = mags.clone();
+                                        r.resize(512, 0.0);
+                                        r
+                                    };
 
                                 let pair = mamba::TrainingPair::new(
                                     state_disp.get_sdr_center_hz() as u32,
@@ -724,16 +780,24 @@ async fn main() -> anyhow::Result<()> {
                                 );
 
                                 if !training_session_disp.try_enqueue(pair) {
-                                    state_disp.training_pairs_dropped.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                                    state_disp
+                                        .training_pairs_dropped
+                                        .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
                                 }
                             }
                         } else {
                             if gate.reason.contains("Below threshold") {
-                                state_disp.gate_rejections_low_anomaly.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                                state_disp
+                                    .gate_rejections_low_anomaly
+                                    .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
                             } else if gate.reason.contains("low confidence") {
-                                state_disp.gate_rejections_low_confidence.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                                state_disp
+                                    .gate_rejections_low_confidence
+                                    .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
                             } else {
-                                state_disp.gate_rejections_other.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                                state_disp
+                                    .gate_rejections_other
+                                    .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
                             }
                         }
 
@@ -741,9 +805,16 @@ async fn main() -> anyhow::Result<()> {
                         let fdc2 = forensic_disp.clone();
                         let reason = gate.reason.clone();
                         tokio::spawn(async move {
-                            if true { // fdc2.lock() removed since it's not a Mutex
-                            let mut f = fdc2.clone();
-                                let _ = f.log_gate_decision(anomaly, gate.confidence, 2.0, gate.forward_to_trainer, &reason);
+                            if true {
+                                // fdc2.lock() removed since it's not a Mutex
+                                let mut f = fdc2.clone();
+                                let _ = f.log_gate_decision(
+                                    anomaly,
+                                    gate.confidence,
+                                    2.0,
+                                    gate.forward_to_trainer,
+                                    &reason,
+                                );
                             }
                         });
                         state_disp.set_latent_embedding(latent.clone());
@@ -1375,9 +1446,15 @@ async fn main() -> anyhow::Result<()> {
                 if let Ok(gr) = st.last_gate_reason.try_lock() {
                     ui.set_last_gate_reason(gr.clone().into());
                 }
-                ui.set_training_pairs_dropped(st.training_pairs_dropped.load(Ordering::Relaxed) as i32);
-                ui.set_gate_rejections_low_anomaly(st.gate_rejections_low_anomaly.load(Ordering::Relaxed) as i32);
-                ui.set_gate_rejections_low_confidence(st.gate_rejections_low_confidence.load(Ordering::Relaxed) as i32);
+                ui.set_training_pairs_dropped(
+                    st.training_pairs_dropped.load(Ordering::Relaxed) as i32
+                );
+                ui.set_gate_rejections_low_anomaly(
+                    st.gate_rejections_low_anomaly.load(Ordering::Relaxed) as i32,
+                );
+                ui.set_gate_rejections_low_confidence(
+                    st.gate_rejections_low_confidence.load(Ordering::Relaxed) as i32,
+                );
 
                 // Mamba safety sync
                 ui.set_mamba_emergency_off(st.get_mamba_emergency_off());
@@ -1432,14 +1509,8 @@ async fn main() -> anyhow::Result<()> {
                 let ts = chrono::Utc::now().format("%Y%m%d_%H%M%S");
                 let path = format!("evidence/report_{ts}.html");
                 let case = format!("TWISTER_{}", s.train_epoch.load(Ordering::Relaxed));
-                match f.export_evidence_report(
-                    &path,
-                    &case,
-                    "Operator",
-                    "Galveston TX",
-                    None,
-                    None,
-                ) {
+                match f.export_evidence_report(&path, &case, "Operator", "Galveston TX", None, None)
+                {
                     Ok(_) => println!("[Forensic] Exported: {}", path),
                     Err(e) => eprintln!("[Forensic] Export failed: {e}"),
                 }
@@ -1447,22 +1518,32 @@ async fn main() -> anyhow::Result<()> {
         });
     }
 
-        // ── Initialize Particle System (Addendum AA) ────────────────────────────
+    // ── Initialize Particle System (Addendum AA) ────────────────────────────
     let particle_renderer = crate::particle_system::renderer::ParticleRenderer::new(
         gpu_shared.clone(),
         10_000_000,
         wgpu::TextureFormat::Rgba8Unorm,
     );
-    let frustum_culler = crate::particle_system::frustum_culler::FrustumCuller::new(gpu_shared.clone(), 10_000_000);
-    let particle_streamer = std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
+    let frustum_culler =
+        crate::particle_system::frustum_culler::FrustumCuller::new(gpu_shared.clone(), 10_000_000);
+    let particle_streamer =
+        std::sync::Arc::new(crate::particle_system::streaming::ParticleStreamLoader::new());
 
-    let now_ms = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis() as u64;
+    let now_ms = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_millis() as u64;
     let _ = tokio::spawn({
         let s = particle_streamer.clone();
-        async move { s.load_window(now_ms - 8_380_800_000, now_ms, 1_000_000).await; }
+        async move {
+            s.load_window(now_ms - 8_380_800_000, now_ms, 1_000_000)
+                .await;
+        }
     });
 
-    state.running.store(true, std::sync::atomic::Ordering::Relaxed);
+    state
+        .running
+        .store(true, std::sync::atomic::Ordering::Relaxed);
     ui.run().context("Slint run failed")?;
 
     // ── Clean shutdown ────────────────────────────────────────────────────────
@@ -1480,14 +1561,16 @@ async fn main() -> anyhow::Result<()> {
         let epoch = state.train_epoch.load(Ordering::Relaxed);
         let loss_avg = state.train_loss.load(Ordering::Relaxed);
         let metadata = crate::state::CheckpointMetadata::new(
-            epoch,
-            loss_avg,
-            loss_avg,  // loss_min = current (will be improved on next training session)
-            loss_avg,  // loss_max = current
+            epoch, loss_avg,
+            loss_avg, // loss_min = current (will be improved on next training session)
+            loss_avg, // loss_max = current
         );
 
         match mamba_trainer.save(&ckpt, Some(metadata)).await {
-            Ok(_) => println!("[Mamba] Final checkpoint: {} (epoch {}, loss {:.6})", ckpt, epoch, loss_avg),
+            Ok(_) => println!(
+                "[Mamba] Final checkpoint: {} (epoch {}, loss {:.6})",
+                ckpt, epoch, loss_avg
+            ),
             Err(e) => eprintln!("[Mamba] Final save failed: {e}"),
         }
     }
