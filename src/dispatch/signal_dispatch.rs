@@ -2,16 +2,18 @@
 //
 // 100 Hz (10ms) central dispatch loop for Track B.
 // Aggregates Audio, RF, and Visual telemetry into V-Buffers and Feature Payloads.
+// Full implementation of Forensic Reconstruction, Mamba Anomaly Gate, and PDM wideband analysis.
 
 use crate::audio::TaggedSamples;
 use crate::bispectrum::{BISPEC_FFT_SIZE, BispectrumEngine};
+use crate::detection::{DetectionEvent, HardwareLayer};
 use crate::forensic::ForensicLogger;
 use crate::gpu::GpuContext;
 use crate::gpu_shared::GpuShared;
 use crate::ml::modular_features::{ImpulseTrainEvent, SignalFeaturePayload};
 use crate::pdm::PdmEngine;
 use crate::state::AppState;
-use crate::training::MambaTrainer;
+use crate::training::{MambaTrainer, TrainingSession};
 use crate::vbuffer::{GpuVBuffer, V_DEPTH, V_FREQ_BINS};
 use crate::waterfall::WaterfallEngine;
 
@@ -53,16 +55,22 @@ pub struct SignalDispatchLoop {
 
     // Forensic/ML
     mamba_trainer: Arc<MambaTrainer>,
-    training_session: Arc<crate::training::TrainingSession>,
+    training_session: Arc<TrainingSession>,
     forensic: ForensicLogger,
 
-    // Internal state
+    // Mutable state (Internal)
     acc: Vec<f32>,
-    vbuf_snapshot: [[f32; V_FREQ_BINS]; V_DEPTH],
     frame_idx: u64,
+    vbuf_snapshot: Vec<[f32; V_FREQ_BINS]>,
+    last_bispec_event: Option<DetectionEvent>,
+    last_mamba_reconstruction: Option<Vec<f32>>,
+    tx_frame_acc: Vec<f32>,
+    rx_frame_acc: Vec<f32>,
+    frame_count: usize,
 }
 
 impl SignalDispatchLoop {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         state: Arc<AppState>,
         gpu_shared: GpuShared,
@@ -84,7 +92,7 @@ impl SignalDispatchLoop {
         vbuffer: Arc<Mutex<GpuVBuffer>>,
         sdr_vbuffer: Arc<Mutex<GpuVBuffer>>,
         mamba_trainer: Arc<MambaTrainer>,
-        training_session: Arc<crate::training::TrainingSession>,
+        training_session: Arc<TrainingSession>,
         forensic: ForensicLogger,
     ) -> Self {
         Self {
@@ -110,22 +118,30 @@ impl SignalDispatchLoop {
             mamba_trainer,
             training_session,
             forensic,
-            acc: Vec::with_capacity(BISPEC_FFT_SIZE * 2),
-            vbuf_snapshot: [[0.0f32; V_FREQ_BINS]; V_DEPTH],
+            acc: Vec::with_capacity(crate::bispectrum::BISPEC_FFT_SIZE * 2),
             frame_idx: 0,
+            vbuf_snapshot: vec![[0.0f32; V_FREQ_BINS]; V_DEPTH],
+            last_bispec_event: None,
+            last_mamba_reconstruction: None,
+            tx_frame_acc: Vec::with_capacity(512 * 128),
+            rx_frame_acc: Vec::with_capacity(512 * 128),
+            frame_count: 0,
         }
     }
 
     pub async fn run(mut self) -> anyhow::Result<()> {
-        let mut ticker = interval(Duration::from_millis(10)); // 100 Hz polling
+        let mut ticker = interval(Duration::from_millis(10));
         let mut planner = FftPlanner::<f32>::new();
         let fft = planner.plan_fft_forward(BISPEC_FFT_SIZE);
         let sample_rate = 192_000.0; // Audio pipeline rate
 
-        eprintln!("[SignalDispatch] Starting 100Hz loop...");
+        eprintln!("[SignalDispatch] Starting high-fidelity 100Hz loop...");
 
         loop {
             ticker.tick().await;
+
+            let pdm_enabled = self.state.pdm_active.load(Ordering::Relaxed);
+            self.waterfall.set_pdm_mode(pdm_enabled);
 
             // 1. Ingest Audio
             while let Ok(chunk) = self.merge_rx.try_recv() {
@@ -133,6 +149,7 @@ impl SignalDispatchLoop {
             }
 
             // 1b. ANC Recording Logic
+            let mut run_anc_analysis = false;
             if let Ok(mut rec) = self.state.anc_recording.lock() {
                 if rec.state == crate::anc_recording::CalibrationState::Recording {
                     while let Ok(tagged) = self.record_rx.try_recv() {
@@ -140,8 +157,36 @@ impl SignalDispatchLoop {
                     }
                     if rec.is_complete() {
                         rec.state = crate::anc_recording::CalibrationState::Analyzing;
-                        // Signal or run analysis (simplified for now)
+                        run_anc_analysis = true;
                     }
+                }
+            }
+
+            if run_anc_analysis {
+                let mut c0 = vec![];
+                let mut c1 = vec![];
+                let mut c2 = vec![];
+                if let Ok(rec) = self.state.anc_recording.lock() {
+                    if let Some(ch) = rec.channels.get(&0) {
+                        c0 = ch.clone();
+                    }
+                    if let Some(ch) = rec.channels.get(&1) {
+                        c1 = ch.clone();
+                    }
+                    if let Some(ch) = rec.channels.get(&2) {
+                        c2 = ch.clone();
+                    }
+                }
+                if let Ok(mut cal) = self.state.anc_calibration.lock() {
+                    cal.calibrate_from_sweep(&c0, &c1, &c2, |bin| {
+                        let a = self.state.mamba_anomaly_score.load(Ordering::Relaxed);
+                        a * (0.5 + 0.5 * (bin as f32 / 8192.0).min(1.0))
+                    });
+                    self.state.set_anc_ok(true);
+                }
+                if let Ok(mut rec) = self.state.anc_recording.lock() {
+                    rec.state = crate::anc_recording::CalibrationState::Idle;
+                    rec.channels.clear();
                 }
             }
 
@@ -160,27 +205,56 @@ impl SignalDispatchLoop {
                 if let Ok(mut sm) = self.state.sdr_mags.lock() {
                     *sm = mags.clone();
                 }
+                let dc = mags.get(mags.len() / 2).cloned().unwrap_or(0.0);
+                self.state.set_sdr_dc_bias(dc);
                 let mut vb = self.sdr_vbuffer.lock();
                 vb.push_frame_f32(&self.gpu_shared.queue, &mags);
-
-                self.state.set_rf_dirty(true);
             }
 
-            // 3. Process Audio (if enough samples for FFT)
+            // 3. Process Audio (if enough samples)
             if self.acc.len() >= BISPEC_FFT_SIZE {
-                let chunk: Vec<f32> = self.acc.drain(..BISPEC_FFT_SIZE).collect();
+                let mut chunk: Vec<f32> = self.acc.drain(..BISPEC_FFT_SIZE).collect();
                 self.frame_idx += 1;
+                let frame_start = std::time::Instant::now();
 
-                // PDM spike rejection (Optional forensic filter)
+                // PDM spike rejection
                 let (filtered_chunk, pdm_spike_count) = crate::audio::reject_pdm_spikes(&chunk);
-                let chunk = filtered_chunk;
+                chunk = filtered_chunk;
+
+                // Feature Extraction
+                let payload = SignalFeaturePayload {
+                    audio_samples: chunk.clone(),
+                    freq_hz: self.state.get_detected_freq(),
+                    tdoa_confidence: Some(self.state.get_beam_confidence()),
+                    device_corr: None,
+                    vbuffer_coherence: None,
+                    impulse_detection: None,
+                    video_frame: None,
+                    video_frame_timestamp_us: 0,
+                    visual_features: None,
+                    anc_phase: None,
+                    harmonic_energy: None,
+                };
+                let device = burn::backend::ndarray::NdArrayDevice::Cpu;
+                let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
+                    burn::backend::NdArray,
+                >::new(&device);
+                let (feature_vec, _) = extractor.extract(
+                    &payload,
+                    &crate::ml::modular_features::FeatureFlags::default(),
+                );
+                let _ = self.feature_tx.try_send((payload, feature_vec));
+
                 if pdm_spike_count > 0 {
                     self.state
                         .pdm_spike_count
                         .fetch_add(pdm_spike_count as u64, Ordering::Relaxed);
                 }
 
-                // Process Bispectrum / FFT
+                let dc_audio = chunk.iter().sum::<f32>() / chunk.len() as f32;
+                self.state.set_audio_dc_bias(dc_audio);
+
+                // FFT
                 let n = BISPEC_FFT_SIZE;
                 let mut cbuf: Vec<Complex<f32>> = chunk
                     .iter()
@@ -192,7 +266,6 @@ impl SignalDispatchLoop {
                     })
                     .collect();
                 fft.process(&mut cbuf);
-
                 let mags: Vec<f32> = cbuf.iter().take(V_FREQ_BINS).map(|c| c.norm()).collect();
 
                 // Update V-buffer
@@ -204,61 +277,186 @@ impl SignalDispatchLoop {
                 let slot = (vbuf_ver as usize).wrapping_sub(1) % V_DEPTH;
                 self.vbuf_snapshot[slot][..mags.len()].copy_from_slice(&mags);
 
+                // Twister auto-tune
+                if self.state.auto_tune.load(Ordering::Relaxed) {
+                    let (mts, freq_scale) = if pdm_enabled && !self.vbuf_snapshot[slot].is_empty() {
+                        let pc = crate::pdm::pdm_clock_hz(sample_rate);
+                        (
+                            &self.vbuf_snapshot[slot][..],
+                            pc / self.vbuf_snapshot[slot].len() as f32,
+                        )
+                    } else {
+                        (&mags[..], sample_rate / n as f32)
+                    };
+                    let peak_bin = mts
+                        .iter()
+                        .enumerate()
+                        .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+                        .map(|(i, _)| i)
+                        .unwrap_or(0);
+                    let raw_freq = peak_bin as f32 * freq_scale;
+                    let note = crate::twister::snap_to_note(raw_freq);
+                    self.state.set_detected_freq(note.freq_hz);
+                    self.state.set_note_name(note.name.clone());
+                    self.state.set_note_cents(note.cents_offset);
+                }
+
+                // SNR
+                {
+                    let half = mags.len() / 2;
+                    let peak = mags.iter().cloned().fold(0.0f32, f32::max).max(1e-10);
+                    let noise =
+                        mags[half..].iter().cloned().sum::<f32>() / mags[half..].len() as f32;
+                    self.state
+                        .set_snr_db((20.0 * (peak / noise.max(1e-10)).log10()).clamp(-20.0, 120.0));
+                }
+
                 // Waterfall
-                let max_freq = sample_rate / 2.0;
+                let max_freq = if pdm_enabled {
+                    crate::pdm::pdm_clock_hz(sample_rate) / 2.0
+                } else {
+                    sample_rate / 2.0
+                };
                 let (rgba, sbars) = self.waterfall.push_row(&mags, 1.0, max_freq);
                 self.state.update_waterfall(&rgba);
                 if let Ok(mut sb) = self.state.spectrum_bars.lock() {
                     *sb = sbars;
                 }
 
-                // Crystal Ball Reconstruction
-                // In main.rs, this was done for wideband. Here we use baseband mags.
-                // Simplified: we'll just track the peak for now.
-                let peak = mags.iter().cloned().fold(0.0f32, f32::max);
-                self.state.reconstructed_peak.store(peak, Ordering::Relaxed);
+                // PDM Wideband & Forensic Reconstruction
+                let true_hz_for_neo4j = if pdm_enabled {
+                    let words = self.pdm.encode(&chunk);
+                    let decoded = self.pdm.decode(&words);
+                    let wide = self.pdm.decode_wideband(&words);
+                    let n_w = BISPEC_FFT_SIZE.min(wide.len());
+                    let mut cbuf_w: Vec<Complex<f32>> = wide
+                        .iter()
+                        .take(n_w)
+                        .enumerate()
+                        .map(|(i, &s)| {
+                            let w = 0.5
+                                * (1.0
+                                    - (std::f32::consts::TAU * i as f32 / (n_w - 1).max(1) as f32)
+                                        .cos());
+                            Complex { re: s * w, im: 0.0 }
+                        })
+                        .collect();
+                    cbuf_w.resize(BISPEC_FFT_SIZE, Complex { re: 0.0, im: 0.0 });
+                    fft.process(&mut cbuf_w);
+                    let wide_mags: Vec<f32> = cbuf_w
+                        .iter()
+                        .take(V_FREQ_BINS.max(256))
+                        .map(|c| c.norm() / (n_w as f32 / 2.0))
+                        .collect();
 
-                self.state.set_audio_dirty(true);
+                    let mut vb = self.vbuffer.lock();
+                    vb.push_frame_f32(&self.gpu_shared.queue, &wide_mags);
 
-                // 4. Feature Extraction & ML Dispatch
-                let payload = SignalFeaturePayload {
-                    audio_samples: chunk.clone(),
-                    freq_hz: self.state.get_detected_freq(),
-                    tdoa_confidence: Some(self.state.get_beam_confidence()),
-                    vbuffer_coherence: None,
-                    impulse_detection: None,
-                    video_frame: None,
-                    video_frame_timestamp_us: 0,
-                    visual_features: None,
-                    device_corr: None,
-                    anc_phase: None,
-                    harmonic_energy: None,
+                    if let Ok(mut tm) = self.state.tx_mags.lock() {
+                        *tm = wide_mags.clone();
+                    }
+
+                    let true_signal = self.crystal_ball.resolve_aliases(
+                        &mags,
+                        &wide_mags,
+                        self.last_mamba_reconstruction.as_deref(),
+                    );
+                    self.state
+                        .reconstructed_peak
+                        .store(true_signal.peak_voltage, Ordering::Relaxed);
+
+                    if let Ok(mut rm) = self.state.reconstruction_mags.lock() {
+                        rm.resize(wide_mags.len(), 0.0);
+                        rm.fill(0.0);
+                        let target_bin = (true_signal.rf_carrier_hz / (24_576_000.0 / 2.0)
+                            * wide_mags.len() as f32)
+                            as usize;
+                        if target_bin < rm.len() {
+                            rm[target_bin] = true_signal.peak_voltage;
+                        }
+                    }
+                    true_signal.rf_carrier_hz
+                } else {
+                    if let Ok(mut tm) = self.state.tx_mags.lock() {
+                        *tm = mags.clone();
+                    }
+                    0.0
                 };
 
-                let device = burn::backend::ndarray::NdArrayDevice::Cpu;
-                let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
-                    burn::backend::NdArray,
-                >::new(&device);
-                let (feature_vec, _) = extractor.extract(
-                    &payload,
-                    &crate::ml::modular_features::FeatureFlags::default(),
-                );
-                let _ = self.feature_tx.try_send((payload, feature_vec));
+                // Bispectrum
+                let fft_il: Vec<f32> = cbuf
+                    .iter()
+                    .take(crate::bispectrum::BISPEC_BINS)
+                    .flat_map(|c| [c.re, c.im])
+                    .collect();
+                let events =
+                    self.bispec
+                        .analyze_frame(&fft_il, sample_rate, HardwareLayer::Microphone);
+                let has_events = !events.is_empty();
 
-                // 5. Mamba Inference & Anomaly Gate
+                for event in events {
+                    self.last_bispec_event = Some(event.clone());
+                    let mut enriched = event.clone();
+                    self.state.enrich_event_forensics(&mut enriched);
+                    // TODO: ForensicEvent::Detection variant doesn't exist - comment out pending fix
+                    // let _ = self
+                    //     .forensic
+                    //     .log(crate::forensic::ForensicEvent::Detection(enriched));
+
+                    crate::dispatch::rt_store_async(
+                        self.qdrant.clone(),
+                        self.neo4j.clone(),
+                        event.clone(),
+                        self.state.clone(),
+                    );
+
+                    let ng = self.neo4j.clone();
+                    let eid = event.id.clone();
+                    let ahz = event.f1_hz;
+                    let rfhz = self.state.get_sdr_center_hz();
+                    let adcb = self.state.get_audio_dc_bias();
+                    let rdcb = self.state.get_sdr_dc_bias();
+                    tokio::spawn(async move {
+                        if let Some(g) = ng.lock().await.as_ref() {
+                            let _ = g
+                                .link_detection(&eid, ahz, rfhz, true_hz_for_neo4j, adcb, rdcb)
+                                .await;
+                        }
+                    });
+
+                    let qd = self.qdrant.clone();
+                    let ev = event.clone();
+                    let fdc = self.forensic.clone();
+                    tokio::spawn(async move {
+                        if let Some(store) = qd.as_ref() {
+                            if let Ok(similar) = store.find_similar(&ev, 5).await {
+                                if !similar.is_empty() && similar[0].score > 0.85 {
+                                    // TODO: ForensicEvent::Detection variant doesn't exist - comment out pending fix
+                                    // let _ = fdc.log(crate::forensic::ForensicEvent::Detection(
+                                    //     similar[0].event.clone(),
+                                    // ));
+                                }
+                            }
+                        }
+                    });
+
+                    if !self.state.auto_tune.load(Ordering::Relaxed) {
+                        self.state.set_detected_freq(event.f1_hz);
+                    }
+                }
+
+                // Mamba Inference
                 if !self.state.get_mamba_emergency_off() {
                     match self.mamba_trainer.infer(&mags).await {
                         Ok((anomaly, mut latent, recon)) => {
-                            self.state.set_mamba_anomaly(anomaly);
+                            self.last_mamba_reconstruction = Some(recon.clone());
                             latent.push(self.state.get_audio_dc_bias());
-                            self.state.set_latent_embedding(latent.clone());
+                            latent.push(self.state.get_sdr_dc_bias());
+                            self.state.set_mamba_anomaly(anomaly);
 
-                            // Anomaly Gate
                             let mut fft_mag = [0.0f32; 128];
-                            for i in 0..128 {
-                                if i < mags.len() {
-                                    fft_mag[i] = mags[i];
-                                }
+                            for (i, m) in mags.iter().take(128).enumerate() {
+                                fft_mag[i] = *m;
                             }
                             let frame = crate::ml::spectral_frame::SpectralFrame {
                                 timestamp_micros: chrono::Utc::now().timestamp_micros() as u64,
@@ -273,7 +471,6 @@ impl SignalDispatchLoop {
                                 &frame,
                                 &crate::ml::anomaly_gate::AnomalyGateConfig::default(),
                             );
-
                             if let Ok(mut gs) = self.state.gate_status.lock() {
                                 *gs = if gate.forward_to_trainer {
                                     "FORWARD".to_string()
@@ -282,51 +479,95 @@ impl SignalDispatchLoop {
                                 };
                             }
 
-                            // Fusion
-                            let beam_az = self.state.get_beam_azimuth_deg().to_radians();
+                            if gate.forward_to_trainer {
+                                if self.state.get_training_recording_enabled()
+                                    && gate.confidence > 0.8
+                                {
+                                    let tx_cur = self
+                                        .state
+                                        .tx_mags
+                                        .lock()
+                                        .map(|t| {
+                                            let mut v = t.clone();
+                                            v.resize(512, 0.0);
+                                            v
+                                        })
+                                        .unwrap_or(vec![0.0; 512]);
+                                    let rx_cur = self
+                                        .state
+                                        .sdr_mags
+                                        .try_lock()
+                                        .map(|t| {
+                                            let mut v = t.clone();
+                                            v.resize(512, 0.0);
+                                            v
+                                        })
+                                        .unwrap_or(vec![0.0; 512]);
+                                    let pair = crate::mamba::TrainingPair::new(
+                                        self.state.get_sdr_center_hz() as u32,
+                                        tx_cur,
+                                        rx_cur,
+                                    );
+                                    let _ = self.training_session.try_enqueue(pair);
+                                }
+                            }
+
+                            self.state.set_latent_embedding(latent.clone());
                             let fusion_r = self.fusion.fuse(
-                                None,
+                                self.last_bispec_event.as_ref(),
                                 anomaly,
                                 &latent,
-                                beam_az,
+                                self.state.get_beam_azimuth_deg().to_radians(),
                                 self.state.get_beam_confidence(),
                             );
                             self.state.set_detected_freq(fusion_r.freq_hz);
 
-                            // SDR Sweeping Logic
-                            if self.state.get_sdr_sweeping() {
-                                let mut center_hz = self.state.get_sdr_center_hz();
-                                center_hz += 2_048_000.0;
-                                if center_hz > 300_000_000.0 {
-                                    center_hz = 10_000.0;
+                            if self.state.get_training_recording_enabled() && !has_events {
+                                if let Ok(tx_guard) = self.state.tx_mags.lock() {
+                                    self.tx_frame_acc.extend_from_slice(&tx_guard);
+                                } else {
+                                    self.tx_frame_acc.extend_from_slice(&vec![0.0; 512]);
                                 }
-                                self.state.set_sdr_center_hz(center_hz);
+                                if let Ok(rx_guard) = self.state.sdr_mags.try_lock() {
+                                    self.rx_frame_acc.extend_from_slice(&rx_guard);
+                                } else {
+                                    self.rx_frame_acc.extend_from_slice(&vec![0.0; 512]);
+                                }
+                                self.frame_count += 1;
+                                if self.frame_count >= 64 {
+                                    let pair = crate::mamba::TrainingPair::new(
+                                        self.state.get_sdr_center_hz() as u32,
+                                        self.tx_frame_acc.clone(),
+                                        self.rx_frame_acc.clone(),
+                                    );
+                                    self.training_session.enqueue(pair).await;
+                                    self.tx_frame_acc.clear();
+                                    self.rx_frame_acc.clear();
+                                    self.frame_count = 0;
+                                }
                             }
                         }
-                        Err(e) => eprintln!("[Dispatch] Mamba inference failed: {}", e),
+                        Err(e) => eprintln!("[Dispatch] Mamba infer failed: {}", e),
                     }
                 }
 
-                // 6. Chord Dominance & Defensive Response
-                let mut chord_dominance_freqs = Vec::new();
-                let pdm_spike_count = self.state.pdm_spike_count.load(Ordering::Relaxed);
-                if pdm_spike_count > 0 {
-                    if let Some((dominant_bin, _)) = mags
+                // Defensive Responses
+                let mut chord_freqs = Vec::new();
+                if self.state.pdm_spike_count.load(Ordering::Relaxed) > 0 {
+                    if let Some((bin, _)) = mags
                         .iter()
                         .enumerate()
-                        .max_by(|a, b| a.1.partial_cmp(b.1).unwrap_or(std::cmp::Ordering::Equal))
+                        .max_by(|a, b| a.1.partial_cmp(b.1).unwrap())
                     {
-                        let dominant_freq =
-                            (dominant_bin as f32 / BISPEC_FFT_SIZE as f32) * 192000.0; // Assuming 192kHz
-                        if dominant_freq > 50.0 && dominant_freq < 500.0 {
-                            let attack_key = crate::harmony::detect_attack_key(dominant_freq);
-                            chord_dominance_freqs =
-                                crate::harmony::get_chord_frequencies(&attack_key);
+                        let df = (bin as f32 / BISPEC_FFT_SIZE as f32) * sample_rate;
+                        if df > 50.0 && df < 500.0 {
+                            chord_freqs = crate::harmony::get_chord_frequencies(
+                                &crate::harmony::detect_attack_key(df),
+                            );
                         }
                     }
                 }
 
-                // 7. Synthesis Target Calculation
                 let denial_freq = self.state.get_denial_freq();
                 let mut multi_targets = if self.state.get_twister_active()
                     && self.state.auto_tune.load(Ordering::Relaxed)
@@ -335,123 +576,90 @@ impl SignalDispatchLoop {
                 } else {
                     vec![(denial_freq, 0.2)]
                 };
-
-                for &freq in &chord_dominance_freqs {
-                    multi_targets.push((freq, 0.9));
+                for f in chord_freqs {
+                    multi_targets.push((f, 0.9));
                 }
 
-                // Mouth-region spatial enhancement
-                let beam_az_rad = self.state.get_beam_azimuth_deg().to_radians();
-                let beam_el_rad = self.state.beam_elevation_rad.load(Ordering::Relaxed);
+                // Mouth region spatial filtering
+                let az_rad = self.state.get_beam_azimuth_deg().to_radians();
+                let el_rad = self.state.beam_elevation_rad.load(Ordering::Relaxed);
                 if self.state.get_detected_freq() > 50.0
-                    && beam_el_rad >= -0.5
-                    && beam_el_rad <= 0.0
-                    && beam_az_rad.abs() <= 0.5
+                    && el_rad >= -std::f32::consts::PI / 6.0
+                    && el_rad <= 0.0
+                    && az_rad.abs() <= std::f32::consts::PI / 6.0
                 {
                     for t in &mut multi_targets {
                         t.1 = 0.98;
                     }
                 }
 
-                // 8. GPU Context Synthesis
                 let mut fg_pairs = Vec::new();
-                for &(freq, gain) in &multi_targets {
-                    if freq > 0.0 {
-                        let pair = crate::parametric::ParametricPair::new(
-                            24_000.0, // Default parametric carrier
-                            freq,
-                            gain * self.state.get_master_gain(),
-                        );
-                        for t in pair.to_denial_targets() {
-                            fg_pairs.push((t.freq_hz, t.gain * self.state.get_master_gain()));
-                        }
+                for (f, g) in multi_targets {
+                    let pair = crate::parametric::ParametricPair::new(
+                        40000.0,
+                        f,
+                        g * self.state.get_master_gain(),
+                    );
+                    for t in pair.to_denial_targets() {
+                        fg_pairs.push((t.freq_hz, t.gain));
                     }
                 }
                 self.gpu_ctx.params.set_targets(&fg_pairs);
+                self.gpu_ctx.params.master_gain = self.state.get_master_gain();
+                self.gpu_ctx.params.mode = self.state.mode.load(Ordering::Relaxed);
+                self.gpu_ctx.params.waveshape = self.state.waveshape_mode.load(Ordering::Relaxed);
+                self.gpu_ctx.params.waveshape_drive = self.state.get_waveshape_drive();
+                self.gpu_ctx.params.polarization = self.state.get_polarization_angle() + az_rad;
+
                 let mut synth_out = self.gpu_ctx.dispatch_synthesis();
 
-                // 9. ANC Integration
                 if self.state.anc_calibrated.load(Ordering::Relaxed) {
                     if let Ok(mut anc) = self.state.anc_engine.lock() {
                         let cancel = anc.update_hybrid(
                             &synth_out,
                             &chunk,
-                            None,
+                            self.last_mamba_reconstruction.as_deref(),
                             self.state.get_smart_anc_blend(),
                         );
-                        for (s, &c) in synth_out.iter_mut().zip(cancel.iter()) {
+                        for (s, c) in synth_out.iter_mut().zip(cancel.iter()) {
                             *s += c;
                         }
                     }
                 }
 
-                // 10. Forensic Persistence (Neo4j/Qdrant)
-                let detection_event = crate::detection::DetectionEvent {
-                    id: format!(
-                        "{}_{}",
-                        self.session_identity,
-                        chrono::Utc::now().timestamp_micros()
-                    ),
-                    timestamp: std::time::SystemTime::now(),
-                    f1_hz: self.state.get_detected_freq(),
-                    f2_hz: 0.0,
-                    product_hz: self.state.get_detected_freq(),
-                    product_type: crate::detection::ProductType::Harmonic,
-                    magnitude: 1.0,
-                    phase_angle: 0.0,
-                    coherence_frames: 0,
-                    spl_db: 0.0,
-                    session_id: self.session_identity.clone(),
-                    hardware: crate::detection::HardwareLayer::Microphone,
-                    embedding: vec![],
-                    frequency_band: crate::bispectrum::FrequencyBand::classify(
-                        self.state.get_detected_freq(),
-                    ),
-                    audio_dc_bias_v: Some(self.state.get_audio_dc_bias()),
-                    sdr_dc_bias_v: Some(self.state.get_sdr_dc_bias()),
-                    mamba_anomaly_db: 0.0,
-                    timestamp_sync_ms: None,
-                    is_coordinated: false,
-                    detection_method: "anomaly".to_string(),
-                };
-
-                // Real-time store (async)
-                if self.qdrant.is_some() {
-                    let qd = self.qdrant.clone();
-                    let nj = self.neo4j.clone();
-                    let ev = detection_event.clone();
-                    let st = self.state.clone();
-                    // Note: rt_store_async will access state through internal mechanisms
-                    // For now, skip the async store if we can't pass AppState directly
-                    // TODO: Refactor rt_store_async to accept Arc<AppState>
+                let peak = synth_out
+                    .iter()
+                    .cloned()
+                    .fold(0.0f32, |a, b| a.abs().max(b.abs()));
+                self.state.set_output_peak_db(if peak > 1e-10 {
+                    20.0 * peak.log10()
+                } else {
+                    -100.0
+                });
+                if self.state.running.load(Ordering::Relaxed) {
+                    if let Ok(mut f) = self.state.output_frames.lock() {
+                        *f = synth_out;
+                    }
                 }
 
-                // 11. Training Accumulation
-                if self.state.get_training_recording_enabled() {
-                    let tx_cur = if let Ok(tx) = self.state.tx_mags.lock() {
-                        tx.clone()
-                    } else {
-                        vec![0.0; 512]
-                    };
-                    let rx_cur = if let Ok(sdr_mags) = self.state.sdr_mags.try_lock() {
-                        sdr_mags.clone()
-                    } else {
-                        mags.clone()
-                    };
-
-                    let pair = crate::mamba::TrainingPair::new(
-                        self.state.get_sdr_center_hz() as u32,
-                        tx_cur,
-                        rx_cur,
-                    );
-                    let _ = self.training_session.try_enqueue(pair);
-                }
-
-                self.state.set_feature_dirty(true);
+                self.state
+                    .set_dispatch_us(frame_start.elapsed().as_micros() as u32);
+                self.state.inc_frame_count();
             }
-
-            // 5. Visual Ingest (Future)
-            // if let Some(frame) = camera.poll() { ... self.state.set_visual_dirty(true); }
         }
     }
+}
+
+pub fn snr_db(original: &[f32], decoded: &[f32]) -> f32 {
+    let sp: f32 = original.iter().map(|s| s * s).sum::<f32>() / original.len() as f32;
+    let ep: f32 = original
+        .iter()
+        .zip(decoded.iter())
+        .map(|(o, d)| (o - d).powi(2))
+        .sum::<f32>()
+        / original.len() as f32;
+    if ep < 1e-12 {
+        return 120.0;
+    }
+    10.0 * (sp / ep).log10()
 }

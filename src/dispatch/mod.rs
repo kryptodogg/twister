@@ -17,7 +17,7 @@ pub fn rt_store_async(
     qdrant: Arc<Option<crate::embeddings::EmbeddingStore>>,
     neo4j: Arc<tokio::sync::Mutex<Option<crate::graph::ForensicGraph>>>,
     event: crate::detection::DetectionEvent,
-    state: crate::state::AppState,
+    state: Arc<crate::state::AppState>,
 ) {
     state.log(
         "INFO",

@@ -39,6 +39,7 @@ mod fusion;
 mod gpu;
 mod gpu_shared;
 mod graph;
+mod hardware_io;
 mod harmony;
 mod input;
 mod knowledge_graph;

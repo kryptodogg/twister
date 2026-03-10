@@ -6,9 +6,9 @@
 //
 // Run with: cargo run --example auto_waveshaping
 
-use std::sync::Arc;
 use tokio::sync::watch;
 use tokio::time::{interval, Duration};
+use slint::VecModel;
 
 // Import the multi-rate signal infrastructure
 use twister::dispatch::{TaggedSignalBuffer, MultiRateSignalFrame, SampleDeltaTime};
@@ -212,7 +212,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ui_handle = ui.as_weak();
 
     // Watch channel for lock-free communication (100Hz → 60FPS)
-    let (tx_metrics, mut rx_metrics) = watch::channel(WaveshapeMetrics::default());
+    let (tx_metrics, rx_metrics) = watch::channel(WaveshapeMetrics::default());
 
     // ───────────────────────────────────────────────────────────────────────
     // SPAWN: 100Hz Signal Dispatch Loop (Tokio async)
@@ -318,8 +318,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                     // Simulated waveform: post-waveshaping oscilloscope data
                     waveform: (0..100)
-                        .map(|i| {
-                            let t = simulated_time + (i as f32) * 0.001;
+                        .map(|_i| {
+                            let t = simulated_time + (_i as f32) * 0.001;
                             let mut val = (t * 10.0).sin();
                             if is_attack {
                                 val = (val * 3.0).sin(); // "Smear": super-Nyquist folding
@@ -395,10 +395,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             // Update waveform visualization
-            backend.set_live_waveform(current_metrics.waveform);
+            let waveform_model = std::rc::Rc::new(VecModel::from(current_metrics.waveform));
+            backend.set_live_waveform(waveform_model.into());
 
             // Update latent activity bars
-            backend.set_latent_activity(current_metrics.latent_activity);
+            let latent_model = std::rc::Rc::new(VecModel::from(current_metrics.latent_activity));
+            backend.set_latent_activity(latent_model.into());
 
             // Frame diagnostics
             backend.set_frame_info(
