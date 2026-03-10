@@ -92,32 +92,9 @@ impl ForensicLogger {
         })
     }
 
-    pub fn log_gate_decision(&mut self, score: f32, confidence: f32, threshold: f32, forward: bool, reason: &str) -> anyhow::Result<()> {
-        let now = std::time::SystemTime::now();
-        let unix_ts = now.duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_secs_f64();
-        let utc_ts = chrono::DateTime::from_timestamp(unix_ts as i64, 0).unwrap_or_default().to_rfc3339();
-
-        let event = ForensicEvent {
-            id: format!("gate_{}", unix_ts),
-            timestamp_utc: utc_ts,
-            timestamp_unix: unix_ts,
-            session_id: self.session_id.clone(),
-            event_type: ForensicEventType::AnomalyGateDecision {
-                anomaly_score: score,
-                confidence,
-                threshold_used: threshold,
-                forward_to_trainer: forward,
-                reason: reason.to_string(),
-            },
-            confidence,
-            duration_seconds: 0.0,
-            equipment: self.equipment.clone(),
-            metadata: std::collections::HashMap::new(),
-        };
-
-        let record = serde_json::to_string(&event)?;
-        writeln!(self.writer, "{}", record)?;
-        self.writer.flush()?;
+    pub fn log_gate_decision(&self, _score: f32, _confidence: f32, _threshold: f32, _forward: bool, _reason: &str) -> anyhow::Result<()> {
+        // STUB: V3 Node.js WebSocket migration.
+        // Rust no longer logs cognitive decisions locally.
         Ok(())
     }
 
@@ -136,44 +113,14 @@ impl ForensicLogger {
         self.log(fe)
     }
 
-    pub fn compute_confidence(&self, anomaly_db: f32) -> f32 {
-        ((anomaly_db - 5.0).max(0.0) / 20.0).min(1.0)
+
+    pub fn log(&self, _event: ForensicEvent) -> anyhow::Result<()> {
+        // STUB: V3 Node.js WebSocket migration.
+        Ok(())
     }
 
-    pub fn classify_attack_vector(
-        &self,
-        audio_dc: Option<f32>,
-        sdr_dc: Option<f32>,
-        rf_confidence: f32,
-        timestamp_sync_ms: i64,
-    ) -> String {
-        let has_audio_dc = audio_dc.map_or(false, |v| v > 0.05);
-        let has_sdr_dc = sdr_dc.map_or(false, |v| v > 1.5);
-        let high_rf = rf_confidence > 0.85;
-        let synchronized = timestamp_sync_ms < 5;
-
-        match (has_audio_dc, has_sdr_dc, high_rf, synchronized) {
-            (true, true, true, true) => "RF_DC_SIMULTANEOUS",
-            (true, false, _, _) => "DC_BIAS_ONLY",
-            (false, true, true, _) => "RF_ONLY",
-            (true, true, _, _) => "RF_DC_SEQUENTIAL",
-            _ => "MIXED_VECTOR",
-        }
-        .to_string()
-    }
-
-    pub async fn shutdown(&self) -> Result<(), LogError> {
-        let session_end = ForensicEvent::SessionEnd {
-            timestamp_micros: get_current_micros(),
-            events_logged_this_session: 0, // Simplified for now since counting requires shared state
-            total_events: 0, // Placeholder
-        };
-
-        let _ = self.sender.send(session_end);
-        // Note: we can't drop self.sender here because we only have a reference.
-        // The channel will close when all clones of ForensicLogger are dropped.
-
-        tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
+    pub async fn shutdown(&self) -> anyhow::Result<()> {
+        // STUB: V3 Node.js WebSocket migration.
         Ok(())
     }
 
