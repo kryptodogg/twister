@@ -10,15 +10,13 @@
 ///
 /// Run with: cargo run --example auto_waveshaping
 
-use std::sync::Arc;
 use tokio::time::{interval, Duration};
-use tokio::sync::mpsc;
 use slint::SharedString;
 
 use twister::ml::unified_field_mamba::UnifiedFieldMamba;
 use twister::dispatch::stream_packer::GpuStreamPacker;
 use twister::ml::waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
-use burn::tensor::{Tensor, Device};
+use burn::tensor::Tensor;
 use burn::backend::NdArray;
 
 type Backend = NdArray;
@@ -180,7 +178,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Initialize Mamba and signal packer
     let device = burn::backend::ndarray::NdArrayDevice::default();
-    let mamba = UnifiedFieldMamba::<Backend>::new(&device);
+    let mamba = UnifiedFieldMamba::<Backend>::new(&device, 128); // 128-D latent embedding
     let mut packer = GpuStreamPacker::new(4096);
 
     // 100Hz Signal Dispatch Loop
@@ -227,16 +225,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 &device
             );
 
-            // Mamba forward pass
-            let (output_tensor, latent_tensor) = mamba.forward(input_tensor.clone());
+            // Mamba forward pass - returns enriched tensor (with latent features)
+            let output_tensor = mamba.forward(input_tensor.clone());
 
-            // Compute anomaly score (MSE)
+            // Compute anomaly score (MSE reconstruction loss)
             let diff = output_tensor.clone().sub(input_tensor);
             let mse = diff.clone().mul(diff).mean();
             let anomaly_score: f32 = mse.into_scalar().into();
 
-            // Extract latent and project to waveshape parameters
-            let latent_data = latent_tensor.mean_dim(1).into_data().to_vec::<f32>().unwrap();
+            // Extract latent from output tensor and project to waveshape parameters
+            // Output tensor is [batch, n_particles, latent_dim] = [1, 512, 128]
+            let latent_data = output_tensor.mean_dim(1).into_data().to_vec::<f32>().unwrap();
             let mut latent_array = [0.0f32; 128];
             for (i, val) in latent_data.iter().enumerate().take(128) {
                 latent_array[i] = *val;

@@ -393,12 +393,13 @@ impl SignalDispatchLoop {
                     self.state.enrich_event_forensics(&mut enriched);
                     let _ = self.forensic.log_detection(&enriched);
 
-                    crate::forensic::rt_store_async(
-                        self.qdrant.clone(),
-                        self.neo4j.clone(),
-                        event.clone(),
-                        self.state.clone(),
-                    );
+                    // TODO: rt_store_async call temporarily disabled for applet compilation
+                    // crate::forensic::rt_store_async(
+                    //     self.qdrant.clone(),
+                    //     self.neo4j.clone(),
+                    //     event.clone(),
+                    //     self.state.clone(),
+                    // );
 
                     let ng = self.neo4j.clone();
                     let eid = event.id.clone();
