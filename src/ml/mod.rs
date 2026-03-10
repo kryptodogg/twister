@@ -50,4 +50,4 @@ pub use timegnn_trainer::{
     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
     compute_nt_xent_loss, cosine_similarity, train_timegnn,
 };
-pub use wav2vec2_loader::{Wav2Vec2Model, infer_wav2vec2_embedding, load_wav2vec2};
+pub use wav2vec2_loader::Wav2Vec2Model;

@@ -6,31 +6,33 @@
 // Run with: cargo test --example test_stft_pipeline
 
 use std::sync::Arc;
-use twister::visualization::stft_pipeline::{StftPipeline, StftProcessor, FFT_SIZE, FREQ_BINS};
 use twister::vbuffer::GpuVBuffer;
+use twister::visualization::stft_pipeline::{FFT_SIZE, FREQ_BINS, StftPipeline, StftProcessor};
 
 #[tokio::test]
 async fn test_stft_pipeline_creation() {
     let (device, queue) = create_wgpu_device().await;
 
-    let result = StftPipeline::new(
-        Arc::new(device),
-        Arc::new(queue),
-    );
+    let result = StftPipeline::new(Arc::new(device), Arc::new(queue));
 
-    assert!(result.is_ok(), "STFT pipeline creation failed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "STFT pipeline creation failed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
 async fn test_stft_processor_creation() {
     let (device, queue) = create_wgpu_device().await;
 
-    let result = StftProcessor::new(
-        Arc::new(device),
-        Arc::new(queue),
-    );
+    let result = StftProcessor::new(Arc::new(device), Arc::new(queue));
 
-    assert!(result.is_ok(), "STFT processor creation failed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "STFT processor creation failed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
@@ -87,15 +89,12 @@ async fn create_wgpu_device() -> (wgpu::Device, wgpu::Queue) {
         .expect("Failed to find an appropriate adapter");
 
     let (device, queue) = adapter
-        .request_device(
-            &wgpu::DeviceDescriptor {
-                label: Some("Test Device"),
-                required_features: wgpu::Features::empty(),
-                required_limits: wgpu::Limits::default(),
-                memory_hints: wgpu::MemoryHints::Performance,
-            },
-            None,
-        )
+        .request_device(&wgpu::DeviceDescriptor {
+            label: Some("Test Device"),
+            required_features: wgpu::Features::empty(),
+            required_limits: wgpu::Limits::default(),
+            memory_hints: wgpu::MemoryHints::Performance,
+        })
         .await
         .expect("Failed to create device");
 
