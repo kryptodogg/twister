@@ -172,7 +172,7 @@ impl VoxelGrid<f32> {
         c0 * (1.0 - zd) + c1 * zd
     }
 
-    pub fn average_along_path(&self, distance: f32) -> f32 {
+    pub fn average_along_path(&self, _distance: f32) -> f32 {
         // Average occupancy
         1.0
     }
