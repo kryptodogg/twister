@@ -1,0 +1,204 @@
+import { HorizontalBox, VerticalBox, Slider, Button } from "std-widgets.slint";
+
+export global JoyconStatus {
+    // Connection
+    in-out property <bool> joycon-connected;
+    in-out property <int> joycon-battery;
+
+    // Gyro (degrees)
+    in-out property <float> gyro-roll;
+    in-out property <float> gyro-pitch;
+    in-out property <float> gyro-yaw;
+
+    // Accelerometer (G)
+    in-out property <float> accel-x;
+    in-out property <float> accel-y;
+    in-out property <float> accel-z;
+
+    // Analog sticks ([-1, 1])
+    in-out property <float> stick-l-x;
+    in-out property <float> stick-l-y;
+    in-out property <float> stick-r-x;
+    in-out property <float> stick-r-y;
+
+    // Triggers (0-255)
+    in-out property <int> trigger-l;
+    in-out property <int> trigger-r;
+
+    // Derived parameters
+    in-out property <float> carrier-frequency-hz;
+    in-out property <float> heterodyne-azimuth;   // In degrees
+    in-out property <float> heterodyne-elevation; // In degrees
+    in-out property <float> heterodyne-strength;  // [0, 1]
+    in-out property <float> viewport-zoom;        // 1.0 = normal
+
+    // Button states
+    in-out property <bool> button-a-pressed;
+    in-out property <bool> button-b-pressed;
+    in-out property <bool> button-x-pressed;
+    in-out property <bool> button-y-pressed;
+
+    // Callbacks
+    callback mode_autotune();
+    callback mode_manual();
+    callback mode_waveshape();
+    callback mode_record();
+}
+
+export component JoyconPanel inherits Rectangle {
+    background: #111;
+
+    VerticalBox {
+        spacing: 15px;
+        padding: 20px;
+
+        // CONNECTION STATUS
+        HorizontalBox {
+            Text { text: "Joy-Con Status:"; min-width: 150px; font-weight: 700; color: white; }
+
+            Rectangle {
+                background: JoyconStatus.joycon-connected ? #0f0 : #f00;
+                width: 20px;
+                height: 20px;
+                border-radius: 10px;
+            }
+
+            Text {
+                text: JoyconStatus.joycon-connected ? "Connected (L+R)" : "Disconnected";
+                color: JoyconStatus.joycon-connected ? #0f0 : #f00;
+                font-weight: 700;
+            }
+
+            Text {
+                text: "Battery: \{JoyconStatus.joycon-battery}%";
+                color: JoyconStatus.joycon-battery > 50 ? #0f0 : (JoyconStatus.joycon-battery > 20 ? #ff0 : #f00);
+            }
+        }
+
+        // GYRO ORIENTATION
+        HorizontalBox {
+            spacing: 20px;
+            VerticalBox {
+                Text { text: "Gyro Orientation:"; font-weight: 700; color: white; }
+                HorizontalBox {
+                    spacing: 10px;
+                    VerticalBox {
+                        width: 80px;
+                        Text { text: "Roll:"; color: white; }
+                        Text { text: "\{round(JoyconStatus.gyro-roll)}°"; color: #0f0; }
+                    }
+                    VerticalBox {
+                        width: 80px;
+                        Text { text: "Pitch:"; color: white; }
+                        Text { text: "\{round(JoyconStatus.gyro-pitch)}°"; color: #0f0; }
+                    }
+                    VerticalBox {
+                        width: 80px;
+                        Text { text: "Yaw:"; color: white; }
+                        Text { text: "\{round(JoyconStatus.gyro-yaw)}°"; color: #0f0; }
+                    }
+                }
+            }
+        }
+
+        // ACCELEROMETER
+        HorizontalBox {
+            spacing: 20px;
+            VerticalBox {
+                Text { text: "Accelerometer (G):"; font-weight: 700; color: white; }
+                HorizontalBox {
+                    spacing: 10px;
+                    VerticalBox {
+                        width: 80px;
+                        Text { text: "X:"; color: white; }
+                        Text { text: "\{round(JoyconStatus.accel-x * 100.0) / 100.0} G"; color: #0f0; }
+                    }
+                    VerticalBox {
+                        width: 80px;
+                        Text { text: "Y:"; color: white; }
+                        Text { text: "\{round(JoyconStatus.accel-y * 100.0) / 100.0} G"; color: #0f0; }
+                    }
+                    VerticalBox {
+                        width: 80px;
+                        Text { text: "Z:"; color: white; }
+                        Text { text: "\{round(JoyconStatus.accel-z * 100.0) / 100.0} G"; color: #0f0; }
+                    }
+                }
+                Text { text: "(Shake = Heterodyne Strength)"; color: #888; font-size: 10px; }
+            }
+        }
+
+        // ANALOG STICKS
+        HorizontalBox {
+            spacing: 20px;
+            VerticalBox {
+                Text { text: "Left Stick (Azimuth/Elevation):"; font-weight: 700; color: white; }
+                HorizontalBox {
+                    spacing: 10px;
+                    VerticalBox {
+                        width: 100px;
+                        Text { text: "X (Azimuth):"; color: white; }
+                        Slider { value: (JoyconStatus.stick-l-x + 1.0) / 2.0; minimum: 0.0; maximum: 1.0; }
+                        Text { text: "\{round(JoyconStatus.stick-l-x * 180.0)}°"; color: #0f0; }
+                    }
+                    VerticalBox {
+                        width: 100px;
+                        Text { text: "Y (Elevation):"; color: white; }
+                        Slider { value: (JoyconStatus.stick-l-y + 1.0) / 2.0; minimum: 0.0; maximum: 1.0; }
+                        Text { text: "\{round(JoyconStatus.stick-l-y * 90.0)}°"; color: #0f0; }
+                    }
+                }
+            }
+
+            VerticalBox {
+                Text { text: "Right Stick (Zoom/Pan):"; font-weight: 700; color: white; }
+                HorizontalBox {
+                    spacing: 10px;
+                    VerticalBox {
+                        width: 100px;
+                        Text { text: "X (Pan):"; color: white; }
+                        Slider { value: (JoyconStatus.stick-r-x + 1.0) / 2.0; minimum: 0.0; maximum: 1.0; }
+                        Text { text: "\{round(JoyconStatus.stick-r-x * 100.0)}%"; color: #0f0; }
+                    }
+                    VerticalBox {
+                        width: 100px;
+                        Text { text: "Y (Zoom):"; color: white; }
+                        Slider { value: (JoyconStatus.stick-r-y + 1.0) / 2.0; minimum: 0.0; maximum: 1.0; }
+                        Text { text: "\{round((1.0 + JoyconStatus.stick-r-y) * 100.0) / 100.0}x"; color: #0f0; }
+                    }
+                }
+            }
+        }
+
+        // TRIGGERS
+        HorizontalBox {
+            spacing: 20px;
+            VerticalBox {
+                width: 200px;
+                Text { text: "L Trigger (Reserved):"; color: white; }
+                Text { text: "\{round(JoyconStatus.trigger-l / 255.0 * 100.0)}%"; color: #0f0; }
+            }
+            VerticalBox {
+                width: 200px;
+                Text { text: "R Trigger (RF Power):"; color: white; }
+                Text { text: "\{round(JoyconStatus.trigger-r / 255.0 * 100.0)}%"; color: #0f0; }
+                Text { text: "(Squeeze = Increase Power)"; color: #888; font-size: 10px; }
+            }
+            VerticalBox {
+                width: 200px;
+                Text { text: "Carrier Frequency:"; color: white; }
+                Text { text: "\{round(JoyconStatus.carrier-frequency-hz / 10000000.0) / 100.0}GHz"; color: #0f0; font-weight: 700; }
+                Text { text: "(Derived from trigger)"; color: #888; font-size: 10px; }
+            }
+        }
+
+        // BUTTONS
+        HorizontalBox {
+            spacing: 10px;
+            Button { text: "A: AutoTune"; clicked => { JoyconStatus.mode_autotune(); } }
+            Button { text: "B: Manual"; clicked => { JoyconStatus.mode_manual(); } }
+            Button { text: "X: WaveShape"; clicked => { JoyconStatus.mode_waveshape(); } }
+            Button { text: "Y: Record"; clicked => { JoyconStatus.mode_record(); } }
+        }
+    }
+}

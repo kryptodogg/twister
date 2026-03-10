@@ -53,6 +53,7 @@ mod trainer;
 mod training;
 mod training_tests;
 mod twister;
+mod dispatch;
 mod vbuffer;
 mod vector;
 mod waterfall;
@@ -77,6 +78,8 @@ use sdr::sdr_channel;
 use state::AppState;
 use vbuffer::{V_DEPTH, V_FREQ_BINS, new_shared_vbuffer};
 use waterfall::WaterfallEngine;
+use crate::hardware_io::{DeviceManager, IqDmaGateway};
+use crate::app_state::DirtyFlags;
 
 const PARAMETRIC_CARRIER_HZ: f32 = 40_000.0;
 #[allow(dead_code)]
@@ -190,6 +193,27 @@ async fn main() -> anyhow::Result<()> {
 
     let (sdr_tx, sdr_rx) = sdr_channel();
     let sdr_thread_handle = sdr::spawn_sdr_thread(state.clone(), sdr_tx);
+
+    let dirty_flags = Arc::new(DirtyFlags::new());
+    let device_manager = Arc::new(DeviceManager::new(dirty_flags.clone()));
+    // IqDmaGateway needs device and queue from wgpu context. Assuming gpu is initialized earlier or we initialize dummy.
+    // We will initialize a dummy context for now if there is none, or use the real one.
+    let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor::default());
+    let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions::default())).unwrap();
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let device = std::sync::Arc::new(device);
+    let queue = std::sync::Arc::new(queue);
+    let dma_gateway = std::sync::Arc::new(std::sync::Mutex::new(IqDmaGateway::new(device, queue, 16)));
+
+    tokio::spawn({
+        let dm = device_manager.clone();
+        let dma = dma_gateway.clone();
+        let flags = dirty_flags.clone();
+        async move {
+            dispatch::run_dispatch_loop(dm, dma, flags, dispatch::DispatchConfig::default()).await;
+        }
+    });
+    eprintln!("[Main] Dispatch loop spawned");
 
     let mamba_trainer =
         Arc::new(training::MambaTrainer::new(state.clone()).context("Mamba trainer init")?);
@@ -400,6 +424,10 @@ async fn main() -> anyhow::Result<()> {
                 vbuffer_coherence: None,
                 anc_phase: None,
                 harmonic_energy: None,
+                video_frame: None,
+                video_frame_timestamp_us: 0,
+                impulse_detection: None,
+                visual_features: None,
             };
             let device = burn::backend::ndarray::NdArrayDevice::Cpu;
             let extractor = crate::ml::modular_features::ModularFeatureExtractor::<
@@ -1722,3 +1750,6 @@ fn _start_trainer_loop(
         }
     });
 }
+mod app_state;
+mod hardware_io;
+mod safe_sdr_wrapper;

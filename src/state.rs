@@ -8,7 +8,7 @@ use crate::ml::modular_features::FeatureFlags;
 //   • SDR state: center_freq_hz, sdr_gain_db, sdr_active, sdr_sample_rate.
 //   • mamba_anomaly_score: f32 output from the autoencoder reconstruction error.
 
-use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU32, AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
 use crate::af32::AtomicF32;
@@ -419,6 +419,28 @@ pub const AGC_MIN_GAIN_DB: f32 = 0.0;
 
 // ── AppState ──────────────────────────────────────────────────────────────────
 
+
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum FreqBand {
+    Wideband,
+    Narrowband,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum FreqMode {
+    Manual,
+    Scan,
+    Lock,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum CameraResolution {
+    Res720p,
+    Res1080p,
+    Res4K,
+}
+
 pub struct AppState {
     // ── Core detection ────────────────────────────────────────────────────────
     pub detected_freq: AtomicF32,
@@ -427,6 +449,15 @@ pub struct AppState {
     pub mode: AtomicU32,
     pub feature_flags: Mutex<FeatureFlags>,
     pub feature_confidence: AtomicF32,
+
+    // Addendum fields
+    pub audio_device_idx: AtomicUsize,
+    pub agc_enabled: AtomicBool,
+    pub agc_gain_multiplier: AtomicU32, // stored as float * 100
+    pub freq_band: Mutex<FreqBand>,
+    pub freq_selection_mode: Mutex<FreqMode>,
+    pub frequency_presets: Mutex<Vec<f32>>,
+    pub camera_resolution: Mutex<CameraResolution>,
     pub impulse_anomaly_score: AtomicF32,
     pub harassment_detected: AtomicBool,
     pub auto_tune: AtomicBool,
@@ -581,6 +612,15 @@ impl AppState {
             mode: AtomicU32::new(0),
             feature_flags: Mutex::new(FeatureFlags::default()),
             feature_confidence: AtomicF32::new(0.0),
+
+            // Addendum initializations
+            audio_device_idx: AtomicUsize::new(0),
+            agc_enabled: AtomicBool::new(true),
+            agc_gain_multiplier: AtomicU32::new(100), // 1.0
+            freq_band: Mutex::new(FreqBand::Wideband),
+            freq_selection_mode: Mutex::new(FreqMode::Manual),
+            frequency_presets: Mutex::new(vec![440.0, 1000.0, 2400.0]),
+            camera_resolution: Mutex::new(CameraResolution::Res720p),
             impulse_anomaly_score: AtomicF32::new(0.0),
             harassment_detected: AtomicBool::new(false),
             auto_tune: AtomicBool::new(true), // AUTO-TUNE ON
@@ -1386,5 +1426,59 @@ impl AppState {
 
     pub fn set_feature_confidence(&self, val: f32) {
         self.feature_confidence.store(val, Ordering::Relaxed);
+    }
+
+    pub fn get_audio_device_idx(&self) -> usize {
+        self.audio_device_idx.load(Ordering::Relaxed)
+    }
+
+    pub fn set_audio_device_idx(&self, idx: usize) {
+        self.audio_device_idx.store(idx, Ordering::Relaxed);
+    }
+
+    pub fn get_agc_enabled(&self) -> bool {
+        self.agc_enabled.load(Ordering::Relaxed)
+    }
+
+    pub fn set_agc_enabled(&self, enabled: bool) {
+        self.agc_enabled.store(enabled, Ordering::Relaxed);
+    }
+
+    pub fn get_agc_gain_multiplier(&self) -> f32 {
+        self.agc_gain_multiplier.load(Ordering::Relaxed) as f32 / 100.0
+    }
+
+    pub fn set_agc_gain_multiplier(&self, mult: f32) {
+        self.agc_gain_multiplier.store((mult * 100.0) as u32, Ordering::Relaxed);
+    }
+
+    pub fn get_freq_band(&self) -> FreqBand {
+        *self.freq_band.lock().unwrap()
+    }
+
+    pub fn set_freq_band(&self, band: FreqBand) {
+        if let Ok(mut b) = self.freq_band.lock() {
+            *b = band;
+        }
+    }
+
+    pub fn get_freq_mode(&self) -> FreqMode {
+        *self.freq_selection_mode.lock().unwrap()
+    }
+
+    pub fn set_freq_mode(&self, mode: FreqMode) {
+        if let Ok(mut m) = self.freq_selection_mode.lock() {
+            *m = mode;
+        }
+    }
+
+    pub fn get_camera_resolution(&self) -> CameraResolution {
+        *self.camera_resolution.lock().unwrap()
+    }
+
+    pub fn set_camera_resolution(&self, res: CameraResolution) {
+        if let Ok(mut r) = self.camera_resolution.lock() {
+            *r = res;
+        }
     }
 }

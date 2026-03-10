@@ -275,3 +275,6 @@ mod tests {
         assert!(result.is_err());
     }
 }
+
+unsafe impl Send for DeviceManager {}
+unsafe impl Sync for DeviceManager {}

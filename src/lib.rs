@@ -1,4 +1,5 @@
 pub mod active_denial;
+pub mod dispatch;
 // src/lib.rs — Library exports for forensic queries tests
 
 // Core modules needed for forensic query API
@@ -48,3 +49,6 @@ pub mod app_state;
 pub mod hardware_io;
 pub mod safe_sdr_wrapper;
 pub mod ui;
+
+pub use app_state::DirtyFlags;
+pub use hardware_io::{DeviceManager, IqDmaGateway};
