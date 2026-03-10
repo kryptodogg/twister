@@ -65,7 +65,7 @@ hf-hub = "*"
 safetensors = "*"
 tokio = { version = "*", features = ["full"] }
 rand = "*"
-hdf5 = "*"
+hdf5 = { version = "*", optional = true }
 tray-icon = "*"
 noise = { version = "*", features = ["std"] }
 # dualsense-rs = "*"
@@ -84,6 +84,7 @@ default = ["rtlsdr"]
 rtlsdr = []
 pluto-plus = []
 all-rf = ["rtlsdr", "pluto-plus"]
+hdf5 = ["dep:hdf5"]
 
 [profile.dev]
 # Keep DSP hot paths fast even in debug builds.

@@ -1,5 +1,6 @@
 use crate::ml::wav2vec2_loader::Wav2Vec2Model;
 use burn::backend::Wgpu;
+#[cfg(feature = "hdf5")]
 use hdf5::File;
 use std::error::Error;
 
@@ -16,7 +17,10 @@ impl EventCorpus {
         h5_out_path: &str,
         sample_rate_hz: u32,
     ) -> Result<EventCorpus, Box<dyn Error>> {
+        #[cfg(feature = "hdf5")]
         let h5_file = File::create(h5_out_path)?;
+        #[cfg(not(feature = "hdf5"))]
+        let _h5_out_path = h5_out_path; // Use this to avoid unused variable warnings
 
         let device = burn::tensor::Device::<Wgpu>::default();
         let wav2vec2 = Wav2Vec2Model::<Wgpu>::load(&device).await?;
@@ -53,6 +57,7 @@ impl EventCorpus {
 
         let num_events = events.len();
 
+        #[cfg(feature = "hdf5")]
         if num_events > 0 {
             // Create datasets (simplified for HDF5 output)
             let features_ds = h5_file.new_dataset::<f32>().shape(num_events * 1092).create("multimodal_features")?;
