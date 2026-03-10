@@ -48,3 +48,12 @@ pub use forensic_queries::{AttackPatternReport, CorrelationEvidence, DetectionWi
 pub mod app_state;
 pub mod hardware_io;
 
+
+pub mod ai;
+pub mod ml;
+pub mod computer_vision;
+pub mod forensic_queries;
+
+pub mod knowledge_graph;
+
+pub mod dispatch;

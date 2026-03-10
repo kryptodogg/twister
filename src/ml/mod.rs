@@ -1,3 +1,4 @@
+
 pub mod event_corpus;
 pub mod fold_frequency_harmonics;
 pub mod impulse_coherence;
@@ -34,7 +35,7 @@ pub use timegnn_trainer::{
     ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
     compute_nt_xent_loss, cosine_similarity, train_timegnn,
 };
-pub use wav2vec2_loader::{Wav2Vec2Model, infer_wav2vec2_embedding, load_wav2vec2};
+
 pub use spectral_frame::SpectralFrame;
 
 pub mod data_contracts;
@@ -43,3 +44,8 @@ pub mod body_region_classifier;
 pub mod pose_materials;
 
 pub mod pose_mamba_trainer;
+pub mod unified_field_mamba;
+pub use unified_field_mamba::UnifiedFieldMamba;
+pub mod waveshape_projection;
+pub use waveshape_projection::{project_latent_to_waveshape, NeuralWaveshapeParams};
+pub mod spectral_frame;
