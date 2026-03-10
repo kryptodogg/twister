@@ -16,11 +16,7 @@
 //   sdr_loop      — tokio::spawn: RTL-SDR IQ capture + Twister auto-tune
 
 #[allow(clippy::too_many_arguments)]
-
-mod slint_generated {
-    slint::include_modules!();
-}
-use slint_generated::AppWindow;
+use twister::AppWindow;
 
 // Twister library imports
 use anyhow::Context;

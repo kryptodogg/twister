@@ -1,5 +1,6 @@
-use crate::knowledge_graph::KnowledgeGraphClient;
 use std::sync::Arc;
+use twister::gpu_shared::GpuShared;
+use twister::knowledge_graph::KnowledgeGraphClient;
 
 /// Represents a message in the multi-turn CopilotKit conversation
 #[derive(Debug, Clone)]
@@ -53,7 +54,9 @@ impl CopilotInterface {
         let (response, chain) = engine.process(query).await;
 
         // Map the reasoning chain's citations into the message
-        let citations: Vec<String> = chain.source_event_ids.iter()
+        let citations: Vec<String> = chain
+            .source_event_ids
+            .iter()
             .map(|id| format!("Event {}", id))
             .collect();
 
