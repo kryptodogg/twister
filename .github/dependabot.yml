@@ -1,0 +1,37 @@
+version: 2
+updates:
+  # Enable version updates for Rust
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "kryptodogg"
+    labels:
+      - "dependencies"
+      - "rust"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "kryptodogg"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Enable version updates for npm (if needed for frontend tools)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "kryptodogg"
+    labels:
+      - "dependencies"
+      - "npm"

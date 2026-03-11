@@ -1,0 +1,316 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # ── Code Quality Gates ─────────────────────────────────────────────────────
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
+        
+    - name: Install additional tools
+      run: |
+        cargo install cargo-audit
+        cargo install cargo-deny
+        
+    - name: Format check
+      run: cargo fmt --all -- --check
+      
+    - name: Clippy linting
+      run: cargo clippy --all-targets --all-features -- -D warnings
+      
+    - name: Security audit
+      run: cargo audit
+      
+    - name: Dependency analysis
+      run: cargo deny check
+
+  # ── Cross-Platform Build Matrix ────────────────────────────────────────────
+  build:
+    name: Build Matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        rust: [stable, nightly]
+        
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: ${{ matrix.rust }}
+        components: rustfmt, clippy
+        
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+          
+    - name: Build project
+      run: cargo build --verbose
+      
+    - name: Build examples
+      run: cargo build --examples --verbose
+      
+    - name: Run basic tests
+      run: cargo test --lib --verbose
+
+  # ── Example Testing ────────────────────────────────────────────────────────
+  examples:
+    name: Example Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        
+    - name: Build toto example
+      run: cargo build --example toto --verbose
+      
+    - name: Test toto example compilation
+      run: |
+        # Verify the example compiles without warnings (except expected ones)
+        cargo check --example toto --verbose
+        
+    - name: Build other examples
+      run: |
+        # Build all examples to ensure they compile
+        cargo build --examples --verbose
+
+  # ── Hardware-Aware Testing ─────────────────────────────────────────────────
+  hardware-testing:
+    name: Hardware-Aware Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Install hardware dependencies
+      run: |
+        # Install RTL-SDR libraries for hardware testing
+        sudo apt-get update
+        sudo apt-get install -y libusb-1.0-0-dev rtl-sdr
+        
+    - name: Build with hardware features
+      run: cargo build --features=hardware-rtlsdr --verbose
+      
+    - name: Test hardware modules
+      run: |
+        # Test that hardware modules compile and basic functionality works
+        cargo test --lib hardware --verbose
+        
+    - name: Test dispatch modules
+      run: cargo test --lib dispatch --verbose
+
+  # ── Performance Testing ────────────────────────────────────────────────────
+  performance:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Install criterion
+      run: cargo install cargo-criterion
+      
+    - name: Run benchmarks
+      run: |
+        # Run existing benchmarks if they exist
+        if [ -d "benches" ]; then
+          cargo criterion --bench mamba_benchmark --verbose
+          cargo criterion --bench bss_benchmark --verbose
+        fi
+
+  # ── Documentation Generation ───────────────────────────────────────────────
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Generate documentation
+      run: cargo doc --no-deps --document-private-items --verbose
+      
+    - name: Upload documentation
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: target/doc/
+
+  # ── Windows-Specific Testing ───────────────────────────────────────────────
+  windows-testing:
+    name: Windows Testing
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          C:\Users\runneradmin\.cargo\registry
+          C:\Users\runneradmin\.cargo\git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        
+    - name: Build project
+      run: cargo build --verbose
+      
+    - name: Build examples
+      run: cargo build --examples --verbose
+      
+    - name: Test Windows-specific features
+      run: |
+        # Test Windows-specific functionality
+        cargo test --lib --features=windows --verbose
+
+  # ── Integration Testing ────────────────────────────────────────────────────
+  integration:
+    name: Integration Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Set up Neo4j
+      uses: ludvigak/setup-neo4j@v1
+      with:
+        neo4j-version: '5.21.0'
+        neo4j-password: 'password'
+        
+    - name: Set up Qdrant
+      run: |
+        docker run -d --name qdrant-test -p 6333:6333 qdrant/qdrant:latest
+        
+    - name: Build with all features
+      run: cargo build --all-features --verbose
+      
+    - name: Run integration tests
+      run: |
+        # Run integration tests that require databases
+        cargo test --test integration --verbose
+        
+    - name: Cleanup
+      run: |
+        docker stop qdrant-test
+        docker rm qdrant-test
+
+  # ── Security Scanning ──────────────────────────────────────────────────────
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Install security tools
+      run: |
+        cargo install cargo-audit
+        cargo install cargo-tarpaulin
+        
+    - name: Security audit
+      run: cargo audit
+      
+    - name: Code coverage analysis
+      run: |
+        cargo tarpaulin --out Xml --timeout 120
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+
+  # ── Deployment Preparation ─────────────────────────────────────────────────
+  deploy-prep:
+    name: Deployment Preparation
+    needs: [code-quality, build, examples, hardware-testing, docs]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Build release
+      run: cargo build --release --verbose
+      
+    - name: Package artifacts
+      run: |
+        mkdir -p artifacts
+        cp target/release/twister artifacts/ || true
+        cp target/release/examples/toto artifacts/ || true
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-artifacts
+        path: artifacts/

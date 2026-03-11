@@ -1,0 +1,169 @@
+name: Nightly Builds
+
+on:
+  schedule:
+    # Run nightly at 2 AM UTC (9 PM EST)
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # ── Nightly Build Matrix ───────────────────────────────────────────────────
+  nightly-build:
+    name: Nightly Build Matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        rust: [nightly]
+        
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@nightly
+      with:
+        components: rustfmt, clippy
+        
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-nightly-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-nightly-cargo-
+          
+    - name: Build project
+      run: cargo build --verbose
+      
+    - name: Build examples
+      run: cargo build --examples --verbose
+      
+    - name: Run tests
+      run: cargo test --lib --verbose
+      
+    - name: Run example tests
+      run: |
+        # Test that key examples compile
+        cargo check --example toto --verbose
+
+  # ── Nightly Performance Testing ────────────────────────────────────────────
+  nightly-performance:
+    name: Nightly Performance Testing
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@nightly
+      
+    - name: Install criterion
+      run: cargo install cargo-criterion
+      
+    - name: Run performance benchmarks
+      run: |
+        # Run existing benchmarks if they exist
+        if [ -d "benches" ]; then
+          cargo criterion --bench mamba_benchmark --verbose
+          cargo criterion --bench bss_benchmark --verbose
+        fi
+
+  # ── Nightly Documentation Build ────────────────────────────────────────────
+  nightly-docs:
+    name: Nightly Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@nightly
+      
+    - name: Generate documentation
+      run: cargo doc --no-deps --document-private-items --verbose
+      
+    - name: Upload documentation
+      uses: actions/upload-artifact@v4
+      with:
+        name: nightly-documentation
+        path: target/doc/
+
+  # ── Nightly Security Scan ──────────────────────────────────────────────────
+  nightly-security:
+    name: Nightly Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@nightly
+      
+    - name: Install security tools
+      run: |
+        cargo install cargo-audit
+        cargo install cargo-tarpaulin
+        
+    - name: Security audit
+      run: cargo audit
+      
+    - name: Code coverage analysis
+      run: |
+        cargo tarpaulin --out Xml --timeout 120
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./cobertura.xml
+        flags: nightly
+        name: nightly-umbrella
+        fail_ci_if_error: true
+
+  # ── Nightly Integration Tests ──────────────────────────────────────────────
+  nightly-integration:
+    name: Nightly Integration Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@nightly
+      
+    - name: Set up Neo4j
+      uses: ludvigak/setup-neo4j@v1
+      with:
+        neo4j-version: '5.21.0'
+        neo4j-password: 'password'
+        
+    - name: Set up Qdrant
+      run: |
+        docker run -d --name qdrant-test -p 6333:6333 qdrant/qdrant:latest
+        
+    - name: Build with all features
+      run: cargo build --all-features --verbose
+      
+    - name: Run integration tests
+      run: |
+        # Run integration tests that require databases
+        cargo test --test integration --verbose
+        
+    - name: Cleanup
+      run: |
+        docker stop qdrant-test
+        docker rm qdrant-test
