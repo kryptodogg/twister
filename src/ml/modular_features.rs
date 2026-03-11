@@ -17,6 +17,10 @@ pub struct FeatureFlags {
     pub use_harmonic_analysis: bool,
     pub use_impulse_detection: bool,
     pub use_impulse_phase_lock: bool,
+    // Visual microphone (C925e webcam)
+    pub use_visual_microphone: bool,
+    pub visual_num_frequency_bins: usize,
+    pub visual_preserve_rgb_separation: bool,
 }
 
 impl Default for FeatureFlags {
@@ -30,6 +34,9 @@ impl Default for FeatureFlags {
             use_harmonic_analysis: false,
             use_impulse_detection: false,
             use_impulse_phase_lock: false,
+            use_visual_microphone: false,
+            visual_num_frequency_bins: 3,
+            visual_preserve_rgb_separation: true,
         }
     }
 }
@@ -46,9 +53,20 @@ impl FeatureFlags {
         dim
     }
 
-    pub fn total_visual_dim(&self) -> usize { 0 }
+    pub fn total_visual_dim(&self) -> usize {
+        if !self.use_visual_microphone {
+            return 0;
+        }
+        if self.visual_preserve_rgb_separation {
+            (3 * self.visual_num_frequency_bins) + 12 + 3 + 4 + 4
+        } else {
+            self.visual_num_frequency_bins + 4 + 4
+        }
+    }
 
-    pub fn total_dim(&self) -> usize { self.total_audio_dim() + self.total_visual_dim() }
+    pub fn total_dim(&self) -> usize {
+        self.total_audio_dim() + self.total_visual_dim()
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -69,6 +87,10 @@ pub struct SignalFeaturePayload {
     pub anc_phase: Option<Vec<f32>>,
     pub harmonic_energy: Option<Vec<f32>>,
     pub impulse_times: Option<Vec<usize>>,
+    // Visual microphone fields
+    pub video_frame: Option<VideoFrame>,
+    pub video_frame_timestamp_us: u64,
+    pub visual_features: Option<Vec<f32>>,
 }
 
 impl SignalFeaturePayload {
@@ -82,6 +104,9 @@ impl SignalFeaturePayload {
             anc_phase: None,
             harmonic_energy: None,
             impulse_times: None,
+            video_frame: None,
+            video_frame_timestamp_us: 0,
+            visual_features: None,
         }
     }
 }
