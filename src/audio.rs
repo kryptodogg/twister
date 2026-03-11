@@ -256,22 +256,23 @@ impl AudioEngine {
             .collect();
 
         // Ensure stable, deterministic ordering:
-        // [0] = C925e Physical Mic Array (not AI Noise-Canceling effect)
-        // [1] = Rear Mic (Pink)
-        // [2] = Rear Line-In (Blue)
+        // [0] = C925e Physical Mic Array (2-ch, 16-bit, 32 kHz)
+        // [1] = Rear Mic/Pink (24-bit, 192 kHz)
+        // [2] = Rear Line-In/Blue (24-bit, 192 kHz)
+        // [3+] = 8-ch Phased-Array Soundcard (24-bit, 192 kHz)
         real_inputs.sort_by(|a, b| {
             let name_a = a.name().unwrap_or_default().to_lowercase();
             let name_b = b.name().unwrap_or_default().to_lowercase();
 
             let rank = |n: &str| {
                 if n.contains("c925e") && !n.contains("ai noise-canceling") {
-                    0 // Physical C925e array only
+                    0 // Physical C925e array only (2-ch 16-bit 32kHz)
                 } else if n.contains("pink") {
-                    1
+                    1 // Rear Mic (24-bit 192kHz)
                 } else if n.contains("blue") {
-                    2
+                    2 // Rear Line-In (24-bit 192kHz)
                 } else {
-                    3
+                    3 // 8-ch phased-array or other (24-bit 192kHz)
                 }
             };
             rank(&name_a).cmp(&rank(&name_b))
@@ -283,20 +284,22 @@ impl AudioEngine {
             let name_b = b.name().unwrap_or_default().to_lowercase();
             let rank = |n: &str| {
                 if n.contains("c925e") && !n.contains("ai noise-canceling") {
-                    0
+                    0 // C925e (2-ch 16-bit 32kHz)
                 } else if n.contains("pink") {
-                    1
+                    1 // Pink Mic (24-bit 192kHz)
                 } else if n.contains("blue") {
-                    2
+                    2 // Blue Line-In (24-bit 192kHz)
                 } else {
-                    3
+                    3 // 8-ch Phased-Array (24-bit 192kHz)
                 }
             };
             rank(&name_a) == rank(&name_b)
         });
 
-        // Primary device: always C925e (rank 0 after sort), 16-bit 32 kHz.
-        // Pipeline reference rate fixed at 192 kHz; all devices sinc-resampled up.
+        // Primary device: C925e (2-ch, 16-bit, 32 kHz).
+        // Secondary/Tertiary: Pink Mic & Blue Line-In (24-bit 192 kHz).
+        // Quaternary+: 8-ch phased-array soundcard (24-bit 192 kHz).
+        // Pipeline reference rate fixed at 192 kHz; all devices sinc-resampled to match.
         let primary_idx: usize = 0;
         let ref_rate: u32 = 192_000;
         let sample_rate = ref_rate as f32;
@@ -323,10 +326,10 @@ impl AudioEngine {
         // Verify 4-microphone TDOA array for mouth-region spatial targeting
         if n_total >= 4 {
             println!("[TDOA-VERIFY] ✓ 4+ microphones detected for 3D spatial targeting:");
-            println!("[TDOA-VERIFY]   [0] C925e stereo (left/right for azimuth)");
-            println!("[TDOA-VERIFY]   [1] Rear Pink (vertical pair with [0])");
-            println!("[TDOA-VERIFY]   [2] Rear Blue (baseline reference)");
-            println!("[TDOA-VERIFY]   [3+] Additional mics (redundancy)");
+            println!("[TDOA-VERIFY]   [0] C925e stereo (2-ch 16-bit 32kHz, left/right for azimuth)");
+            println!("[TDOA-VERIFY]   [1] Rear Pink (24-bit 192kHz, vertical pair with [0])");
+            println!("[TDOA-VERIFY]   [2] Rear Blue (24-bit 192kHz, baseline reference)");
+            println!("[TDOA-VERIFY]   [3+] 8-ch phased-array (24-bit 192kHz, spatial redundancy)");
             println!("[TDOA-VERIFY] ✓ Mouth-region targeting enabled (elevation + azimuth)");
         } else if n_total == 3 {
             println!("[TDOA-VERIFY] ⚠ 3 microphones: azimuth+elevation possible");

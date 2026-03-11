@@ -1,0 +1,7 @@
+// ui/toto.slint — Root component file for toto example
+// Directly exposes TotoHudApplet for use by examples/toto.rs
+
+import { TotoHudApplet } from "applets/toto_hud.slint";
+
+// Re-export TotoHudApplet as a named export so Rust can access it
+export { TotoHudApplet }

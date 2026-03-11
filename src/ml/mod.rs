@@ -52,3 +52,6 @@ pub mod spectral_frame;
 
 pub mod field_particle;
 pub use field_particle::FieldParticle;
+
+pub mod field_pipeline;
+pub use field_pipeline::{FieldPipeline, MambaProjections, AudioSource};

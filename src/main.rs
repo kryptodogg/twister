@@ -44,6 +44,8 @@ use twister::graph::ForensicGraph;
 use twister::mamba::TrainingPair;
 use twister::ml::anomaly_gate::{AnomalyGateConfig, evaluate_anomaly_gate};
 use twister::ml::spectral_frame::SpectralFrame;
+use twister::ml::{FieldPipeline, AudioSource};
+use twister::dispatch::{SignalIngester, SignalMetadata, SignalType, SampleFormat};
 use twister::parametric::ParametricManager;
 use twister::pdm::PdmEngine;
 use twister::reconstruct::CrystalBall;
@@ -287,6 +289,16 @@ async fn main() -> anyhow::Result<()> {
         ));
         let crystal_ball_disp = crystal_ball.clone();
 
+        // ── FieldPipeline (Track A-1) ─────────────────────────────────────
+        // Unified signal ingester for audio/RF/visual → Mamba → projections
+        let mut field_pipeline = twister::ml::FieldPipeline::with_audio_source(
+            AudioSource::LocalMicrophone {
+                sample_rate: sample_rate as u32,
+            },
+        );
+        let mut last_projections: Option<twister::ml::MambaProjections> = None;
+        let mut pipeline_timestamp_us = std::time::Instant::now();
+
         let mut tx_frame_acc = Vec::with_capacity(512 * 128);
         let mut rx_frame_acc = Vec::with_capacity(512 * 128);
         let mut frame_count = 0usize;
@@ -302,6 +314,24 @@ async fn main() -> anyhow::Result<()> {
 
             while let Ok(chunk) = merge_rx.try_recv() {
                 acc.extend_from_slice(&chunk);
+
+                // ── Track A-1: Feed audio chunks into FieldPipeline ───
+                // Convert chunk to bytes for ingestion
+                let chunk_bytes: Vec<u8> = chunk
+                    .iter()
+                    .flat_map(|&s| (s as i16).to_le_bytes().to_vec())
+                    .collect();
+                let timestamp_us = pipeline_timestamp_us.elapsed().as_micros() as u64;
+                let metadata = SignalMetadata {
+                    signal_type: SignalType::Audio,
+                    sample_rate_hz: sample_rate as u32,
+                    carrier_freq_hz: None,
+                    num_channels: 1,
+                    sample_format: SampleFormat::I16,
+                };
+                if let Some(projections) = field_pipeline.ingest_bytes(&chunk_bytes, timestamp_us, &metadata) {
+                    last_projections = Some(projections);
+                }
             }
 
             // ANC recording
@@ -479,6 +509,19 @@ async fn main() -> anyhow::Result<()> {
             state_disp.update_waterfall(&rgba);
             if let Ok(mut sb) = state_disp.spectrum_bars.lock() {
                 *sb = sbars;
+            }
+
+            // ── Track A-1: Update state with FieldPipeline projections ───
+            if let Some(projections) = &last_projections {
+                // Store the three projection scalars (Drive, Fold, Asym)
+                state_disp.field_drive.store(projections.drive, std::sync::atomic::Ordering::Relaxed);
+                state_disp.field_fold.store(projections.fold, std::sync::atomic::Ordering::Relaxed);
+                state_disp.field_asym.store(projections.asym, std::sync::atomic::Ordering::Relaxed);
+
+                eprintln!(
+                    "[A-1] Projections: drive={:.6}, fold={:.6}, asym={:.6}",
+                    projections.drive, projections.fold, projections.asym
+                );
             }
 
             // PDM wideband

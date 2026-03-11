@@ -79,6 +79,32 @@ export global Colors {
     out property <color> canvas-background:      #0A0C14;  // Darker than surface-dim
 }
 
+export global EmeraldCity {
+    // Octave-fold base bounds (Hz). See src/ui/emeraldcity.rs
+    out property <float> resonant-lower-hz: 363.8;
+    out property <float> resonant-upper-hz: 727.6;
+
+    // Emerald City Resonance Palette (sRGB) for live wave/label color.
+    // Stops: Red → Orange → Yellow → Green → Cyan → Blue → Violet
+    out property <color> red:    #FF1A1A;
+    out property <color> orange: #FF6600;
+    out property <color> yellow: #FFAA00;
+    out property <color> green:  #22C55E;
+    out property <color> cyan:   #00E5C8;
+    out property <color> blue:   #0099FF;
+    out property <color> violet: #A855F7;
+
+    // Gradient for tuning UI (color-first frequency intuition). Use as a brush.
+    out property <brush> spectrum: @linear-gradient(90deg,
+        #FF1A1A 0%,
+        #FF6600 16.666%,
+        #FFAA00 33.333%,
+        #22C55E 50%,
+        #00E5C8 66.666%,
+        #0099FF 83.333%,
+        #A855F7 100%
+    );
+}
 export global Spacing {
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // RESPONSIVE SPACING — Ratios of unit-size
@@ -166,3 +192,4 @@ export global Typography {
 //     height: 6px;
 //     border-radius: 3px;
 // }
+

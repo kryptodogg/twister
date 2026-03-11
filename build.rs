@@ -11,5 +11,4 @@ fn main() {
     slint_build::compile("ui/applets/joycon_wand.slint").expect("Slint build failed");
     slint_build::compile("ui/applets/toto_hud.slint").expect("Slint build failed");
     slint_build::compile("ui/applets/mamba_brain.slint").expect("Slint build failed");
-    slint_build::compile("assets/prototyping/toto/toto.slint").expect("Slint build failed");
 }

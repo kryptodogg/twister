@@ -479,6 +479,12 @@ pub struct AppState {
     // ── Mamba autoencoder ─────────────────────────────────────────────────────
     /// Reconstruction MSE from the most recent inference pass (0 = unknown).
     pub mamba_anomaly_score: AtomicF32,
+    /// Drive projection from FieldPipeline (Track A-1).
+    pub field_drive: AtomicF32,
+    /// Fold projection from FieldPipeline (Track A-1).
+    pub field_fold: AtomicF32,
+    /// Asym projection from FieldPipeline (Track A-1).
+    pub field_asym: AtomicF32,
     /// 64-dimensional latent embedding from Mamba inference (MAMBA_LATENT_DIM).
     pub latent_embedding: Mutex<Vec<f32>>,
     /// Full-range ANC phase calibration data (1 Hz - 12.288 MHz).
@@ -630,6 +636,9 @@ impl AppState {
             output_peak_db: AtomicF32::new(-60.0),
 
             mamba_anomaly_score: AtomicF32::new(0.0),
+            field_drive: AtomicF32::new(0.0),
+            field_fold: AtomicF32::new(0.0),
+            field_asym: AtomicF32::new(0.0),
             latent_embedding: Mutex::new(vec![0.0; 128]), // Initialize 64-dim zero vector (MAMBA_LATENT_DIM)
             anc_calibration: Mutex::new(crate::anc_calibration::FullRangeCalibration::new()),
             anc_recording: Mutex::new(crate::anc_recording::RecordingBuffer::new(192_000.0)),

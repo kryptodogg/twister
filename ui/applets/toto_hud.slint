@@ -1,304 +1,653 @@
-import { VerticalBox, HorizontalBox, Slider, Switch, ProgressIndicator, Button } from "std-widgets.slint";
-import { Standards, IconButton, ForensicPalette, ForensicMaterials } from "../standards.slint";
+// ui/applets/toto_hud.slint
+// Toto HUD Applet — Compact Floating Instrument Widget (Slint)
+// Ported from: assets/prototyping/Compact_Floating_Instrument_Widget/src/app/App.tsx
 
-export global TotoEngine {
-    in-out property <bool> always-learning: true;
-    in-out property <float> anomaly-score: 0.150;
+import { Colors } from "../tokens.slint";
 
-    // The 12 spectral hues (Flutopedia Scale)
-    in-out property <string> path-c: "M 0 60 L 600 60";
-    in-out property <string> path-cs: "M 0 60 L 600 60";
-    in-out property <string> path-d: "M 0 60 L 600 60";
-    in-out property <string> path-ds: "M 0 60 L 600 60";
-    in-out property <string> path-e: "M 0 60 L 600 60";
-    in-out property <string> path-f: "M 0 60 L 600 60";
-    in-out property <string> path-fs: "M 0 60 L 600 60"; // Cyan
-    in-out property <string> path-g: "M 0 60 L 600 60";
-    in-out property <string> path-gs: "M 0 60 L 600 60";
-    in-out property <string> path-a: "M 0 60 L 600 60";
-    in-out property <string> path-as: "M 0 60 L 600 60"; // Violet
-    in-out property <string> path-b: "M 0 60 L 600 60";
+// ─────────────────────────────────────────────────────────────────────────────
+// Small primitives (custom, to keep the applet self-contained)
+// ─────────────────────────────────────────────────────────────────────────────
 
-    // Mamba Projections
-    in-out property <float> drive: 0.250;
-    in-out property <float> fold: 0.700;
-    in-out property <float> asym: 0.150;
-
-    // Engine Telemetry
-    in-out property <string> telemetry-text: "Awaiting Unified Field Particles...";
-
-    // UI State
-    in-out property <bool> metrics-expanded: false;
+component Divider inherits Rectangle {
+    in property <length> thickness: 1px;
+    in property <length> divider-height: 50px;
+    width: thickness;
+    height: divider-height;
+    background: Colors.outline;
 }
 
+component ToggleSwitch inherits Rectangle {
+    in-out property <bool> checked: true;
+    in property <length> rem: 16px;
+
+    property <length> h: rem * 0.75;
+    property <length> w: rem * 1.5;
+    property <length> pad: rem * 0.08;
+
+    width: w;
+    height: h;
+    border-radius: h / 2;
+    border-width: rem * 0.06;
+    border-color: checked ? Colors.primary : Colors.outline;
+    background: checked ? Colors.primary.with-alpha(0.25) : Colors.surface-container-low;
+
+    Rectangle {
+        width: h - pad * 2;
+        height: h - pad * 2;
+        border-radius: self.height / 2;
+        x: checked ? parent.width - self.width - pad : pad;
+        y: pad;
+        background: checked ? Colors.primary : Colors.on-surface-variant;
+        animate x { duration: 150ms; easing: ease-in-out; }
+        animate background { duration: 150ms; easing: ease-in-out; }
+    }
+
+    animate background { duration: 150ms; easing: ease-in-out; }
+    animate border-color { duration: 150ms; easing: ease-in-out; }
+
+    TouchArea {
+        clicked => { root.checked = !root.checked; }
+    }
+}
+
+component ChipButton inherits Rectangle {
+    in property <string> label;
+    in property <string> icon;
+    in property <length> rem: 16px;
+    callback clicked;
+
+    height: rem * 2.25;
+    border-radius: rem * 0.375;
+    background: Colors.canvas-background;
+    border-color: Colors.outline;
+    border-width: rem * 0.06;
+
+    states [
+        hover when touch.has-hover: { background: Colors.surface-container-low; }
+        pressed when touch.pressed: { background: Colors.surface-container; }
+    ]
+    animate background { duration: 120ms; }
+
+    HorizontalLayout {
+        padding: rem * 0.375;
+        spacing: rem * 0.3;
+        alignment: center;
+
+        Text {
+            text: icon;
+            color: Colors.on-surface-variant;
+            font-size: rem * 0.9;
+            font-family: "monospace";
+            vertical-alignment: center;
+        }
+
+        Text {
+            text: label;
+            color: Colors.on-surface-variant;
+            font-size: rem * 0.8;
+            font-weight: 500;
+            vertical-alignment: center;
+        }
+    }
+
+    touch := TouchArea { clicked => root.clicked(); }
+}
+
+component DenialItem inherits Rectangle {
+    in property <string> label;
+    in property <string> freq;
+    in-out property <bool> active: false;
+    in property <length> rem: 16px;
+
+    height: rem * 2.25;
+    border-radius: rem * 0.25;
+    background: Colors.surface-dim;
+    border-width: rem * 0.06;
+    border-color: active ? Colors.secondary : Colors.outline;
+
+    HorizontalLayout {
+        padding: rem * 0.375;
+        spacing: rem * 0.5;
+
+        VerticalLayout {
+            spacing: rem * 0.125;
+
+            Text {
+                text: label;
+                color: active ? Colors.on-surface : Colors.on-surface-variant;
+                font-size: rem * 0.75;
+                font-weight: 500;
+            }
+
+            Text {
+                text: freq;
+                color: Colors.on-surface-variant.with-alpha(0.7);
+                font-size: rem * 0.65;
+                font-family: "monospace";
+            }
+        }
+
+        Rectangle { horizontal-stretch: 1; background: transparent; }
+
+        ToggleSwitch { rem: root.rem; checked <=> root.active; }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TotoHudApplet
+// ─────────────────────────────────────────────────────────────────────────────
+
 export component TotoHudApplet inherits Window {
-    title: "AG-HUD: Unified Mamba BSS";
-    width: 800px;
-    height: 700px;
-    background: ForensicMaterials.glass_tablet_background;
-
-    // Apply transparent windowing properties (Acrylic/Ubuntu)
+    title: "Toto · Compact Floating Instrument";
     no-frame: true;
+    background: transparent;
 
-    VerticalBox {
-        spacing: 15px;
-        padding: 20px;
+    // Public properties (wired from Rust)
+    in-out property <length> unit-size: 384px;
+    in-out property <bool> expanded: false;
 
-        // Header Panel (Frosted Glass)
-        Rectangle {
-            background: ForensicMaterials.surface_panel;
-            border-radius: 12px;
-            border-color: ForensicPalette.ag_cyan;
-            border-width: 1px;
+    in-out property <float> anomaly-score: 0.0;
+    in-out property <bool> auto-steer: true;
+    in-out property <float> dominant-freq-hz: 0.0;
 
-            HorizontalBox {
-                padding: 15px;
-                spacing: 20px;
+    // Viewbox space: 0..100 x 0..100
+    in-out property <string> wave-path: "M 0 50 L 100 50";
 
-                VerticalBox {
-                    VerticalBox {
+    in-out property <float> learning-loss: 0.0;
+    in-out property <string> loss-path: "M 0 100 L 100 100";
+
+    in-out property <bool> dvr-recording: false;
+    in-out property <int> dvr-buffer-days: 0;
+
+    in-out property <color> resonant-color: Colors.primary;
+
+    // FieldPipeline projections (Track A-1)
+    in-out property <float> drive: 0.0;
+    in-out property <float> fold: 0.0;
+    in-out property <float> asym: 0.0;
+
+    // Animation tick for smooth transitions
+    in-out property <float> animation-tick: 0.0;
+
+    // "rem" derived from unit-size (default unit-size=384 => rem=16)
+    property <length> rem: unit-size / 24;
+
+    // Root sizing: maintain credit-card aspect ratio when collapsed
+    property <length> collapsed-height: unit-size / 1.6;
+    property <length> settings-height: rem * 10.25;
+
+    width: unit-size;
+    height: collapsed-height + (expanded ? settings-height : 0);
+
+    animate height { duration: 400ms; easing: ease-in-out; }
+    animate resonant-color { duration: 400ms; easing: ease-in-out; }
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: Colors.surface-dim;
+        border-radius: rem * 0.75;
+        border-width: rem * 0.06;
+        border-color: Colors.outline;
+        clip: true;
+
+        VerticalLayout {
+            padding: rem * 0.5;
+            spacing: rem * 0.375;
+
+            // ═══════════════════════════════════════════════════════════════
+            // HEADER PANEL
+            // ═══════════════════════════════════════════════════════════════
+            Rectangle {
+                height: rem * 2.5;
+                background: Colors.canvas-background;
+                border-radius: rem * 0.375;
+                border-width: rem * 0.06;
+                border-color: Colors.outline;
+
+                HorizontalLayout {
+                    padding-left: rem * 0.75;
+                    padding-right: rem * 0.75;
+                    spacing: rem * 0.75;
+                    alignment: center;
+
+                    HorizontalLayout {
+                        spacing: rem * 0.75;
+                        alignment: center;
+
                         Text {
-                            text: "🔬 UNIFIED MAMBA INFERENCE LOOP";
-                            color: ForensicPalette.ag_cyan;
-                            font-weight: 800;
-                            font-size: Standards.font-size-large;
-                            font-family: Standards.font-family;
+                            text: "TOTO CORE";
+                            color: Colors.primary;
+                            font-size: rem * 0.85;
+                            font-weight: 700;
+                            letter-spacing: rem * 0.05;
                         }
-                    }
-                    VerticalBox {
-                        spacing: 4px;
-                        HorizontalBox {
-                            spacing: 8px;
-                            Text { text: "Anomaly Score:"; color: Standards.on-surface; font-family: Standards.font-family; font-size: 11px; }
+
+                        Divider { thickness: rem * 0.06; height: rem * 1.0; }
+
+                        HorizontalLayout {
+                            spacing: rem * 0.375;
+                            alignment: center;
+
                             Text {
-                                text: round(TotoEngine.anomaly-score * 1000) / 1000;
-                                color: TotoEngine.anomaly-score > 0.5 ? ForensicPalette.ag_red : ForensicPalette.ag_cyan;
-                                font-weight: 800;
-                                font-family: "Courier";
-                                font-size: 13px;
+                                text: "Anomaly Score";
+                                color: Colors.on-surface-variant;
+                                font-size: rem * 0.75;
+                                font-weight: 500;
+                            }
+
+                            Text {
+                                text: round(anomaly-score * 1000) / 1000;
+                                color: resonant-color;
+                                font-size: rem * 0.8;
+                                font-family: "monospace";
+                                font-weight: 700;
                             }
                         }
-                        // Gradient anomaly bar
-                        Rectangle {
-                            width: 200px;
-                            height: 6px;
-                            border-radius: 3px;
-                            background: @linear-gradient(90deg,
-                                #00ff00 0%,
-                                #ffff00 25%,
-                                #ff8000 50%,
-                                #ff0000 100%
-                            );
+                    }
+
+                    Rectangle { horizontal-stretch: 1; background: transparent; }
+
+                    HorizontalLayout {
+                        spacing: rem * 0.5;
+                        alignment: center;
+
+                        Text {
+                            text: "Neural Auto-Steer";
+                            color: Colors.primary.with-alpha(0.8);
+                            font-size: rem * 0.75;
+                            font-weight: 500;
+                        }
+
+                        ToggleSwitch { rem: root.rem; checked <=> root.auto-steer; }
+                    }
+                }
+            }
+
+            // ═══════════════════════════════════════════════════════════════
+            // OSCILLOSCOPE CANVAS
+            // ═══════════════════════════════════════════════════════════════
+            Rectangle {
+                vertical-stretch: 1;
+                background: Colors.canvas-background;
+                border-radius: rem * 0.375;
+                border-width: rem * 0.06;
+                border-color: Colors.outline;
+                clip: true;
+
+                // Horizontal grid (6 rows)
+                for i in [1, 2, 3, 4, 5]: Rectangle {
+                    x: 0;
+                    y: parent.height * (i * 1.0 / 6.0);
+                    width: parent.width;
+                    height: rem * 0.06;
+                    background: Colors.outline.with-alpha(i == 3 ? 0.6 : 0.25);
+                }
+
+                // Vertical grid (10 columns)
+                for j in [1, 2, 3, 4, 5, 6, 7, 8, 9]: Rectangle {
+                    x: parent.width * (j * 1.0 / 10.0);
+                    y: 0;
+                    width: rem * 0.06;
+                    height: parent.height;
+                    background: Colors.outline.with-alpha(0.2);
+                }
+
+                // Glow pass
+                Path {
+                    width: parent.width;
+                    height: parent.height;
+                    viewbox-x: 0;
+                    viewbox-y: 0;
+                    viewbox-width: 100;
+                    viewbox-height: 100;
+                    commands: wave-path;
+                    stroke: resonant-color.with-alpha(0.35);
+                    stroke-width: rem * 0.55;
+                    anti-alias: true;
+                }
+
+                // Main pass
+                Path {
+                    width: parent.width;
+                    height: parent.height;
+                    viewbox-x: 0;
+                    viewbox-y: 0;
+                    viewbox-width: 100;
+                    viewbox-height: 100;
+                    commands: wave-path;
+                    stroke: resonant-color;
+                    stroke-width: rem * 0.18;
+                    anti-alias: true;
+                }
+
+                Text {
+                    x: rem * 0.75;
+                    y: rem * 0.55;
+                    text: "WgpuShaderZone (BSS)";
+                    color: Colors.primary;
+                    font-size: rem * 0.8;
+                    font-weight: 600;
+                }
+
+                Text {
+                    text: "Folded Resonance";
+                    color: resonant-color;
+                    font-size: rem * 0.8;
+                    font-family: "monospace";
+                    x: parent.width - self.width - rem * 0.75;
+                    y: rem * 0.55;
+                }
+
+                Text {
+                    text: "Time (10ms)";
+                    color: Colors.on-surface-variant;
+                    font-size: rem * 0.7;
+                    font-family: "monospace";
+                    x: (parent.width - self.width) / 2;
+                    y: parent.height - self.height - rem * 0.5;
+                }
+            }
+
+            // ═══════════════════════════════════════════════════════════════
+            // TELEMETRY STRIP
+            // ═══════════════════════════════════════════════════════════════
+            HorizontalLayout {
+                spacing: rem * 0.375;
+                height: rem * 2.75;
+
+                Rectangle {
+                    width: rem * 8.5;
+                    height: parent.height;
+                    background: Colors.canvas-background;
+                    border-radius: rem * 0.375;
+                    border-width: rem * 0.06;
+                    border-color: Colors.outline;
+
+                    VerticalLayout {
+                        padding: rem * 0.5;
+                        spacing: rem * 0.25;
+
+                        HorizontalLayout {
+                            spacing: rem * 0.35;
+                            alignment: center;
+
                             Rectangle {
-                                width: TotoEngine.anomaly-score * parent.width;
+                                width: rem * 0.4;
+                                height: rem * 0.4;
+                                border-radius: self.width / 2;
+                                background: dvr-recording ? Colors.error : Colors.outline;
+                            }
+
+                            Text {
+                                text: "DVR: " + (dvr-recording ? "REC" : "IDLE");
+                                color: dvr-recording ? Colors.error : Colors.on-surface-variant;
+                                font-size: rem * 0.75;
+                                font-family: "monospace";
+                                font-weight: 600;
+                            }
+                        }
+
+                        Text {
+                            text: "Buffer: " + dvr-buffer-days + " Days";
+                            color: Colors.on-surface-variant;
+                            font-size: rem * 0.65;
+                            font-family: "monospace";
+                        }
+                    }
+                }
+
+                Rectangle {
+                    horizontal-stretch: 1;
+                    height: parent.height;
+                    background: Colors.canvas-background;
+                    border-radius: rem * 0.375;
+                    border-width: rem * 0.06;
+                    border-color: Colors.outline;
+                    clip: true;
+
+                    VerticalLayout {
+                        padding: rem * 0.5;
+                        spacing: rem * 0.25;
+
+                        HorizontalLayout {
+                            Text {
+                                text: "Learning Loss";
+                                color: Colors.primary;
+                                font-size: rem * 0.75;
+                                font-weight: 600;
+                            }
+
+                            Rectangle { horizontal-stretch: 1; background: transparent; }
+
+                            Text {
+                                text: round(learning-loss * 1000) / 1000;
+                                color: Colors.on-surface-variant;
+                                font-size: rem * 0.75;
+                                font-family: "monospace";
+                                font-weight: 600;
+                            }
+                        }
+
+                        Rectangle {
+                            vertical-stretch: 1;
+                            background: Colors.surface-container-low;
+                            border-radius: rem * 0.25;
+                            clip: true;
+
+                            Path {
+                                width: parent.width;
                                 height: parent.height;
-                                background: white;
-                                opacity: 0.7;
+                                viewbox-x: 0;
+                                viewbox-y: 0;
+                                viewbox-width: 100;
+                                viewbox-height: 100;
+                                commands: loss-path;
+                                stroke: Colors.primary;
+                                stroke-width: rem * 0.12;
+                                anti-alias: true;
                             }
                         }
                     }
                 }
 
-                Rectangle { width: 1px; background: Standards.surface-variant; }
+                // FieldPipeline Projections (Track A-1)
+                Rectangle {
+                    width: rem * 12.0;
+                    height: parent.height;
+                    background: Colors.canvas-background;
+                    border-radius: rem * 0.375;
+                    border-width: rem * 0.06;
+                    border-color: Colors.outline;
 
-                HorizontalBox {
-                    alignment: end;
-                    spacing: 8px;
+                    VerticalLayout {
+                        padding: rem * 0.5;
+                        spacing: rem * 0.25;
+
+                        Text {
+                            text: "Field Projections";
+                            color: Colors.tertiary;
+                            font-size: rem * 0.75;
+                            font-weight: 600;
+                        }
+
+                        // Drive
+                        VerticalLayout {
+                            spacing: rem * 0.125;
+
+                            HorizontalLayout {
+                                Text {
+                                    text: "Drive";
+                                    color: Colors.on-surface-variant;
+                                    font-size: rem * 0.65;
+                                    font-family: "monospace";
+                                }
+
+                                Rectangle { horizontal-stretch: 1; background: transparent; }
+
+                                Text {
+                                    text: round(drive * 1000) / 1000;
+                                    color: Colors.on-surface-variant;
+                                    font-size: rem * 0.65;
+                                    font-family: "monospace";
+                                }
+                            }
+
+                            Rectangle {
+                                height: rem * 0.375;
+                                background: Colors.surface-container-low;
+                                border-radius: rem * 0.125;
+
+                                Rectangle {
+                                    width: parent.width * drive;
+                                    height: parent.height;
+                                    background: Colors.tertiary;
+                                    border-radius: rem * 0.125;
+                                }
+                            }
+                        }
+
+                        // Fold
+                        VerticalLayout {
+                            spacing: rem * 0.125;
+
+                            HorizontalLayout {
+                                Text {
+                                    text: "Fold";
+                                    color: Colors.on-surface-variant;
+                                    font-size: rem * 0.65;
+                                    font-family: "monospace";
+                                }
+
+                                Rectangle { horizontal-stretch: 1; background: transparent; }
+
+                                Text {
+                                    text: round(fold * 1000) / 1000;
+                                    color: Colors.on-surface-variant;
+                                    font-size: rem * 0.65;
+                                    font-family: "monospace";
+                                }
+                            }
+
+                            Rectangle {
+                                height: rem * 0.375;
+                                background: Colors.surface-container-low;
+                                border-radius: rem * 0.125;
+
+                                Rectangle {
+                                    width: parent.width * fold;
+                                    height: parent.height;
+                                    background: Colors.secondary;
+                                    border-radius: rem * 0.125;
+                                }
+                            }
+                        }
+
+                        // Asym
+                        VerticalLayout {
+                            spacing: rem * 0.125;
+
+                            HorizontalLayout {
+                                Text {
+                                    text: "Asym";
+                                    color: Colors.on-surface-variant;
+                                    font-size: rem * 0.65;
+                                    font-family: "monospace";
+                                }
+
+                                Rectangle { horizontal-stretch: 1; background: transparent; }
+
+                                Text {
+                                    text: round(asym * 1000) / 1000;
+                                    color: Colors.on-surface-variant;
+                                    font-size: rem * 0.65;
+                                    font-family: "monospace";
+                                }
+                            }
+
+                            Rectangle {
+                                height: rem * 0.375;
+                                background: Colors.surface-container-low;
+                                border-radius: rem * 0.125;
+
+                                Rectangle {
+                                    width: parent.width * asym;
+                                    height: parent.height;
+                                    background: Colors.primary;
+                                    border-radius: rem * 0.125;
+                                }
+                            }
+                        }
+                    }
+                }
+                Rectangle {
+                    width: rem * 3.0;
+                    height: parent.height;
+                    background: expanded ? Colors.surface-container : Colors.canvas-background;
+                    border-radius: rem * 0.375;
+                    border-width: rem * 0.06;
+                    border-color: Colors.outline;
+
                     Text {
-                        text: "Always Learning:";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: 11px;
+                        text: "⚙";
+                        color: expanded ? Colors.on-surface : Colors.on-surface-variant;
+                        font-size: rem * 1.125;
+                        horizontal-alignment: center;
                         vertical-alignment: center;
                     }
-                    Switch { checked <=> TotoEngine.always-learning; }
-                }
-            }
-        }
 
-        // Main Visualization: Universal Rainbow Harmonic Smear
-        Rectangle {
-            height: 350px;
-            background: ForensicMaterials.surface_panel;
-            border-color: ForensicPalette.ag_violet;
-            border-width: 2px;
-            border-radius: 8px;
-
-            HorizontalBox {
-                padding: 10px;
-                Text { text: "Oscilloscope"; color: Standards.on-surface; font-family: Standards.font-family; }
-                Text { text: "Universal Rainbow Harmonic Smear (BSS)"; color: Standards.secondary; font-family: Standards.font-family; horizontal-alignment: right; }
-            }
-
-            // The 12 overlapping signal layers demonstrating BSS
-            Path { commands: TotoEngine.path-c; stroke: Standards.hue-c; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-cs; stroke: Standards.hue-cs; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-d; stroke: Standards.hue-d; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-ds; stroke: Standards.hue-ds; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-e; stroke: Standards.hue-e; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-f; stroke: Standards.hue-f; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-fs; stroke: Standards.hue-fs; stroke-width: 3px; } // Cyan - Highlighted Folded Octaves
-            Path { commands: TotoEngine.path-g; stroke: Standards.hue-g; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-gs; stroke: Standards.hue-gs; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-a; stroke: Standards.hue-a; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-as; stroke: Standards.hue-as; stroke-width: 2px; } // Violet
-            Path { commands: TotoEngine.path-b; stroke: Standards.hue-b; stroke-width: 2px; }
-
-            Text { text: "Amplitude"; color: Standards.on-surface; font-family: Standards.font-family; x: 10px; y: 160px; transform-rotation: -90deg; }
-            Text { text: "Time (100Hz)"; color: Standards.on-surface; font-family: Standards.font-family; y: parent.height - 20px; x: (parent.width - self.width) / 2; }
-
-            // Grid lines
-            Path { stroke: Standards.surface-variant; stroke-width: 1px; commands: "M 0 175 L 800 175 M 100 0 L 100 350 M 200 0 L 200 350 M 300 0 L 300 350 M 400 0 L 400 350 M 500 0 L 500 350 M 600 0 L 600 350 M 700 0 L 700 350"; }
-        }
-
-        // Mamba Projections
-        HorizontalBox {
-            spacing: 15px;
-
-            // Drive Parameter (Red/Baseline)
-            Rectangle {
-                background: ForensicMaterials.surface_panel;
-                border-color: ForensicPalette.ag_red;
-                border-width: 2px;
-                border-radius: 8px;
-                VerticalBox {
-                    padding: 12px;
-                    Text {
-                        text: "🎚️ DRIVE";
-                        color: ForensicPalette.ag_red;
-                        font-family: Standards.font-family;
-                        font-weight: 700;
-                        font-size: 12px;
-                    }
-                    Text {
-                        text: round(TotoEngine.drive * 1000) / 1000;
-                        color: ForensicPalette.ag_red;
-                        font-family: "Courier";
-                        font-size: 18px;
-                        font-weight: 800;
-                    }
-                    ProgressIndicator { width: 100%; progress: TotoEngine.drive; }
-                    Text {
-                        text: "Auto Waveshaping Coefficient";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: Standards.font-size-small;
+                    TouchArea {
+                        clicked => { root.expanded = !root.expanded; }
                     }
                 }
             }
 
-            // Fold Parameter (Green/Harmonic)
-            Rectangle {
-                background: ForensicMaterials.surface_panel;
-                border-color: ForensicPalette.hue-e;
-                border-width: 2px;
-                border-radius: 8px;
-                VerticalBox {
-                    padding: 12px;
-                    Text {
-                        text: "📈 FOLD";
-                        color: ForensicPalette.hue-e;
-                        font-family: Standards.font-family;
-                        font-weight: 700;
-                        font-size: 12px;
-                    }
-                    Text {
-                        text: round(TotoEngine.fold * 1000) / 1000;
-                        color: ForensicPalette.hue-e;
-                        font-family: "Courier";
-                        font-size: 18px;
-                        font-weight: 800;
-                    }
-                    ProgressIndicator { width: 100%; progress: TotoEngine.fold; }
-                    Text {
-                        text: "Frequency Folding Intensity";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: Standards.font-size-small;
-                    }
-                }
-            }
+            // ═══════════════════════════════════════════════════════════════
+            // SETTINGS PANE (EXPANDABLE)
+            // ═══════════════════════════════════════════════════════════════
+            if expanded: Rectangle {
+                background: Colors.canvas-background;
+                border-radius: rem * 0.375;
+                border-width: rem * 0.06;
+                border-color: Colors.outline;
 
-            // Asymmetry Parameter (Violet/Harmonic Smear)
-            Rectangle {
-                background: ForensicMaterials.surface_panel;
-                border-color: ForensicPalette.ag_violet;
-                border-width: 2px;
-                border-radius: 8px;
-                VerticalBox {
-                    padding: 12px;
-                    Text {
-                        text: "🌀 ASYM";
-                        color: ForensicPalette.ag_violet;
-                        font-family: Standards.font-family;
-                        font-weight: 700;
-                        font-size: 12px;
-                    }
-                    Text {
-                        text: round(TotoEngine.asym * 1000) / 1000;
-                        color: ForensicPalette.ag_violet;
-                        font-family: "Courier";
-                        font-size: 18px;
-                        font-weight: 800;
-                    }
-                    ProgressIndicator { width: 100%; progress: TotoEngine.asym; }
-                    Text {
-                        text: "Phase Asymmetry (Non-Linear)";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: Standards.font-size-small;
-                    }
-                }
-            }
-        }
+                VerticalLayout {
+                    padding: rem * 0.75;
+                    spacing: rem * 0.375;
 
-        // Material Bottom App Bar (Frosted Glass)
-        Rectangle {
-            height: 48px;
-            background: ForensicMaterials.surface_panel;
-            border-radius: 24px;
-            border-color: ForensicPalette.ag_cyan;
-            border-width: 1px;
-            HorizontalBox {
-                padding: 8px;
-                alignment: center;
-                spacing: 10px;
-                Text {
-                    text: "BSS ENGINE";
-                    color: ForensicPalette.ag_cyan;
-                    font-family: Standards.font-family;
-                    font-weight: 600;
-                    font-size: 11px;
-                }
-                Text {
-                    text: "|";
-                    color: Standards.surface-variant;
-                    font-size: 12px;
-                }
-                IconButton {
-                    icon: "⚙"; // Gear Icon
-                    clicked => { TotoEngine.metrics-expanded = !TotoEngine.metrics-expanded; }
-                }
-            }
-        }
+                    HorizontalLayout {
+                        spacing: rem * 0.375;
+                        alignment: center;
 
-        // Collapsable Slate Pane (Raw Metrics & Complex Actions)
-        if TotoEngine.metrics-expanded: Rectangle {
-            background: ForensicMaterials.glass_tablet_background;
-            border-radius: 8px;
-            border-color: ForensicPalette.ag_violet;
-            border-width: 2px;
-            height: 140px;
-            VerticalBox {
-                padding: 10px;
-                Text { text: "RAW BSS TELEMETRY ENGINE"; color: Standards.primary; font-family: Standards.font-family; font-weight: Standards.font-weight-regular; }
-                Text { text: TotoEngine.telemetry-text; color: Standards.on-surface; font-family: Standards.font-family; }
+                        Text {
+                            text: "⚡";
+                            color: Colors.secondary;
+                            font-size: rem * 0.875;
+                        }
+                        Text {
+                            text: "Active Denial";
+                            color: Colors.on-surface;
+                            font-size: rem * 0.8;
+                            font-weight: 600;
+                        }
+                    }
 
-                HorizontalBox {
-                    spacing: 10px;
-                    Button { text: "Probe Burst"; }
-                    Button { text: "Record DVR"; }
+                    VerticalLayout {
+                        spacing: rem * 0.375;
+                        DenialItem { rem: root.rem; label: "2.4GHz WiFi Jam"; freq: "2450 MHz"; active: true; }
+                        DenialItem { rem: root.rem; label: "Bluetooth BLE Disruption"; freq: "2402 MHz"; active: false; }
+                        DenialItem { rem: root.rem; label: "UHF Drone Link"; freq: "433 MHz"; active: false; }
+                    }
+
+                    HorizontalLayout {
+                        spacing: rem * 0.375;
+                        ChipButton { rem: root.rem; icon: "∿"; label: "Analyze"; }
+                        ChipButton { rem: root.rem; icon: "⌁"; label: "Sweep"; }
+                        ChipButton { rem: root.rem; icon: "⇩"; label: "Export"; }
+                    }
                 }
+
+                animate opacity { duration: 300ms; }
             }
         }
     }

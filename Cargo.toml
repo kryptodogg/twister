@@ -57,8 +57,8 @@ slint = { version ="1.15.1", default-features = false, features = [
 tempfile = "*"
 async-trait = "*"
 # ── GPU compute ────────────────────────────────────────────────────────────────
-# DX12 backend — Windows 11. AMD RX 6700 XT is accessed via the D3D12 layer.
-# wgpu on Windows uses DX12 natively; Vulkan is available as a fallback.
+# Vulkan backend — Windows 11 (unlocks experimental features and Vulkan interop).
+# AMD RX 6700 XT is accessed via wgpu Vulkan driver on both Windows and Linux.
 wgpu = { version = "*", features = ["vulkan"] }
 # ── HuggingFace Model Hub + Corpus Storage ──────────────────────────────────────
 hf-hub = "*"
@@ -101,10 +101,12 @@ codegen-units = 1
 [target."cfg(windows)".dependencies]
 windows = { version = "*", features = ["Win32_Graphics_Dwm", "Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_Graphics_Gdi"] }
 
-[[example]]
-name = "applet_toto_core"
-path = "examples/applet_toto_core.rs"
 
 [[example]]
 name = "toto"
 path = "examples/toto.rs"
+
+[[example]]
+name = "applet_toto_hud"
+path = "examples/applet_toto_hud.rs"
+

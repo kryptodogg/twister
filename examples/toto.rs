@@ -173,9 +173,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     });
 
-    // Create the Slint window. TotoCard is the exported component name
-    // from toto.slint's `export component TotoCard`.
-    let window = TotoCard::new()?;
+    // Create the Slint window. For this example, we use the standalone
+    // TotoHudApplet which is compiled separately in build.rs.
+    // Use the generated app module to access it.
+    let window = app::TotoHudApplet::new()?;
 
     // Platform-specific compositor blur.
     // This is the call that enables Windows Acrylic effect.
@@ -223,7 +224,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 // For now, the transparent background is set in toto.slint itself.
 // On Windows, the OS compositor may show this as dark gray without DWM integration.
 
-fn enable_compositor_blur(_window: &TotoCard) {
+fn enable_compositor_blur(_window: &app::TotoHudApplet) {
     // Future: Implement platform-specific blur via windows-sys on Windows
     // and X11 atoms on Linux.
 }
