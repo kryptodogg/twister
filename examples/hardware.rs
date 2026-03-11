@@ -3,9 +3,11 @@
 // Calibration Surface for the Truth
 // Usage: cargo run --example hardware
 
-use slint::{ComponentHandle, SharedString};
+use slint::{ComponentHandle, SharedString, Image};
 use twister::hardware::HardwareRegistry;
 use twister::utils::latency::QpcTimer;
+use twister::ml::PoseEstimator;
+use twister::dispatch::generate_density_sparkle;
 use std::sync::Arc;
 
 slint::include_modules!();
@@ -26,6 +28,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     engine.set_audio_wired(true);
     engine.set_rtl_wired(false);
     engine.set_pluto_wired(false);
+    engine.set_cmos_wired(false);
+
+    // Setup Pose Estimator
+    let _pose_estimator = Arc::new(PoseEstimator::<burn_ndarray::NdArray<f32>>::new(
+        burn::backend::ndarray::NdArrayDevice::Cpu
+    ));
 
     // Wire Forensic Snapshot
     let timer_clone = timer.clone();
@@ -33,24 +41,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let ts = timer_clone.now_us();
         let path = format!("assets/snapshot_{}.csv", ts);
         let _ = std::fs::create_dir_all("assets");
-        // REAL SNAPSHOT LOGIC:
-        // Collect current FieldParticles from all sensors and write to disk.
-        println!("[Forensic] Snapshot captured at QPC {}: {}", ts, path);
+        println!("[Forensic] Snapshot triggered: {}", path);
         if let Ok(mut f) = std::fs::File::create(&path) {
             use std::io::Write;
-            let _ = writeln!(f, "timestamp_us,source_id,intensity,pos_x,pos_y,pos_z");
-            let _ = writeln!(f, "{},0,0.42,0.0,0.0,0.0", ts); // Example Row
+            let _ = writeln!(f, "timestamp_us,source,intensity,x,y,z");
+            // Real session data would be dumped here
         }
     });
 
-    // Density Sparkle Update (Simulated Real-Only Flow)
+    engine.on_toggle_pose(|enabled| {
+        println!("[GPU] Pose Estimation: {}", if enabled { "ACTIVE" } else { "OFF" });
+    });
+
+    // Real-Time UI Bridge (Simulation of live hardware)
     let ui_weak = ui.as_weak();
-    let timer_pulse = slint::Timer::default();
-    timer_pulse.start(slint::TimerMode::Repeated, std::time::Duration::from_millis(100), move || {
+    let timer_ui = slint::Timer::default();
+    timer_ui.start(slint::TimerMode::Repeated, std::time::Duration::from_millis(33), move || {
         if let Some(ui) = ui_weak.upgrade() {
             let engine = ui.global::<HardwareEngine>();
-            // If hardware was LIVE, we would generate the path from real hologram particles.
-            engine.set_density_sparkle_path("M 10 10 L 20 20 M 100 150 L 110 160".into());
+            // If data was flowing, generate_density_sparkle would be called here
+            engine.set_density_sparkle_path(generate_density_sparkle(&[]).into());
         }
     });
 

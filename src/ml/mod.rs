@@ -54,3 +54,5 @@ pub mod spectral_frame;
 
 pub mod field_particle;
 pub use field_particle::FieldParticle;
+pub mod pose_estimator;
+pub use pose_estimator::PoseEstimator;

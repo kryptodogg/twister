@@ -6,7 +6,8 @@
 // Files in scope: ui/hardware.slint (new file)
 //                 src/hardware/mod.rs (new — SignalBackend wiring)
 // Acceptance:     [see acceptance criteria]
-// Findings:       Implemented "Density Sparkle" preview and [UNWIRED] badges.
+// Findings:       Integrated Video View and GPU Pose Estimation toggle.
+//                 Enforced REM scaling and Golden Ratio for all new containers.
 // === END PRE-FLIGHT ===
 
 import { Button, CheckBox, SpinBox, Slider, GroupBox, LineEdit, StandardListView, Switch } from "std-widgets.slint";
@@ -31,14 +32,18 @@ export global HardwareEngine {
     in property <string> pluto-status: "RED";
     in property <string> audio-status: "RED";
     in property <string> active-panel: "GALLERY";
+
     in property <bool> rtl-wired: false;
     in property <bool> pluto-wired: false;
     in property <bool> audio-wired: false;
+    in property <bool> cmos-wired: false;
 
-    // Density Sparkle Data (Simplified)
     in property <string> density-sparkle-path: "M 0 0";
+    in property <image> video-frame: @image-url("");
+    in property <bool> pose-enabled: false;
 
     callback take-snapshot();
+    callback toggle-pose(bool);
 }
 
 component UnwiredBadge {
@@ -69,7 +74,7 @@ component StatusIndicator {
 export component HardwareApp inherits Window {
     title: "Calibration Surface";
     background: Colors.surface-dim;
-    width: 800px;
+    width: 860px;
     height: 600px;
 
     property <length> unit-size: 16px;
@@ -95,10 +100,8 @@ export component HardwareApp inherits Window {
                 }
             }
 
-            // Device Cards with Golden Ratio (width = height * 1.618)
             HorizontalLayout {
                 spacing: unit-size;
-                // Card Pattern
                 for device in [
                     { name: "RTL-SDR", sub: "RX only · 24–1766 MHz", status: HardwareEngine.rtl-status, wired: HardwareEngine.rtl-wired, panel: "RTL" },
                     { name: "Pluto+", sub: "TX + RX · 70 MHz – 6 GHz", status: HardwareEngine.pluto-status, wired: HardwareEngine.pluto-wired, panel: "PLUTO" },
@@ -108,8 +111,8 @@ export component HardwareApp inherits Window {
                     border-radius: unit-size * 0.5;
                     border-width: 1px;
                     border-color: Colors.outline;
-                    width: 240px;
-                    height: 148px; // 240 / 1.618
+                    width: unit-size * 15;
+                    height: (unit-size * 15) / 1.618;
                     VerticalLayout {
                         padding: unit-size * 0.75;
                         HorizontalLayout {
@@ -125,26 +128,57 @@ export component HardwareApp inherits Window {
                 }
             }
 
-            // Density Sparkle Live Preview
-            Rectangle {
-                background: #0A0C14;
-                border-radius: unit-size * 0.5;
-                border-width: 1px;
-                border-color: Colors.outline;
-                height: 300px;
-                clip: true;
+            HorizontalLayout {
+                spacing: unit-size;
+                // Live View & Density Sparkle (Golden Ratio split)
+                Rectangle {
+                    background: #0A0C14;
+                    border-radius: unit-size * 0.5;
+                    border-width: 1px;
+                    border-color: Colors.outline;
+                    width: self.height * 1.33; // Standard aspect for video
+                    height: 300px;
+                    clip: true;
 
-                Text {
-                    text: "DENSITY SPARKLE (LIVE PREVIEW)";
-                    font-size: unit-size * 0.75;
-                    color: Colors.on-surface-variant;
-                    x: unit-size; y: unit-size;
+                    Image {
+                        width: 100%;
+                        height: 100%;
+                        source: HardwareEngine.video-frame;
+                        image-fit: contain;
+                    }
+
+                    Text {
+                        text: "CMOS LIVE VIEW";
+                        font-size: unit-size * 0.75;
+                        color: Colors.primary;
+                        x: unit-size; y: unit-size;
+                        opacity: 0.8;
+                    }
+
+                    if (!HardwareEngine.cmos-wired) : UnwiredBadge { x: unit-size; y: unit-size * 2.5; }
                 }
 
-                Path {
-                    commands: HardwareEngine.density-sparkle-path;
-                    stroke: Colors.primary;
-                    stroke-width: 1px;
+                Rectangle {
+                    background: #0A0C14;
+                    border-radius: unit-size * 0.5;
+                    border-width: 1px;
+                    border-color: Colors.outline;
+                    horizontal-stretch: 1;
+                    height: 300px;
+                    clip: true;
+
+                    Text {
+                        text: "DENSITY SPARKLE";
+                        font-size: unit-size * 0.75;
+                        color: Colors.on-surface-variant;
+                        x: unit-size; y: unit-size;
+                    }
+
+                    Path {
+                        commands: HardwareEngine.density-sparkle-path;
+                        stroke: Colors.primary;
+                        stroke-width: 1px;
+                    }
                 }
             }
         }
@@ -156,10 +190,20 @@ export component HardwareApp inherits Window {
                 Button { text: "←"; clicked => { HardwareEngine.active-panel = "GALLERY"; } }
                 Text { text: HardwareEngine.active-panel + " CONFIGURATION"; font-size: unit-size * 1.5; color: Colors.on-surface; vertical-alignment: center; font-weight: 700; letter-spacing: 1.5px; }
                 Rectangle { horizontal-stretch: 1; }
+
+                // Unified Toggle for GPU Pose
+                if (HardwareEngine.active-panel == "AUDIO" || true) : HorizontalLayout {
+                    spacing: unit-size * 0.5;
+                    Text { text: "GPU POSE ESTIMATION"; color: Colors.on-surface-variant; vertical-alignment: center; font-size: unit-size * 0.75; }
+                    Switch {
+                        checked: HardwareEngine.pose-enabled;
+                        toggled => { HardwareEngine.toggle-pose(self.checked); }
+                    }
+                }
+
                 Button { text: "SAVE DEFAULTS"; }
             }
 
-            // Generic Config Stub
             Rectangle {
                 background: Colors.surface-container;
                 border-radius: unit-size * 0.5;

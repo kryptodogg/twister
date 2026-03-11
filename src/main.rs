@@ -45,6 +45,7 @@ use crate::dispatch::backend::{FileBackend, AudioBackend};
 use crate::utils::latency::QpcTimer;
 use crate::ml::waveshape_projection::project_latent_to_waveshape;
 use crate::ml::field_particle::FieldParticle;
+use crate::ml::PoseEstimator;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -56,31 +57,32 @@ async fn main() -> anyhow::Result<()> {
 
     let ui = self::TotoCard::new().context("Slint window creation failed")?;
 
+    // ── MULTI-SENSOR INGESTION ────────────────────────────────────────────────
     let audio_ingester = Arc::new(AudioIngester::new());
-    let _rf_ingester = Arc::new(RFIngester::new());
-    let _visual_ingester = Arc::new(VisualIngester::new());
+    let rf_ingester = Arc::new(RFIngester::new());
+    let visual_ingester = Arc::new(VisualIngester::new());
     let het_synth = Arc::new(tokio::sync::Mutex::new(HetSynthesizer::new()));
 
-    {
-        let mut hs = het_synth.lock().await;
-        let session_ts = timer.now_us();
-        let _ = std::fs::create_dir_all("forensic");
-        if let Ok(file_backend) = FileBackend::new(&format!("forensic/session_{}.pcm", session_ts)) {
-            hs.add_backend(Box::new(file_backend));
-        }
-        hs.add_backend(Box::new(AudioBackend::new("Default")));
-    }
+    // Setup GPU Pose Estimator
+    let pose_estimator = Arc::new(PoseEstimator::<burn_ndarray::NdArray<f32>>::new(
+        burn::backend::ndarray::NdArrayDevice::Cpu
+    ));
 
+    // ── FORENSIC DISPATCH ─────────────────────────────────────────────────────
     let state_disp = state.clone();
     let audio_ing_disp = audio_ingester.clone();
+    let rf_ing_disp = rf_ingester.clone();
+    let visual_ing_disp = visual_ingester.clone();
     let timer_disp = timer.clone();
     let het_synth_disp = het_synth.clone();
-    let mamba_trainer = Arc::new(crate::training::MambaTrainer::new(state.clone())?);
+    let pose_est_disp = pose_estimator.clone();
 
     tokio::spawn(async move {
         loop {
-            let _ts = timer_disp.now_us();
-            let audio_raw: Vec<u8> = Vec::new(); // Real buffers only
+            let ts = timer_disp.now_us();
+
+            // 1. Audio Thread (Simulated Integration)
+            let audio_raw: Vec<u8> = Vec::new(); // Real hardware buffer
             if !audio_raw.is_empty() {
                 let meta = SignalMetadata {
                     signal_type: SignalType::Audio,
@@ -89,18 +91,16 @@ async fn main() -> anyhow::Result<()> {
                     num_channels: 1,
                     sample_format: SampleFormat::F32,
                 };
-
-                if let Some(accumulated) = audio_ing_disp.accumulate(&audio_raw, &meta) {
-                    if let Ok((anomaly, latent, _recon)) = mamba_trainer.forward(&accumulated).await {
-                        let params = project_latent_to_waveshape(&latent, 44100.0);
-                        state_disp.waveshape_drive.store(params.drive, Ordering::Relaxed);
-                        state_disp.mamba_anomaly_score.store(anomaly, Ordering::Relaxed);
-
-                        let mut hs = het_synth_disp.lock().await;
-                        hs.generate_samples(512, 44100.0);
-                    }
-                }
+                let _particles = audio_ing_disp.ingest(&audio_raw, ts, &meta);
             }
+
+            // 2. Visual Thread (Raw CMOS Integration)
+            let visual_raw: Vec<u8> = Vec::new(); // Real CMOS buffer
+            if !visual_raw.is_empty() {
+                let keypoints = pose_est_disp.estimate(&visual_raw, 128, 128);
+                // Map keypoints to hologram...
+            }
+
             tokio::time::sleep(std::time::Duration::from_millis(10)).await;
         }
     });

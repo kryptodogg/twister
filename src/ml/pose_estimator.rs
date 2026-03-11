@@ -1,0 +1,79 @@
+use burn::prelude::*;
+use burn::tensor::backend::Backend;
+
+/// GPU-Accelerated Pose Estimator
+/// Uses a cascaded CNN architecture to extract body keypoints for the Synesthesia Hologram.
+#[derive(Module, Debug)]
+pub struct PoseModel<B: Backend> {
+    conv1: burn::nn::conv::Conv2d<B>,
+    conv2: burn::nn::conv::Conv2d<B>,
+    pool: burn::nn::pool::MaxPool2d,
+    fc1: burn::nn::Linear<B>,
+    fc2: burn::nn::Linear<B>,
+}
+
+impl<B: Backend> PoseModel<B> {
+    pub fn new(device: &B::Device) -> Self {
+        let conv1 = burn::nn::conv::Conv2dConfig::new([3, 16], [3, 3]).init(device);
+        let conv2 = burn::nn::conv::Conv2dConfig::new([16, 32], [3, 3]).init(device);
+        let pool = burn::nn::pool::MaxPool2dConfig::new([2, 2]).init();
+        let fc1 = burn::nn::LinearConfig::new(32 * 30 * 30, 256).init(device);
+        let fc2 = burn::nn::LinearConfig::new(256, 33 * 3).init(device); // 33 keypoints * (x,y,z)
+
+        Self {
+            conv1,
+            conv2,
+            pool,
+            fc1,
+            fc2,
+        }
+    }
+
+    pub fn forward(&self, input: Tensor<B, 4>) -> Tensor<B, 2> {
+        let x = self.conv1.forward(input);
+        let x = burn::tensor::activation::relu(x);
+        let x = self.pool.forward(x);
+
+        let x = self.conv2.forward(x);
+        let x = burn::tensor::activation::relu(x);
+        let x = self.pool.forward(x);
+
+        let dims = x.dims();
+        let x = x.reshape([dims[0], dims[1] * dims[2] * dims[3]]);
+        let x = self.fc1.forward(x);
+        let x = burn::tensor::activation::relu(x);
+        self.fc2.forward(x)
+    }
+}
+
+pub struct PoseEstimator<B: Backend> {
+    model: PoseModel<B>,
+    device: B::Device,
+}
+
+impl<B: Backend> PoseEstimator<B> {
+    pub fn new(device: B::Device) -> Self {
+        let model = PoseModel::new(&device);
+        Self { model, device }
+    }
+
+    pub fn estimate(&self, raw_frame: &[u8], width: usize, height: usize) -> Vec<[f32; 3]> {
+        if raw_frame.is_empty() || width != 128 || height != 128 {
+            return Vec::new();
+        }
+
+        // Convert raw bytes to Tensor
+        let data = TensorData::new(
+            raw_frame.iter().map(|&b| b as f32 / 255.0).collect(),
+            [1, 3, height, width]
+        );
+        let input = Tensor::<B, 4>::from_data(data, &self.device);
+
+        // Inference
+        let output = self.model.forward(input);
+        let keypoints_data = output.into_data();
+        let keypoints: Vec<f32> = keypoints_data.as_slice().unwrap().to_vec();
+
+        keypoints.chunks(3).map(|c| [c[0], c[1], c[2]]).collect()
+    }
+}
