@@ -9,3 +9,6 @@ pub use audio_ingester::AudioIngester;
 
 pub mod rf_ingester;
 pub use rf_ingester::RFIngester;
+
+pub mod visual_ingester;
+pub use visual_ingester::VisualIngester;
