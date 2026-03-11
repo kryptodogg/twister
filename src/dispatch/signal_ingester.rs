@@ -45,4 +45,5 @@ pub enum SampleFormat {
     F32,             // 32-bit float
     IQ8,             // 8-bit I + 8-bit Q (SDR)
     IQ16,            // 16-bit I + 16-bit Q (SDR)
+    IQ32F,           // 32-bit float I + 32-bit float Q (Forensic IQ)
 }

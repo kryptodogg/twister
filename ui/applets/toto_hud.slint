@@ -1,304 +1,113 @@
-import { VerticalBox, HorizontalBox, Slider, Switch, ProgressIndicator, Button } from "std-widgets.slint";
-import { Standards, IconButton, ForensicPalette, ForensicMaterials } from "../standards.slint";
+import { Button, CheckBox, SpinBox, Slider, GroupBox, LineEdit, StandardListView, Switch } from "std-widgets.slint";
+
+export global Colors {
+    out property <color> surface-dim: #0F111A;
+    out property <color> surface-container: #1A1D2B;
+    out property <color> surface-container-high: #22253A;
+    out property <color> surface-container-highest: #292C3F;
+    out property <color> primary: #00E5C8;
+    out property <color> secondary: #A855F7;
+    out property <color> tertiary: #F59E0B;
+    out property <color> error: #FF5449;
+    out property <color> on-surface: #E1E3F0;
+    out property <color> on-surface-variant: #9CA3AF;
+    out property <color> outline: rgba(255, 255, 255, 12%);
+    out property <color> outline-variant: rgba(255, 255, 255, 6%);
+}
 
 export global TotoEngine {
+    in property <string> audio-status: "DISCONNECTED";
+    in property <string> rf-status: "DISCONNECTED";
+    in property <string> optical-status: "DISCONNECTED";
+    in property <float> anomaly-score: 0.0;
+    in property <float> drive: 0.0;
+    in property <float> fold: 0.0;
+    in property <float> asym: 0.0;
+    in property <float> dominant-freq-hz: 0.0;
+    in property <string> wave-path: "M 0 50";
+    in property <color> wave-color: Colors.primary;
     in-out property <bool> always-learning: true;
-    in-out property <float> anomaly-score: 0.150;
-
-    // The 12 spectral hues (Flutopedia Scale)
-    in-out property <string> path-c: "M 0 60 L 600 60";
-    in-out property <string> path-cs: "M 0 60 L 600 60";
-    in-out property <string> path-d: "M 0 60 L 600 60";
-    in-out property <string> path-ds: "M 0 60 L 600 60";
-    in-out property <string> path-e: "M 0 60 L 600 60";
-    in-out property <string> path-f: "M 0 60 L 600 60";
-    in-out property <string> path-fs: "M 0 60 L 600 60"; // Cyan
-    in-out property <string> path-g: "M 0 60 L 600 60";
-    in-out property <string> path-gs: "M 0 60 L 600 60";
-    in-out property <string> path-a: "M 0 60 L 600 60";
-    in-out property <string> path-as: "M 0 60 L 600 60"; // Violet
-    in-out property <string> path-b: "M 0 60 L 600 60";
-
-    // Mamba Projections
-    in-out property <float> drive: 0.250;
-    in-out property <float> fold: 0.700;
-    in-out property <float> asym: 0.150;
-
-    // Engine Telemetry
-    in-out property <string> telemetry-text: "Awaiting Unified Field Particles...";
-
-    // UI State
     in-out property <bool> metrics-expanded: false;
 }
 
-export component TotoHudApplet inherits Window {
-    title: "AG-HUD: Unified Mamba BSS";
-    width: 800px;
-    height: 700px;
-    background: ForensicMaterials.glass_tablet_background;
-
-    // Apply transparent windowing properties (Acrylic/Ubuntu)
-    no-frame: true;
-
-    VerticalBox {
-        spacing: 15px;
-        padding: 20px;
-
-        // Header Panel (Frosted Glass)
-        Rectangle {
-            background: ForensicMaterials.surface_panel;
-            border-radius: 12px;
-            border-color: ForensicPalette.ag_cyan;
-            border-width: 1px;
-
-            HorizontalBox {
-                padding: 15px;
-                spacing: 20px;
-
-                VerticalBox {
-                    VerticalBox {
-                        Text {
-                            text: "🔬 UNIFIED MAMBA INFERENCE LOOP";
-                            color: ForensicPalette.ag_cyan;
-                            font-weight: 800;
-                            font-size: Standards.font-size-large;
-                            font-family: Standards.font-family;
-                        }
-                    }
-                    VerticalBox {
-                        spacing: 4px;
-                        HorizontalBox {
-                            spacing: 8px;
-                            Text { text: "Anomaly Score:"; color: Standards.on-surface; font-family: Standards.font-family; font-size: 11px; }
-                            Text {
-                                text: round(TotoEngine.anomaly-score * 1000) / 1000;
-                                color: TotoEngine.anomaly-score > 0.5 ? ForensicPalette.ag_red : ForensicPalette.ag_cyan;
-                                font-weight: 800;
-                                font-family: "Courier";
-                                font-size: 13px;
-                            }
-                        }
-                        // Gradient anomaly bar
-                        Rectangle {
-                            width: 200px;
-                            height: 6px;
-                            border-radius: 3px;
-                            background: @linear-gradient(90deg,
-                                #00ff00 0%,
-                                #ffff00 25%,
-                                #ff8000 50%,
-                                #ff0000 100%
-                            );
-                            Rectangle {
-                                width: TotoEngine.anomaly-score * parent.width;
-                                height: parent.height;
-                                background: white;
-                                opacity: 0.7;
-                            }
-                        }
-                    }
-                }
-
-                Rectangle { width: 1px; background: Standards.surface-variant; }
-
-                HorizontalBox {
-                    alignment: end;
-                    spacing: 8px;
-                    Text {
-                        text: "Always Learning:";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: 11px;
-                        vertical-alignment: center;
-                    }
-                    Switch { checked <=> TotoEngine.always-learning; }
-                }
-            }
+component StatusBadge {
+    in property <string> label;
+    in property <string> status;
+    property <color> status-color:
+        status == "LIVE" ? Colors.primary :
+        status == "HW FAULT" ? Colors.error :
+        Colors.on-surface-variant;
+    Rectangle {
+        background: Colors.surface-container-high;
+        border-radius: 4px;
+        border-width: 1px;
+        border-color: status-color;
+        height: 24px;
+        HorizontalLayout {
+            padding-left: 8px;
+            padding-right: 8px;
+            spacing: 4px;
+            Text { text: label + ":"; color: Colors.on-surface-variant; font-size: 10px; vertical-alignment: center; }
+            Text { text: status; color: status-color; font-size: 10px; font-weight: 700; vertical-alignment: center; }
         }
+    }
+}
 
-        // Main Visualization: Universal Rainbow Harmonic Smear
-        Rectangle {
-            height: 350px;
-            background: ForensicMaterials.surface_panel;
-            border-color: ForensicPalette.ag_violet;
-            border-width: 2px;
-            border-radius: 8px;
-
-            HorizontalBox {
-                padding: 10px;
-                Text { text: "Oscilloscope"; color: Standards.on-surface; font-family: Standards.font-family; }
-                Text { text: "Universal Rainbow Harmonic Smear (BSS)"; color: Standards.secondary; font-family: Standards.font-family; horizontal-alignment: right; }
-            }
-
-            // The 12 overlapping signal layers demonstrating BSS
-            Path { commands: TotoEngine.path-c; stroke: Standards.hue-c; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-cs; stroke: Standards.hue-cs; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-d; stroke: Standards.hue-d; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-ds; stroke: Standards.hue-ds; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-e; stroke: Standards.hue-e; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-f; stroke: Standards.hue-f; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-fs; stroke: Standards.hue-fs; stroke-width: 3px; } // Cyan - Highlighted Folded Octaves
-            Path { commands: TotoEngine.path-g; stroke: Standards.hue-g; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-gs; stroke: Standards.hue-gs; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-a; stroke: Standards.hue-a; stroke-width: 2px; }
-            Path { commands: TotoEngine.path-as; stroke: Standards.hue-as; stroke-width: 2px; } // Violet
-            Path { commands: TotoEngine.path-b; stroke: Standards.hue-b; stroke-width: 2px; }
-
-            Text { text: "Amplitude"; color: Standards.on-surface; font-family: Standards.font-family; x: 10px; y: 160px; transform-rotation: -90deg; }
-            Text { text: "Time (100Hz)"; color: Standards.on-surface; font-family: Standards.font-family; y: parent.height - 20px; x: (parent.width - self.width) / 2; }
-
-            // Grid lines
-            Path { stroke: Standards.surface-variant; stroke-width: 1px; commands: "M 0 175 L 800 175 M 100 0 L 100 350 M 200 0 L 200 350 M 300 0 L 300 350 M 400 0 L 400 350 M 500 0 L 500 350 M 600 0 L 600 350 M 700 0 L 700 350"; }
-        }
-
-        // Mamba Projections
-        HorizontalBox {
-            spacing: 15px;
-
-            // Drive Parameter (Red/Baseline)
-            Rectangle {
-                background: ForensicMaterials.surface_panel;
-                border-color: ForensicPalette.ag_red;
-                border-width: 2px;
-                border-radius: 8px;
-                VerticalBox {
-                    padding: 12px;
-                    Text {
-                        text: "🎚️ DRIVE";
-                        color: ForensicPalette.ag_red;
-                        font-family: Standards.font-family;
-                        font-weight: 700;
-                        font-size: 12px;
-                    }
-                    Text {
-                        text: round(TotoEngine.drive * 1000) / 1000;
-                        color: ForensicPalette.ag_red;
-                        font-family: "Courier";
-                        font-size: 18px;
-                        font-weight: 800;
-                    }
-                    ProgressIndicator { width: 100%; progress: TotoEngine.drive; }
-                    Text {
-                        text: "Auto Waveshaping Coefficient";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: Standards.font-size-small;
-                    }
-                }
-            }
-
-            // Fold Parameter (Green/Harmonic)
-            Rectangle {
-                background: ForensicMaterials.surface_panel;
-                border-color: ForensicPalette.hue-e;
-                border-width: 2px;
-                border-radius: 8px;
-                VerticalBox {
-                    padding: 12px;
-                    Text {
-                        text: "📈 FOLD";
-                        color: ForensicPalette.hue-e;
-                        font-family: Standards.font-family;
-                        font-weight: 700;
-                        font-size: 12px;
-                    }
-                    Text {
-                        text: round(TotoEngine.fold * 1000) / 1000;
-                        color: ForensicPalette.hue-e;
-                        font-family: "Courier";
-                        font-size: 18px;
-                        font-weight: 800;
-                    }
-                    ProgressIndicator { width: 100%; progress: TotoEngine.fold; }
-                    Text {
-                        text: "Frequency Folding Intensity";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: Standards.font-size-small;
-                    }
-                }
-            }
-
-            // Asymmetry Parameter (Violet/Harmonic Smear)
-            Rectangle {
-                background: ForensicMaterials.surface_panel;
-                border-color: ForensicPalette.ag_violet;
-                border-width: 2px;
-                border-radius: 8px;
-                VerticalBox {
-                    padding: 12px;
-                    Text {
-                        text: "🌀 ASYM";
-                        color: ForensicPalette.ag_violet;
-                        font-family: Standards.font-family;
-                        font-weight: 700;
-                        font-size: 12px;
-                    }
-                    Text {
-                        text: round(TotoEngine.asym * 1000) / 1000;
-                        color: ForensicPalette.ag_violet;
-                        font-family: "Courier";
-                        font-size: 18px;
-                        font-weight: 800;
-                    }
-                    ProgressIndicator { width: 100%; progress: TotoEngine.asym; }
-                    Text {
-                        text: "Phase Asymmetry (Non-Linear)";
-                        color: Standards.on-surface;
-                        font-family: Standards.font-family;
-                        font-size: Standards.font-size-small;
-                    }
-                }
-            }
-        }
-
-        // Material Bottom App Bar (Frosted Glass)
-        Rectangle {
-            height: 48px;
-            background: ForensicMaterials.surface_panel;
-            border-radius: 24px;
-            border-color: ForensicPalette.ag_cyan;
-            border-width: 1px;
-            HorizontalBox {
-                padding: 8px;
+export component TotoCard inherits Window {
+    title: "Toto HUD";
+    background: Colors.surface-dim;
+    property <length> unit-size: 16px;
+    width: 600px;
+    height: 370px;
+    VerticalLayout {
+        padding: unit-size;
+        spacing: unit-size * 0.5;
+        HorizontalLayout {
+            height: unit-size * 3;
+            spacing: unit-size;
+            VerticalLayout {
+                spacing: unit-size * 0.25;
                 alignment: center;
-                spacing: 10px;
-                Text {
-                    text: "BSS ENGINE";
-                    color: ForensicPalette.ag_cyan;
-                    font-family: Standards.font-family;
-                    font-weight: 600;
-                    font-size: 11px;
-                }
-                Text {
-                    text: "|";
-                    color: Standards.surface-variant;
-                    font-size: 12px;
-                }
-                IconButton {
-                    icon: "⚙"; // Gear Icon
-                    clicked => { TotoEngine.metrics-expanded = !TotoEngine.metrics-expanded; }
-                }
+                Text { text: "ANOMALY SCORE"; color: Colors.on-surface-variant; font-size: unit-size * 0.6; font-weight: 700; }
+                Text { text: round(TotoEngine.anomaly-score * 1000) / 1000; color: Colors.on-surface; font-size: unit-size * 1.5; }
+            }
+            Rectangle { width: 1px; background: Colors.outline-variant; }
+            HorizontalLayout {
+                spacing: unit-size * 0.5;
+                alignment: center;
+                StatusBadge { label: "AUDIO"; status: TotoEngine.audio-status; }
+                StatusBadge { label: "RF"; status: TotoEngine.rf-status; }
+                StatusBadge { label: "OPTICAL"; status: TotoEngine.optical-status; }
             }
         }
-
-        // Collapsable Slate Pane (Raw Metrics & Complex Actions)
-        if TotoEngine.metrics-expanded: Rectangle {
-            background: ForensicMaterials.glass_tablet_background;
-            border-radius: 8px;
-            border-color: ForensicPalette.ag_violet;
-            border-width: 2px;
-            height: 140px;
-            VerticalBox {
-                padding: 10px;
-                Text { text: "RAW BSS TELEMETRY ENGINE"; color: Standards.primary; font-family: Standards.font-family; font-weight: Standards.font-weight-regular; }
-                Text { text: TotoEngine.telemetry-text; color: Standards.on-surface; font-family: Standards.font-family; }
-
-                HorizontalBox {
-                    spacing: 10px;
-                    Button { text: "Probe Burst"; }
-                    Button { text: "Record DVR"; }
-                }
+        Rectangle {
+            background: Colors.surface-container;
+            border-radius: unit-size * 0.5;
+            border-width: 1px;
+            border-color: Colors.outline;
+            height: 180px;
+            Path { commands: TotoEngine.wave-path; stroke: TotoEngine.wave-color; stroke-width: unit-size * 0.125; }
+            Text { text: "ML DERIVED"; color: Colors.secondary; font-size: unit-size * 0.5; font-weight: 700; x: parent.width - self.width - 8px; y: 8px; }
+        }
+        HorizontalLayout {
+            spacing: unit-size * 0.75;
+            VerticalLayout {
+                spacing: unit-size * 0.25;
+                Text { text: "DRIVE"; color: Colors.on-surface-variant; font-size: unit-size * 0.6; font-weight: 700; }
+                Text { text: round(TotoEngine.drive * 1000) / 1000; color: Colors.on-surface; font-size: unit-size; }
+                Rectangle { height: 4px; background: Colors.surface-container-highest; Rectangle { x: 0; width: TotoEngine.drive * parent.width; background: Colors.primary; } }
+            }
+            VerticalLayout {
+                spacing: unit-size * 0.25;
+                Text { text: "FOLD"; color: Colors.on-surface-variant; font-size: unit-size * 0.6; font-weight: 700; }
+                Text { text: round(TotoEngine.fold * 1000) / 1000; color: Colors.on-surface; font-size: unit-size; }
+                Rectangle { height: 4px; background: Colors.surface-container-highest; Rectangle { x: 0; width: TotoEngine.fold * parent.width; background: Colors.secondary; } }
+            }
+            VerticalLayout {
+                spacing: unit-size * 0.25;
+                Text { text: "ASYM"; color: Colors.on-surface-variant; font-size: unit-size * 0.6; font-weight: 700; }
+                Text { text: round(TotoEngine.asym * 1000) / 1000; color: Colors.on-surface; font-size: unit-size; }
+                Rectangle { height: 4px; background: Colors.surface-container-highest; Rectangle { x: 0; width: (TotoEngine.asym + 1.0) * 0.5 * parent.width; background: Colors.tertiary; } }
             }
         }
     }

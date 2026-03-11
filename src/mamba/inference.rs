@@ -52,7 +52,7 @@ impl MambaInference {
     }
 
     /// Run inference on feature vector
-    pub fn infer(&self, features: &FeatureVector) -> InferenceResult {
+    pub fn forward(&self, features: &FeatureVector) -> InferenceResult {
         let start = std::time::Instant::now();
 
         // Convert features to tensor
@@ -112,7 +112,7 @@ impl MambaInference {
     }
 
     /// Run inference on raw feature array
-    pub fn infer_array(&self, features: &Array1<f32>) -> InferenceResult {
+    pub fn forward_array(&self, features: &Array1<f32>) -> InferenceResult {
         let start = std::time::Instant::now();
 
         // Convert to tensor
@@ -170,9 +170,6 @@ impl MambaInference {
 
     /// Get model configuration
     pub fn config(&self) -> &SSAMBAConfig {
-        // In this modular version, we could store it in MambaInference if needed,
-        // but for now we'll return a placeholder or just remove the getter if unused.
-        // For compatibility, we'll return a static/default if we don't want to store it.
         unimplemented!("Config access via model removed for Burn compatibility")
     }
 
@@ -238,7 +235,7 @@ mod tests {
         let inference = MambaInference::new(&config);
 
         let features = FeatureVector::zeros();
-        let result = inference.infer(&features);
+        let result = inference.forward(&features);
 
         assert_eq!(result.latent.len(), 64);
         assert!(result.mode < 3);

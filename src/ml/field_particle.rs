@@ -2,36 +2,61 @@ use bytemuck::{Pod, Zeroable};
 
 /// Universal FieldParticle Struct
 /// Represents a single unified particle for any signal type (Audio, RF, Video)
-/// Total Size: 32 bytes (6 * 4 bytes data + 3 * 4 bytes padding = 36? Wait, 3*4=12. 3 f32=12. phase_i=4, phase_q=4, energy=4, material_id=4. Total 32 bytes! Wait, 12+4+4+4+4=28. Wait, 3 padding u32s = 12 bytes. 28 + 12 = 40 bytes)
+/// Total Size: Exactly 128 bytes (one AMD Infinity Cache line)
 /// GPU Buffer Layout: std140 with proper alignment for compute shaders
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Pod, Zeroable)]
 pub struct FieldParticle {
-    /// Spatial coordinate in the Chronos Slate
-    pub position: [f32; 3],
+    /// Hardware-sourced microsecond timestamp
+    pub timestamp_us: u64,
 
-    /// In-phase component
-    pub phase_i: f32,
+    /// Center frequency of observation
+    pub freq_hz: f64,
 
-    /// Quadrature component
-    pub phase_q: f32,
-
-    /// Instantaneous power/magnitude
+    /// Normalized energy (0.0 - 1.0)
     pub energy: f32,
 
-    /// Mamba latent cluster motif (e.g., 60Hz vs 750THz)
-    pub material_id: u32,
+    /// Phase coherence (Γ), 0.0 (null) to 1.0 (constructive)
+    pub phase_coherence: f32,
 
-    /// 16-byte alignment for GPU buffers
-    pub _padding: [u32; 3],
+    /// Spatial estimate in meters
+    pub position_xyz: [f32; 3],
+
+    /// Octave-folded harmonic bucket (0-11)
+    pub material_id: u8,
+
+    /// Data source identifier:
+    /// 0=AudioHost, 1=PlutoOnboard, 2=HostProcessed, 3=Pico
+    pub source: u8,
+
+    /// Alignment padding to 4 bytes
+    pub _pad0: [u8; 2],
+
+    /// Pre-computed Doppler shift heuristic
+    pub doppler_shift: f32,
+
+    /// Pre-computed phase velocity heuristic
+    pub phase_velocity: f32,
+
+    /// Pre-computed scattering cross-section heuristic
+    pub scattering_cross_section: f32,
+
+    /// Spectral bandwidth of this observation in Hz
+    pub bandwidth_hz: f32,
+
+    /// Anomaly score from Coral NF (0.0 if unavailable)
+    pub anomaly_score: f32,
+
+    /// Last ESN classification from Pico (255 = unknown)
+    pub motif_hint: u8,
+
+    /// Alignment padding
+    pub _pad1: [u8; 3],
+
+    /// First 16 dimensions of the 128-D Mamba latent embedding
+    /// (Full 128-D lives in GPU; this is the CPU-resident summary)
+    pub embedding: [f32; 16],
 }
 
-// WGSL Equivalent (add as a comment for the GPU shader pipeline):
-// struct FieldParticle {
-//     position: vec3<f32>,
-//     phase_i: f32,
-//     phase_q: f32,
-//     energy: f32,
-//     material_id: u32,
-//     _padding: vec3<u32>,
-// };
+// Forensic constraint: The struct MUST be exactly 128 bytes.
+const _: () = assert!(std::mem::size_of::<FieldParticle>() == 128);

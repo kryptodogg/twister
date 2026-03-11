@@ -62,9 +62,14 @@ impl MambaTrainer {
         Ok(0.0)
     }
 
-    /// Inference step (simplified)
-    pub fn infer(&self, _magnitudes: &[f32]) -> Result<crate::mamba::inference::InferenceResult, anyhow::Error> {
+    /// Inference step (simplified) - Renamed to forward for consistency
+    pub fn forward(&self, _magnitudes: &[f32]) -> Result<crate::mamba::inference::InferenceResult, anyhow::Error> {
         Err(anyhow::anyhow!("Trainer-based inference not yet implemented in modular Mamba"))
+    }
+
+    /// Legacy infer alias for temporary compatibility
+    pub fn infer(&self, magnitudes: &[f32]) -> Result<crate::mamba::inference::InferenceResult, anyhow::Error> {
+        self.forward(magnitudes)
     }
 
     /// Save model checkpoint
