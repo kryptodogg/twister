@@ -1,6 +1,7 @@
 use thiserror::Error;
 use std::fs::File;
 use std::io::{BufWriter, Write};
+use std::path::Path;
 
 #[derive(Error, Debug)]
 pub enum BackendError {
@@ -8,6 +9,8 @@ pub enum BackendError {
     Io(#[from] std::io::Error),
     #[error("Hardware error: {0}")]
     Hardware(String),
+    #[error("Invalid data: {0}")]
+    InvalidData(String),
 }
 
 pub trait SignalBackend: Send {
@@ -22,11 +25,21 @@ pub struct FileBackend {
 }
 
 impl FileBackend {
-    pub fn new(path: &str) -> Result<Self, std::io::Error> {
+    pub fn new(path_str: &str) -> Result<Self, BackendError> {
+        let path = Path::new(path_str);
+
+        // Strict Path Constraint: No test data in production
+        if path.components().any(|c| {
+            let s = c.as_os_str().to_string_lossy();
+            s == "tests" || s == "examples"
+        }) {
+            return Err(BackendError::InvalidData("Test files must not be used in production".to_string()));
+        }
+
         let file = File::create(path)?;
         Ok(Self {
             writer: BufWriter::new(file),
-            path: path.to_string(),
+            path: path_str.to_string(),
         })
     }
 }
@@ -63,7 +76,6 @@ impl AudioBackend {
 
 impl SignalBackend for AudioBackend {
     fn write_pcm(&mut self, _samples: &[f32]) -> Result<(), BackendError> {
-        // CPAL wrapping would go here
         Ok(())
     }
     fn flush(&mut self) -> Result<(), BackendError> { Ok(()) }

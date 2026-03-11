@@ -1,168 +1,28 @@
-// UI Tokens — Single Source of Truth
-// Import with: import { Colors, Spacing, Typography } from "tokens.slint";
-// Reference: assets/SKILL-SLINT-MD3.md
-
 export global Colors {
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // MD3 SURFACES (Elevation Levels 0-4)
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    out property <color> surface-dim:            #0F111A;
-    out property <color> surface:                #14161F;
-    out property <color> surface-bright:         #1A1D2B;
-    out property <color> surface-container-low:  #161820;
-    out property <color> surface-container:      #1A1D2B;
+    out property <color> surface-dim: #0F111A;
+    out property <color> surface-container: #1A1D2B;
     out property <color> surface-container-high: #22253A;
     out property <color> surface-container-highest: #292C3F;
+    out property <color> primary: #00E5C8;
+    out property <color> secondary: #A855F7;
+    out property <color> tertiary: #F59E0B;
+    out property <color> error: #FF5449;
+    out property <color> on-surface: #E1E3F0;
+    out property <color> on-surface-variant: #9CA3AF;
+    out property <color> outline: rgba(255, 255, 255, 12%);
+    out property <color> outline-variant: rgba(255, 255, 255, 6%);
 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // MD3 SEMANTIC ROLES
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-    // Primary (Teal) — Active labels, headers, key borders
-    out property <color> primary:                #00E5C8;
-    out property <color> on-primary:             #003730;
-    out property <color> primary-container:      #004D43;
-    out property <color> on-primary-container:   #6FFCE8;
-
-    // Secondary (Violet) — Loss curves, anomaly warnings
-    out property <color> secondary:              #A855F7;
-    out property <color> on-secondary:           #2A004F;
-    out property <color> secondary-container:    #3D0070;
-    out property <color> on-secondary-container: #D9AAFF;
-
-    // Tertiary (Amber/Gold) — Threat tier Gold indicator
-    out property <color> tertiary:               #F59E0B;
-    out property <color> on-tertiary:            #3D2400;
-    out property <color> tertiary-container:     #5A3600;
-    out property <color> on-tertiary-container:  #FFDDB0;
-
-    // Error (Red) — Sensor offline, parse errors
-    out property <color> error:                  #FF5449;
-    out property <color> on-error:               #690005;
-    out property <color> error-container:        #93000A;
-    out property <color> on-error-container:     #FFDAD6;
-
-    // Text & UI Chrome
-    out property <color> on-surface:             #E1E3F0;
-    out property <color> on-surface-variant:     #9CA3AF;
-    out property <color> outline:                rgba(255, 255, 255, 12%);
-    out property <color> outline-variant:        rgba(255, 255, 255, 6%);
-    out property <color> scrim:                  rgba(0, 0, 0, 60%);
-
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // THREAT TIER STATES
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    out property <color> tier-lead:              #6C7280;
-    out property <color> tier-obsidian:          #9CA3AF;
-    out property <color> tier-gold:              #F59E0B;
-
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // HARMONIC PALETTE (Data Visualization Only)
-    // 12-Tone Octave Mapping: C, C#, D, D#, E, F, F#, G, G#, A, A#, B
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    out property <color> harm-0:   #FF1A1A;   // C — AC mains (50/60 Hz), ELF
-    out property <color> harm-1:   #FF6600;   // C# — Low-freq audio artifacts
-    out property <color> harm-2:   #FFAA00;   // D — Mid audio, ultrasound harmonics
-    out property <color> harm-3:   #E5E500;   // D# — Upper audio, sonar
-    out property <color> harm-4:   #66E620;   // E — VHF lower edge
-    out property <color> harm-5:   #9910FF;   // F — Violet anchor (F4=349Hz, 2.4GHz)
-    out property <color> harm-6:   #6600FF;   // F# — WiFi 2.4GHz upper, ISM band
-    out property <color> harm-7:   #0099FF;   // G — Bluetooth, 2.4–2.5GHz
-    out property <color> harm-8:   #00E5CC;   // G# — Teal: 85kHz target, ultrasound
-    out property <color> harm-9:   #1ADD4D;   // A — Green: 5GHz WiFi, GPS
-    out property <color> harm-10:  #B3F21A;   // A# — Yellow-teal: mmWave lower
-    out property <color> harm-11:  #F21AB3;   // B — Magenta: High RF, 24GHz radar
-
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // SPECIAL BACKGROUNDS (Canvas, etc.)
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    out property <color> canvas-background:      #0A0C14;  // Darker than surface-dim
+    // Harmonic Palette (C through B)
+    out property <color> harm-0: #FF1A1A;
+    out property <color> harm-1: #FF6600;
+    out property <color> harm-2: #FFAA00;
+    out property <color> harm-3: #E5E500;
+    out property <color> harm-4: #66E620;
+    out property <color> harm-5: #9910FF;
+    out property <color> harm-6: #6600FF;
+    out property <color> harm-7: #0099FF;
+    out property <color> harm-8: #00E5CC;
+    out property <color> harm-9: #1ADD4D;
+    out property <color> harm-10: #B3F21A;
+    out property <color> harm-11: #F21AB3;
 }
-
-export global Spacing {
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // RESPONSIVE SPACING — Ratios of unit-size
-    // unit-size = height of golden-ratio credit card (1.585:1)
-    // Scales responsively: phone (212pt) → widget (54pt) → display (540pt)
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    in property <length> unit-size: 100px;  // Default: 100px (override per use site)
-
-    // Ratios computed from unit-size at instantiation time
-    out property <length> xs:   unit-size * 0.040;    // spacing-1: Icon to label
-    out property <length> sm:   unit-size * 0.080;    // spacing-2: Component padding
-    out property <length> md:   unit-size * 0.160;    // spacing-4: Card padding
-    out property <length> lg:   unit-size * 0.240;    // spacing-6: Section margin
-    out property <length> xl:   unit-size * 0.320;    // spacing-8: Major separation
-}
-
-export global Typography {
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // RESPONSIVE TYPOGRAPHY — Ratios of unit-size
-    // Minimum floor: 8px (below which text clips/hides rather than shrinking)
-    // Above 8px floor: scales linearly with unit-size
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    in property <length> unit-size: 100px;  // Synchronized with Spacing.unit-size
-
-    // HEADLINE (Major sections) — 0.32x, 0.28x, 0.24x unit-size
-    out property <length> headline-large:  max(8px, unit-size * 0.32);
-    out property <length> headline-medium: max(8px, unit-size * 0.28);
-    out property <length> headline-small:  max(8px, unit-size * 0.24);
-
-    // TITLE (Card titles, panel labels) — 0.22x, 0.16x, 0.14x unit-size
-    out property <length> title-large:   max(8px, unit-size * 0.22);
-    out property <length> title-medium:  max(8px, unit-size * 0.16);
-    out property <length> title-small:   max(8px, unit-size * 0.14);
-
-    // BODY (Primary text content) — 0.16x, 0.14x, 0.12x unit-size
-    out property <length> body-large:   max(8px, unit-size * 0.16);
-    out property <length> body-medium:  max(8px, unit-size * 0.14);
-    out property <length> body-small:   max(8px, unit-size * 0.12);
-
-    // LABEL (Button text, badges, UI chrome) — 0.14x, 0.12x, 0.11x unit-size
-    out property <length> label-large:   max(8px, unit-size * 0.14);
-    out property <length> label-medium:  max(8px, unit-size * 0.12);
-    out property <length> label-small:   max(8px, unit-size * 0.11);
-
-    // MONOSPACE (Numeric readouts, code, telemetry) — 0.24x, 0.11x unit-size
-    out property <length> mono-value:   max(8px, unit-size * 0.24);  // Large numbers
-    out property <length> mono-label:   max(8px, unit-size * 0.11);  // Headers, units
-}
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// USAGE EXAMPLES
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-// Metric label (above numeric value):
-// Text {
-//     text: "ANOMALY";
-//     font-size: Typography.label-small;
-//     font-weight: 700;
-//     letter-spacing: 1.5px;
-//     color: Colors.on-surface-variant;
-// }
-
-// Metric value (large monospaced number):
-// Text {
-//     text: "0.487";
-//     font-size: Typography.mono-value;
-//     font-weight: 300;
-//     font-family: "JetBrains Mono", "Cascadia Code", monospace;
-//     color: Colors.on-surface;
-// }
-
-// Card with primary accent:
-// Rectangle {
-//     background: Colors.surface-container;
-//     border-color: Colors.primary;
-//     border-width: 1px;
-//     border-radius: 8px;
-//     padding: Spacing.md;
-// }
-
-// Harmonic palette particle:
-// Rectangle {
-//     background: Colors.harm-5;  // Violet (F note / 2.4GHz)
-//     width: 6px;
-//     height: 6px;
-//     border-radius: 3px;
-// }

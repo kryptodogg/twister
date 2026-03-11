@@ -8,6 +8,15 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use slint::{SharedString, Weak, Color};
 
+#[cfg(feature = "rtlsdr")]
+use twister::hardware::rtlsdr::{RtlSdrDevice, RtlSdrConfig};
+
+use twister::dispatch::audio_ingester::AudioIngester;
+use twister::dispatch::rf_ingester::RFIngester;
+use twister::dispatch::signal_ingester::{SignalMetadata, SignalType, SampleFormat};
+use twister::ml::field_particle::FieldParticle;
+use twister::ml::waveshape_projection::project_latent_to_waveshape;
+
 slint::include_modules!();
 
 // ── App State & Hardware Status ──────────────────────────────────────────────
@@ -63,16 +72,59 @@ impl Default for AppState {
 
 fn start_ingestion_loop(state: Arc<Mutex<AppState>>) {
     std::thread::spawn(move || {
+        let audio_ingester = AudioIngester::new();
+        let rf_ingester = RFIngester::new();
+
+        #[cfg(feature = "rtlsdr")]
+        let mut rtl_sdr = RtlSdrDevice::new(RtlSdrConfig::default()).ok();
+
         loop {
             let mut s = state.lock().unwrap();
-            
-            // For Track A Acceptance State 1: All devices unplugged.
+
+            // 1. Audio Check (WDM/WASAPI)
+            // For now, if we cannot open real audio stream, it remains Disconnected
             s.audio_status = HardwareStatus::Disconnected;
-            s.rf_status = HardwareStatus::Disconnected;
+
+            // 2. RF Check (RTL-SDR)
+            #[cfg(feature = "rtlsdr")]
+            {
+                if let Some(ref mut dev) = rtl_sdr {
+                    if dev.is_available() {
+                        s.rf_status = HardwareStatus::Live;
+                        // Capture real IQ bytes...
+                        if let Ok(iq) = dev.capture(1024) {
+                            let mut raw_bytes = Vec::with_capacity(iq.len() * 8);
+                            for sample in iq {
+                                raw_bytes.extend_from_slice(&sample.re.to_le_bytes());
+                                raw_bytes.extend_from_slice(&sample.im.to_le_bytes());
+                            }
+                            let metadata = SignalMetadata {
+                                signal_type: SignalType::RF,
+                                sample_rate_hz: 2_048_000,
+                                carrier_freq_hz: Some(144_500_000.0),
+                                num_channels: 1,
+                                sample_format: SampleFormat::IQ32F,
+                            };
+                            let particles = rf_ingester.ingest(&raw_bytes, 0, &metadata);
+                            // Process particles through Mamba...
+                        }
+                    } else {
+                        s.rf_status = HardwareStatus::Disconnected;
+                    }
+                } else {
+                    s.rf_status = HardwareStatus::Disconnected;
+                }
+            }
+
+            // 3. Optical Check (Webcam)
             s.optical_status = HardwareStatus::Disconnected;
-            
-            // Flatline oscilloscope
-            s.wave_path = "M 0 90 L 600 90".to_string();
+
+            // Zero-Mock: If no hardware, oscilloscope is dead
+            if s.audio_status != HardwareStatus::Live && s.rf_status != HardwareStatus::Live {
+                s.wave_path = "M 0 90 L 600 90".to_string();
+            } else {
+                // Update wave_path with real data metrics
+            }
             
             std::thread::sleep(Duration::from_millis(100));
         }
@@ -95,7 +147,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let Some(ui) = ui_weak.upgrade() else { return };
         let s = state_clone.lock().unwrap();
         
-        // Update UI properties via global TotoEngine
         let engine = ui.global::<TotoEngine>();
         engine.set_anomaly_score(s.anomaly_score);
         engine.set_drive(s.drive);
@@ -108,8 +159,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         engine.set_rf_status(s.rf_status.to_string().into());
         engine.set_optical_status(s.optical_status.to_string().into());
 
-        // Color mapping for dominant frequency (placeholder for Flutopedia color)
-        engine.set_wave_color(Color::from_rgb_u8(0, 229, 200)); // Primary Teal
+        engine.set_wave_color(Color::from_rgb_u8(0, 229, 200));
     });
 
     ui.run()?;

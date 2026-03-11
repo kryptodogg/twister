@@ -1,0 +1,171 @@
+// === PRE-FLIGHT ===
+// Task:           Track 0, Milestone 0-D (Hardware Configuration Applet)
+// Files read:     ui/tokens.slint, assets/SKILL-SLINT-MD3.md,
+//                 assets/material-1.0/* (full Material Design 3 component library),
+//                 ui/toto.slint (reference for component style and structure)
+// Files in scope: ui/hardware.slint (new file)
+//                 src/hardware/mod.rs (new — SignalBackend wiring)
+// Acceptance:     [see acceptance criteria]
+// Findings:       Implemented "Density Sparkle" preview and [UNWIRED] badges.
+// === END PRE-FLIGHT ===
+
+import { Button, CheckBox, SpinBox, Slider, GroupBox, LineEdit, StandardListView, Switch } from "std-widgets.slint";
+
+export global Colors {
+    out property <color> surface-dim: #0F111A;
+    out property <color> surface-container: #1A1D2B;
+    out property <color> surface-container-high: #22253A;
+    out property <color> surface-container-highest: #292C3F;
+    out property <color> primary: #00E5C8;
+    out property <color> secondary: #A855F7;
+    out property <color> tertiary: #F59E0B;
+    out property <color> error: #FF5449;
+    out property <color> on-surface: #E1E3F0;
+    out property <color> on-surface-variant: #9CA3AF;
+    out property <color> outline: rgba(255, 255, 255, 12%);
+    out property <color> outline-variant: rgba(255, 255, 255, 6%);
+}
+
+export global HardwareEngine {
+    in property <string> rtl-status: "RED";
+    in property <string> pluto-status: "RED";
+    in property <string> audio-status: "RED";
+    in property <string> active-panel: "GALLERY";
+    in property <bool> rtl-wired: false;
+    in property <bool> pluto-wired: false;
+    in property <bool> audio-wired: false;
+
+    // Density Sparkle Data (Simplified)
+    in property <string> density-sparkle-path: "M 0 0";
+
+    callback take-snapshot();
+}
+
+component UnwiredBadge {
+    Rectangle {
+        background: Colors.tertiary;
+        border-radius: 2px;
+        height: 14px;
+        Text {
+            text: "[UNWIRED]";
+            color: Colors.on-surface;
+            font-size: 8px;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+    }
+}
+
+component StatusIndicator {
+    in property <string> status;
+    Rectangle {
+        width: 12px;
+        height: 12px;
+        border-radius: 6px;
+        background: status == "GREEN" ? #00FF00 : status == "YELLOW" ? #FFFF00 : #FF0000;
+    }
+}
+
+export component HardwareApp inherits Window {
+    title: "Calibration Surface";
+    background: Colors.surface-dim;
+    width: 800px;
+    height: 600px;
+
+    property <length> unit-size: 16px;
+
+    VerticalLayout {
+        padding: unit-size * 1.5;
+        spacing: unit-size;
+
+        if (HardwareEngine.active-panel == "GALLERY") : VerticalLayout {
+            spacing: unit-size;
+            HorizontalLayout {
+                Text {
+                    text: "DEVICE GALLERY";
+                    font-size: unit-size * 1.5;
+                    color: Colors.on-surface;
+                    font-weight: 700;
+                    letter-spacing: 1.5px;
+                }
+                Rectangle { horizontal-stretch: 1; }
+                Button {
+                    text: "FORENSIC SNAPSHOT";
+                    clicked => { HardwareEngine.take-snapshot(); }
+                }
+            }
+
+            // Device Cards with Golden Ratio (width = height * 1.618)
+            HorizontalLayout {
+                spacing: unit-size;
+                // Card Pattern
+                for device in [
+                    { name: "RTL-SDR", sub: "RX only · 24–1766 MHz", status: HardwareEngine.rtl-status, wired: HardwareEngine.rtl-wired, panel: "RTL" },
+                    { name: "Pluto+", sub: "TX + RX · 70 MHz – 6 GHz", status: HardwareEngine.pluto-status, wired: HardwareEngine.pluto-wired, panel: "PLUTO" },
+                    { name: "Soundcard", sub: "TX + RX audio · 20 Hz – 96 kHz", status: HardwareEngine.audio-status, wired: HardwareEngine.audio-wired, panel: "AUDIO" }
+                ] : Rectangle {
+                    background: Colors.surface-container;
+                    border-radius: unit-size * 0.5;
+                    border-width: 1px;
+                    border-color: Colors.outline;
+                    width: 240px;
+                    height: 148px; // 240 / 1.618
+                    VerticalLayout {
+                        padding: unit-size * 0.75;
+                        HorizontalLayout {
+                            Text { text: device.name; font-size: unit-size * 1.2; color: Colors.primary; }
+                            Rectangle { horizontal-stretch: 1; }
+                            StatusIndicator { status: device.status; }
+                        }
+                        Text { text: device.sub; color: Colors.on-surface-variant; font-size: unit-size * 0.75; }
+                        Rectangle { vertical-stretch: 1; }
+                        if (!device.wired) : UnwiredBadge { horizontal-alignment: right; }
+                    }
+                    TouchArea { clicked => { HardwareEngine.active-panel = device.panel; } }
+                }
+            }
+
+            // Density Sparkle Live Preview
+            Rectangle {
+                background: #0A0C14;
+                border-radius: unit-size * 0.5;
+                border-width: 1px;
+                border-color: Colors.outline;
+                height: 300px;
+                clip: true;
+
+                Text {
+                    text: "DENSITY SPARKLE (LIVE PREVIEW)";
+                    font-size: unit-size * 0.75;
+                    color: Colors.on-surface-variant;
+                    x: unit-size; y: unit-size;
+                }
+
+                Path {
+                    commands: HardwareEngine.density-sparkle-path;
+                    stroke: Colors.primary;
+                    stroke-width: 1px;
+                }
+            }
+        }
+
+        if (HardwareEngine.active-panel != "GALLERY") : VerticalLayout {
+            spacing: unit-size;
+            HorizontalLayout {
+                spacing: unit-size;
+                Button { text: "←"; clicked => { HardwareEngine.active-panel = "GALLERY"; } }
+                Text { text: HardwareEngine.active-panel + " CONFIGURATION"; font-size: unit-size * 1.5; color: Colors.on-surface; vertical-alignment: center; font-weight: 700; letter-spacing: 1.5px; }
+                Rectangle { horizontal-stretch: 1; }
+                Button { text: "SAVE DEFAULTS"; }
+            }
+
+            // Generic Config Stub
+            Rectangle {
+                background: Colors.surface-container;
+                border-radius: unit-size * 0.5;
+                vertical-stretch: 1;
+                Text { text: "Device Controls [UNWIRED]"; color: Colors.tertiary; horizontal-alignment: center; vertical-alignment: center; }
+            }
+        }
+    }
+}
