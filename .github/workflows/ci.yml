@@ -8,22 +8,28 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  HDF5_DIR: /usr/lib/x86_64-linux-gnu/hdf5/serial
 
 jobs:
   # ── Code Quality Gates ─────────────────────────────────────────────────────
   code-quality:
     name: Code Quality Checks
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libhdf5-dev pkg-config
+
     - name: Install Rust toolchain
       uses: dtolnay/rust-toolchain@stable
       with:
         components: rustfmt, clippy
-        
+
     - name: Install additional tools
       run: |
         cargo install cargo-audit
@@ -59,7 +65,17 @@ jobs:
       with:
         toolchain: ${{ matrix.rust }}
         components: rustfmt, clippy
-        
+
+    - name: Install HDF5 (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libhdf5-dev pkg-config
+
+    - name: Install HDF5 (macOS)
+      if: matrix.os == 'macos-latest'
+      run: brew install hdf5 pkg-config
+
     - name: Cache cargo registry
       uses: actions/cache@v4
       with:
@@ -308,9 +324,41 @@ jobs:
         mkdir -p artifacts
         cp target/release/twister artifacts/ || true
         cp target/release/examples/toto artifacts/ || true
-        
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: release-artifacts
         path: artifacts/
+
+  # ── Phase 4 ML Integration Testing ─────────────────────────────────────────
+  ml-testing:
+    name: Machine Learning Testing (Phase 4)
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libhdf5-dev pkg-config
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-ml-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Test TimeGNN and Pattern Discovery
+      run: cargo test timegnn_pattern_discovery --verbose
+
+    - name: Test Point Mamba Integration
+      run: cargo test point_mamba_integration --verbose
