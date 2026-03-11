@@ -42,6 +42,11 @@ A workgroup of 128 causes two sequential wavefronts with cross-wavefront overhea
   128 bytes (one Infinity Cache line). Use named active-padding fields — never
   `[u8; N]` dummy arrays. Every padding byte carries a pre-computed heuristic
   (e.g., `doppler_shift`, `phase_velocity`, `scattering_cross_section`).
+  The canonical example is `AetherParticle` (128 bytes, particle physics).
+  The second canonical example is `HeterodynePayload` (128 bytes, the struct
+  that carries all three sensory channels — haptic `F_tactile`, heterodyned
+  `f_audio` tone frequency, and Chronos motif token — across the CPU/GPU
+  boundary in a single cache line, ensuring no channel lags another).
 
 **Acceptance**: Shader compilation log shows no "suboptimal occupancy" warnings.
 GPU timestamp queries confirm the cull pass processes 1M Gaussians in ≤ 4ms.
@@ -165,6 +170,12 @@ produces Γ ≈ 1 at 2.437 GHz (channel 6) may produce Γ ≈ 0 at 2.462 GHz
 metal surface at measured distance. The visualization shows a dark band at the
 theoretical null distance. Verify null position matches λ/2 prediction within 5%.
 
+**Target state**: A room in which every active RF source has been retuned —
+phase-shifted or frequency-nudged by the TX pipeline — so that Γ across the
+occupied bands trends toward coherence rather than cancellation. The room should
+*look* like a chord: bright, saturated, organized. Not silent. Not suppressed.
+Resolved. This is what Emerald City is measuring toward.
+
 ---
 
 ## New Track: Haptic Sub-System (600Hz)
@@ -209,6 +220,14 @@ Haptic output splits into two perceptual bands:
 - Source: RF-GGX roughness `α_RF` and Double-Debye `ε_eff` at proxy location
 - Interpretation: "what material is the RF scattering from here"
 - Higher `α_RF` → higher HF vibration frequency
+- This band is targeted specifically at **Pacinian corpuscles** — the mechanoreceptors
+  in human fingertips sensitive to 200–300 Hz vibration. They are the biological
+  texture detectors. Driving them at frequencies derived from `α_RF` means the
+  user is learning material identity through the same sensory channel used to
+  distinguish silk from sandpaper. A WiFi signal bouncing off concrete (α_RF ≈ 0.01
+  at 2.4 GHz, smooth relative to wavelength, low HF content) feels categorically
+  different from the same signal bouncing off acoustic foam (α_RF ≈ 0.3, diffuse,
+  high HF content). The Pacinian corpuscles are being trained as RF material sensors.
 - This is the Daredevil channel: wood, metal, glass, and wet surfaces each
   produce distinct HF signatures. The user learns to identify materials
   without visual confirmation.

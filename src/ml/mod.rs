@@ -55,3 +55,9 @@ pub use field_particle::FieldParticle;
 
 pub mod field_pipeline;
 pub use field_pipeline::{FieldPipeline, MambaProjections, AudioSource};
+
+pub mod mamba;
+pub use mamba::{MambaModel, MambaConfig};
+
+pub mod waveshape;
+pub use waveshape::{WaveshapeProjector, WaveshapeConfig};

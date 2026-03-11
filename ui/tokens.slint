@@ -154,6 +154,15 @@ export global Typography {
     out property <length> mono-label:   max(8px, unit-size * 0.11);  // Headers, units
 }
 
+
+export global Fonts {
+    // Typography families. Inter is vendored in assets/fonts and registered by Rust.
+    out property <string> primary: "Inter";
+
+    // Monospace for live telemetry (avoid jitter). Prefer Space Mono when available.
+    out property <string> mono: "Cascadia Mono";
+}
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // USAGE EXAMPLES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

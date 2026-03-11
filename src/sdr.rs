@@ -87,11 +87,19 @@ fn downsample_spectrum(mags: &[f32], target: usize) -> Vec<f32> {
 
 // ── SDR channel ───────────────────────────────────────────────────────────────
 
+// Magnitude channel for waterfall visualization (mags, center_hz, sample_rate)
 pub type SdrMagSender = crossbeam_channel::Sender<(Vec<f32>, f32, f32)>;
 pub type SdrMagReceiver = crossbeam_channel::Receiver<(Vec<f32>, f32, f32)>;
 
-pub fn sdr_channel() -> (SdrMagSender, SdrMagReceiver) {
-    bounded(32)
+// IQ channel carrying raw I/Q blocks for ingestion/training
+pub type SdrIqSender = crossbeam_channel::Sender<IqBlock>;
+pub type SdrIqReceiver = crossbeam_channel::Receiver<IqBlock>;
+
+/// Create a pair of channels: magnitude + IQ
+pub fn sdr_channel() -> (SdrMagSender, SdrMagReceiver, SdrIqSender, SdrIqReceiver) {
+    let (mag_tx, mag_rx) = bounded(32);
+    let (iq_tx, iq_rx) = bounded(32);
+    (mag_tx, mag_rx, iq_tx, iq_rx)
 }
 
 struct SdrEngine {
@@ -116,7 +124,11 @@ impl SdrEngine {
 
 // ── Background SDR capture thread ─────────────────────────────────────────────
 
-pub fn spawn_sdr_thread(state: Arc<AppState>, mag_tx: SdrMagSender) -> std::thread::JoinHandle<()> {
+pub fn spawn_sdr_thread(
+    state: Arc<AppState>,
+    mag_tx: SdrMagSender,
+    iq_tx: SdrIqSender,
+) -> std::thread::JoinHandle<()> {
     std::thread::spawn(move || {
         let mut planner = FftPlanner::new();
 
@@ -251,3 +263,4 @@ pub fn list_devices() -> Vec<String> {
         .map(|i| format!("RTL-SDR device {}", i))
         .collect()
 }
+

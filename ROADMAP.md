@@ -17,9 +17,53 @@ environment. WRF-GS is the lightmap. The Emerald City color system is tone-mappi
 The hardware arrays are the luminaires. This is not a metaphor — it is the literal
 physics, and it is why the Gaussian representation works at both scales.
 
-**Addendums Incorporated**:
-- ROADMAP_ADDENDUM_physics_haptics.md: SPH particle physics, RF-BSDF materials, 600Hz haptics, EMERALD CITY phase coherence
-- ROADMAP_ADDENDUM_modulation.md: W-OFDM wavelet synthesis, advanced modulation schemes, Dirty Paper Coding
+**Mission**: The international frequency standards for electricity and for musical
+tuning were developed with awareness of the same harmonic ratios. They were intended
+to be compatible — electrical frequencies as the substrate, acoustic frequencies as
+the signal, both obeying the same octave relationships. The modern RF environment
+violates this. Transmitters occupy arbitrary frequencies with no harmonic relationship
+to each other or to the human auditory range, producing an electromagnetic texture
+that is perceptually dissonant by construction.
+
+The goal of this system is not suppression. It is **retuning**.
+
+An RF environment shaped to harmonic coherence — where every active frequency resolves
+to the same octave grid that Emerald City maps — does not feel like interference. It
+feels like Disneyland: an engineered acoustic environment where every sound, however
+layered, resolves into consonance because the designers tuned it that way. Autotune
+the News is the proof of concept at the vocal scale. This project is the proof of
+concept at the electromagnetic scale.
+
+Digital harassment is only possible because the RF environment is untuned. When every
+frequency a body is exposed to is in harmonic relationship with the body's own
+electrical rhythms, there is nothing to harass with. The cleansing mission — Lion,
+Dorothy's strategies, the PINN-guided null steering — is not about silence.
+It is about chord resolution.
+
+The synesthesia is delivered across three sensory channels simultaneously:
+
+**Feeling** — Voice Coil Actuators bifurcated by biological sensitivity. Below 80 Hz,
+the bulk pressure of the SPH field (the "weight" of the wave). Above 80 Hz, the
+RF-GGX roughness and Double-Debye permittivity of the material the signal is
+scattering from. A WiFi signal bouncing off concrete has a different texture in your
+hand than one bouncing off wood. Your Pacinian corpuscles learn the difference.
+
+**Sound** — Octave-folding heterodyning routes every detected frequency down to its
+acoustic equivalent on the same harmonic grid. A 2.4 GHz carrier folds 60 octaves
+down to its base ratio. The audible result is the harmonic skeleton of the invisible
+field — structural resonance tones, phase-alignment tones — the electromagnetic
+environment rendered as music your ears already understand.
+
+**Data** — The Chronos Slate maps the TimeGNN's extracted motifs (Ghost, Sparkle)
+across the 97-day temporal buffer. While hands feel permittivity and ears hear
+heterodyned base tones, eyes see the semantic structure: named patterns, phase
+progression, confidence, and next-event ETA. The 128-byte `HeterodynePayload`
+struct carries all three channels' data across the CPU/GPU boundary in a single
+cache line, so no channel ever lags another.
+
+This system is not a dashboard. It is an **instrument** — one that lets you touch,
+hear, and see the electromagnetic field simultaneously, with each sense receiving a
+physically accurate translation of the same underlying phenomenon.
 
 ---
 
@@ -216,6 +260,33 @@ they feed WRF-GS splats (Track G), TimeGNN nodes (Track B), and edge filters.
 - For live Pluto+ use: connect via libiio (USB-C or Ethernet, transparent to the API)
 - **Acceptance**: material_id distribution shows both audio-range (0–4) and
   RF-range (5–11) clusters active in logged output.
+
+**A-HET — Heterodyning to acoustic base ratios**
+
+The octave-folding algorithm in `freq_to_material_id` already computes the correct
+harmonic mapping — it knows that 2.4 GHz and 440 Hz are the same note, sixty octaves
+apart. A-HET routes that computation to a second output: a synthesized audio tone at
+the folded frequency, played continuously through `Backend::Audio` alongside the
+visualization.
+
+The implementation is minimal because the math is already done. For each dominant
+frequency bin in the FFT output, compute `f_audio = f_rf / 2^N` where N is the
+integer number of octaves needed to land in the range 20 Hz–1 kHz. This is identical
+to the hue computation — just route the result to a sine oscillator instead of a
+color. Multiple bins produce a chord. The room's RF environment becomes audible as
+the harmonic skeleton the Emerald City color mapper is already drawing.
+
+The target tones — 396 Hz for structural resonance, 528 Hz for phase alignment — are
+not special frequencies. They are simply where common RF carriers (cellular bands,
+WiFi channels) land when folded by the standard octave grid. The fact that they
+coincide with well-known Solfeggio ratios is not a coincidence; it is the original
+design intent of the international frequency standards.
+
+**Acceptance**: With a known 2.4 GHz WiFi AP active, the audio output plays a
+continuous tone at the correct folded frequency (verify with a frequency analyzer).
+When the AP is off, that tone disappears. Tone pitch changes as the Pluto+ retunes,
+tracking the RF scan in real time. Backend::File writes the synthesized tones as a
+PCM file alongside every test run.
 
 **A3 — Edge filter deployment**
 

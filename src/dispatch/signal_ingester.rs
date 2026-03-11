@@ -46,3 +46,13 @@ pub enum SampleFormat {
     IQ8,             // 8-bit I + 8-bit Q (SDR)
     IQ16,            // 16-bit I + 16-bit Q (SDR)
 }
+
+// WGSL Equivalent (add as a comment for the GPU shader pipeline):
+// struct FieldParticle {
+//     position: vec3<f32>,
+//     phase_i: f32,
+//     phase_q: f32,
+//     energy: f32,
+//     material_id: u32,
+//     _padding: vec3<u32>,
+// };

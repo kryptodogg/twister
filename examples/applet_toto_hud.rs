@@ -16,6 +16,7 @@ use twister::audio::{AudioEngine, record_channel, tdoa_channel};
 use twister::bispectrum::BISPEC_FFT_SIZE;
 use twister::state::AppState;
 use twister::training::MambaTrainer;
+use twister::ml::project_latent_to_waveshape;
 use twister::ui::{enable_acrylic_blur, get_resonant_color};
 
 fn build_wave_path(samples: &[f32]) -> String {
@@ -93,7 +94,7 @@ fn drain_latest(rx: &Receiver<Vec<f32>>, ring: &mut Vec<f32>, keep: usize) {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let state = Arc::new(AppState::new());
+    let state = AppState::new();
 
     // Audio: primary (merged) stream plus TDOA/record side channels.
     let (merge_tx, merge_rx) = bounded::<Vec<f32>>(32);
@@ -104,6 +105,8 @@ async fn main() -> anyhow::Result<()> {
     let sample_rate = audio.sample_rate;
 
     let trainer = Arc::new(MambaTrainer::new(state.clone())?);
+
+    twister::ui::register_default_fonts();
 
     let ui = TotoHudApplet::new()?;
     ui.set_unit_size(384.0);
@@ -132,6 +135,10 @@ async fn main() -> anyhow::Result<()> {
         let mut anomaly_score: f32 = 0.0;
         let mut learning_loss: f32 = 0.0;
         let mut dominant_freq_hz: f32 = 0.0;
+        let mut drive: f32 = 0.0;
+        let mut fold: f32 = 0.0;
+        let mut asym: f32 = 0.0;
+        let mut animation_tick: f32 = 0.0;
 
         loop {
             tick.tick().await;
@@ -170,8 +177,20 @@ async fn main() -> anyhow::Result<()> {
                 last_infer = Instant::now();
 
                 match trainer.infer(&mags).await {
-                    Ok((anomaly, _latent, recon)) => {
+                    Ok((anomaly, latent, recon)) => {
                         anomaly_score = anomaly;
+
+                        // Project latent -> drive/fold/asym (bounded for UI bars).
+                        let mut latent_128 = [0.0f32; 128];
+                        if !latent.is_empty() {
+                            for i in 0..128 {
+                                latent_128[i] = latent[i % latent.len()];
+                            }
+                        }
+                        let ws = project_latent_to_waveshape(&latent_128, sample_rate);
+                        drive = ws.drive.clamp(0.0, 1.0);
+                        fold = ws.foldback.clamp(0.0, 1.0);
+                        asym = (ws.asymmetry * 0.5 + 0.5).clamp(0.0, 1.0);
 
                         // Prefer a reconstruction-derived loss when available.
                         let mut mse = 0.0f32;
@@ -200,6 +219,8 @@ async fn main() -> anyhow::Result<()> {
                 }
             }
 
+            animation_tick += 0.016;
+
             let wave_slice = &ring[start..];
             let wave_path = build_wave_path(wave_slice);
             let loss_path = build_series_path(&loss_hist);
@@ -216,6 +237,10 @@ async fn main() -> anyhow::Result<()> {
                 ui.set_wave_path(wave_path.into());
                 ui.set_learning_loss(learning_loss);
                 ui.set_loss_path(loss_path.into());
+                ui.set_drive(drive);
+                ui.set_fold(fold);
+                ui.set_asym(asym);
+                ui.set_animation_tick(animation_tick);
                 ui.set_resonant_color(resonant_color);
             });
         }
@@ -224,3 +249,5 @@ async fn main() -> anyhow::Result<()> {
     ui.run()?;
     Ok(())
 }
+
+

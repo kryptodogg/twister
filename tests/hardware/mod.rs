@@ -81,13 +81,14 @@ mod hardware_tests {
         assert!(matched_patterns >= 3,
             "Only found {}/4 expected device patterns", matched_patterns);
 
-        // Verify high sample rate support (192 kHz for standard mode)
+        // Verify high sample rate support (192 kHz for the primary array + rear mic/line-in).
+        // Exception: the Logitech C925e mic is typically 2-channel at 32 kHz and is not a 192 kHz source.
         let high_sample_rate_devices: Vec<_> = device_info.iter()
             .filter(|d| d.supported_sample_rates.iter().any(|&rate| rate >= 192_000))
             .collect();
 
         assert!(!high_sample_rate_devices.is_empty(),
-            "No devices support 192 kHz sample rate required for standard mode");
+            "No devices support 192 kHz sample rate required for the primary capture path (excluding C925e camera mic)");
 
         println!("✅ Audio device enumeration test PASSED");
         println!("   - {} devices found (≥4 required)", device_info.len());
@@ -124,39 +125,69 @@ mod hardware_tests {
         println!("\n📡 PLUTO+ SDR CONNECTIVITY TEST");
         println!("===============================");
 
-        // This test requires libiio and Pluto+ hardware
-        // TODO: Implement actual Pluto+ detection and basic I/Q streaming
+        // attempt to open Pluto+ via libiio (rtlsdr wrapper)
+        if let Ok(mut engine) = twister::rtlsdr::RtlSdrEngine::with_device(0) {
+            println!("Opened Pluto+ device successfully");
+            let _ = engine.set_sample_rate(2_048_000);
+            let _ = engine.set_gain(10.0);
+            // grab one block of IQ samples
+            if let Ok(iq) = engine.read_block(16384) {
+                println!("Received {} IQ samples", iq.len());
+                assert!(!iq.is_empty(), "No IQ samples read from Pluto+");
+            } else {
+                panic!("Failed to read IQ block from Pluto+");
+            }
+        } else {
+            panic!("Could not open Pluto+ device. Ensure drivers are installed and @third_party contains the DLL.");
+        }
 
-        println!("⚠️  Pluto+ SDR test placeholder - requires libiio integration");
-        println!("   Expected: Pluto+ device detected at USB VID:PID");
-        println!("   Basic I/Q streaming at 2.4 GHz center frequency");
-
-        // Placeholder assertion
-        let pluto_connected = true; // Would check actual hardware presence
-        assert!(pluto_connected, "Pluto+ SDR not connected");
-
-        println!("✅ Pluto+ SDR connectivity test PASSED (placeholder)");
+        println!("✅ Pluto+ SDR connectivity test PASSED");
     }
 
     /// Test 4: Signal Ingestion Pipeline
-    /// Verifies end-to-end signal processing from audio input to FFT
+    /// Verifies end-to-end signal processing from audio/RF input to FFT
     #[test]
     fn test_signal_ingestion_pipeline() {
         println!("\n🎵 SIGNAL INGESTION PIPELINE TEST");
         println!("=================================");
 
-        // This test requires the full signal processing pipeline
-        // TODO: Implement actual signal ingestion and FFT validation
+        // instantiate pipeline and feed it artificial audio+RF data
+        let mut pipeline = twister::ml::FieldPipeline::new();
 
-        println!("⚠️  Signal ingestion test placeholder - requires audio pipeline");
-        println!("   Expected: Audio capture → 512-bin FFT → V-buffer update");
-        println!("   Real-time spectrum analysis at 192 kHz sample rate");
+        // audio sample: 16-bit sine tone
+        let mut audio_bytes = Vec::new();
+        for _ in 0..480 {
+            let sample = (0.5 * i16::MAX as f32) as i16;
+            audio_bytes.extend_from_slice(&sample.to_le_bytes());
+        }
+        let audio_meta = twister::dispatch::SignalMetadata {
+            signal_type: twister::dispatch::SignalType::Audio,
+            sample_rate_hz: 48000,
+            carrier_freq_hz: None,
+            num_channels: 1,
+            sample_format: twister::dispatch::SampleFormat::I16,
+        };
+        let proj_audio = pipeline.ingest_bytes(&audio_bytes, 0, &audio_meta);
+        assert!(proj_audio.is_some(), "Audio ingestion produced no projection");
 
-        // Placeholder assertion
-        let pipeline_functional = true; // Would test actual signal flow
-        assert!(pipeline_functional, "Signal ingestion pipeline not functional");
+        // RF sample: simple IQ8 square wave
+        let mut rf_bytes = Vec::new();
+        for i in 0..256 {
+            let v = if i % 2 == 0 { 255u8 } else { 0u8 };
+            rf_bytes.push(v);
+            rf_bytes.push(v);
+        }
+        let rf_meta = twister::dispatch::SignalMetadata {
+            signal_type: twister::dispatch::SignalType::RF,
+            sample_rate_hz: 2048000,
+            carrier_freq_hz: Some(2.4e9),
+            num_channels: 2,
+            sample_format: twister::dispatch::SampleFormat::IQ8,
+        };
+        let proj_rf = pipeline.ingest_bytes(&rf_bytes, 0, &rf_meta);
+        assert!(proj_rf.is_some(), "RF ingestion produced no projection");
 
-        println!("✅ Signal ingestion pipeline test PASSED (placeholder)");
+        println!("✅ Signal ingestion pipeline test PASSED (basic audio+RF)");
     }
 
     /// Test 5: Mamba Autoencoder Training
@@ -205,7 +236,20 @@ mod hardware_tests {
     /// Verifies wavelet-based OFDM transmission synthesis
     #[test]
     fn test_w_ofdm_wavelet_synthesis() {
-        println!("\n🌊 W-OFDM WAVELET SYNTHESIS TEST");
+        // ensure the helper WGSL shader compiles as part of the pipeline
+        use wgpu::util::DeviceExt;
+        println!("\n🧩 W-OFDM SHADER COMPILATION TEST");
+        println!("================================");
+        let instance = wgpu::Instance::default();
+        let adapter = futures::executor::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions::default())).expect("Adapter");
+        let (device, _queue) = futures::executor::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default(), None)).expect("Device");
+        let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+            label: Some("waveform"),
+            source: wgpu::ShaderSource::Wgsl(include_str!("../../shaders/waveform.wgsl").into()),
+        });
+        // if creation succeeded, compilation passed
+        println!("✅ WGSL shader compiled successfully");
+    }        println!("\n🌊 W-OFDM WAVELET SYNTHESIS TEST");
         println!("================================");
 
         // This test requires wavelet transform implementation
@@ -286,20 +330,26 @@ mod hardware_tests {
     }
 
     /// Test 12: 600Hz Haptic Feedback System
-    /// Verifies high-frequency tactile feedback decoupled from visual frame
+    ///
+    /// This is not just controller rumble (Joy-Con / DualSense). It is radio haptics:
+    /// perceivable tactile sensation on human skin driven by RF-field interactions and
+    /// material coupling (future: RF-BSDF + Emerald City lighting).
+    ///
+    /// Verifies high-frequency tactile update loops decoupled from the visual frame.
     #[test]
     fn test_600hz_haptic_feedback() {
         println!("\n✋ 600Hz HAPTIC FEEDBACK TEST");
         println!("============================");
 
-        // This test requires VCA hardware and 600Hz PBD solve
-        // TODO: Implement localized particle solve at 600Hz for tactile sensation
+        // This test targets radio-haptic loops: the tactile system runs at high rate
+        // (hundreds of Hz) even when rendering is 60 Hz. HD rumble is a convenient
+        // validation tool, but the end goal is RF felt on skin.
+        // TODO: Implement localized particle/PBD solve at 600 Hz for tactile drive.
 
-        println!("⚠️  Haptic feedback test placeholder - requires VCA hardware + 600Hz solve");
-        println!("   Expected: Pacinian corpuscle stimulation ≥300Hz for continuous feel");
-        println!("   GPU compute (<0.5ms) + async readback + CPU VCA drive (<1.67ms total)");
-
-        // Placeholder assertion
+        println!("⚠️  Radio-haptics placeholder - requires 600 Hz loop + actuator coupling");
+        println!("   Expected: Pacinian corpuscle stimulation at >= 300 Hz for continuous feel");
+        println!("   Expected: RF/material coupling (RF-BSDF) can encode texture-like sensations");
+// Placeholder assertion
         let haptic_feedback_continuous = true; // Would test 600Hz update rate
         assert!(haptic_feedback_continuous, "600Hz haptic feedback not continuous");
 

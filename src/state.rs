@@ -485,6 +485,13 @@ pub struct AppState {
     pub field_fold: AtomicF32,
     /// Asym projection from FieldPipeline (Track A-1).
     pub field_asym: AtomicF32,
+    /// Dominant frequency in Hz (peak FFT bin) — [E2] Applet wiring.
+    /// Updated ~100ms by dispatch loop, read by 60Hz UI timer.
+    /// Used for resonant color mapping (freq → hue) in Toto HUD.
+    pub dominant_freq_hz: AtomicF32,
+    /// Rolling loss history for visualization (VecDeque, capacity ~100, ~2s @ 50Hz).
+    /// [E2] Applet loss sparkline updates from this.
+    pub loss_history: Mutex<std::collections::VecDeque<f32>>,
     /// 64-dimensional latent embedding from Mamba inference (MAMBA_LATENT_DIM).
     pub latent_embedding: Mutex<Vec<f32>>,
     /// Full-range ANC phase calibration data (1 Hz - 12.288 MHz).
@@ -639,6 +646,10 @@ impl AppState {
             field_drive: AtomicF32::new(0.0),
             field_fold: AtomicF32::new(0.0),
             field_asym: AtomicF32::new(0.0),
+            /// [APPLET E1-E2] Dominant frequency tracking for resonant color mapping.
+            dominant_freq_hz: AtomicF32::new(0.0),
+            /// [APPLET E2] Loss history for training convergence sparkline visualization.
+            loss_history: Mutex::new(std::collections::VecDeque::with_capacity(100)),
             latent_embedding: Mutex::new(vec![0.0; 128]), // Initialize 64-dim zero vector (MAMBA_LATENT_DIM)
             anc_calibration: Mutex::new(crate::anc_calibration::FullRangeCalibration::new()),
             anc_recording: Mutex::new(crate::anc_recording::RecordingBuffer::new(192_000.0)),

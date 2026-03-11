@@ -176,8 +176,8 @@ async fn main() -> anyhow::Result<()> {
         &format!("Log: {}", forensic.log_path().display()),
     );
 
-    let (sdr_tx, sdr_rx) = sdr_channel();
-    let sdr_thread_handle = twister::sdr::spawn_sdr_thread(state.clone(), sdr_tx);
+    let (sdr_tx, sdr_rx, sdr_iq_tx, sdr_iq_rx) = sdr_channel();
+    let sdr_thread_handle = twister::sdr::spawn_sdr_thread(state.clone(), sdr_tx, sdr_iq_tx);
 
     let mamba_trainer = Arc::new(
         twister::training::MambaTrainer::new(state.clone()).context("Mamba trainer init")?,
@@ -334,6 +334,27 @@ async fn main() -> anyhow::Result<()> {
                 }
             }
 
+            // process any SDR IQ blocks – feed to FieldPipeline as RF signal
+            while let Ok(iq_block) = sdr_iq_rx.try_recv() {
+                // serialize complex samples to interleaved IQ8 format for ingestion
+                let mut buf = Vec::with_capacity(iq_block.iq.len() * 2);
+                for c in iq_block.iq.iter() {
+                    let i_byte = ((c.re.clamp(-1.0, 1.0) * 127.0) + 127.5) as u8;
+                    let q_byte = ((c.im.clamp(-1.0, 1.0) * 127.0) + 127.5) as u8;
+                    buf.push(i_byte);
+                    buf.push(q_byte);
+                }
+                let metadata = SignalMetadata {
+                    signal_type: SignalType::RF,
+                    sample_rate_hz: iq_block.sample_rate as u32,
+                    carrier_freq_hz: Some(iq_block.center_hz as f64),
+                    num_channels: 2,
+                    sample_format: SampleFormat::IQ8,
+                };
+                if let Some(proj) = field_pipeline.ingest_bytes(&buf, pipeline_timestamp_us.elapsed().as_micros() as u64, &metadata) {
+                    last_projections = Some(proj);
+                }
+            }
             // ANC recording
             let mut run_anc_analysis = false;
             if let Ok(mut rec) = state_disp.anc_recording.lock() {
@@ -376,10 +397,22 @@ async fn main() -> anyhow::Result<()> {
             }
 
             // SDR frames
+            // process magnitude updates (waterfall + compute dominant frequency)
             while let Ok((mags, sdr_last_center_hz, sdr_last_rate)) = sdr_rx.try_recv() {
                 if !state_disp.rtl_connected.load(Ordering::Relaxed) {
                     state_disp.rtl_connected.store(true, Ordering::Relaxed);
                 }
+                // compute dominant frequency and record in state
+                if let Some((max_idx, _)) = mags
+                    .iter()
+                    .enumerate()
+                    .max_by(|a, b| a.1.partial_cmp(b.1).unwrap_or(std::cmp::Ordering::Equal))
+                {
+                    // Nyquist = rate/2, bins = V_FREQ_BINS
+                    let freq = (max_idx as f32 / mags.len() as f32) * (sdr_last_rate / 2.0);
+                    state_disp.dominant_freq_hz.store(freq, Ordering::Relaxed);
+                }
+
                 let (rgba, sbars) = sdr_waterfall.push_row(&mags, 1.0, sdr_last_rate / 2.0);
                 if let Ok(mut w) = state_disp.sdr_waterfall_rgba.lock() {
                     *w = rgba;

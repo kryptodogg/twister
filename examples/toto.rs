@@ -2,7 +2,8 @@
 // Toto HUD Applet (mock stream)
 //
 // This is a fast UI demo: it cycles dominant frequency to show Emerald City
-// octave-fold color transitions, while animating wave and loss paths.
+// octave-fold color transitions, while animating wave/loss paths and
+// drive/fold/asym projection bars.
 
 slint::include_modules!();
 
@@ -79,6 +80,10 @@ struct WidgetState {
     wave_path: String,
     learning_loss: f32,
     loss_path: String,
+    drive: f32,
+    fold: f32,
+    asym: f32,
+    animation_tick: f32,
 }
 
 struct MockStream {
@@ -115,6 +120,11 @@ impl MockStream {
         let anomaly = 0.150 + 0.030 * (self.phase * 0.9).sin().abs();
         let loss = 0.040 + 0.015 * (self.phase * 0.7).cos().abs();
 
+        // Projection bars: smooth drift within 0..1.
+        let drive = (0.25 + 0.15 * (self.phase * 0.3).sin()).clamp(0.0, 1.0);
+        let fold = (0.70 + 0.20 * (self.phase * 0.2).cos()).clamp(0.0, 1.0);
+        let asym = (0.15 + 0.10 * (self.phase * 0.5).sin().abs()).clamp(0.0, 1.0);
+
         self.loss_hist.push_back(loss);
         while self.loss_hist.len() > 64 {
             self.loss_hist.pop_front();
@@ -126,6 +136,10 @@ impl MockStream {
             wave_path: build_wave_path(self.phase, self.freq_step),
             learning_loss: loss,
             loss_path: build_series_path(&self.loss_hist),
+            drive,
+            fold,
+            asym,
+            animation_tick: self.phase,
         }
     }
 }
@@ -142,6 +156,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let _ = tx.try_send(state);
         }
     });
+
+    twister::ui::register_default_fonts();
 
     let window = TotoHudApplet::new()?;
     window.set_unit_size(384.0);
@@ -166,6 +182,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 w.set_wave_path(state.wave_path.into());
                 w.set_learning_loss(state.learning_loss);
                 w.set_loss_path(state.loss_path.into());
+                w.set_drive(state.drive);
+                w.set_fold(state.fold);
+                w.set_asym(state.asym);
+                w.set_animation_tick(state.animation_tick);
                 w.set_resonant_color(color);
             }
         },
@@ -174,4 +194,3 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     window.run()?;
     Ok(())
 }
-
