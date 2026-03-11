@@ -439,7 +439,10 @@ mod tests {
     #[test]
     fn test_color_features() {
         let ingester = VisualIngester::new(8, 8);
-        let frame = vec![255u8, 0u8, 0u8; 8 * 8]; // Pure red
+        let mut frame = vec![0u8; 8 * 8 * 3]; // RGB888
+        for px in frame.chunks_exact_mut(3) {
+            px[0] = 255; // R
+        }
         let color = ingester.extract_color_features(&frame);
         
         assert_eq!(color.len(), 4);
@@ -448,3 +451,4 @@ mod tests {
         assert!(color[2] < 0.1); // Low blue
     }
 }
+

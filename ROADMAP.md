@@ -2,12 +2,24 @@
 ## Parallel Track Architecture for Unblocked Development
 
 **Platform**: Windows 11 → NixOS (post-stabilization)  
-**GPU Backend**: wgpu Vulkan with experimental features, cross-platform (Windows/Linux/NixOS)  
+**GPU Backend**: wgpu DX12 now, Vulkan/ROCm after stabilization  
 **Principle**: Every track produces a runnable artifact. No track blocks another.  
 **Philosophy**: Anakin building C-3PO. Centralize everything on the tethered workbench
 first. Sever the tether only after the neural architecture is mathematically proven
 and compiles flawlessly without mock stubs.  
 **Agent rule**: Read `assets/SKILL-SLINT-MD3.md` before writing any `.slint` file.
+
+**Core framing**: This system is a **lighting engine where RF is the photon source**.
+Maxwell's equations are scale-invariant — a Gaussian splat at 2.4 GHz and a Gaussian
+splat at 550nm are the same primitive, parameterized differently. Oz doesn't visualize
+RF *data*; it renders an RF *scene*, the same way a path tracer renders a lit 3D
+environment. WRF-GS is the lightmap. The Emerald City color system is tone-mapping.
+The hardware arrays are the luminaires. This is not a metaphor — it is the literal
+physics, and it is why the Gaussian representation works at both scales.
+
+**Addendums Incorporated**:
+- ROADMAP_ADDENDUM_physics_haptics.md: SPH particle physics, RF-BSDF materials, 600Hz haptics, EMERALD CITY phase coherence
+- ROADMAP_ADDENDUM_modulation.md: W-OFDM wavelet synthesis, advanced modulation schemes, Dirty Paper Coding
 
 ---
 
@@ -64,7 +76,7 @@ phase. Do not deploy to standalone edge until the full pipeline is proven.
 │                      MAIN PC (Windows 11)                            │
 │    RX 6700 XT + Ryzen 7 5700X + 64GB RAM (SAM enabled)              │
 │                                                                      │
-│  • Mamba / TimeGNN / LNN / PINN training  (Burn + wgpu Vulkan)        │
+│  • Mamba / TimeGNN / LNN / PINN training  (Burn + wgpu DX12)        │
 │  • WRF-GS 128-D Gaussian splat scene + hardware ray tracing         │
 │  • Slint UI (Toto, Chronos)                                         │
 │  • Orchestrates all edge devices; master of all model training       │
@@ -153,6 +165,28 @@ with an ARM CPU and FPGA fabric. This has concrete implications for the architec
 Every color token matches `SKILL-SLINT-MD3.md §2`.
 
 **Blocks**: Tracks E and F.
+
+### 0-C: Hardware Gate — Smart Access Memory (SAM) Verification
+
+**Why**: The RX 6700 XT + Ryzen 7 5700X supports AMD Smart Access Memory (ReBAR),
+which exposes the full 12GB VRAM to the CPU as a single contiguous BAR region.
+When disabled, the CPU can only address 256MB of VRAM at a time, forcing the driver
+to window-map uploads and destroying the zero-copy pipeline that Tracks G and H depend on.
+Every GPU buffer workflow in this codebase assumes SAM is active.
+
+**Verification**:
+```powershell
+# In GPU-Z or via wgpu adapter info — BAR size should show ~12GB, not 256MB
+# Or check Device Manager → Display Adapter → Resources → Memory Range size
+```
+In wgpu code: query `adapter.get_info()` and log the result to `assets/hardware_gate.txt`.
+
+**Acceptance**: Confirm SAM/ReBAR active before writing any `wgpu::Buffer` with
+`BufferUsages::STORAGE | BufferUsages::COPY_DST`. Document result in `assets/hardware_gate.txt`.
+If SAM is disabled, enable it in BIOS (AMD CBS → NBIO → Above 4G Decoding + ReBAR Support)
+before proceeding with any Track G or H work.
+
+**Blocks**: Tracks G, H (indirectly — correctness assumption for all large GPU buffers).
 
 ---
 
@@ -262,6 +296,12 @@ microsecond RF bursts and 12-hour thermal/power cycles.
   `dx/dt = -x/τ + f(x, input, t)` where τ is a learned time constant per node
 - Pass actual elapsed time between FieldParticle observations — do not assume
   uniform timesteps. This is the key architectural difference from a standard RNN.
+- **Preferred framework**: Use [Burn](https://burn.dev) (`burn` crate) for training
+  from B5 onward. Burn's autodiff graph fuses FFT → embedding → inference → loss
+  into a single kernel where possible, and its Vulkan/WGPU backend survives the
+  NixOS/ROCm migration without a rewrite. Earlier milestones (B1–B4) may use
+  PyTorch/tch-rs if already in flight — do not retrofit, just don't start new
+  training code in PyTorch after B4 is green.
 - **Acceptance**: Feed TimeGNN a sequence with 30% of steps randomly dropped.
   LNN prediction error must not exceed baseline by more than 15%.
   A fixed-step RNN on the same data will degrade significantly — document both
@@ -386,9 +426,9 @@ microsecond RF bursts and 12-hour thermal/power cycles.
 
 ### Track G — WRF-GS Scene (wgpu) + PINN Wrapper
 
-**Depends on**: A1 (Mamba 128-D embeddings), E2 (wgpu Vulkan proven in widget)  
+**Depends on**: A1 (Mamba 128-D embeddings), E2 (wgpu DX12 proven in widget)  
 **Independent of**: Tracks B, C, D, F  
-**Platform**: Windows 11, wgpu Vulkan with experimental features and Vulkan interop.
+**Platform**: Windows 11, wgpu DX12. ROCm is explicitly post-stabilization.
 
 **Goal**: wgpu render pass where each Gaussian carries a 128-D Mamba embedding
 as its "color." Wavelet decomposition allows a single 3D scene to represent
@@ -574,8 +614,8 @@ I-3                       ✓                                          ✓
 | D | Python | langgraph, ollama, joplin-api | No |
 | E | Rust + Slint | slint 1.15, windows-sys | No |
 | F | Rust + Slint | slint 1.15 | No |
-| G | Rust | wgpu 28 | Yes (Vulkan) |
-| H | Rust | wgpu 28, nalgebra | Yes (Vulkan) |
+| G | Rust | wgpu 28 | Yes (DX12) |
+| H | Rust | wgpu 28, nalgebra | Yes (DX12) |
 | I | Rust + Python | all of the above | Yes |
 
 ---
@@ -604,14 +644,14 @@ I-3                       ✓                                          ✓
 
 - [ ] A1: Drive/Fold/Asym confirmed varying from real particle input
 - [ ] E2: Toto widget live on Windows 11 with real data
-- [ ] G1: WRF-GS render at 60 FPS on Windows 11 Vulkan
+- [ ] G1: WRF-GS render at 60 FPS on Windows 11 DX12
 - [ ] B1: TimeGNN checkpoint saves without error
 - [ ] 72 hours of continuous operation on Windows 11 without crash
 
-**Migration adds**: ROCm HIP backend, KWin compositor blur,
+**Migration adds**: ROCm HIP backend, Vulkan ray tracing, KWin compositor blur,
 cooperative group kernels for progressive BVH refinement.  
-**Architecture note**: Already using wgpu Vulkan on Windows 11 for experimental feature access
-and Vulkan interop. NixOS migration leverages same Vulkan backend, no abstraction layer change.
+**Migration changes nothing**: APIs, Slint components, track structure, Pluto+ libiio
+interface — all stay identical. DX12 → Vulkan is a backend swap, not a rewrite.
 
 ---
 
