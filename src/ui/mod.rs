@@ -1,5 +1,6 @@
-pub mod copilot_handler;
-pub use copilot_handler::*;
+pub mod hardware_logic;
+pub mod toto_logic;
 
+pub mod app_controller;
+pub mod copilot_handler;
 pub mod transparency;
-pub use transparency::{compositor_supports_transparency, enable_acrylic_blur, get_window_background_color};
