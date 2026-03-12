@@ -7,13 +7,12 @@
 //! - Sigma-delta PDM modulation kernel
 //! - Warp scheduling for <35ms latency
 
-use crate::utils::error::{Result, GPUError};
+use crate::utils::error::Result;
 use wgpu::{
-    Adapter, Device, Queue, Instance, Surface, CommandEncoder,
+    Adapter, Device, Queue, Instance,
     BindGroup, Buffer, BufferUsages,
-    ShaderModule, PipelineLayout, BindGroupLayout,
+    PipelineLayout, BindGroupLayout,
 };
-use wgpu_types::{Backend, PowerPreference, RequestAdapterOptions};
 use std::sync::Arc;
 use std::time::Duration;
 use parking_lot::Mutex;
@@ -23,9 +22,9 @@ use bytemuck::{Pod, Zeroable};
 #[derive(Debug, Clone)]
 pub struct WgpuConfig {
     /// Preferred backend (Vulkan, Dx12, Metal, Gl)
-    pub backend: Backend,
+    pub backend: wgpu::Backends,
     /// Power preference
-    pub power_preference: PowerPreference,
+    pub power_preference: wgpu::PowerPreference,
     /// V-buffer pool size in bytes
     pub vbuffer_pool_size: usize,
     /// Enable warp scheduling
@@ -35,8 +34,8 @@ pub struct WgpuConfig {
 impl Default for WgpuConfig {
     fn default() -> Self {
         Self {
-            backend: Backend::all(),
-            power_preference: PowerPreference::HighPerformance,
+            backend: wgpu::Backends::all(),
+            power_preference: wgpu::PowerPreference::HighPerformance,
             vbuffer_pool_size: 256 * 1024 * 1024, // 256 MB
             warp_scheduling: true,
         }
@@ -102,32 +101,33 @@ pub struct PDMParams {
 impl GPUContext {
     /// Create a new GPU context
     pub async fn new(config: WgpuConfig) -> Result<Self> {
-        let instance = Instance::new(wgpu::InstanceDescriptor {
+        let instance = Instance::new(&wgpu::InstanceDescriptor {
             backends: config.backend.into(),
             ..Default::default()
         });
 
         let adapter = instance
-            .request_adapter(&RequestAdapterOptions {
+            .request_adapter(&wgpu::RequestAdapterOptions {
                 power_preference: config.power_preference,
                 force_fallback_adapter: false,
                 compatible_surface: None,
             })
             .await
-            .ok_or_else(|| GPUError::NoAdapter)?;
+            .map_err(|_| anyhow::anyhow!("No GPU adapter found"))?;
 
         let (device, queue) = adapter
             .request_device(
                 &wgpu::DeviceDescriptor {
                     label: Some("Twister GPU Device"),
-                    required_features: wgpu::Features::COMPUTE_SHADER | wgpu::Features::TIMESTAMP_QUERY,
+                    required_features: wgpu::Features::TIMESTAMP_QUERY,
                     required_limits: wgpu::Limits::default(),
                     memory_hints: wgpu::MemoryHints::Performance,
+                    trace: wgpu::Trace::default(),
+                    experimental_features: wgpu::ExperimentalFeatures::default(),
                 },
-                None,
             )
             .await
-            .map_err(|e| GPUError::DeviceRequestFailed(e.to_string()))?;
+            .map_err(|e| anyhow::anyhow!("Device request failed: {}", e))?;
 
         Ok(Self {
             instance,
@@ -172,16 +172,16 @@ impl GPUContext {
     /// Read data from a staging buffer
     pub async fn read_buffer<T: Pod>(&self, buffer: &Buffer) -> Result<Vec<T>> {
         let buffer_slice = buffer.slice(..);
-        let (tx, rx) = futures::channel::oneshot::channel();
+        let (tx, rx) = tokio::sync::oneshot::channel();
 
         buffer_slice.map_async(wgpu::MapMode::Read, move |result| {
             let _ = tx.send(result);
         });
 
-        self.device.poll(wgpu::Maintain::wait()).panic_on_timeout();
+        self.device.poll(wgpu::PollType::Wait { submission_index: None, timeout: None });
         rx.await
-            .map_err(|_| GPUError::BufferMapping("Channel error".into()))?
-            .map_err(|e| GPUError::BufferMapping(e.to_string()))?;
+            .map_err(|_| anyhow::anyhow!("Channel error"))?
+            .map_err(|e| anyhow::anyhow!("Buffer mapping failed: {}", e))?;
 
         let data = buffer_slice.get_mapped_range();
         let result = bytemuck::cast_slice(&data).to_vec();
@@ -271,7 +271,7 @@ impl ComputeKernelManager {
             &wgpu::PipelineLayoutDescriptor {
                 label: Some("BSS Pipeline Layout"),
                 bind_group_layouts: &[&bind_group_layout],
-                push_constant_ranges: &[],
+                immediate_size: 0,
             }
         );
 
@@ -346,7 +346,7 @@ impl ComputeKernelManager {
             &wgpu::PipelineLayoutDescriptor {
                 label: Some("FFT Pipeline Layout"),
                 bind_group_layouts: &[&bind_group_layout],
-                push_constant_ranges: &[],
+                immediate_size: 0,
             }
         );
 
@@ -421,7 +421,7 @@ impl ComputeKernelManager {
             &wgpu::PipelineLayoutDescriptor {
                 label: Some("PDM Pipeline Layout"),
                 bind_group_layouts: &[&bind_group_layout],
-                push_constant_ranges: &[],
+                immediate_size: 0,
             }
         );
 
@@ -693,10 +693,10 @@ impl WarpScheduler {
     pub fn schedule(&self, work: impl FnOnce() + Send + 'static) -> Result<()> {
         // Submit work to GPU queue
         work();
-        
+
         // Ensure completion within target latency
-        self.context.device.poll(wgpu::Maintain::Wait);
-        
+        self.context.device.poll(wgpu::PollType::Wait { submission_index: None, timeout: None });
+
         Ok(())
     }
 

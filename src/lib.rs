@@ -87,7 +87,7 @@ pub mod twister;
 pub mod embeddings;
 
 // Evidence export
-pub mod evidence_export;
+// pub mod evidence_export; — deleted, Track C1 forensic module replaces
 
 // Parametric speaker
 pub mod parametric;

@@ -11,7 +11,9 @@ pub struct RtlSdrEngine {
 #[cfg(feature = "rtlsdr")]
 impl RtlSdrEngine {
     pub fn with_device(index: u32) -> Result<Self> {
-        match rtlsdr::open(index) {
+        // SAFETY: RTL-SDR device index is always a small non-negative value (0-7)
+        // Conversion from u32 to i32 is safe here.
+        match rtlsdr::open(index as i32) {
             Ok(device) => Ok(Self { device: Some(device) }),
             Err(e) => Err(anyhow!("Failed to open RTL-SDR device {}: {:?}", index, e)),
         }

@@ -52,7 +52,14 @@ impl SignalIngester for RFIngester {
                 anomaly_score: 0.0,
                 material_id: 5,
                 motif_hint: 255,
-                _padding: [0.0; 8],
+                scattering_cross_section: 0.0,
+                permittivity_real: 0.0,
+                permittivity_imag: 0.0,
+                reserved_for_h2_null_phase: 0.0,
+                reserved_for_ha_haptic_freq: 0.0,
+                reserved_for_grb_water_saturation: 0.0,
+                reserved_for_j1_proprioception: 0.0,
+                reserved_for_forensic_hash_lo: 0,
             });
         }
         particles

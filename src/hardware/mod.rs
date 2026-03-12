@@ -4,10 +4,11 @@
 //! - All devices implement SignalBackend trait
 //! - QpcTimer provides forensic timestamps (Windows QPC / Linux CLOCK_MONOTONIC_RAW)
 //! - rtlsdr is optional (feature-gated)
+//! - calibration.rs deleted — being rewritten for V3
 
 pub mod audio_device;
 pub mod audio;
-pub mod calibration;
+// pub mod calibration; — deleted, V3 rewrite
 pub mod gpu;
 pub mod pluto_device;
 pub mod rtl_device;
