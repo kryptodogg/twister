@@ -1,6 +1,20 @@
+//! Hardware Abstraction Layer — V3 Track 0-B
+//!
+//! # V3 Architecture Notes
+//! - All devices implement SignalBackend trait
+//! - QpcTimer provides forensic timestamps (Windows QPC / Linux CLOCK_MONOTONIC_RAW)
+//! - rtlsdr is optional (feature-gated)
+
 pub mod audio_device;
+pub mod audio;
+pub mod calibration;
+pub mod gpu;
 pub mod pluto_device;
 pub mod rtl_device;
+#[cfg(feature = "rtlsdr")]
+pub mod rtlsdr;
+pub mod sync;
+pub mod traits;
 
 pub use audio_device::AudioDevice;
 pub use pluto_device::PlutoDevice;

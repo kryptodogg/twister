@@ -1,5 +1,12 @@
 use std::sync::atomic::{AtomicU64, Ordering};
 
+/// QPC Timer — Forensic Timestamps (Windows QPC / Linux Fallback)
+///
+/// # V3 Architecture Note
+/// Windows: Uses QueryPerformanceCounter for forensic timestamps
+/// Linux: Falls back to SystemTime (CLOCK_MONOTONIC_RAW preferred for production)
+/// Track 0-D: All timestamps slaved to Pico PPS for cross-examination
+
 pub struct QpcTimer {
     epoch_qpc: u64,
     frequency: u64,
@@ -24,6 +31,7 @@ impl QpcTimer {
     #[cfg(not(windows))]
     pub fn new() -> Self {
         // Fallback for non-windows (not for production forensic use)
+        // Production: Use CLOCK_MONOTONIC_RAW via libc
         Self {
             epoch_qpc: 0,
             frequency: 1_000_000,

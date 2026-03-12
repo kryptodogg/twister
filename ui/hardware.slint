@@ -122,7 +122,10 @@ export component HardwareApp inherits Window {
                         }
                         Text { text: device.sub; color: Colors.on-surface-variant; font-size: unit-size * 0.75; }
                         Rectangle { vertical-stretch: 1; }
-                        if (!device.wired) : UnwiredBadge { horizontal-alignment: right; }
+                        if (!device.wired) : HorizontalLayout {
+                            Rectangle { horizontal-stretch: 1; }
+                            UnwiredBadge { }
+                        }
                     }
                     TouchArea { clicked => { HardwareEngine.active-panel = device.panel; } }
                 }

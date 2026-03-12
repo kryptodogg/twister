@@ -1,3 +1,11 @@
+//! ML Pipeline — V3 Foundation
+//!
+//! # V3 Architecture Notes
+//! - timegnn_trainer deleted — Track B6 being rewritten
+//! - pose_estimator deleted — was stub, Track G0 rewrites
+//! - spectral_frame module reference removed (check if exists)
+//! - pose_materials deleted — depended on deleted pose_estimator
+
 pub mod anomaly_gate;
 pub mod chronos_bridge;
 pub mod event_corpus;
@@ -14,45 +22,39 @@ pub mod point_mamba;
 pub mod point_mamba_trainer;
 pub mod pointnet_encoder;
 pub mod timegnn;
-pub mod timegnn_trainer;
-pub mod timegnn_ui_bridge;
+// timegnn_trainer, timegnn_ui_bridge deleted — Track B6 rewrite
 pub mod wav2vec2_loader;
 pub mod wideband_harmonic_analysis;
 
+// Data contracts
+pub mod data_contracts;
+pub mod field_particle;
+
+// V3 UnifiedFieldMamba (replaces SSAMBA)
+pub mod unified_field_mamba;
+
+// Waveshape projection (Track A)
+pub mod waveshape_projection;
+
+// Pose modules (being rewritten — Track G0)
+// pose_estimator, pose_materials deleted
+
+// Exports
 pub use losses::chamfer_distance::{ChamferDistance, HuberLoss};
 pub use mamba_block::MambaBlock;
 pub use modular_features::{FeatureFlags, ModularFeatureEncoder, SignalFeaturePayload, VideoFrame};
-
 pub use pattern_discovery::{
     ClusteringResult, Event, KMeansConfig, Pattern, compute_silhouette_score,
     compute_temporal_frequency, discover_patterns, generate_pattern_label, kmeans,
 };
-
 pub use point_decoder::PointDecoder;
 pub use point_mamba::PointMamba;
 pub use point_mamba_trainer::{PointMambaTrainer, TrainerConfig as PointMambaTrainingConfig};
 pub use pointnet_encoder::PointNetEncoder;
 pub use timegnn::TimeGnnModel;
-pub use timegnn_trainer::{
-    ContrastiveLossConfig, TimeGnnTrainingConfig, TrainingEvent, TrainingMetrics,
-    compute_nt_xent_loss, cosine_similarity, train_timegnn,
-};
-
-pub use spectral_frame::SpectralFrame;
-
-pub mod data_contracts;
-
-pub mod body_region_classifier;
-pub mod pose_materials;
-
-pub mod pose_mamba_trainer;
-pub mod unified_field_mamba;
+// timegnn_trainer exports deleted
 pub use unified_field_mamba::UnifiedFieldMamba;
-pub mod waveshape_projection;
 pub use waveshape_projection::{NeuralWaveshapeParams, project_latent_to_waveshape};
-pub mod spectral_frame;
-
-pub mod field_particle;
 pub use field_particle::FieldParticle;
-pub mod pose_estimator;
-pub use pose_estimator::PoseEstimator;
+// PoseEstimator deleted with pose_estimator module
+// SpectralFrame — check if module exists before exporting

@@ -1,5 +1,12 @@
+//! Haptic Engine — V3 Track HA 600Hz Sub-Step
+//!
+//! # V3 Architecture Notes
+//! - Uses crate::utils::AtomicF32 (NOT std::sync::atomic which doesn't exist)
+//! - Target hardware: DualSense (PS5) Actuators, Voice Coil Actuators
+
 use crate::ml::field_particle::FieldParticle;
-use std::sync::atomic::{AtomicF32, Ordering};
+use crate::utils::atomic::AtomicF32;
+use std::sync::atomic::Ordering;
 
 /// Haptic Engine: Translates the Synesthesia Hologram into physical force fields.
 /// Target hardware: DualSense (PS5) Actuators.

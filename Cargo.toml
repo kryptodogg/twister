@@ -92,8 +92,9 @@ uuid = { version = "*", features = ["v4"] }
 wgpu = { version = "*", features = ["vulkan"] }
 windows-sys = { version = "*", features = [
   "Win32_Foundation",
-  "Win32_Graphics_Dwm"
-], optional = true }
+  "Win32_Graphics_Dwm",
+  "Win32_System_Performance"  # QPC timer for forensic timestamps
+] }
 # Note: HDF5 requires native library installation (libhdf5); using JSON for MVP
 
 [build-dependencies]

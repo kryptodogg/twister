@@ -1,16 +1,15 @@
 [package]
 name = "basic-app"
 version = "0.1.0"
-authors = ["Your Name <your.email@example.com>"]
-edition = "2021"
+edition = "2024"
 description = "A basic Slint application template"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-slint = "1.13"
+slint ="1.15.1"
 
 [build-dependencies]
-slint-build = "1.13"
+slint-build = "1.15.1"
 
 # WebAssembly support - uncomment for web deployment
 # [lib]

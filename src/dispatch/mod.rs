@@ -1,3 +1,11 @@
+//! Dispatch Loop — V3 Track A Mamba Inference
+//!
+//! # V3 Architecture Notes
+//! - het_synthesizer deleted — being rewritten for V3
+//! - pose_estimator deleted — Track G0 rewrite
+//! - training::MambaTrainer deleted — using mamba module directly
+//! - DSP moved downstream: TDOA, PSD deleted from ingestion
+
 pub mod stream_packer;
 pub use stream_packer::GpuStreamPacker;
 
@@ -14,16 +22,20 @@ pub mod visual_ingester;
 pub use visual_ingester::VisualIngester;
 
 pub mod backend;
-pub mod het_synthesizer;
+// pub mod het_synthesizer; — deleted, V3 rewrite
 
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use crate::state::AppState;
 use crate::utils::latency::QpcTimer;
-use crate::ml::pose_estimator::PoseEstimator;
-use crate::training::MambaTrainer;
+// pose_estimator deleted — Track G0
+// use crate::ml::pose_estimator::PoseEstimator;
+// training::MambaTrainer deleted — using mamba module
+// use crate::training::MambaTrainer;
 use crate::ml::waveshape_projection::project_latent_to_waveshape;
-use crate::dsp::{BSSProcessor, TDOAEstimator, WelchPSD, PSDConfig, TDOAConfig};
+// DSP moved downstream — TDOA, PSD deleted from ingestion
+// use crate::dsp::{BSSProcessor, TDOAEstimator, WelchPSD, PSDConfig, TDOAConfig};
+use crate::dsp::BSSProcessor;
 use std::sync::atomic::Ordering;
 
 /// Primary Forensic Dispatch Loop

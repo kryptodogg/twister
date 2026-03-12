@@ -1,23 +1,23 @@
 //! Mamba autoencoder module for RF-Audio fusion
 //!
-//! Implements SSAMBA (State Space Audio Mamba) architecture:
-//! - Input: [RF_PSD(256) | Audio_PSD(128) | TDOA(16) | ANC_state(32)] = 432
-//! - Latent: 64-D representation
-//! - Control heads: mode logits (3) + desired_snr_db (1)
+//! # V3 Architecture Note
+//! SSAMBA (State Space Audio Mamba) is being replaced by UnifiedFieldMamba with SAST token ordering.
+//! This module contains only the base model. Inference and training are being rewritten.
+//!
+//! Track B reference: UnifiedFieldMamba implementation supersedes this architecture.
 
 pub mod model;
-pub mod inference;
-pub mod training;
+// inference and training deleted — V3 UnifiedFieldMamba replaces
 
-pub use model::{SSAMBA as MambaAutoencoder, SSAMBAConfig, MambaBlock, ControlHead};
-pub use inference::{MambaInference, InferenceResult};
-pub use training::{MambaTrainer as OnlineTrainer, TrainingConfig};
+pub use model::SSAMBA as MambaAutoencoder;
+// SSAMBAConfig, ControlHead deleted — V3 uses different config structure
 
 /// Mamba context length (432 bins)
 pub const MAMBA_CONTEXT_LEN: usize = 432;
 /// Mamba input bins (432 bins)
 pub const MAMBA_INPUT_BINS: usize = 432;
 
+/// Compute RMS dB from spectrum (utility for DSP)
 pub fn compute_rms_db(x: &[f32]) -> f32 {
     let sum_sq: f32 = x.iter().map(|&v| v * v).sum();
     if sum_sq < 1e-10 { return -100.0; }
@@ -25,17 +25,7 @@ pub fn compute_rms_db(x: &[f32]) -> f32 {
     20.0 * rms.log10()
 }
 
-/// Training metrics for UI telemetry
-#[derive(Debug, Clone, Default)]
-pub struct TrainingMetrics {
-    pub epoch: u32,
-    pub batch_count: u32,
-    pub avg_loss: f32,
-    pub total_events: usize,
-    pub avg_confidence: f32,
-}
-
-/// Training pair for Mamba autoencoder
+/// Training pair for Mamba autoencoder (V2 format — being replaced)
 #[derive(Debug, Clone)]
 pub struct TrainingPair {
     pub tx_spectrum: Vec<f32>,
