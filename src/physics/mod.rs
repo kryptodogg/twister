@@ -52,3 +52,5 @@ pub fn solve_rf_field(
 
     Ok(rf_sim.grid)
 }
+pub mod haptic_engine;
+pub use haptic_engine::HapticForceField;

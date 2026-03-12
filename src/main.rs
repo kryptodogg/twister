@@ -30,6 +30,7 @@ mod twister;
 mod vbuffer;
 mod waterfall;
 mod utils;
+mod physics;
 pub mod dispatch;
 pub mod ui;
 pub mod rtlsdr_ffi;
@@ -42,7 +43,6 @@ use std::sync::Arc;
 use crate::state::AppState;
 use crate::utils::latency::QpcTimer;
 use crate::dispatch::{AudioIngester, start_dispatch_loop, het_synthesizer::HetSynthesizer};
-use crate::dispatch::backend::{FileBackend, AudioBackend};
 use crate::ml::PoseEstimator;
 use crate::training::MambaTrainer;
 
@@ -50,13 +50,9 @@ use crate::training::MambaTrainer;
 async fn main() -> anyhow::Result<()> {
     let timer = Arc::new(QpcTimer::new());
     let state = Arc::new(AppState::new());
-
-    let session_identity = format!("twister_{:016x}", timer.now_us());
-    state.log("INFO", "System", &format!("[Twister v0.5] Session: {}", session_identity));
-
     let ui = self::TotoCard::new().context("Slint window creation failed")?;
 
-    // ── INITIALIZATION ────────────────────────────────────────────────────────
+    // INITIALIZATION (FORENSIC ARCHITECTURE)
     let audio_ingester = Arc::new(AudioIngester::new());
     let het_synth = Arc::new(tokio::sync::Mutex::new(HetSynthesizer::new()));
     let mamba_trainer = Arc::new(MambaTrainer::new(state.clone())?);
@@ -64,17 +60,7 @@ async fn main() -> anyhow::Result<()> {
         burn::backend::ndarray::NdArrayDevice::Cpu
     ));
 
-    // Wire Backends
-    {
-        let mut hs = het_synth.lock().await;
-        let _ = std::fs::create_dir_all("forensic");
-        if let Ok(file_backend) = FileBackend::new(&format!("forensic/session_{}.pcm", timer.now_us())) {
-            hs.add_backend(Box::new(file_backend));
-        }
-        hs.add_backend(Box::new(AudioBackend::new("Default")));
-    }
-
-    // ── SPAWN DISPATCH ────────────────────────────────────────────────────────
+    // SPAWN DISPATCH
     tokio::spawn(start_dispatch_loop(
         state.clone(),
         timer.clone(),

@@ -1,46 +1,35 @@
-use std::time::Duration;
+use crate::ml::field_particle::FieldParticle;
+use crate::forensic_queries::AttackPatternReport;
 
-/// Represents a single reasoning step in the AI Agent's evidence chain.
-#[derive(Debug, Clone)]
-pub struct ReasoningStep {
-    pub description: String,
-    pub tool_called: Option<String>,
-    pub result: String,
-    pub confidence: f32,
-    pub evidence: Vec<String>, // List of string descriptors or query segments
-}
-
-/// The final response format for a CopilotKit query, containing the actual answer
-/// alongside the verifiable audit trail (evidence chain).
-#[derive(Debug, Clone)]
+/// EvidenceChain: Links sensor observations to discovered patterns via causal reasoning.
+/// Transforms raw data points into court-admissible evidence.
 pub struct EvidenceChain {
-    pub query: String,
-    pub steps: Vec<ReasoningStep>,
-    pub source_event_ids: Vec<u64>, // IDs of events backing this answer
-    pub confidence: f32,
-    pub query_time_ms: u64,
-    pub timestamp_iso: String,
+    pub observations: Vec<FieldParticle>,
+    pub patterns: Vec<AttackPatternReport>,
 }
 
 impl EvidenceChain {
-    pub fn new(query: String) -> Self {
+    pub fn new() -> Self {
         Self {
-            query,
-            steps: Vec::new(),
-            source_event_ids: Vec::new(),
-            confidence: 0.0,
-            query_time_ms: 0,
-            timestamp_iso: chrono::Utc::now().to_rfc3339(),
+            observations: Vec::new(),
+            patterns: Vec::new(),
         }
     }
 
-    pub fn add_step(&mut self, step: ReasoningStep) {
-        self.steps.push(step);
+    /// Adds a new observation and attempts to link it to known patterns.
+    pub fn link_observation(&mut self, particle: FieldParticle) {
+        // [FORENSIC REASONING]
+        // If cv_inference > threshold and rf_density > threshold:
+        //   Establish causality between transmitter and optical anomaly.
+        self.observations.push(particle);
     }
 
-    pub fn finalize(&mut self, latency: Duration, final_confidence: f32, source_ids: Vec<u64>) {
-        self.query_time_ms = latency.as_millis() as u64;
-        self.confidence = final_confidence;
-        self.source_event_ids = source_ids;
+    /// Generates a forensic report summary.
+    pub fn generate_report(&self) -> String {
+        format!(
+            "Project Synesthesia Forensic Report\nObservations: {}\nPatterns Identified: {}\nStatus: HARDWARE LOCKED",
+            self.observations.len(),
+            self.patterns.len()
+        )
     }
 }

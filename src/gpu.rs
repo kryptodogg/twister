@@ -527,3 +527,5 @@ impl SignalProcessorGpu {
         gpu_vbuffer.meta.version += 1;
     }
 }
+pub mod wavelet_compute;
+pub use wavelet_compute::WaveletComputePipeline;

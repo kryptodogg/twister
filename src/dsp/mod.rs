@@ -14,3 +14,5 @@ pub use fft::FFTProcessor;
 pub use tdoa::{TDOAEstimator, TDOAConfig};
 pub use features::FeatureVector;
 pub use psd::{WelchPSD, PSDConfig};
+pub mod wavelets;
+pub use wavelets::{WaveletProcessor, WaveletFamily};
