@@ -23,6 +23,7 @@ use crate::utils::latency::QpcTimer;
 use crate::ml::pose_estimator::PoseEstimator;
 use crate::training::MambaTrainer;
 use crate::ml::waveshape_projection::project_latent_to_waveshape;
+use crate::dsp::{BSSProcessor, TDOAEstimator, WelchPSD, PSDConfig, TDOAConfig};
 use std::sync::atomic::Ordering;
 
 /// Primary Forensic Dispatch Loop
@@ -34,9 +35,15 @@ pub async fn start_dispatch_loop(
     audio_ingester: Arc<AudioIngester>,
     pose_estimator: Arc<PoseEstimator<burn_ndarray::NdArray<f32>>>,
 ) {
+    // ── DSP Subsystems ────────────────────────────────────────────────────────
+    let mut bss = BSSProcessor::new(4);
+    let mut psd = WelchPSD::new(PSDConfig { fft_size: 1024, overlap: 512 });
+    let mut tdoa = TDOAEstimator::new(TDOAConfig { sample_rate: 44100.0, max_delay_s: 0.05 });
+
     loop {
         let ts = timer.now_us();
 
+        // 1. Unified Hologram Ingestion (Simulated Hardware Buffers)
         let audio_raw: Vec<u8> = Vec::new();
         if !audio_raw.is_empty() {
             let meta = SignalMetadata {
@@ -47,21 +54,27 @@ pub async fn start_dispatch_loop(
                 sample_format: SampleFormat::F32,
             };
 
+            // Raw Truth Extraction (BSS Phase)
+            let particles = audio_ingester.ingest(&audio_raw, ts, &meta);
+            let _separated = bss.separate(&particles);
+
+            // PSD & Anomaly Scoring
             if let Some(accumulated) = audio_ingester.accumulate(&audio_raw, &meta) {
+                let _power_spectrum = psd.compute_psd(&accumulated);
+
                 if let Ok((anomaly, latent, _)) = mamba_trainer.forward(&accumulated).await {
                     let params = project_latent_to_waveshape(&latent, 44100.0);
                     state.waveshape_drive.store(params.drive, Ordering::Relaxed);
                     state.mamba_anomaly_score.store(anomaly, Ordering::Relaxed);
 
+                    // Update Auditory Rendering
                     let mut hs = het_synth.lock().await;
+                    for p in &particles {
+                        hs.process_particle(p);
+                    }
                     hs.generate_samples(512, 44100.0);
                 }
             }
-        }
-
-        let visual_raw: Vec<u8> = Vec::new();
-        if !visual_raw.is_empty() {
-             let _keypoints = pose_estimator.estimate(&visual_raw, 128, 128);
         }
 
         tokio::time::sleep(std::time::Duration::from_millis(10)).await;

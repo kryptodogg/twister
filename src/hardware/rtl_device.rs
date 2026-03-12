@@ -1,13 +1,21 @@
 use crate::hardware::{SignalBackend, BackendError};
+#[cfg(feature = "rtlsdr")]
+use crate::hardware::rtlsdr::RtlSdrEngine;
 
 /// RTL-SDR Backend (librtlsdr wrapper)
 pub struct RtlDevice {
-    pub device_index: u32,
+    pub index: u32,
+    #[cfg(feature = "rtlsdr")]
+    engine: Option<RtlSdrEngine>,
 }
 
 impl RtlDevice {
     pub fn new(index: u32) -> Self {
-        Self { device_index: index }
+        Self {
+            index,
+            #[cfg(feature = "rtlsdr")]
+            engine: None
+        }
     }
 }
 

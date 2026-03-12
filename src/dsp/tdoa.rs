@@ -1,117 +1,62 @@
-//! Time Difference of Arrival (TDOA) estimation
+use rustfft::{FftPlanner, num_complex::Complex};
 
-use rustfft::FftPlanner;
-use num_complex::Complex32;
-use nalgebra::Vector3;
-
-/// TDOA estimator using GCC-PHAT
-pub struct TDOAEstimator {
-    fft_size: usize,
-    sample_rate: u32,
-    mic_spacing: f32,
-}
-
-/// TDOA configuration structure
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct TDOAConfig {
-    pub max_lag: usize,
-    pub sample_rate: u32,
-    pub gcc_phat: bool,
-    pub smoothing: f32,
+    pub sample_rate: f32,
+    pub max_delay_s: f32,
 }
 
-/// Cross-correlation results
-pub struct CrossCorrelation {
-    pub peak_value: f32,
-}
-
-impl CrossCorrelation {
-    pub fn compute(_sig1: &[f32], _sig2: &[f32], _max_lag: usize) -> Self {
-        Self { peak_value: 0.1 }
-    }
+/// TDOAEstimator: Time Difference of Arrival estimation via Cross-Correlation.
+/// Essential for 3D spatial localization in the hologram.
+pub struct TDOAEstimator {
+    pub config: TDOAConfig,
+    planner: FftPlanner<f32>,
 }
 
 impl TDOAEstimator {
     pub fn new(config: TDOAConfig) -> Self {
         Self {
-            fft_size: 1024,
-            sample_rate: config.sample_rate,
-            mic_spacing: 0.1, // Default mic spacing in meters
+            config,
+            planner: FftPlanner::new(),
         }
     }
 
-    pub fn get_features(&self, signal_l: &[f32], signal_r: &[f32], num_features: usize) -> ndarray::Array1<f32> {
-        let tdoa = self.estimate(signal_l, signal_r);
-        let mut features = ndarray::Array1::zeros(num_features + 2);
-        features[0] = tdoa;
-        features[1] = self.tdoa_to_doa(tdoa);
-        features
-    }
+    /// Computes the time delay (in seconds) between two signals.
+    pub fn estimate_delay(&mut self, signal_a: &[f32], signal_b: &[f32]) -> f32 {
+        let n = signal_a.len().min(signal_b.len());
+        if n == 0 { return 0.0; }
 
-    /// Estimate TDOA between two channels using GCC-PHAT
-    pub fn estimate(&self, signal_l: &[f32], signal_r: &[f32]) -> f32 {
-        let fft_l = self.fft(signal_l);
-        let fft_r = self.fft(signal_r);
+        let fft_size = n.next_power_of_two();
+        let fft = self.planner.plan_fft_forward(fft_size);
+        let ifft = self.planner.plan_fft_inverse(fft_size);
 
-        // GCC-PHAT: cross-spectrum phase transform
-        let mut cross_spectrum = vec![Complex32::default(); self.fft_size];
-        for i in 0..self.fft_size {
-            let denom = (fft_l[i] * fft_r[i].conj()).norm();
-            cross_spectrum[i] = if denom > 1e-10 {
-                (fft_l[i] * fft_r[i].conj()) / denom
-            } else {
-                Complex32::default()
-            };
+        let mut spec_a: Vec<Complex<f32>> = signal_a.iter().take(n).map(|&s| Complex::new(s, 0.0)).collect();
+        spec_a.resize(fft_size, Complex::new(0.0, 0.0));
+        let mut spec_b: Vec<Complex<f32>> = signal_b.iter().take(n).map(|&s| Complex::new(s, 0.0)).collect();
+        spec_b.resize(fft_size, Complex::new(0.0, 0.0));
+
+        fft.process(&mut spec_a);
+        fft.process(&mut spec_b);
+
+        // Cross-correlation in frequency domain: S_a * conj(S_b)
+        for i in 0..fft_size {
+            spec_a[i] = spec_a[i] * spec_b[i].conj();
         }
 
-        // IFFT to get cross-correlation
-        let mut planner = FftPlanner::new();
-        let ifft = planner.plan_fft_inverse(self.fft_size);
-        ifft.process_with_scratch(&mut cross_spectrum, &mut vec![Complex32::default(); self.fft_size]);
+        ifft.process(&mut spec_a);
 
-        // Find peak
-        let max_idx = cross_spectrum
-            .iter()
-            .enumerate()
-            .max_by(|(_, a), (_, b)| a.norm().partial_cmp(&b.norm()).unwrap())
-            .map(|(i, _)| i)
-            .unwrap_or(0);
+        // Find peak index
+        let (peak_idx, _) = spec_a.iter().enumerate()
+            .max_by(|(_, a), (_, b)| a.re.partial_cmp(&b.re).unwrap())
+            .unwrap_or((0, &Complex::new(0.0, 0.0)));
 
-        // Convert to time difference
-        let lag = if max_idx > self.fft_size / 2 {
-            max_idx as f32 - self.fft_size as f32
+        // Shift to signed lag
+        let lag = if peak_idx > fft_size / 2 {
+            peak_idx as i32 - fft_size as i32
         } else {
-            max_idx as f32
+            peak_idx as i32
         };
 
-        lag / self.sample_rate as f32
+        lag as f32 / self.config.sample_rate
     }
-
-    /// Convert TDOA to direction of arrival
-    pub fn tdoa_to_doa(&self, tdoe_seconds: f32) -> f32 {
-        let speed_of_sound = 343.0;
-        (tdoe_seconds * speed_of_sound / self.mic_spacing).asin() * 180.0 / std::f32::consts::PI
-    }
-
-    fn fft(&self, signal: &[f32]) -> Vec<Complex32> {
-        let mut padded = vec![Complex32::default(); self.fft_size];
-        for (i, &s) in signal.iter().take(self.fft_size).enumerate() {
-            padded[i] = Complex32::new(s, 0.0);
-        }
-        let mut planner = FftPlanner::new();
-        let fft = planner.plan_fft_forward(self.fft_size);
-        fft.process_with_scratch(&mut padded, &mut vec![Complex32::default(); self.fft_size]);
-        padded
-    }
-}
-
-/// 3D position from TDOA
-pub fn triangulate(tdoa_lr: f32, tdoa_rear: f32, _mic_positions: &[Vector3<f32>]) -> Vector3<f32> {
-    // Simplified triangulation
-    let speed_of_sound = 343.0;
-    let dist_diff_lr = tdoa_lr * speed_of_sound;
-    let dist_diff_rear = tdoa_rear * speed_of_sound;
-    
-    // Placeholder - actual triangulation would solve hyperbolic equations
-    Vector3::new(dist_diff_lr, dist_diff_rear, 0.0)
 }
