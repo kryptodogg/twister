@@ -349,11 +349,23 @@ C dependencies require an `unsafe` wrapper with documented justification.
 Python dependencies require PyO3 and are restricted to Dorothy (Track D)
 and training pipelines. Python never appears in the real-time signal path.
 
-### 6.2 — The wgpu Version Is Locked
+### 6.2 — Dependency Lifecycle and the `Cargo.lock` Contract
 
-wgpu 28. Not 27. Not 29. If a new wgpu release fixes something you need,
-file it as a migration task. Do not upgrade mid-track without a full
-API audit across all shader and pipeline code.
+During active, experimental development (Phases 0-H), `Cargo.toml` may use
+wildcard (`*`) or range (`0.x`) versions to access bleeding-edge features.
+This flexibility is a deliberate choice to accelerate prototyping.
+
+However, reproducibility remains non-negotiable. It is enforced by the
+`Cargo.lock` file, which serves as the canonical, time-stamped record of
+the exact dependency tree for a given commit.
+
+- **The `Cargo.lock` file MUST be committed to version control.** It is not a
+  temporary build artifact; it is a foundational part of the evidence chain.
+- **Running `cargo update` is a significant engineering event.** The resulting
+  changes to `Cargo.lock` must be reviewed, and the commit message must
+  justify the update (e.g., "Update `wgpu` to access new feature X").
+- **Before a stable release, all `Cargo.toml` dependencies will be pinned** to
+  the exact versions from the last known-good `Cargo.lock` file.
 
 ### 6.3 — SPIR-V and Vulkan Extensions Are Permitted
 

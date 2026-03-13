@@ -211,6 +211,7 @@ A3 — Optical (OV9281 stereo frames, C925e video)
 A4 — Pico 2 (serial: PPS timestamps, UWB ranging, IR array)
 A5 — CSI proxy (Wi-Fi channel state information if adapter supports it)
 A6 — Clock discipline (Pico PPS → QueryPerformanceCounter alignment)
+A7 — Weather Oracle (NOAA API → Local Refractive Index $n$ for light/RF)
 ```
 
 **Acceptance per track:** Raw samples reach the GPU dispatch channel.

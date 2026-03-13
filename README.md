@@ -269,7 +269,7 @@ Injected signal:  Var(Γ(t)) ≈ 0  — coherence held by phase-locked oscillato
     │ 8-bit quantized · divergence = |GPU_score − Coral_score|
     │ Low divergence on suspect signal = synthesized carrier flag
     ▼
-[Pico TDOA vote] ← speed of light + ruler. No ML. Hard to spoof.
+[Pico TDOA vote] ← (c / RefractiveIndex(NOAA_Weather)) + ruler. No ML.
     ▼
 [Jury verdict]
     │ Unanimous = highest forensic confidence

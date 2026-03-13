@@ -1,24 +1,24 @@
 [package]
 name = "synesthesia"
 version = "0.1.0"
-description = "A Tauri App"
 edition = "2024"
+description = "A Tauri App"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
+crate-type = ["cdylib", "rlib", "staticlib"]
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
 name = "synesthesia_lib"
-crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+bytemuck = { version = "*", features = ["derive"] }
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+tauri = { version = "*", features = [] }
+tauri-plugin-opener = "*"
 
 [build-dependencies]
 tauri-build = { version = "*", features = [] }
-
-[dependencies]
-tauri = { version = "2.10.3", features = [] }
-tauri-plugin-opener = "*"
-serde = { version = "*", features = ["derive"] }
-serde_json = "*"
-
