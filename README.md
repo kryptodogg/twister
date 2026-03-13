@@ -1,6 +1,7 @@
 # Synesthesia — Full-Spectrum Forensic Sensor Fusion Platform
 
-**Formerly: Twister v0.2**
+**Stack: Tauri + Vanilla JS + Rust + wgpu**  
+**Primary platform: Windows 11 (AMD RX 6700 XT, ReBAR enabled)**
 
 A GPU-first harmonic self-defense and forensic investigation workstation.
 Captures, fuses, and renders every signal band from 1 Hz to visible light
@@ -10,31 +11,169 @@ injection attacks.
 
 ---
 
+## Recommended IDE Setup
+
+[VS Code](https://code.visualstudio.com/) +
+[Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) +
+[rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+
+---
+
+## Why Tauri + Vanilla
+
+Tauri gives you a native Rust backend with full access to Windows system
+APIs — USB, serial, WASAPI audio, and the wgpu GPU pipeline — while the
+frontend handles multi-window UI without fighting a game engine's windowing
+model.
+
+Vanilla JS is the right frontend choice here. The UI is a status display
+and control surface for hardware state. It receives Tauri events and updates
+the DOM. No framework is needed for that, and no framework gets in the way
+of the Material Design 3 web components that provide the design system.
+
+**The backend is Tokio.** Pure async/await lets the OS handle threading.
+Hardware events from the Pico 2 serial port, RTL-SDR, and Pluto+ libiio
+emit as Tauri events to whichever window is listening. The hardware applet
+window subscribes to device connection events. The main scene window
+subscribes to FieldParticle stream events. The dispatch loop is a
+long-running Tauri plugin on the Tokio runtime. No manual thread
+management. No blocking calls on async threads.
+
+**Window split:** Tauri owns the UI panels — hardware applet, timeline,
+jury overlay, Dorothy interface. A native wgpu window runs alongside for
+the 3D scene renderer. Tauri handles the controls; wgpu handles the render
+loop with full Wave64 workgroup control and no compositor interference.
+
+---
+
+## Translucency — Native Windows 11 Mica
+
+Real OS-level translucency via the Windows Desktop Window Manager
+composition API. Not faked. Not screenshot-and-blur. DWM composites your
+content against the live wallpaper and background windows in hardware.
+
+```toml
+# src-tauri/Cargo.toml
+[dependencies]
+window-vibrancy = "0.5"
+```
+
+```rust
+// src-tauri/src/main.rs
+use window_vibrancy::apply_mica;
+
+tauri::Builder::default()
+    .setup(|app| {
+        let window = app.get_webview_window("main").unwrap();
+        #[cfg(target_os = "windows")]
+        apply_mica(&window, Some(true))?; // true = dark Mica variant
+        Ok(())
+    })
+```
+
+```json
+// tauri.conf.json
+{
+  "app": {
+    "windows": [{
+      "transparent": true,
+      "decorations": false
+    }]
+  }
+}
+```
+
+**Mica vs Acrylic:** Mica samples the wallpaper color, not the live
+background. It is subtler and more stable under movement. Acrylic blurs
+whatever is directly behind the window in real time. For a dense monitoring
+workstation, Mica is the right choice for primary panels. Acrylic works
+well for floating secondary panels like the hardware applet — both can
+coexist per-window via `window-vibrancy`.
+
+---
+
+## Design System — Material Design 3
+
+MD3 web components from `@material/web` are native custom elements. They
+work in Vanilla JS with no framework, no build overhead beyond what Tauri
+already provides. The entire design language is CSS custom properties —
+one token file controls all spacing, color, and typography.
+
+```bash
+npm install @material/web
+```
+
+```html
+<!-- index.html -->
+<script type="module">
+  import '@material/web/button/filled-button.js';
+  import '@material/web/button/outlined-button.js';
+  import '@material/web/switch/switch.js';
+  import '@material/web/slider/slider.js';
+  import '@material/web/chips/filter-chip.js';
+  import '@material/web/divider/divider.js';
+</script>
+
+<md-filled-button>Connect Device</md-filled-button>
+<md-switch id="layer-rf"></md-switch>
+<md-slider min="0" max="100" value="50"></md-slider>
+```
+
+```css
+/* tokens.css — set once, MD3 consumes everywhere */
+:root {
+  /* Mica surface: translucent, tinted */
+  --md-sys-color-surface:           rgba(28, 27, 31, 0.65);
+  --md-sys-color-surface-container: rgba(36, 34, 40, 0.72);
+  --md-sys-color-on-surface:        #E6E1E5;
+  --md-sys-color-primary:           #D0BCFF;
+  --md-sys-color-on-primary:        #21005D;
+
+  /* Forensic state accent colors */
+  --color-connected:    #4CAF50;
+  --color-disconnected: #F44336;
+  --color-unwired:      #FF9800;
+  --color-anomaly:      #FF5252;
+
+  /* Proportional scale — matches masterplan unit-size rule */
+  --unit-size: 16px;
+  --md-sys-typescale-body-large-size: var(--unit-size);
+}
+```
+
+Device status chips are MD3 filter chips — one per sensor, color-coded
+via the forensic accent tokens. `CONNECTED` is green. `DISCONNECTED` is
+red. `UNWIRED` is amber. These are the only three states. There are no
+placeholders, no default values, no simulated signals.
+
+---
+
 ## The Core Architectural Principle
 
-The CPU's job is to move small control structs into VRAM and then get out
-of the way. The GPU owns everything that touches signal values.
+The CPU writes small control structs into VRAM and gets out of the way.
+The GPU owns everything that touches signal values.
 
-Your RX 6700 XT has 12 GB of GDDR6 at **384 GB/s**. That is the primary
-compute address space. With Smart Access Memory (ReBAR) enabled, the CPU
-writes directly into GDDR6 at ~32 GB/s over PCIe 4.0. Data crosses from
-hardware into GPU memory once, via DMA. It does not return to the CPU
-until it exits as a forensic corpus write or a rendered frame.
+Your RX 6700 XT has 12 GB of GDDR6 at **384 GB/s**. With Smart Access
+Memory (ReBAR) enabled in BIOS, the CPU writes directly into GDDR6 at
+~32 GB/s over PCIe 4.0. Data crosses from hardware into GPU memory once,
+via DMA. It does not return to the CPU until it exits as a forensic corpus
+write or a rendered frame.
 
 ### Bandwidth Reference
 
-| Path                           | Bandwidth         |
-|--------------------------------|-------------------|
-| RX 6700 XT VRAM (internal)     | 384 GB/s          |
-| CPU → VRAM via SAM (PCIe 4.0)  | ~32 GB/s          |
-| Apple M2 Pro unified memory    | 200 GB/s          |
-| Apple M1 unified memory        | 68 GB/s           |
-| DDR4 system RAM                | ~51 GB/s          |
+| Path                           | Bandwidth    |
+|--------------------------------|--------------|
+| RX 6700 XT VRAM (internal)     | 384 GB/s     |
+| CPU → VRAM via SAM (PCIe 4.0)  | ~32 GB/s     |
+| Apple M2 Pro unified memory    | 200 GB/s     |
+| Apple M1 unified memory        | 68 GB/s      |
+| DDR4 system RAM                | ~51 GB/s     |
+| Apple M1/M2 SSD paging         | ~7 GB/s      |
 
-Once an Apple Silicon Mac's model exceeds unified memory, it pages to SSD
-at ~7 GB/s. This system has a graceful degradation path: VRAM → system RAM
-via SAM → SSD. For models under ~12 GB, this system has a genuine bandwidth
-advantage over all base Apple Silicon chips.
+Once Apple Silicon exceeds unified memory it falls off a cliff to SSD
+paging. This system degrades gracefully: VRAM → system RAM via SAM → SSD.
+For models under ~12 GB this system has a genuine bandwidth advantage
+over all base Apple Silicon chips.
 
 ---
 
@@ -49,189 +188,123 @@ BAND                  SENSOR                          ROLE
 20 Hz – 20 kHz        C925e stereo mics (raw)         Acoustic, no preprocessing
 10 kHz – 300 MHz      RTL-SDR + Youloop               Raw IQ, bearing via null axis
 70 MHz – 6 GHz        PlutoSDR+ PA (2TX / 2RX)        Bistatic MIMO radar, ~12mm
-                                                        antenna baseline, phase
+                                                        baseline, TDOA + phase
                                                         interferometry for bearing
 DC – 75 MHz           Pico 2 (RP2350) PIO             Master clock (PPS), UWB
                                                         impulse TX, IR LED driver
-~300 THz              OV9281 dual stereo              PRIMARY: 2560×800, 120fps,
-                       (global shutter, mono)           global shutter, stereo depth,
-                                                        pose estimation, IR detector
-~300 THz              C925e video (rolling shutter)   Secondary: visual microphone
-                                                        via line-rate temporal sampling
+~300 THz              OV9281 dual stereo              2560×800, 120fps, global
+                       (global shutter, mono)           shutter, stereo depth, pose,
+                                                        IR detector array
+~300 THz              C925e video (rolling shutter)   Visual microphone via
+                                                        line-rate temporal sampling
 ~300 THz              IR emitters + receivers         Structured light depth,
                        (Pico 2 PIO array)               retroreflective ranging
 ──────────────────────────────────────────────────────────────────────
 GAP                   6 GHz → infrared               Future: IR array closes this
 ```
 
-The Pico 2 is the master clock. Its PPS signal slaves every sensor timestamp.
-Divergence between Pico PPS and host system time is itself a forensic channel.
+The Pico 2 is the master clock. Its PPS signal slaves every sensor
+timestamp via `QueryPerformanceCounter`. Clock divergence between Pico
+PPS and Windows QPC is itself a forensic channel.
 
 ---
 
 ## The Color Operator
 
-Every sensor, every modality, every rendered particle uses the same function:
+Every sensor, every modality, every rendered particle uses one function.
+A WGSL constant — not a lookup table. Fully invertible.
 
 ```wgsl
-const F_MIN: f32 = 1.0;       // Hz — infrasound floor
-const F_MAX: f32 = 700e12;    // Hz — visible light ceiling
-const LOG_RANGE: f32 = log(F_MAX / F_MIN);
+const F_MIN: f32 = 1.0;
+const F_MAX: f32 = 700e12;
+const LOG_RANGE: f32 = log(F_MAX / F_MIN);  // ~33.18 octave-decades
 
 fn freq_to_hue(f: f32) -> f32 {
     return clamp(log(f / F_MIN) / LOG_RANGE, 0.0, 1.0);
 }
 ```
 
-0.0 = red (infrasound). 1.0 = violet (light). Invertible. A GPU shader
-constant, not a lookup table. Two sensors reporting the same hue at the same
-timestamp are detecting the same physical phenomenon through different physics.
-Same hue with low cross-sensor phase coherence is the injection signature.
+0.0 = red (infrasound). 1.0 = violet (light). Two sensors reporting the
+same hue at the same timestamp detected the same physical phenomenon
+through different physics. Same hue with low cross-sensor phase coherence
+is the injection signature.
 
 ---
 
 ## The Attack Signature
 
 A continuous carrier where information is encoded in amplitude notches —
-suppressed-carrier AM / inverted OOK. The perceptual system calibrates to
-the constant carrier as silence. Only the notches produce detectable
-perturbation. Traditional spectrum analyzers miss it because peak power is
-unremarkable.
-
-The discriminant is **carrier variance**: natural signals have fluctuating
-phase coherence. Synthesized signals have suspiciously stable coherence
-maintained by a phase-locked oscillator.
+suppressed-carrier AM / inverted OOK. The discriminant is carrier variance:
 
 ```
-Natural event:    Var(Γ(t)) > 0  — coherence fluctuates
-Injected signal:  Var(Γ(t)) ≈ 0  — coherence maintained artificially
+Natural event:    Var(Γ(t)) > 0  — phase coherence fluctuates naturally
+Injected signal:  Var(Γ(t)) ≈ 0  — coherence held by phase-locked oscillator
 ```
-
-The first-order temporal difference of any signal stream is the natural
-detector for this attack — it eliminates the static carrier term and
-reveals the notch structure.
 
 ---
 
-## Data Flow (V3 — No FFT at Ingestion)
+## Data Flow
 
 ```
-[Hardware sensors] — coil, C925e, RTL-SDR, Pluto+, OV9281x2, Pico 2
-    │ Raw samples: PCM, IQ, pixels, impulse timing
-    │ Pico 2 PPS slaves all timestamps
+[Hardware sensors]
+    │ Raw: PCM via WASAPI, IQ, pixels, impulse timing
+    │ All timestamps slaved to Pico 2 PPS via QueryPerformanceCounter
     ▼
-[Ingestion layer — src/ingestion/] — CPU
-    │ Forms RawIQPoint{i, q, timestamp_us, sensor_xyz, source_id, raw_flags}
-    │ raw_flags carries jitter_us and packet_loss — these are signal, not noise
+[Ingestion — src-tauri/src/ingestion/]      [Tokio async, never blocks]
+    │ RawIQPoint { i, q, timestamp_us, sensor_xyz, source_id, raw_flags }
+    │ raw_flags carries jitter_us + packet_loss — these are signal
     │ NO FFT. NO preprocessing. NO denoising.
     ▼
-[SAM write — queue.write_buffer()] — CPU → VRAM once
-    │ Raw points enter GPU memory. They do not return to CPU.
+[SAM write — queue.write_buffer()] → GDDR6 once, stays there
     ▼
-[Space-Time Laplacian — WGSL compute] — GPU
-    │ Patch formation: FPS + KNN (k=20)
-    │ Spatial edges: Gaussian kernel on patch center distances
-    │ Temporal edges: DCT phase features across adjacent frames
-    │ CSR-format sparse matrix in storage buffers
-    │ SpMV power iteration → 4 eigenvectors (Gram-Schmidt orthogonalized)
+[Space-Time Laplacian — WGSL compute @workgroup_size(64,1,1)]
+    │ FPS + KNN(k=20) patch formation
+    │ Sparse CSR graph → 4 eigenvectors (Gram-Schmidt)
+    │ v(4) = temporal eigenvector: cross-frame identity without ML
     ▼
-[SAST token ordering] — GPU
-    │ Surface-Aware Spectral Traversal on eigenvectors v(1)–v(4)
-    │ v(4) is the temporal eigenvector: cross-frame identity without ML
-    │ Forward + reverse traversal per eigenvector → 8 traversal streams
+[UnifiedFieldMamba — GPU Mamba SSM]
+    │ 128-D embedding · anomaly score · carrier_variance discriminant
     ▼
-[UnifiedFieldMamba — GPU Mamba SSM] — GPU
-    │ Raw ordered tokens → 128-D embedding per token
-    │ Anomaly score, phase coherence estimate, carrier variance
+[Coral Mamba — Google Coral TPU]        ← parallel, independent weights
+    │ 8-bit quantized · divergence = |GPU_score − Coral_score|
+    │ Low divergence on suspect signal = synthesized carrier flag
     ▼
-[Coral Mamba — Google Coral TPU] — parallel, independent
-    │ Same token stream, 8-bit quantized, optional FFT pre-processing
-    │ divergence = |GPU_output - Coral_output|
-    │ Low divergence = anomaly flag (synthesized signals survive quantization)
+[Pico TDOA vote] ← speed of light + ruler. No ML. Hard to spoof.
     ▼
-[Pico geometric vote] — TDOA from impulse timing
-    │ Speed-of-light ranging, no ML, hardest to spoof
+[Jury verdict]
+    │ Unanimous = highest forensic confidence
+    │ Dissent logged as separate stream — dissent is data
     ▼
-[Jury verdict] — CPU aggregates three votes
-    │ Unanimous = highest confidence. Dissent logged as forensic stream.
+[FieldParticle — 128 bytes, one Infinity Cache line, zero anonymous padding]
     ▼
-[FieldParticle formation] — GPU
-    │ 128-byte struct, one Infinity Cache line, zero implicit padding
-    │ Every byte named and accounted for — no anonymous alignment bytes
-    ▼
-[Dual output — same data, same timestamp]
-    │
-    ├──► [WRF-GS renderer] — Gaussian splats in 3D scene
-    │     Hue from freq_to_hue(). Brightness from phase_coherence.
-    │     Saturation from carrier_variance (low variance = vivid = suspect)
-    │     OV9281 stereo reconstruction as spatial anchor
-    │
-    └──► [Pluto+ / Pico 2 TX] — same FieldParticle stream drives transmission
-          Rendering and transmitting are the same computation.
-          You are painting with radio.
-    │
-    ▼
-[Forensic corpus — src/forensic/] — CPU
-    │ Append-only, fsync after every write
-    │ SHA-256 hash → FieldParticle.corpus_hash
-    │ Pico-corroborated timestamps
-    ▼
-[Dorothy — LFM 2.5, LangGraph] — CPU
-    Natural-language summary of events for non-technical observers.
-    Export packet for legal documentation.
+        ┌─────────────────────────────────────────┐
+        │        SAME DATA · SAME TIMESTAMP       │
+        ▼                                         ▼
+[wgpu scene renderer]                   [Pluto+ / Pico 2 TX]
+Gaussian splats                         Same FieldParticle stream
+freq_to_hue() color                     drives transmission
+carrier_variance → saturation           Rendering IS transmitting
+        │
+        ▼
+[Forensic corpus]
+Append-only · fsync · SHA-256 · Pico-corroborated timestamps
+        │
+        ▼
+[Dorothy — LFM 2.5 via Tauri command]
+Natural-language event summary · legal documentation export
 ```
-
-FFT happens downstream of inference, on the reconstructed 3D point cloud,
-for spatial spectral analysis only — finding periodic geometric structures
-in the scene itself, not preprocessing sensor input.
-
----
-
-## The Jury
-
-Three independent inference paths. No single path is ground truth.
-A 2-1 vote logs the dissenting activations as a separate forensic stream.
-The dissent is data.
-
-| Voter | Method | Spoofability |
-|-------|--------|-------------|
-| GPU Mamba | Full-precision space-time Laplacian SSM | Moderate |
-| Coral Mamba | 8-bit quantized, FFT-compressed | Different failure modes |
-| Pico TDOA | Speed of light + ruler measurements | Very hard |
-
-Unanimous verdict across all three: highest forensic confidence.
-
----
-
-## The Universal Packet
-
-`FieldParticle` is not a rendering primitive that is also transmitted.
-It IS the universal packet. The fragment shader and the Pluto+ modulator
-consume identical data at identical timestamps.
-
-```rust
-#[repr(C, align(128))]
-pub struct FieldParticle { /* 128 bytes exactly, zero implicit padding */ }
-const _: () = assert!(std::mem::size_of::<FieldParticle>() == 128);
-const _: () = assert!(std::mem::align_of::<FieldParticle>() == 128);
-```
-
-Every padding byte is a named reservation for a planned future field.
-`reserved_for_h2_null_phase: f32` is not dead weight — it is a byte
-that has been fetched on every particle since Track 0-A, waiting for
-Track H2 null synthesis to activate it. The memory cost was paid once.
 
 ---
 
 ## Scene Toggles
 
 ```
-V — Stereo reconstruction (OV9281)
-M — Magnetic field (telephone coil)
+V — Stereo reconstruction (OV9281 depth)
+M — Magnetic field overlay (telephone coil)
 P — Pose estimation
 A — Acoustic field
 R — RF field
-J — Jury overlay
+J — Jury verdict overlay
 T — Timeline scrub (4D navigation through corpus)
 ```
 
@@ -240,24 +313,34 @@ T — Timeline scrub (4D navigation through corpus)
 ## Build
 
 ```bash
-cargo run --release
+# Prerequisites: Rust 1.82+, Node.js 20+
+# AMD Adrenalin Vulkan driver required
+# ReBAR must be enabled in BIOS — verify in GPU-Z → Advanced → ReBAR: Enabled
+
+npm install
+cargo tauri dev       # development
+cargo tauri build     # production
 ```
 
-Requires: Rust 1.82+, Vulkan driver (amdvlk or mesa radv), wgpu 28,
-Pico 2 firmware flashed and PPS signal active on GPIO.
+---
 
-On NixOS with Mesa: SAM is enabled by default when ReBAR is active in BIOS.
-On ROCm: `rocSPARSE` validates the WGSL sparse Laplacian implementation.
-The WGSL and ROCm implementations must agree on eigenvalues before either
-is production.
+## Platform Status
+
+| Platform      | Status       | Notes                                     |
+|---------------|--------------|-------------------------------------------|
+| Windows 11    | ✅ Primary   | WASAPI · Mica translucency · ReBAR · QPC  |
+| NixOS + KWin  | 🔲 Future    | KWin blur-behind · ALSA/PipeWire          |
 
 ---
 
 ## Project Status
 
-The hardware applet (Track 0-D) is the current target. It is the first
-deliverable. No other track produces permanent code until the applet can
-detect, display, and hot-plug every connected device.
+Track 0-D (hardware applet) is the current target and first deliverable.
+No other track produces permanent production code until the applet detects,
+displays, and hot-plugs every connected device with accurate
+`CONNECTED` / `DISCONNECTED` / `UNWIRED` state.
 
 See `SYNESTHESIA_MASTERPLAN.md` for the complete architecture, track
 structure, and dependency graph.
+
+See `AGENTS.md` before writing any code.
