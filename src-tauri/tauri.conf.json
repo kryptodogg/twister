@@ -10,11 +10,15 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "synesthesia",
-        "width": 1000,
-        "height": 618,
+        "label": "brick-road",
+        "title": "Brick Road \u2014 Settings",
+        "transparent": true,
         "decorations": false,
-        "transparent": true
+        "visible": false,
+        "width": 1100,
+        "height": 780,
+        "minWidth": 800,
+        "minHeight": 600
       }
     ],
     "security": {

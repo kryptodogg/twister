@@ -14,6 +14,7 @@ crate-type = ["cdylib", "rlib", "staticlib"]
 name = "synesthesia_lib"
 
 [dependencies]
+window-vibrancy = "0.7.1"
 bytemuck = { version = "*", features = ["derive"] }
 serde = { version = "*", features = ["derive"] }
 serde_json = "*"
