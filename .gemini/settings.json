@@ -1,13 +1,14 @@
 {
-  "mcpServers": {
-    "context7": {
-      "httpUrl": "https://mcp.context7.com/mcp",
-      "headers": {
-        "CONTEXT7_API_KEY": "ctx7sk-53dc18c0-8ec8-411f-9b8c-d5cd35028768",
-        "Accept": "application/json, text/event-stream"
-      }
+    "mcpServers": {
+        "context7": {
+            "httpUrl": "https://mcp.context7.com/mcp",
+            "headers": {
+                "CONTEXT7_API_KEY": "ctx7sk-6f4dfcff-f787-4fc0-ad17-2750e4be45c4",
+                "Accept": "application/json, text/event-stream"
+            }
+        }
+    },
+    "experimental": {
+        "enableAgents": true
     }
-  },
-
-  "experimental": { "enableAgents": true }
 }

@@ -1,46 +1,24 @@
-# Rust build artifacts
-/target/
-Cargo.lock
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Backup files
-*.rs.bk
-*.bak
-*.tmp
-*~
+node_modules
+dist
+dist-ssr
+*.local
 
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-.claude/
-
-# OS generated files
-Thumbs.db
-Desktop.ini
-
-# Logs and forensic data
-forensic_log/
-*.jsonl
-
-# Docker data
-.docker_data/
-
-# Git worktrees
-.worktrees/
-
-# Large binaries and tools
-**/bin/*.exe
-**/bin/*.dll
-**/bin/*.so
-**/bin/*.dylib
-
-# Project data and build folders
-/databases/
-/twister_rtc/target/
-/third_party/
-/fpga/
-/docs/
-/evidence/
-/forensic_log/
-/drivers/
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

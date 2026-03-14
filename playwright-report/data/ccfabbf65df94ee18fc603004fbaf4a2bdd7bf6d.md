@@ -1,0 +1,52 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e15]:
+          - heading "Universal Tuner" [level=2] [ref=e16]
+          - paragraph [ref=e17]: "Platform: RTL-SDR [DISCONNECTED]"
+      - button "Settings" [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - generic [ref=e23]: Settings
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]: Antenna Preset
+            - img [ref=e29]
+          - generic [ref=e31]:
+            - button "Bundled" [ref=e32] [cursor=pointer]
+            - button "YouLoop" [ref=e33] [cursor=pointer]
+          - paragraph [ref=e34]: "Range: 10 kHz - 300 MHz"
+        - generic [ref=e35]:
+          - text: Modulation Flow
+          - generic [ref=e36]:
+            - button "AM" [ref=e37] [cursor=pointer]
+            - button "FM" [ref=e38] [cursor=pointer]
+            - button "USB" [ref=e39] [cursor=pointer]
+            - button "LSB" [ref=e40] [cursor=pointer]
+            - button "CW" [ref=e41] [cursor=pointer]
+            - button "W-OFDM" [ref=e42] [cursor=pointer]
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - generic [ref=e47]: Live Signal Density
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - heading "102.100" [level=1] [ref=e54]
+            - generic [ref=e55]: MHz
+          - generic [ref=e56]:
+            - generic [ref=e57]: "IF: 0.00 Hz"
+            - generic [ref=e58]: "SR: 2.4 MSPS"
+        - generic [ref=e59]:
+          - paragraph [ref=e60]: "[ NO SOURCE CONNECTED ]"
+          - paragraph [ref=e61]: Waiting for RTL-SDR USB Packet Stream...
+  - navigation [ref=e62]:
+    - generic [ref=e63]: H
+    - generic [ref=e64]: Hardware Applet
+    - generic [ref=e66]: "[UNWIRED] - Dashboard"
+```

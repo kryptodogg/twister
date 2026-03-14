@@ -1,1 +1,0 @@
-This folder will contain the weights for the models and be neatly organized. I will train wav2vec2, mamba, lfm2.5, and timegnn as well as fine-tune them and other models on the corpus I create. 
