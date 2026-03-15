@@ -167,3 +167,75 @@ impl From<f32> for AtomicF32 {
         Self::new(v)
     }
 }
+
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DeviceStatus {
+    Connected,
+    Disconnected,
+    Unwired,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeviceState {
+    pub id: String,
+    pub status: DeviceStatus,
+    pub last_seen_ms: Option<u64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum GpioDirection {
+    In,
+    Out,
+    Alt,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum GpioPull {
+    Up,
+    Down,
+    None,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum GpioActiveState {
+    High,
+    Low,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GpioPin {
+    pub pin: u8,
+    pub function: String,
+    pub direction: GpioDirection,
+    pub pull: GpioPull,
+    pub connected_to: String,
+    pub active_state: GpioActiveState,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ControllerInfo {
+    pub id: String,
+    pub name: String,
+    pub connection_type: String, // "USB", "Bluetooth"
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ControllerState {
+    pub battery_level: f32,
+    pub accelerometer: [f32; 3],
+    pub gyroscope: [f32; 3],
+    pub buttons: Vec<String>, // List of pressed buttons
+    pub sticks: Vec<[f32; 2]>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Settings {
+    pub devices: serde_json::Value,
+    pub gpio: Vec<GpioPin>,
+}

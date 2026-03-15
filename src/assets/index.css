@@ -1,0 +1,30 @@
+@import 'material-symbols/outlined.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
+    color: var(--md-sys-color-on-surface);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Prevent Tailwind preflight from resetting MD3 internals */
+  md-filled-button, md-outlined-button, md-filled-tonal-button,
+  md-switch, md-slider, md-filter-chip, md-select,
+  md-outlined-text-field, md-elevated-card, md-divider, md-linear-progress {
+    all: revert;
+  }
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}

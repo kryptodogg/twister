@@ -1,0 +1,37 @@
+:root {
+  /* === Brick Road Source Palette === */
+  --br-green:  #96BF54;   /* RGB 150, 191, 84  — olive/yellow-green */
+  --br-tan:    #BF8754;   /* RGB 191, 135, 84  — warm brown         */
+  --br-teal:   #54ACBF;   /* RGB 84, 172, 191  — steel blue         */
+  --br-purple: #A954BF;   /* RGB 169, 84, 191  — violet             */
+  --br-slate:  #52666A;   /* RGB 82, 102, 106  — dark teal-grey     */
+
+  /* === Semantic Roles === */
+  --color-rx:           var(--br-green);     /* receiving / active input  */
+  --color-tx:           var(--br-teal);      /* transmitting / output     */
+  --color-config:       var(--br-tan);       /* configuration / pending   */
+  --color-controller:   var(--br-purple);    /* controller / special      */
+  --color-neutral:      var(--br-slate);     /* surfaces / inactive       */
+
+  --color-connected:    var(--br-green);
+  --color-disconnected: #F44336;
+  --color-unwired:      var(--br-tan);
+
+  /* === Mica-compatible surfaces === */
+  --surface:            rgba(18, 22, 24, 0.68);
+  --surface-card:       rgba(28, 36, 38, 0.72);
+  --surface-elevated:   rgba(38, 48, 50, 0.80);
+  --surface-header:     rgba(12, 16, 18, 0.75);
+
+  /* === MD3 token overrides === */
+  --md-sys-color-primary:              #96BF54;
+  --md-sys-color-on-primary:           #1A2600;
+  --md-sys-color-secondary:            #54ACBF;
+  --md-sys-color-on-secondary:         #001F26;
+  --md-sys-color-tertiary:             #A954BF;
+  --md-sys-color-on-tertiary:          #26003A;
+  --md-sys-color-surface:              rgba(18, 22, 24, 0.68);
+  --md-sys-color-on-surface:           #D8E4C8;
+  --md-sys-color-outline:              rgba(150, 191, 84, 0.25);
+  --md-sys-color-outline-variant:      rgba(82, 102, 106, 0.40);
+}
